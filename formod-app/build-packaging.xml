@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="project" default="package" basedir="."
+	xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+		uri="antlib:org.apache.maven.artifact.ant" />
+
+	<propertyregex property="resources.dir" input="${project.build.sourceDirectory}"
+			regexp="(.*)(java)" replace="\1resources" />
+    
+	<!-- ./target/../Icons -->
+	<property name="icons.dir" value="${resources.dir}/Icons" />
+	<!-- ./target/../License -->
+	<property name="license.dir" value="${resources.dir}/License" />
+	<!-- deployment dir for packagings -->
+		<property name="deployment.root.folder" value="~/downloads/Formose" />
+
+	<import>
+		<javaresource name="build-packaging.xml">
+			<classpath>
+				<pathelement location="${org.openflexo:packaging-tools:jar}"></pathelement>
+			</classpath>
+		</javaresource>
+	</import>
+
+	<target name="package" depends="defineProperties">
+		<delete dir="${mac.app.dir}" failonerror="false" />
+		<mkdir dir="${mac.app.dir}" />
+		<loadproperties srcfile="packaging.properties" />
+		<antcall target="createPackage" />
+	</target>
+
+</project>

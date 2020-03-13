@@ -1,0 +1,40 @@
+﻿THEORY BalanceX IS
+  UnSysteme,6,0,0,0,0,0,0;
+  Initialisation,2,0,0,0,0,0,0;
+  ML_In,2,0,0,0,0,0,0;
+  ML_Out,2,0,0,0,0,0,0
+END
+&
+THEORY ProofState IS
+  Unproved;
+  Unproved;
+  Unproved;
+  Unproved;
+  Unproved;
+  Unproved
+END
+&
+THEORY MethodList IS
+  pr;
+  pr;
+  pr;
+  pr;
+  pr;
+  pr
+END
+&
+THEORY PassList IS
+  Force(0),?;
+  Force(0),?;
+  Force(0),?;
+  Force(0),?;
+  Force(0),?;
+  Force(0),?
+END
+&
+THEORY ManForms 
+END
+&
+THEORY Version IS
+  PRVersion("svn")(CLT == "V4.0-53996")
+END

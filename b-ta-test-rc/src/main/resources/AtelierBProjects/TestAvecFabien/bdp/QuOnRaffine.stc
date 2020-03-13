@@ -1,0 +1,99 @@
+﻿<component_checksums>
+<base>
+<symbol name="NAME" value="QuOnRaffine" />
+<symbol name="TYPE" value="0" />
+<symbol name="PARAM" />
+<symbol name="CONSTRAINTS" />
+<symbol name="SEES" />
+<symbol name="INCLUDES" />
+<symbol name="IMPORTS" />
+<symbol name="PROMOTES" />
+<symbol name="EXTENDS" />
+<symbol name="USES" />
+<symbol name="SETS" />
+<symbol name="CONCRETE_VAR" />
+<symbol name="ABSTRACT_VAR" value="4124bc0a9335c27f086f24ba207a4912" />
+<symbol name="CONCRETE_CONST" value="e0323a9039add2978bf5b49550572c7c" />
+<symbol name="ABSTRACT_CONST" />
+<symbol name="PROPERTIES" value="f50ae4c4a08744dfe1a625ae1bb21ae9" />
+<symbol name="INVARIANT" />
+<symbol name="VARIANT" />
+<symbol name="ASSERTIONS" />
+<symbol name="VALUES" />
+<operations>
+<operation>
+<symbol name="NAME" value="INITIALISATION" />
+<symbol name="COMPONENT" value="QuOnRaffine" />
+<symbol name="PRECONDITION" />
+<symbol name="BODY" value="e6d897cf7aa5e4ecbfe4ccf0b0999b8f" />
+<called>
+</called>
+<refined>
+<operation>
+<symbol name="NAME" value="INITIALISATION" />
+<symbol name="COMPONENT" value="UnSysteme" />
+<symbol name="PRECONDITION" />
+<symbol name="BODY" value="17294c44bf6f186c77a212e6eeccc85a" />
+<called>
+</called>
+<refined>
+</refined>
+</operation>
+
+</refined>
+</operation>
+
+</operations>
+</base>
+<seen>
+</seen>
+<used>
+</used>
+<included>
+</included>
+<imported>
+</imported>
+<extended>
+</extended>
+<refined>
+<component_checksums>
+<base>
+<symbol name="NAME" value="UnSysteme" />
+<symbol name="TYPE" value="1" />
+<symbol name="PARAM" />
+<symbol name="CONSTRAINTS" />
+<symbol name="SEES" />
+<symbol name="INCLUDES" />
+<symbol name="IMPORTS" />
+<symbol name="PROMOTES" />
+<symbol name="EXTENDS" />
+<symbol name="USES" />
+<symbol name="SETS" value="3b98e2dffc6cb06a89dcb0d5c60a0206" />
+<symbol name="CONCRETE_VAR" />
+<symbol name="ABSTRACT_VAR" value="4124bc0a9335c27f086f24ba207a4912" />
+<symbol name="CONCRETE_CONST" />
+<symbol name="ABSTRACT_CONST" />
+<symbol name="PROPERTIES" />
+<symbol name="INVARIANT" value="800ca6cde6b52c5b5e29a99cc0920d02" />
+<symbol name="VARIANT" />
+<symbol name="ASSERTIONS" />
+<symbol name="VALUES" />
+<operations>
+</operations>
+</base>
+<seen>
+</seen>
+<used>
+</used>
+<included>
+</included>
+<imported>
+</imported>
+<extended>
+</extended>
+<refined>
+</refined>
+</component_checksums>
+
+</refined>
+</component_checksums>

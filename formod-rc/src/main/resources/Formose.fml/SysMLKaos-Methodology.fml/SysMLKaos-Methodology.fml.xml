@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-4" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml" version="0.1" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml" name="SysMLKaos-Methodology" userID="FLX" flexoID="4">
+  <FlexoConcept id="FLX-214" name="SysMLKaosElementMapping" userID="FLX" flexoID="214">
+    <Inspector id="FLX-213" renderer="((&quot;SysMLKaos[&quot; + element.identifier) + &quot;]&quot;)" inspectorTitle="Element" userID="FLX" flexoID="213">
+      <InspectorEntry id="SYL-3722" widget="TEXT_FIELD" data="element.identifier" name="element" label="element" type="java.lang.String" userID="SYL" flexoID="3722" />
+      <InspectorEntry id="SYL-3723" container="goalModel" widget="CUSTOM_WIDGET" data="agent" name="agent" label="agent" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent&gt;" userID="SYL" flexoID="3723" />
+      <InspectorEntry id="SYL-3724" widget="TEXT_AREA" data="element.description" name="description" label="description" type="java.lang.String" userID="SYL" flexoID="3724" />
+    </Inspector>
+    <EmbeddedFlexoConcept id="FLX-2401" name="GoalRequirementMapping" userID="FLX" flexoID="2401">
+      <Inspector id="FLX-2400" renderer="((&quot;GoalRequirementMapping[&quot; + requirement.name) + &quot;]&quot;)" inspectorTitle="GoalRequirementMapping" userID="FLX" flexoID="2400" />
+      <FlexoConceptInstanceRole id="FLX-2410" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement" cloningStrategy="Reference" cardinality="ZeroOne" name="requirement" userID="FLX" flexoID="2410" />
+      <FlexoConceptInstanceRole id="FLX-2411" virtualModelInstance="goalModel" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroOne" name="goal" userID="FLX" flexoID="2411" />
+      <CreationScheme id="FLX-2404" name="create" width="800" label="create" height="600" userID="FLX" flexoID="2404">
+        <BehaviourControlGraph_Sequence id="FLX-2414" userID="FLX" flexoID="2414">
+          <ControlGraph2_AssignationAction id="FLX-2407" assign="goal" ownerContext="controlGraph2" userID="FLX" flexoID="2407">
+            <AssignableAction_ExpressionAction id="FLX-2412" expression="parameters.aGoal" userID="FLX" flexoID="2412" />
+          </ControlGraph2_AssignationAction>
+          <ControlGraph1_AssignationAction id="FLX-2406" assign="requirement" ownerContext="controlGraph1" userID="FLX" flexoID="2406">
+            <AssignableAction_ExpressionAction id="FLX-2413" expression="parameters.aRequirement" userID="FLX" flexoID="2413" />
+          </ControlGraph1_AssignationAction>
+        </BehaviourControlGraph_Sequence>
+        <GenericBehaviourParameter id="FLX-2415" isRequired="true" widget="CUSTOM_WIDGET" name="aRequirement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" userID="FLX" flexoID="2415" />
+        <GenericBehaviourParameter id="FLX-2416" isRequired="true" widget="CUSTOM_WIDGET" name="aGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="2416" />
+      </CreationScheme>
+      <DeletionScheme id="FLX-2405" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="2405">
+        <BehaviourControlGraph_Sequence id="FLX-2532" userID="FLX" flexoID="2532">
+          <ControlGraph2_Sequence id="FLX-2531" ownerContext="controlGraph2" userID="FLX" flexoID="2531">
+            <ControlGraph2_NotifyPropertyChangedAction id="FLX-2463" propertyName="requirements" object="container.element" ownerContext="controlGraph2" userID="FLX" flexoID="2463" />
+            <ControlGraph1_DeleteFlexoConceptInstance id="FLX-2456" deletionSchemeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement.delete" object="requirement" ownerContext="controlGraph1" userID="FLX" flexoID="2456" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="FLX-2525" logLevel="INFO" logString="(&quot;Delete &quot; + this)" ownerContext="controlGraph1" userID="FLX" flexoID="2525" />
+        </BehaviourControlGraph_Sequence>
+      </DeletionScheme>
+      <EventListener id="FLX-2442" listenedVirtualModelInstance="goalModel" flexoEventTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedGoal" name="listenGoalDeletion" width="800" label="listen_goal_deletion" height="600" userID="FLX" flexoID="2442">
+        <BehaviourControlGraph_ConditionalAction id="FLX-2445" condition="(event.goal = goal)" ownerContext="controlGraph2" userID="FLX" flexoID="2445">
+          <ThenControlGraph_Sequence id="FLX-2457" ownerContext="thenControlGraph" userID="FLX" flexoID="2457">
+            <ControlGraph2_DeleteFlexoConceptInstance id="FLX-2528" deletionSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping.delete" object="this" ownerContext="controlGraph2" userID="FLX" flexoID="2528" />
+            <ControlGraph1_LogAction id="FLX-2447" logLevel="INFO" logString="(&quot;Deleting goal &quot; + goal)" ownerContext="controlGraph1" userID="FLX" flexoID="2447" />
+          </ThenControlGraph_Sequence>
+        </BehaviourControlGraph_ConditionalAction>
+      </EventListener>
+      <CreationScheme id="FLX-2679" name="createNewGoal" width="800" label="create_new_goal" height="600" userID="FLX" flexoID="2679">
+        <BehaviourControlGraph_Sequence id="FLX-2686" userID="FLX" flexoID="2686">
+          <ControlGraph2_Sequence id="FLX-2781" ownerContext="controlGraph2" userID="FLX" flexoID="2781">
+            <ControlGraph2_Sequence id="FLX-2780" ownerContext="controlGraph2" userID="FLX" flexoID="2780">
+              <ControlGraph2_AssignationAction id="FLX-2743" assign="goal" ownerContext="controlGraph2" userID="FLX" flexoID="2743">
+                <AssignableAction_ExpressionAction id="FLX-2742" expression="newGoal" userID="FLX" flexoID="2742" />
+              </ControlGraph2_AssignationAction>
+              <ControlGraph1_LogAction id="FLX-2746" logLevel="INFO" logString="(&quot;on vient de creer FunctionalGoal  &quot; + newGoal)" ownerContext="controlGraph1" userID="FLX" flexoID="2746" />
+            </ControlGraph2_Sequence>
+            <ControlGraph1_DeclarationAction id="FLX-2741" variable="newGoal" ownerContext="controlGraph1" userID="FLX" flexoID="2741">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-2740" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create" receiver="goalModel" userID="FLX" flexoID="2740">
+                <AddFlexoConceptInstanceParameter id="SYL-3761" paramName="name" value="parameters.requirement.name" userID="SYL" flexoID="3761" />
+                <AddFlexoConceptInstanceParameter id="SYL-3762" paramName="type" value="&quot;&quot;" userID="SYL" flexoID="3762" />
+                <AddFlexoConceptInstanceParameter id="SYL-3763" paramName="description" value="parameters.requirement.description" userID="SYL" flexoID="3763" />
+                <AddFlexoConceptInstanceParameter id="SYL-3764" paramName="notify" value="false" userID="SYL" flexoID="3764" />
+              </AssignableAction_AddFlexoConceptInstance>
+            </ControlGraph1_DeclarationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-2682" assign="requirement" ownerContext="controlGraph1" userID="FLX" flexoID="2682">
+            <AssignableAction_ExpressionAction id="FLX-2681" expression="parameters.requirement" userID="FLX" flexoID="2681" />
+          </ControlGraph1_AssignationAction>
+        </BehaviourControlGraph_Sequence>
+        <GenericBehaviourParameter id="FLX-2687" isRequired="true" widget="CUSTOM_WIDGET" name="requirement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" userID="FLX" flexoID="2687" />
+      </CreationScheme>
+      <CreationScheme id="FLX-3261" name="createNewRequirement" width="800" label="create_new_requirement" height="600" userID="FLX" flexoID="3261">
+        <BehaviourControlGraph_Sequence id="FLX-3273" userID="FLX" flexoID="3273">
+          <ControlGraph2_Sequence id="SYL-3287" ownerContext="controlGraph2" userID="SYL" flexoID="3287">
+            <ControlGraph2_LogAction id="FLX-3264" logLevel="INFO" logString="(&quot;on vient de creer le requirement  &quot; + requirement)" ownerContext="controlGraph2" userID="FLX" flexoID="3264" />
+            <ControlGraph1_AssignationAction id="SYL-3285" assign="requirement" ownerContext="controlGraph1" userID="SYL" flexoID="3285">
+              <AssignableAction_AddFlexoConceptInstance id="SYL-3282" container="element" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement.createRequirement" receiver="formoseVMI" ownerContext="controlGraph1" userID="SYL" flexoID="3282">
+                <AddFlexoConceptInstanceParameter id="SYL-3283" paramName="name" value="parameters.goal.name" userID="SYL" flexoID="3283" />
+                <AddFlexoConceptInstanceParameter id="SYL-3284" paramName="description" value="parameters.goal.description" userID="SYL" flexoID="3284" />
+              </AssignableAction_AddFlexoConceptInstance>
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-3272" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="3272">
+            <AssignableAction_ExpressionAction id="FLX-3271" expression="parameters.goal" userID="FLX" flexoID="3271" />
+          </ControlGraph1_AssignationAction>
+        </BehaviourControlGraph_Sequence>
+        <GenericBehaviourParameter id="FLX-3274" isRequired="true" widget="CUSTOM_WIDGET" name="goal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="3274" />
+      </CreationScheme>
+    </EmbeddedFlexoConcept>
+    <EmbeddedFlexoConcept id="SYL-3029" name="TopGoalRequirementMapping" userID="SYL" flexoID="3029">
+      <Inspector id="SYL-3030" inspectorTitle="TopGoalRequirementMapping" userID="SYL" flexoID="3030" />
+      <FlexoConceptInstanceRole id="SYL-3036" virtualModelInstance="container.container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" cloningStrategy="Reference" cardinality="One" name="parentGoalRequirementMapping" userID="SYL" flexoID="3036" />
+      <FlexoConceptInstanceRole id="SYL-3037" virtualModelInstance="container.container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" cloningStrategy="Reference" cardinality="One" name="goalRequirementMapping" userID="SYL" flexoID="3037" />
+      <CreationScheme id="SYL-3034" name="create" width="800" label="create" height="600" userID="SYL" flexoID="3034">
+        <BehaviourControlGraph_Sequence id="SYL-3109" userID="SYL" flexoID="3109">
+          <ControlGraph2_AssignationAction id="SYL-3102" assign="goalRequirementMapping" ownerContext="controlGraph2" userID="SYL" flexoID="3102">
+            <AssignableAction_ExpressionAction id="SYL-3101" expression="parameters.mapping" userID="SYL" flexoID="3101" />
+          </ControlGraph2_AssignationAction>
+          <ControlGraph1_AssignationAction id="SYL-3100" assign="parentGoalRequirementMapping" ownerContext="controlGraph1" userID="SYL" flexoID="3100">
+            <AssignableAction_ExpressionAction id="SYL-3099" expression="parameters.parentMapping" userID="SYL" flexoID="3099" />
+          </ControlGraph1_AssignationAction>
+        </BehaviourControlGraph_Sequence>
+        <GenericBehaviourParameter id="SYL-3098" widget="CUSTOM_WIDGET" name="parentMapping" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping&gt;" userID="SYL" flexoID="3098" />
+        <GenericBehaviourParameter id="SYL-3097" widget="CUSTOM_WIDGET" name="mapping" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping&gt;" userID="SYL" flexoID="3097" />
+      </CreationScheme>
+      <DeletionScheme id="SYL-3035" name="delete" width="800" label="delete" height="600" userID="SYL" flexoID="3035">
+        <BehaviourControlGraph_EmptyControlGraph id="SYL-3062" userID="SYL" flexoID="3062" />
+      </DeletionScheme>
+    </EmbeddedFlexoConcept>
+    <EmbeddedFlexoConcept id="SYL-3354" name="DiagramMapping" userID="SYL" flexoID="3354">
+      <Inspector id="SYL-3355" renderer="(((diagramTitle + &quot;[&quot;) + element.identifier) + &quot;]&quot;)" inspectorTitle="Goal Modeling Diagram" userID="SYL" flexoID="3355">
+        <InspectorEntry id="SYL-3717" widget="TEXT_FIELD" data="goalModelingDiagram.diagramTitle" name="diagramTitle" label="diagram_title" type="java.lang.String" userID="SYL" flexoID="3717" />
+        <InspectorEntry id="SYL-3840" widget="TEXT_AREA" data="goalModelingDiagram.diagramDescription" name="diagramDescription" label="diagram_description" type="java.lang.String" userID="SYL" flexoID="3840" />
+      </Inspector>
+      <FlexoConceptInstanceRole id="FLX-3361" virtualModelInstance="sysMLKaos" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml" cloningStrategy="Reference" cardinality="ZeroOne" name="goalModelingDiagram" userID="FLX" flexoID="3361" />
+      <ExpressionProperty id="SYL-3455" expression="goalModelingDiagram.diagramTitle" name="diagramTitle" userID="SYL" flexoID="3455" />
+      <CreationScheme id="SYL-3359" name="createMainFunctionalGoalDiagram" width="800" label="create_main_functional_goal_diagram" height="600" userID="SYL" flexoID="3359">
+        <BehaviourControlGraph_Sequence id="SYL-3858" userID="SYL" flexoID="3858">
+          <ControlGraph2_Sequence id="SYL-3859" ownerContext="controlGraph2" userID="SYL" flexoID="3859">
+            <ControlGraph2_NotifyPropertyChangedAction id="SYL-3698" propertyName="diagramTitle" object="this" ownerContext="controlGraph2" userID="SYL" flexoID="3698" />
+            <ControlGraph1_AssignationAction id="FLX-3387" assign="goalModelingDiagram" ownerContext="controlGraph1" userID="FLX" flexoID="3387">
+              <AssignableAction_AddVirtualModelInstance id="FLX-3389" virtualModelInstanceTitle="(element.identifier + &quot;-MainFunctionalGoalModelingDiagram&quot;)" virtualModelInstanceName="(element.identifier + &quot;-MainFunctionalGoalModelingDiagram&quot;)" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml.init" receiver="sysMLKaos" userID="FLX" flexoID="3389">
+                <AddFlexoConceptInstanceParameter id="SYL-3471" paramName="diagramName" value="(element.identifier + &quot;-MainFunctionalGoalModelingDiagram&quot;)" userID="SYL" flexoID="3471" />
+                <AddFlexoConceptInstanceParameter id="SYL-3472" paramName="diagramTitle" value="&quot;Functional Goal Diagram&quot;" userID="SYL" flexoID="3472" />
+                <AddFlexoConceptInstanceParameter id="SYL-3473" paramName="model" value="goalModel" userID="SYL" flexoID="3473" />
+              </AssignableAction_AddVirtualModelInstance>
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="SYL-3857" logLevel="INFO" logString="(&quot;Create diagram for model &quot; + goalModel)" ownerContext="controlGraph1" userID="SYL" flexoID="3857" />
+        </BehaviourControlGraph_Sequence>
+      </CreationScheme>
+      <DeletionScheme id="SYL-3360" name="delete" width="800" label="delete" height="600" userID="SYL" flexoID="3360">
+        <BehaviourControlGraph_EmptyControlGraph id="SYL-3363" userID="SYL" flexoID="3363" />
+      </DeletionScheme>
+      <EventListener id="SYL-3529" listenedVirtualModelInstance="goalModelingDiagram" flexoEventTypeURI="null#UpdateDiagram" name="requirementsShouldBeUpdated" width="800" label="requirements_should_be_updated" height="600" userID="SYL" flexoID="3529">
+        <BehaviourControlGraph_LogAction id="SYL-3553" logLevel="INFO" logString="&quot;OK, on doit mettre a jour le diagramme&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="3553" />
+      </EventListener>
+      <CreationScheme id="SYL-3657" name="createGoalDiagram" width="800" label="create_goal_diagram" height="600" userID="SYL" flexoID="3657">
+        <BehaviourControlGraph_Sequence id="SYL-3701" userID="SYL" flexoID="3701">
+          <ControlGraph2_NotifyPropertyChangedAction id="SYL-3699" propertyName="diagramTitle" object="this" ownerContext="controlGraph2" userID="SYL" flexoID="3699" />
+          <ControlGraph1_AssignationAction id="FLX-3661" assign="goalModelingDiagram" ownerContext="controlGraph1" userID="FLX" flexoID="3661">
+            <AssignableAction_AddVirtualModelInstance id="FLX-3660" virtualModelInstanceTitle="((element.identifier + &quot;-&quot;) + parameters.diagramTitle)" virtualModelInstanceName="((element.identifier + &quot;-&quot;) + parameters.diagramTitle)" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml.init" receiver="sysMLKaos" userID="FLX" flexoID="3660">
+              <AddFlexoConceptInstanceParameter id="SYL-3658" paramName="diagramName" value="((element.identifier + &quot;-&quot;) + parameters.diagramTitle)" userID="SYL" flexoID="3658" />
+              <AddFlexoConceptInstanceParameter id="SYL-3659" paramName="diagramTitle" value="parameters.diagramTitle" userID="SYL" flexoID="3659" />
+              <AddFlexoConceptInstanceParameter id="SYL-3656" paramName="model" value="goalModel" userID="SYL" flexoID="3656" />
+            </AssignableAction_AddVirtualModelInstance>
+          </ControlGraph1_AssignationAction>
+        </BehaviourControlGraph_Sequence>
+        <GenericBehaviourParameter id="SYL-3665" widget="TEXT_FIELD" name="diagramTitle" type="java.lang.String" userID="SYL" flexoID="3665" />
+        <GenericBehaviourParameter id="SYL-3664" widget="TEXT_AREA" name="diagramDescription" type="java.lang.String" userID="SYL" flexoID="3664" />
+      </CreationScheme>
+      <ActionScheme id="SYL-3780" name="representTopGoalRequirements" width="800" label="represent_all_requirements" height="600" userID="SYL" flexoID="3780">
+        <BehaviourControlGraph_Sequence id="SYL-3806" userID="SYL" flexoID="3806">
+          <ControlGraph2_Sequence id="SYL-3897" ownerContext="controlGraph2" userID="SYL" flexoID="3897">
+            <ControlGraph2_IterationAction id="SYL-3783" iteratorName="topGoalRequirementMapping" ownerContext="controlGraph2" userID="SYL" flexoID="3783">
+              <Iteration_SelectFlexoConceptInstance id="SYL-3785" container="container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#TopGoalRequirementMapping" receiver="container.container" ownerContext="iterationControlGraph" userID="SYL" flexoID="3785" />
+              <ControlGraph_Sequence id="SYL-3955" ownerContext="controlGraph" userID="SYL" flexoID="3955">
+                <ControlGraph2_Sequence id="SYL-3956" ownerContext="controlGraph2" userID="SYL" flexoID="3956">
+                  <ControlGraph2_AssignationAction id="SYL-3823" assign="index" ownerContext="controlGraph2" userID="SYL" flexoID="3823">
+                    <AssignableAction_ExpressionAction id="SYL-3822" expression="(index + 1)" userID="SYL" flexoID="3822" />
+                  </ControlGraph2_AssignationAction>
+                  <ControlGraph1_ConditionalAction id="SYL-3941" condition="(goalGR = null)" ownerContext="controlGraph1" userID="SYL" flexoID="3941">
+                    <ElseControlGraph_LogAction id="SYL-3954" logLevel="INFO" logString="((&quot;C'est bon &quot; + topGoalRequirementMapping.goalRequirementMapping.goal) + &quot; est deja represente&quot;)" ownerContext="elseControlGraph" userID="SYL" flexoID="3954" />
+                    <ThenControlGraph_Sequence id="SYL-3958" ownerContext="thenControlGraph" userID="SYL" flexoID="3958">
+                      <ControlGraph2_AssignationAction id="SYL-3952" assign="goalGR" ownerContext="controlGraph2" userID="SYL" flexoID="3952">
+                        <AssignableAction_AddFlexoConceptInstance id="SYL-3947" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#FunctionalGoalGR.representTopFunctionalGoal" receiver="goalModelingDiagram" ownerContext="controlGraph2" userID="SYL" flexoID="3947">
+                          <AddFlexoConceptInstanceParameter id="SYL-3948" paramName="goal" value="topGoalRequirementMapping.goalRequirementMapping.goal" userID="SYL" flexoID="3948" />
+                          <AddFlexoConceptInstanceParameter id="SYL-3949" paramName="index" value="index" userID="SYL" flexoID="3949" />
+                        </AssignableAction_AddFlexoConceptInstance>
+                      </ControlGraph2_AssignationAction>
+                      <ControlGraph1_LogAction id="SYL-3946" logLevel="INFO" logString="&quot;Il faut representer le goal&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="3946" />
+                    </ThenControlGraph_Sequence>
+                  </ControlGraph1_ConditionalAction>
+                </ControlGraph2_Sequence>
+                <ControlGraph1_DeclarationAction id="SYL-3939" variable="goalGR" ownerContext="controlGraph1" userID="SYL" flexoID="3939">
+                  <AssignableAction_SelectUniqueFlexoConceptInstance id="SYL-3937" container="goalModelingDiagram" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#FunctionalGoalGR" receiver="goalModelingDiagram" ownerContext="controlGraph1" userID="SYL" flexoID="3937">
+                    <Condition id="SYL-3938" condition="(selected.goal = topGoalRequirementMapping.goalRequirementMapping.goal)" userID="SYL" flexoID="3938" />
+                  </AssignableAction_SelectUniqueFlexoConceptInstance>
+                </ControlGraph1_DeclarationAction>
+              </ControlGraph_Sequence>
+            </ControlGraph2_IterationAction>
+            <ControlGraph1_LogAction id="SYL-3894" logLevel="INFO" logString="(&quot;On represente les top goals pour &quot; + diagramTitle)" ownerContext="controlGraph1" userID="SYL" flexoID="3894" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="SYL-3805" variable="index" ownerContext="controlGraph1" userID="SYL" flexoID="3805">
+            <AssignableAction_ExpressionAction id="SYL-3804" expression="0" userID="SYL" flexoID="3804" />
+          </ControlGraph1_DeclarationAction>
+        </BehaviourControlGraph_Sequence>
+      </ActionScheme>
+    </EmbeddedFlexoConcept>
+    <FlexoConceptInstanceRole id="FLX-220" virtualModelInstance="formoseVMI" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element" cloningStrategy="Reference" cardinality="ZeroOne" name="element" userID="FLX" flexoID="220" />
+    <FlexoConceptInstanceRole id="FLX-222" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#DiagramMapping" cloningStrategy="Reference" cardinality="ZeroOne" name="mainFunctionalGoalDiagram" userID="FLX" flexoID="222" />
+    <FlexoConceptInstanceRole id="FLX-2599" virtualModelInstance="parentDiagramElementMapping.goalModel" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" cloningStrategy="Reference" cardinality="ZeroOne" name="agent" userID="FLX" flexoID="2599" />
+    <FlexoConceptInstanceRole id="SYL-3110" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping" cloningStrategy="Reference" cardinality="ZeroOne" name="parentDiagramElementMapping" userID="SYL" flexoID="3110" />
+    <FlexoConceptInstanceRole id="SYL-3327" virtualModelInstance="sysMLKaos" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml" cloningStrategy="Reference" cardinality="ZeroOne" name="goalModel" userID="SYL" flexoID="3327" />
+    <GetSetProperty id="FLX-3433" name="goalDiagrams" description="Return all mappings between element and SysML/KAOS diagram" userID="FLX" flexoID="3433">
+      <SetControlGraph_EmptyControlGraph id="FLX-3434" ownerContext="setControlGraph" userID="FLX" flexoID="3434" />
+      <GetControlGraph_ReturnStatement id="FLX-3436" ownerContext="getControlGraph" userID="FLX" flexoID="3436">
+        <AssignableAction_SelectFlexoConceptInstance id="FLX-3435" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#DiagramMapping" receiver="container" userID="FLX" flexoID="3435" />
+      </GetControlGraph_ReturnStatement>
+    </GetSetProperty>
+    <FIBComponentModelSlot id="SYL-3494" templateComponentURI="http://formose.lacl.fr/Fib/SysMLKaosElementMapping.fib" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="ui" userID="SYL" flexoID="3494">
+      <VariableAssignment id="SYL-3493" variableType="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping&gt;" variable="data" value="this" userID="SYL" flexoID="3493" />
+    </FIBComponentModelSlot>
+    <GetSetProperty id="SYL-3599" name="childrenDiagramElementMapping" userID="SYL" flexoID="3599">
+      <SetControlGraph_EmptyControlGraph id="SYL-3600" ownerContext="setControlGraph" userID="SYL" flexoID="3600" />
+      <GetControlGraph_ReturnStatement id="SYL-3604" ownerContext="getControlGraph" userID="SYL" flexoID="3604">
+        <AssignableAction_SelectFlexoConceptInstance id="SYL-3602" container="container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping" receiver="container" userID="SYL" flexoID="3602">
+          <Condition id="SYL-3603" condition="(selected.parentDiagramElementMapping = this)" userID="SYL" flexoID="3603" />
+        </AssignableAction_SelectFlexoConceptInstance>
+      </GetControlGraph_ReturnStatement>
+    </GetSetProperty>
+    <CreationScheme id="FLX-217" name="createNewMapping" width="800" label="create_new_mapping" height="600" userID="FLX" flexoID="217">
+      <BehaviourControlGraph_Sequence id="FLX-236" userID="FLX" flexoID="236">
+        <ControlGraph2_Sequence id="SYL-3609" ownerContext="controlGraph2" userID="SYL" flexoID="3609">
+          <ControlGraph2_Sequence id="FLX-2519" ownerContext="controlGraph2" userID="FLX" flexoID="2519">
+            <ControlGraph2_Sequence id="SYL-3396" ownerContext="controlGraph2" userID="SYL" flexoID="3396">
+              <ControlGraph2_Sequence id="FLX-2697" ownerContext="controlGraph2" userID="FLX" flexoID="2697">
+                <ControlGraph2_Sequence id="SYL-3495" ownerContext="controlGraph2" userID="SYL" flexoID="3495">
+                  <ControlGraph2_Sequence id="SYL-3631" ownerContext="controlGraph2" userID="SYL" flexoID="3631">
+                    <ControlGraph2_ConditionalAction id="SYL-3626" condition="(parentDiagramElementMapping != null)" ownerContext="controlGraph2" userID="SYL" flexoID="3626">
+                      <ThenControlGraph_NotifyPropertyChangedAction id="SYL-3628" propertyName="childrenDiagramElementMapping" object="parentDiagramElementMapping" ownerContext="thenControlGraph" userID="SYL" flexoID="3628" />
+                    </ControlGraph2_ConditionalAction>
+                    <ControlGraph1_AssignationAction id="SYL-3489" assign="ui" ownerContext="controlGraph1" userID="SYL" flexoID="3489">
+                      <AssignableAction_ConfigureGINAFIBComponent id="SYL-3491" receiver="projectUI" userID="SYL" flexoID="3491" />
+                    </ControlGraph1_AssignationAction>
+                  </ControlGraph2_Sequence>
+                  <ControlGraph1_ExpressionAction id="FLX-2691" expression="this.updateMapping()" ownerContext="controlGraph1" userID="FLX" flexoID="2691" />
+                </ControlGraph2_Sequence>
+                <ControlGraph1_LogAction id="FLX-2694" logLevel="INFO" logString="&quot;On vient de creer un nouveau GoalModellingDiagram&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="2694" />
+              </ControlGraph2_Sequence>
+              <ControlGraph1_AssignationAction id="SYL-3395" assign="mainFunctionalGoalDiagram" ownerContext="controlGraph1" userID="SYL" flexoID="3395">
+                <AssignableAction_AddFlexoConceptInstance id="SYL-3394" container="this" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#DiagramMapping.createMainFunctionalGoalDiagram" receiver="container" userID="SYL" flexoID="3394" />
+              </ControlGraph1_AssignationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AssignationAction id="FLX-225" assign="goalModel" ownerContext="controlGraph1" userID="FLX" flexoID="225">
+              <AssignableAction_AddVirtualModelInstance id="FLX-224" virtualModelInstanceTitle="(parameters.anElement.identifier + &quot;-GoalModel&quot;)" virtualModelInstanceName="(parameters.anElement.identifier + &quot;-GoalModel&quot;)" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml.init" receiver="sysMLKaos" userID="FLX" flexoID="224">
+                <AddFlexoConceptInstanceParameter id="SYL-3349" paramName="name" value="(parameters.anElement.identifier + &quot;-GoalModel&quot;)" userID="SYL" flexoID="3349" />
+                <AddFlexoConceptInstanceParameter id="SYL-3350" paramName="title" value="(&quot;GoalModel for &quot; + parameters.anElement.identifier)" userID="SYL" flexoID="3350" />
+                <AddFlexoConceptInstanceParameter id="SYL-3351" paramName="description" value="&quot;&quot;" userID="SYL" flexoID="3351" />
+                <AddFlexoConceptInstanceParameter id="SYL-3352" paramName="parentModel" value="parentDiagramElementMapping.goalModel" userID="SYL" flexoID="3352" />
+              </AssignableAction_AddVirtualModelInstance>
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_ConditionalAction id="SYL-3606" condition="(parameters.anElement.parent != null)" ownerContext="controlGraph1" userID="SYL" flexoID="3606">
+            <ThenControlGraph_AssignationAction id="SYL-3608" assign="parentDiagramElementMapping" ownerContext="thenControlGraph" userID="SYL" flexoID="3608">
+              <AssignableAction_ExpressionAction id="SYL-3607" expression="container.getElementMapping(parameters.anElement.parent)" userID="SYL" flexoID="3607" />
+            </ThenControlGraph_AssignationAction>
+          </ControlGraph1_ConditionalAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-219" assign="element" ownerContext="controlGraph1" userID="FLX" flexoID="219">
+          <AssignableAction_ExpressionAction id="FLX-221" expression="parameters.anElement" userID="FLX" flexoID="221" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-237" container="formoseVMI" isRequired="true" widget="CUSTOM_WIDGET" name="anElement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="237" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-218" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="218">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-238" userID="FLX" flexoID="238" />
+    </DeletionScheme>
+    <ActionScheme id="FLX-2543" name="refineUsingAgentAllocation" width="800" label="refine_using_agent_allocation" height="600" userID="FLX" flexoID="2543">
+      <BehaviourControlGraph_Sequence id="FLX-2553" userID="FLX" flexoID="2553">
+        <ControlGraph2_IterationAction id="FLX-2546" iteratorName="agent" ownerContext="controlGraph2" userID="FLX" flexoID="2546">
+          <Iteration_SelectFlexoConceptInstance id="FLX-2548" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#SoftwareAgent" receiver="goalModel" ownerContext="iterationControlGraph" userID="FLX" flexoID="2548" />
+          <ControlGraph_Sequence id="FLX-2580" ownerContext="controlGraph" userID="FLX" flexoID="2580">
+            <ControlGraph2_Sequence id="SYL-3909" ownerContext="controlGraph2" userID="SYL" flexoID="3909">
+              <ControlGraph2_Sequence id="SYL-3917" ownerContext="controlGraph2" userID="SYL" flexoID="3917">
+                <ControlGraph2_Sequence id="SYL-4040" ownerContext="controlGraph2" userID="SYL" flexoID="4040">
+                  <ControlGraph2_Sequence id="SYL-4041" ownerContext="controlGraph2" userID="SYL" flexoID="4041">
+                    <ControlGraph2_ExpressionAction id="SYL-4035" expression="agentMapping.mainFunctionalGoalDiagram.representTopGoalRequirements()" ownerContext="controlGraph2" userID="SYL" flexoID="4035" />
+                    <ControlGraph1_ExpressionAction id="SYL-4030" expression="this.updateTopGoals(agentMapping)" ownerContext="controlGraph1" userID="SYL" flexoID="4030" />
+                  </ControlGraph2_Sequence>
+                  <ControlGraph1_LogAction id="SYL-4038" logLevel="INFO" logString="(&quot;Found agentMapping:&quot; + agentMapping)" ownerContext="controlGraph1" userID="SYL" flexoID="4038" />
+                </ControlGraph2_Sequence>
+                <ControlGraph1_ConditionalAction id="SYL-3911" condition="(agentMapping = null)" ownerContext="controlGraph1" userID="SYL" flexoID="3911">
+                  <ThenControlGraph_AssignationAction id="SYL-3913" assign="agentMapping" ownerContext="thenControlGraph" userID="SYL" flexoID="3913">
+                    <AssignableAction_ExpressionAction id="SYL-3912" expression="this.allocateAgent(agent)" userID="SYL" flexoID="3912" />
+                  </ThenControlGraph_AssignationAction>
+                </ControlGraph1_ConditionalAction>
+              </ControlGraph2_Sequence>
+              <ControlGraph1_DeclarationAction id="SYL-3902" variable="agentMapping" ownerContext="controlGraph1" userID="SYL" flexoID="3902">
+                <AssignableAction_SelectUniqueFlexoConceptInstance id="SYL-3900" container="container" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="3900">
+                  <Condition id="SYL-3901" condition="(selected.agent = agent)" userID="SYL" flexoID="3901" />
+                </AssignableAction_SelectUniqueFlexoConceptInstance>
+              </ControlGraph1_DeclarationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_LogAction id="FLX-2550" logLevel="INFO" logString="(&quot;Tiens on s'occupe de l'agent &quot; + agent)" ownerContext="controlGraph1" userID="FLX" flexoID="2550" />
+          </ControlGraph_Sequence>
+        </ControlGraph2_IterationAction>
+        <ControlGraph1_LogAction id="FLX-2552" logLevel="INFO" logString="&quot;Refining using agent allocation&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="2552" />
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+    <ActionScheme id="FLX-2647" name="updateMapping" width="800" label="update_mapping" height="600" description="Called to update goal modelling diagram with all requirements found in related element" userID="FLX" flexoID="2647">
+      <BehaviourControlGraph_Sequence id="FLX-2689" userID="FLX" flexoID="2689">
+        <ControlGraph2_Sequence id="FLX-2698" ownerContext="controlGraph2" userID="FLX" flexoID="2698">
+          <ControlGraph2_Sequence id="FLX-2688" ownerContext="controlGraph2" userID="FLX" flexoID="2688">
+            <ControlGraph2_FinalizeMatching id="FLX-2676" container="flexoConceptInstance" flexoBehaviourURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping.delete" matchingSet="matchingSet" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" ownerContext="controlGraph2" userID="FLX" flexoID="2676" />
+            <ControlGraph1_IterationAction id="FLX-2654" iteratorName="requirement" ownerContext="controlGraph1" userID="FLX" flexoID="2654">
+              <Iteration_ExpressionAction id="FLX-2656" expression="element.requirements" ownerContext="iterationControlGraph" userID="FLX" flexoID="2656" />
+              <ControlGraph_MatchFlexoConceptInstance id="FLX-2658" container="this" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping.createNewGoal" matchingSet="matchingSet" receiver="container" ownerContext="controlGraph" userID="FLX" flexoID="2658">
+                <MatchingCriteria id="FLX-2661" patternRoleName="requirement" value="requirement" userID="FLX" flexoID="2661" />
+                <MatchingCriteria id="FLX-2662" patternRoleName="goal" userID="FLX" flexoID="2662" />
+                <MatchingCriteria id="FLX-2663" patternRoleName="element" userID="FLX" flexoID="2663" />
+                <MatchingCriteria id="FLX-2664" patternRoleName="mainFunctionalGoalDiagram" userID="FLX" flexoID="2664" />
+                <MatchingCriteria id="FLX-2665" patternRoleName="agent" userID="FLX" flexoID="2665" />
+                <MatchingCriteria id="FLX-2666" patternRoleName="elementMappings" userID="FLX" flexoID="2666" />
+                <MatchingCriteria id="FLX-2667" patternRoleName="comments" userID="FLX" flexoID="2667" />
+                <MatchingCriteria id="FLX-2668" patternRoleName="sysMLKaos" userID="FLX" flexoID="2668" />
+                <MatchingCriteria id="FLX-2669" patternRoleName="name" userID="FLX" flexoID="2669" />
+                <MatchingCriteria id="FLX-2670" patternRoleName="user" userID="FLX" flexoID="2670" />
+                <MatchingCriteria id="FLX-2671" patternRoleName="timestamp" userID="FLX" flexoID="2671" />
+                <MatchingCriteria id="FLX-2672" patternRoleName="declaringElement" userID="FLX" flexoID="2672" />
+                <CreateFlexoConceptInstanceParameter id="FLX-2690" paramName="requirement" value="requirement" userID="FLX" flexoID="2690" />
+              </ControlGraph_MatchFlexoConceptInstance>
+            </ControlGraph1_IterationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="FLX-2696" logLevel="INFO" logString="&quot;Updating SysMLKaosElementMapping&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="2696" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeclarationAction id="FLX-2652" variable="matchingSet" ownerContext="controlGraph1" userID="FLX" flexoID="2652">
+          <AssignableAction_InitiateMatching id="FLX-2650" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" userID="FLX" flexoID="2650" />
+        </ControlGraph1_DeclarationAction>
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+    <EventListener id="FLX-2699" listenedVirtualModelInstance="element.container" flexoEventTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#NewRequirement" name="newRequirement" width="800" label="new_requirement" height="600" userID="FLX" flexoID="2699">
+      <BehaviourControlGraph_Sequence id="FLX-2774" ownerContext="controlGraph2" userID="FLX" flexoID="2774">
+        <ControlGraph2_Sequence id="FLX-2821" ownerContext="controlGraph2" userID="FLX" flexoID="2821">
+          <ControlGraph2_ConditionalAction id="FLX-2723" condition="(event.requirement.container = element)" ownerContext="controlGraph2" userID="FLX" flexoID="2723">
+            <ThenControlGraph_Sequence id="FLX-2734" ownerContext="thenControlGraph" userID="FLX" flexoID="2734">
+              <ControlGraph2_Sequence id="FLX-2816" ownerContext="controlGraph2" userID="FLX" flexoID="2816">
+                <ControlGraph2_LogAction id="FLX-2750" logLevel="INFO" logString="(&quot;OK c'est bon je retourne &quot; + newGoalRequirementMapping)" ownerContext="controlGraph2" userID="FLX" flexoID="2750" />
+                <ControlGraph1_DeclarationAction id="FLX-2814" variable="newGoalRequirementMapping" ownerContext="controlGraph1" userID="FLX" flexoID="2814">
+                  <AssignableAction_ExpressionAction id="FLX-2813" expression="this.ensureGoalRequirementMappingExists(event.requirement)" userID="FLX" flexoID="2813" />
+                </ControlGraph1_DeclarationAction>
+              </ControlGraph2_Sequence>
+              <ControlGraph1_LogAction id="FLX-2725" logLevel="INFO" logString="(&quot;**** Tiens un nouveau requirement &quot; + event.requirement)" ownerContext="controlGraph1" userID="FLX" flexoID="2725" />
+            </ThenControlGraph_Sequence>
+          </ControlGraph2_ConditionalAction>
+          <ControlGraph1_LogAction id="FLX-2773" logLevel="INFO" logString="(&quot;container=&quot; + event.requirement.container)" ownerContext="controlGraph1" userID="FLX" flexoID="2773" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="FLX-2772" logLevel="INFO" logString="(&quot;Hop je recois NewRequirement &quot; + event.requirement)" ownerContext="controlGraph1" userID="FLX" flexoID="2772" />
+      </BehaviourControlGraph_Sequence>
+    </EventListener>
+    <ActionScheme id="FLX-2797" name="ensureGoalRequirementMappingExists" width="800" label="ensure_goal_requirement_mapping_exists" height="600" userID="FLX" flexoID="2797">
+      <BehaviourControlGraph_Sequence id="FLX-2817" userID="FLX" flexoID="2817">
+        <ControlGraph2_ConditionalAction id="FLX-2804" condition="(list.size &gt; 0)" ownerContext="controlGraph2" userID="FLX" flexoID="2804">
+          <ElseControlGraph_ReturnStatement id="FLX-2812" ownerContext="elseControlGraph" userID="FLX" flexoID="2812">
+            <AssignableAction_AddFlexoConceptInstance id="FLX-2810" container="this" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping.createNewGoal" receiver="container" ownerContext="elseControlGraph" userID="FLX" flexoID="2810">
+              <AddFlexoConceptInstanceParameter id="FLX-2811" paramName="requirement" value="parameters.requirement" userID="FLX" flexoID="2811" />
+            </AssignableAction_AddFlexoConceptInstance>
+          </ElseControlGraph_ReturnStatement>
+          <ThenControlGraph_ReturnStatement id="FLX-2806" ownerContext="thenControlGraph" userID="FLX" flexoID="2806">
+            <AssignableAction_ExpressionAction id="FLX-2805" expression="list.get(0)" userID="FLX" flexoID="2805" />
+          </ThenControlGraph_ReturnStatement>
+        </ControlGraph2_ConditionalAction>
+        <ControlGraph1_DeclarationAction id="FLX-2801" variable="list" ownerContext="controlGraph1" userID="FLX" flexoID="2801">
+          <AssignableAction_SelectFlexoConceptInstance id="FLX-2800" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" receiver="container" userID="FLX" flexoID="2800">
+            <Condition id="FLX-2802" condition="(selected.requirement = parameters.requirement)" userID="FLX" flexoID="2802" />
+          </AssignableAction_SelectFlexoConceptInstance>
+        </ControlGraph1_DeclarationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2818" isRequired="true" widget="CUSTOM_WIDGET" name="requirement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" userID="FLX" flexoID="2818" />
+    </ActionScheme>
+    <ActionScheme id="FLX-2958" visibility="Private" name="allocateAgent" width="800" label="allocate_agent" height="600" userID="FLX" flexoID="2958">
+      <BehaviourControlGraph_Sequence id="FLX-2985" userID="FLX" flexoID="2985">
+        <ControlGraph2_Sequence id="SYL-2996" ownerContext="controlGraph2" userID="SYL" flexoID="2996">
+          <ControlGraph2_Sequence id="SYL-4146" ownerContext="controlGraph2" userID="SYL" flexoID="4146">
+            <ControlGraph2_Sequence id="SYL-4106" ownerContext="controlGraph2" userID="SYL" flexoID="4106">
+              <ControlGraph2_Sequence id="SYL-4143" ownerContext="controlGraph2" userID="SYL" flexoID="4143">
+                <ControlGraph2_Sequence id="SYL-4105" ownerContext="controlGraph2" userID="SYL" flexoID="4105">
+                  <ControlGraph2_Sequence id="SYL-4104" ownerContext="controlGraph2" userID="SYL" flexoID="4104">
+                    <ControlGraph2_Sequence id="SYL-4103" ownerContext="controlGraph2" userID="SYL" flexoID="4103">
+                      <ControlGraph2_ReturnStatement id="SYL-3008" ownerContext="controlGraph2" userID="SYL" flexoID="3008">
+                        <AssignableAction_ExpressionAction id="SYL-3007" expression="newElementMapping" userID="SYL" flexoID="3007" />
+                      </ControlGraph2_ReturnStatement>
+                      <ControlGraph1_NotifyPropertyChangedAction id="SYL-4102" propertyName="childrenDiagramElementMapping" object="this" ownerContext="controlGraph1" userID="SYL" flexoID="4102" />
+                    </ControlGraph2_Sequence>
+                    <ControlGraph1_AssignationAction id="SYL-4100" assign="newElementMapping.goalModel.parentModel" ownerContext="controlGraph1" userID="SYL" flexoID="4100">
+                      <AssignableAction_ExpressionAction id="SYL-4099" expression="goalModel" userID="SYL" flexoID="4099" />
+                    </ControlGraph1_AssignationAction>
+                  </ControlGraph2_Sequence>
+                  <ControlGraph1_AssignationAction id="SYL-4098" assign="newElementMapping.agent" ownerContext="controlGraph1" userID="SYL" flexoID="4098">
+                    <AssignableAction_ExpressionAction id="SYL-4097" expression="parameters.agent" userID="SYL" flexoID="4097" />
+                  </ControlGraph1_AssignationAction>
+                </ControlGraph2_Sequence>
+                <ControlGraph1_LogAction id="SYL-4142" logLevel="INFO" logString="(&quot;Hop, on a bien le nouveau mapping &quot; + newElementMapping)" ownerContext="controlGraph1" userID="SYL" flexoID="4142" />
+              </ControlGraph2_Sequence>
+              <ControlGraph1_DeclarationAction id="SYL-4096" variable="newElementMapping" ownerContext="controlGraph1" userID="SYL" flexoID="4096">
+                <AssignableAction_ExpressionAction id="SYL-4095" expression="container.getElementMapping(newElement)" userID="SYL" flexoID="4095" />
+              </ControlGraph1_DeclarationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_LogAction id="SYL-4145" logLevel="INFO" logString="(&quot;Nouvel element: &quot; + newElement)" ownerContext="controlGraph1" userID="SYL" flexoID="4145" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="FLX-2976" variable="newElement" ownerContext="controlGraph1" userID="FLX" flexoID="2976">
+            <AssignableAction_ExpressionAction id="FLX-2975" expression="element.createChildrenElement(parameters.agent.name,parameters.agent.description)" userID="FLX" flexoID="2975" />
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="FLX-2984" logLevel="INFO" logString="(&quot;Allocate agent &quot; + parameters.agent)" ownerContext="controlGraph1" userID="FLX" flexoID="2984" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="SYL-3018" widget="CUSTOM_WIDGET" name="agent" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#SoftwareAgent&gt;" userID="SYL" flexoID="3018" />
+    </ActionScheme>
+    <ActionScheme id="FLX-3116" visibility="Private" name="getGoalRequirementMapping" width="800" label="get_goal_requirement_mapping" height="600" userID="FLX" flexoID="3116">
+      <BehaviourControlGraph_Sequence id="FLX-3125" userID="FLX" flexoID="3125">
+        <ControlGraph2_ConditionalAction id="FLX-3122" condition="(list.size &gt; 0)" ownerContext="controlGraph2" userID="FLX" flexoID="3122">
+          <ElseControlGraph_ReturnStatement id="SYL-3128" ownerContext="elseControlGraph" userID="SYL" flexoID="3128">
+            <AssignableAction_ExpressionAction id="SYL-3127" expression="null" userID="SYL" flexoID="3127" />
+          </ElseControlGraph_ReturnStatement>
+          <ThenControlGraph_ReturnStatement id="FLX-3121" ownerContext="thenControlGraph" userID="FLX" flexoID="3121">
+            <AssignableAction_ExpressionAction id="FLX-3120" expression="list.get(0)" userID="FLX" flexoID="3120" />
+          </ThenControlGraph_ReturnStatement>
+        </ControlGraph2_ConditionalAction>
+        <ControlGraph1_DeclarationAction id="FLX-3124" variable="list" ownerContext="controlGraph1" userID="FLX" flexoID="3124">
+          <AssignableAction_SelectFlexoConceptInstance id="FLX-3123" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" receiver="container" userID="FLX" flexoID="3123">
+            <Condition id="FLX-3115" condition="(selected.goal = parameters.goal)" userID="FLX" flexoID="3115" />
+          </AssignableAction_SelectFlexoConceptInstance>
+        </ControlGraph1_DeclarationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-3126" isRequired="true" widget="CUSTOM_WIDGET" name="goal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="3126" />
+    </ActionScheme>
+    <EventListener id="FLX-3565" listenedVirtualModelInstance="goalModel" flexoEventTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal" name="newGoalCreated" width="800" label="new_goal_created" height="600" description="Behaviour called when a new goal has been created in a SysML/KAOS goal diagram" userID="FLX" flexoID="3565">
+      <BehaviourControlGraph_Sequence id="FLX-3576" userID="FLX" flexoID="3576">
+        <ControlGraph2_Sequence id="FLX-3574" ownerContext="controlGraph2" userID="FLX" flexoID="3574">
+          <ControlGraph2_Sequence id="SYL-3757" ownerContext="controlGraph2" userID="SYL" flexoID="3757">
+            <ControlGraph2_ConditionalAction id="SYL-3748" condition="(matchingMappings.size = 0)" ownerContext="controlGraph2" userID="SYL" flexoID="3748">
+              <ElseControlGraph_Sequence id="SYL-3758" ownerContext="elseControlGraph" userID="SYL" flexoID="3758">
+                <ControlGraph2_ReturnStatement id="SYL-3756" ownerContext="controlGraph2" userID="SYL" flexoID="3756">
+                  <AssignableAction_ExpressionAction id="SYL-3755" expression="matchingMappings.get(0)" userID="SYL" flexoID="3755" />
+                </ControlGraph2_ReturnStatement>
+                <ControlGraph1_LogAction id="SYL-3753" logLevel="INFO" logString="&quot;OK, j'ai deja mon mapping&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="3753" />
+              </ElseControlGraph_Sequence>
+              <ThenControlGraph_Sequence id="SYL-3759" ownerContext="thenControlGraph" userID="SYL" flexoID="3759">
+                <ControlGraph2_Sequence id="SYL-3760" ownerContext="controlGraph2" userID="SYL" flexoID="3760">
+                  <ControlGraph2_ReturnStatement id="SYL-3570" ownerContext="controlGraph2" userID="SYL" flexoID="3570">
+                    <AssignableAction_AddFlexoConceptInstance id="SYL-3569" container="this" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping.create" receiver="container" ownerContext="controlGraph2" userID="SYL" flexoID="3569">
+                      <AddFlexoConceptInstanceParameter id="SYL-3568" paramName="aRequirement" value="newRequirement" userID="SYL" flexoID="3568" />
+                      <AddFlexoConceptInstanceParameter id="SYL-3567" paramName="aGoal" value="event.goal" userID="SYL" flexoID="3567" />
+                    </AssignableAction_AddFlexoConceptInstance>
+                  </ControlGraph2_ReturnStatement>
+                  <ControlGraph1_DeclarationAction id="FLX-3571" variable="newRequirement" ownerContext="controlGraph1" userID="FLX" flexoID="3571">
+                    <AssignableAction_ExpressionAction id="FLX-3566" expression="element.createRequirementNoNotification(event.goal.name,event.goal.description)" userID="FLX" flexoID="3566" />
+                  </ControlGraph1_DeclarationAction>
+                </ControlGraph2_Sequence>
+                <ControlGraph1_LogAction id="SYL-3751" logLevel="INFO" logString="&quot;OK je dois instancier un nouveau mapping&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="3751" />
+              </ThenControlGraph_Sequence>
+            </ControlGraph2_ConditionalAction>
+            <ControlGraph1_DeclarationAction id="SYL-3746" variable="matchingMappings" ownerContext="controlGraph1" userID="SYL" flexoID="3746">
+              <AssignableAction_SelectFlexoConceptInstance id="SYL-3744" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#GoalRequirementMapping" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="3744">
+                <Condition id="SYL-3745" condition="(selected.goal = event.goal)" userID="SYL" flexoID="3745" />
+              </AssignableAction_SelectFlexoConceptInstance>
+            </ControlGraph1_DeclarationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="FLX-3573" logLevel="INFO" logString="(&quot;Name equals &quot; + event.goal.name)" ownerContext="controlGraph1" userID="FLX" flexoID="3573" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="FLX-3575" logLevel="INFO" logString="(&quot;Received new event &quot; + event)" ownerContext="controlGraph1" userID="FLX" flexoID="3575" />
+      </BehaviourControlGraph_Sequence>
+    </EventListener>
+    <ActionScheme id="SYL-3648" name="createNewGoalDiagram" width="800" label="create_new_goal_diagram" height="600" userID="SYL" flexoID="3648">
+      <BehaviourControlGraph_Sequence id="SYL-3674" userID="SYL" flexoID="3674">
+        <ControlGraph2_Sequence id="SYL-3675" ownerContext="controlGraph2" userID="SYL" flexoID="3675">
+          <ControlGraph2_ReturnStatement id="SYL-3673" ownerContext="controlGraph2" userID="SYL" flexoID="3673">
+            <AssignableAction_ExpressionAction id="SYL-3672" expression="newDiagramMapping" userID="SYL" flexoID="3672" />
+          </ControlGraph2_ReturnStatement>
+          <ControlGraph1_NotifyPropertyChangedAction id="SYL-3671" propertyName="goalDiagrams" object="this" ownerContext="controlGraph1" userID="SYL" flexoID="3671" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeclarationAction id="SYL-3669" variable="newDiagramMapping" ownerContext="controlGraph1" userID="SYL" flexoID="3669">
+          <AssignableAction_AddFlexoConceptInstance id="SYL-3655" container="this" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#DiagramMapping.createGoalDiagram" receiver="container" userID="SYL" flexoID="3655">
+            <AddFlexoConceptInstanceParameter id="SYL-3667" paramName="diagramTitle" value="parameters.diagramTitle" userID="SYL" flexoID="3667" />
+            <AddFlexoConceptInstanceParameter id="SYL-3668" paramName="diagramDescription" value="parameters.diagramDescription" userID="SYL" flexoID="3668" />
+          </AssignableAction_AddFlexoConceptInstance>
+        </ControlGraph1_DeclarationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="SYL-3650" isRequired="true" widget="TEXT_FIELD" name="diagramTitle" type="java.lang.String" userID="SYL" flexoID="3650" />
+      <GenericBehaviourParameter id="SYL-3651" widget="TEXT_FIELD" name="diagramDescription" type="java.lang.String" userID="SYL" flexoID="3651" />
+    </ActionScheme>
+    <ActionScheme id="FLX-3965" visibility="Private" name="updateTopGoals" width="800" label="update_top_goals" height="600" userID="FLX" flexoID="3965">
+      <BehaviourControlGraph_Sequence id="SYL-3985" ownerContext="controlGraph2" userID="SYL" flexoID="3985">
+        <ControlGraph2_ReturnStatement id="SYL-3967" ownerContext="controlGraph2" userID="SYL" flexoID="3967">
+          <AssignableAction_ExpressionAction id="SYL-3966" expression="parameters.newElementMapping" userID="SYL" flexoID="3966" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_IterationAction id="FLX-3984" iteratorName="assignment" ownerContext="controlGraph1" userID="FLX" flexoID="3984">
+          <Iteration_SelectFlexoConceptInstance id="FLX-3969" container="goalModel" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#AgentAssignment" receiver="goalModel" ownerContext="iterationControlGraph" userID="FLX" flexoID="3969">
+            <Condition id="FLX-3968" condition="(selected.agent = parameters.newElementMapping.agent)" userID="FLX" flexoID="3968" />
+          </Iteration_SelectFlexoConceptInstance>
+          <ControlGraph_Sequence id="FLX-3983" ownerContext="controlGraph" userID="FLX" flexoID="3983">
+            <ControlGraph2_Sequence id="SYL-3981" ownerContext="controlGraph2" userID="SYL" flexoID="3981">
+              <ControlGraph2_Sequence id="SYL-4019" ownerContext="controlGraph2" userID="SYL" flexoID="4019">
+                <ControlGraph2_ConditionalAction id="SYL-4004" condition="(topGoalRequirement = null)" ownerContext="controlGraph2" userID="SYL" flexoID="4004">
+                  <ThenControlGraph_Sequence id="SYL-4021" ownerContext="thenControlGraph" userID="SYL" flexoID="4021">
+                    <ControlGraph2_Sequence id="SYL-4022" ownerContext="controlGraph2" userID="SYL" flexoID="4022">
+                      <ControlGraph2_Sequence id="SYL-4023" ownerContext="controlGraph2" userID="SYL" flexoID="4023">
+                        <ControlGraph2_Sequence id="SYL-4024" ownerContext="controlGraph2" userID="SYL" flexoID="4024">
+                          <ControlGraph2_AssignationAction id="SYL-4018" assign="topGoalRequirement" ownerContext="controlGraph2" userID="SYL" flexoID="4018">
+                            <AssignableAction_AddFlexoConceptInstance id="SYL-4013" container="parameters.newElementMapping" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#TopGoalRequirementMapping.create" receiver="container" ownerContext="controlGraph2" userID="SYL" flexoID="4013">
+                              <AddFlexoConceptInstanceParameter id="SYL-4014" paramName="parentMapping" value="parentMapping" userID="SYL" flexoID="4014" />
+                              <AddFlexoConceptInstanceParameter id="SYL-4015" paramName="mapping" value="newMapping" userID="SYL" flexoID="4015" />
+                            </AssignableAction_AddFlexoConceptInstance>
+                          </ControlGraph2_AssignationAction>
+                          <ControlGraph1_LogAction id="SYL-4012" logLevel="INFO" logString="(((&quot;On instancie un top goal entre &quot; + parentMapping) + &quot; et &quot;) + newMapping)" ownerContext="controlGraph1" userID="SYL" flexoID="4012" />
+                        </ControlGraph2_Sequence>
+                        <ControlGraph1_DeclarationAction id="SYL-4010" variable="newMapping" ownerContext="controlGraph1" userID="SYL" flexoID="4010">
+                          <AssignableAction_ExpressionAction id="SYL-4011" expression="parameters.newElementMapping.ensureGoalRequirementMappingExists(newRequirement)" ownerContext="controlGraph1" userID="SYL" flexoID="4011" />
+                        </ControlGraph1_DeclarationAction>
+                      </ControlGraph2_Sequence>
+                      <ControlGraph1_DeclarationAction id="SYL-4008" variable="newRequirement" ownerContext="controlGraph1" userID="SYL" flexoID="4008">
+                        <AssignableAction_ExpressionAction id="SYL-4009" expression="parameters.newElementMapping.element.createRequirement(assignment.goal.name,assignment.goal.description)" ownerContext="controlGraph1" userID="SYL" flexoID="4009" />
+                      </ControlGraph1_DeclarationAction>
+                    </ControlGraph2_Sequence>
+                    <ControlGraph1_LogAction id="SYL-4007" logLevel="INFO" logString="(&quot;Missing top goal requirement &quot; + assignment.goal)" ownerContext="controlGraph1" userID="SYL" flexoID="4007" />
+                  </ThenControlGraph_Sequence>
+                </ControlGraph2_ConditionalAction>
+                <ControlGraph1_DeclarationAction id="SYL-4002" variable="topGoalRequirement" ownerContext="controlGraph1" userID="SYL" flexoID="4002">
+                  <AssignableAction_SelectUniqueFlexoConceptInstance id="SYL-4000" container="parameters.newElementMapping" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#TopGoalRequirementMapping" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="4000">
+                    <Condition id="SYL-4001" condition="(selected.parentGoalRequirementMapping = parentMapping)" userID="SYL" flexoID="4001" />
+                  </AssignableAction_SelectUniqueFlexoConceptInstance>
+                </ControlGraph1_DeclarationAction>
+              </ControlGraph2_Sequence>
+              <ControlGraph1_DeclarationAction id="SYL-3980" variable="parentMapping" ownerContext="controlGraph1" userID="SYL" flexoID="3980">
+                <AssignableAction_ExpressionAction id="SYL-3979" expression="this.getGoalRequirementMapping(assignment.goal)" ownerContext="controlGraph1" userID="SYL" flexoID="3979" />
+              </ControlGraph1_DeclarationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_LogAction id="FLX-3982" logLevel="INFO" logString="(&quot;On doit reporter le goal &quot; + assignment.goal)" ownerContext="controlGraph1" userID="FLX" flexoID="3982" />
+          </ControlGraph_Sequence>
+        </ControlGraph1_IterationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="SYL-4025" widget="CUSTOM_WIDGET" name="newElementMapping" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping&gt;" userID="SYL" flexoID="4025" />
+    </ActionScheme>
+  </FlexoConcept>
+  <FlexoConcept idref="FLX-2401" />
+  <FlexoConcept idref="SYL-3029" />
+  <FlexoConcept idref="SYL-3354" />
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="203" />
+  <UseModelSlotDeclaration id="1" modelSlotClass="org.openflexo.technologyadapter.gina.FIBComponentModelSlot" userID="SYL" flexoID="-1" />
+  <Inspector id="FLX-1" renderer="(&quot;SysMLKaos-B-Methodology defined on &quot; + element.identifier)" inspectorTitle="SysMLKaos-B-Methodology" userID="FLX" flexoID="1" />
+  <FMLRTVirtualModelInstanceModelSlot id="FLX-7" virtualModelURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="sysMLKaos" userID="FLX" flexoID="7" />
+  <GetSetProperty id="FLX-232" name="elementMappings" description="Return all mappings between element and SysML/KAOS diagram" userID="FLX" flexoID="232">
+    <SetControlGraph_EmptyControlGraph id="FLX-240" ownerContext="setControlGraph" userID="FLX" flexoID="240" />
+    <GetControlGraph_ReturnStatement id="FLX-235" ownerContext="getControlGraph" userID="FLX" flexoID="235">
+      <AssignableAction_SelectFlexoConceptInstance id="FLX-234" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping" receiver="this" userID="FLX" flexoID="234" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <CreationScheme id="FLX-131" name="create" width="800" label="create" height="600" userID="FLX" flexoID="131">
+    <BehaviourControlGraph_Sequence id="SYL-2907" userID="SYL" flexoID="2907">
+      <ControlGraph2_Sequence id="FLX-241" ownerContext="controlGraph2" userID="FLX" flexoID="241">
+        <ControlGraph2_Sequence id="FLX-2390" ownerContext="controlGraph2" userID="FLX" flexoID="2390">
+          <ControlGraph2_Sequence id="FLX-2389" ownerContext="controlGraph2" userID="FLX" flexoID="2389">
+            <ControlGraph2_AddFlexoConceptInstance id="FLX-227" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping.createNewMapping" receiver="this" ownerContext="controlGraph2" userID="FLX" flexoID="227">
+              <AddFlexoConceptInstanceParameter id="FLX-228" paramName="anElement" value="parameters.element" userID="FLX" flexoID="228" />
+            </ControlGraph2_AddFlexoConceptInstance>
+            <ControlGraph1_LogAction id="FLX-2386" logLevel="INFO" logString="(&quot;Jusqu'ici tout va bien, rootModel=&quot; + sysMLKaos.rootModel)" ownerContext="controlGraph1" userID="FLX" flexoID="2386" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="FLX-2388" logLevel="INFO" logString="(&quot;Hop on arrive ici avec &quot; + sysMLKaos.toString)" ownerContext="controlGraph1" userID="FLX" flexoID="2388" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-231" assign="declaringElement" ownerContext="controlGraph1" userID="FLX" flexoID="231">
+          <AssignableAction_ExpressionAction id="FLX-230" expression="parameters.element" userID="FLX" flexoID="230" />
+        </ControlGraph1_AssignationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_AssignationAction id="SYL-2906" assign="sysMLKaos" ownerContext="controlGraph1" userID="SYL" flexoID="2906">
+        <AssignableAction_AddVirtualModelInstance id="SYL-2902" virtualModelInstanceTitle="parameters.sysMLKaosViewName" virtualModelInstanceName="parameters.sysMLKaosViewName" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint.init" receiver="container" userID="SYL" flexoID="2902">
+          <AddFlexoConceptInstanceParameter id="SYL-2903" paramName="name" value="parameters.sysMLKaosViewName" userID="SYL" flexoID="2903" />
+          <AddFlexoConceptInstanceParameter id="SYL-2904" paramName="title" value="parameters.sysMLKaosViewName" userID="SYL" flexoID="2904" />
+          <AddFlexoConceptInstanceParameter id="SYL-2905" paramName="description" value="&quot;&quot;" userID="SYL" flexoID="2905" />
+        </AssignableAction_AddVirtualModelInstance>
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-151" isRequired="true" widget="TEXT_FIELD" name="sysMLKaosViewName" type="java.lang.String" userID="FLX" flexoID="151" />
+    <GenericBehaviourParameter id="FLX-243" widget="CUSTOM_WIDGET" name="element" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="243" />
+  </CreationScheme>
+  <DeletionScheme id="FLX-171" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="171">
+    <BehaviourControlGraph_EmptyControlGraph id="FLX-170" userID="FLX" flexoID="170" />
+  </DeletionScheme>
+  <ActionScheme id="FLX-2344" name="getElementMapping" width="800" label="get_element_mapping" height="600" description="" userID="FLX" flexoID="2344">
+    <BehaviourControlGraph_Sequence id="SYL-2858" ownerContext="controlGraph2" userID="SYL" flexoID="2858">
+      <ControlGraph2_Sequence id="SYL-2859" ownerContext="controlGraph2" userID="SYL" flexoID="2859">
+        <ControlGraph2_ReturnStatement id="SYL-2857" ownerContext="controlGraph2" userID="SYL" flexoID="2857">
+          <AssignableAction_ExpressionAction id="SYL-2856" expression="null" userID="SYL" flexoID="2856" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_ConditionalAction id="SYL-2853" condition="(list.size &gt; 0)" ownerContext="controlGraph1" userID="SYL" flexoID="2853">
+          <ThenControlGraph_ReturnStatement id="SYL-2855" ownerContext="thenControlGraph" userID="SYL" flexoID="2855">
+            <AssignableAction_ExpressionAction id="SYL-2854" expression="list.get(0)" userID="SYL" flexoID="2854" />
+          </ThenControlGraph_ReturnStatement>
+        </ControlGraph1_ConditionalAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="SYL-2850" variable="list" ownerContext="controlGraph1" userID="SYL" flexoID="2850">
+        <AssignableAction_SelectFlexoConceptInstance id="SYL-2849" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping" receiver="this" userID="SYL" flexoID="2849">
+          <Condition id="SYL-2851" condition="(selected.element = parameters.element)" userID="SYL" flexoID="2851" />
+        </AssignableAction_SelectFlexoConceptInstance>
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2355" widget="CUSTOM_WIDGET" name="element" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2355" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2468" name="retrieveDiagramElementMapping" width="800" label="get_diagram_element_mapping" height="600" description="Returns existing DiagramElementMapping for supplied element.&#xA;When not existant, create a new one" userID="FLX" flexoID="2468">
+    <BehaviourControlGraph_Sequence id="FLX-2792" ownerContext="controlGraph2" userID="FLX" flexoID="2792">
+      <ControlGraph2_Sequence id="FLX-2791" ownerContext="controlGraph2" userID="FLX" flexoID="2791">
+        <ControlGraph2_Sequence id="FLX-2514" ownerContext="controlGraph2" userID="FLX" flexoID="2514">
+          <ControlGraph2_ReturnStatement id="FLX-2487" ownerContext="controlGraph2" userID="FLX" flexoID="2487">
+            <AssignableAction_ExpressionAction id="FLX-2486" expression="returned" userID="FLX" flexoID="2486" />
+          </ControlGraph2_ReturnStatement>
+          <ControlGraph1_ConditionalAction id="FLX-2504" condition="(returned = null)" ownerContext="controlGraph1" userID="FLX" flexoID="2504">
+            <ThenControlGraph_Sequence id="SYL-2877" ownerContext="thenControlGraph" userID="SYL" flexoID="2877">
+              <ControlGraph2_AssignationAction id="SYL-2876" assign="returned" ownerContext="controlGraph2" userID="SYL" flexoID="2876">
+                <AssignableAction_AddFlexoConceptInstance id="SYL-2871" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping.createNewMapping" receiver="this" ownerContext="controlGraph2" userID="SYL" flexoID="2871">
+                  <AddFlexoConceptInstanceParameter id="SYL-2875" paramName="anElement" value="parameters.element" userID="SYL" flexoID="2875" />
+                </AssignableAction_AddFlexoConceptInstance>
+              </ControlGraph2_AssignationAction>
+              <ControlGraph1_LogAction id="FLX-2789" logLevel="INFO" logString="&quot;On le trouve pas, on le reconstruit&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="2789" />
+            </ThenControlGraph_Sequence>
+          </ControlGraph1_ConditionalAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeclarationAction id="FLX-2479" variable="returned" ownerContext="controlGraph1" userID="FLX" flexoID="2479">
+          <AssignableAction_ExpressionAction id="FLX-2478" expression="this.getElementMapping(parameters.element)" userID="FLX" flexoID="2478" />
+        </ControlGraph1_DeclarationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_LogAction id="FLX-2787" logLevel="INFO" logString="(&quot;On cherche le mapping pour &quot; + parameters.element)" ownerContext="controlGraph1" userID="FLX" flexoID="2787" />
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2475" widget="CUSTOM_WIDGET" name="element" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2475" />
+  </ActionScheme>
+  <EventListener id="SYL-4059" listenedVirtualModelInstance="formoseVMI" flexoEventTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#NewElement" name="newElementCreated" width="800" label="new_element_created" height="600" userID="SYL" flexoID="4059">
+    <BehaviourControlGraph_Sequence id="SYL-4076" userID="SYL" flexoID="4076">
+      <ControlGraph2_Sequence id="SYL-4075" ownerContext="controlGraph2" userID="SYL" flexoID="4075">
+        <ControlGraph2_Sequence id="SYL-4079" ownerContext="controlGraph2" userID="SYL" flexoID="4079">
+          <ControlGraph2_Sequence id="SYL-4125" ownerContext="controlGraph2" userID="SYL" flexoID="4125">
+            <ControlGraph2_ReturnStatement id="SYL-4078" ownerContext="controlGraph2" userID="SYL" flexoID="4078">
+              <AssignableAction_ExpressionAction id="SYL-4077" expression="newElementMapping" userID="SYL" flexoID="4077" />
+            </ControlGraph2_ReturnStatement>
+            <ControlGraph1_AssignationAction id="SYL-4124" assign="newElementMapping.parentDiagramElementMapping" ownerContext="controlGraph1" userID="SYL" flexoID="4124">
+              <AssignableAction_ExpressionAction id="SYL-4123" expression="parentElementMapping" userID="SYL" flexoID="4123" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="FLX-4064" variable="newElementMapping" ownerContext="controlGraph1" userID="FLX" flexoID="4064">
+            <AssignableAction_AddFlexoConceptInstance id="FLX-4066" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping.createNewMapping" receiver="this" ownerContext="controlGraph1" userID="FLX" flexoID="4066">
+              <AddFlexoConceptInstanceParameter id="SYL-4122" paramName="anElement" value="event.element" userID="SYL" flexoID="4122" />
+            </AssignableAction_AddFlexoConceptInstance>
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeclarationAction id="SYL-4074" variable="parentElementMapping" ownerContext="controlGraph1" userID="SYL" flexoID="4074">
+          <AssignableAction_ExpressionAction id="SYL-4073" expression="this.getElementMapping(event.element.parent)" userID="SYL" flexoID="4073" />
+        </ControlGraph1_DeclarationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_LogAction id="SYL-4061" logLevel="INFO" logString="&quot;New element created&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="4061" />
+    </BehaviourControlGraph_Sequence>
+  </EventListener>
+</VirtualModel>

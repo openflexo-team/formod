@@ -1,0 +1,550 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml")
+public class SysMLKaosModel {
+
+  public String modelName;
+  public String modelTitle;
+  public String modelDescription;
+  public SysMLKaosModel parentModel;
+  @GetSetProperty(value="goals", access=get)  
+  public List<Goal> getGoals {  
+    return this.SelectFlexoConceptInstance(type=Goal);  
+  }
+  @GetSetProperty(value="agents", access=get)  
+  public List<Agent> getAgents {  
+    return this.SelectFlexoConceptInstance(type=Agent);  
+  }
+  @GetSetProperty(value="groups", access=get)  
+  public List<GoalGroup> getGroups {  
+    return this.SelectFlexoConceptInstance(type=GoalGroup);  
+  }
+  @GetSetProperty(value="ungroupedGoals", access=get)  
+  public List<Goal> getUngroupedGoals {  
+    return this.SelectFlexoConceptInstance(type=Goal,where=where=(selected.goalGroup = null));  
+  }
+  @GetSetProperty(value="topLevelGroups", access=get)  
+  public List<GoalGroup> getTopLevelGroups {  
+    return this.SelectFlexoConceptInstance(type=GoalGroup,where=where=(selected.parentGroup = null));  
+  }
+
+  @CreationScheme  
+  SysMLKaosModel:init(String name, String title, String description, SysMLKaosModel parentModel) {  
+    modelName = parameters.name;    
+    modelTitle = parameters.title;    
+    modelDescription = parameters.description;    
+    parentModel = parameters.parentModel;  
+  }  
+
+  @ActionScheme  
+  Void addFunctionalGoal(String name, String type, String description) {  
+    FunctionalGoal.create(parameters.name,parameters.type,parameters.description,true)  
+  }  
+
+  @ActionScheme  
+  Void addRefinement() {  
+    Refinement.create()  
+  }  
+
+  @ActionScheme  
+  Void removeRefinement(Refinement refinement) {  
+    parameters.refinement.delete();  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+
+  /**  
+   * A functional goal.  
+  This concept implements here many notions of the model.  
+  When no responsability is defined, this is a normal goal, to be refined.  
+  When a responsability is defined:  
+  - this is an Expectation if the responsability references an EnvironmentalAgent  
+  - this is a Requirement if the responsability references a SoftwareAgent  
+   *   
+   */  
+  @FlexoConcept  
+  public class FunctionalGoal extends Goal  {  
+  
+    public List responsability;  
+    public List assignments;  
+    public String functionalGoalType;  
+  
+    @CreationScheme    
+    FunctionalGoal:create(String name, String type, String description, Boolean notify) {    
+      functionalGoalType = parameters.type;      
+      this.createGoal(parameters.name,parameters.description)      
+      if parameters.notify {      
+        log "Notify new event"        
+        fireEvent NewGoal      
+      }      
+      container.firePropertyChange ungroupedGoals    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Agent {  
+  
+    public String name;  
+    public String description;  
+  
+    @ActionScheme    
+    Void createAgent(String name, String description) {    
+      name = parameters.name;      
+      description = parameters.description;    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      log ("On arrive la avec " + container)      
+      SysMLKaosModel containerModel = container;      
+      log ("On va supprimer l'agent, containerModel=" + containerModel)      
+      delete this;      
+      log ("Ca y est agent supprime, containerModel=" + containerModel)      
+      fireEvent DeletedAgent      
+      containerModel.firePropertyChange agents    
+    }    
+  
+  }  
+
+  /**  
+   * Defines a refinment relationship between a Goal and a collection of Goals  
+  Goals should be compatible (a functional requirement cannot emerge from a non functional requirement for example)  
+  Semantics of refinment is defined by sub-classes  
+   *   
+   */  
+  @FlexoConcept  
+  public class Refinement {  
+  
+    public List parentGoal;  
+    public List childGoals;  
+    public boolean isAnd;  
+    public boolean isOr;  
+    @GetSetProperty(value="refinementType", access=get)    
+    public String getRefinementType {    
+      if this.isAnd {      
+        return "ref_and";      
+      } else {      
+        if this.isOr {        
+          return "ref_or";        
+        } else {        
+          if isMilestone {          
+            return "ref_milestone";          
+          } else {          
+            return "ref";          
+          }        
+        }      
+      }    
+    }  
+    public boolean isMilestone;  
+    public boolean isData;  
+  
+    @ActionScheme    
+    Void addLinkToAParentGoal(Goal parentGoal) {    
+      if (!(parentGoal.contains(parameters.parentGoal))) {      
+        parentGoal.add(parameters.parentGoal)        
+        parameters.parentGoal.childrenRefinement.add(this)      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void addLinkToAChildrenGoal(Goal childrenGoal) {    
+      if (!(childGoals.contains(parameters.childrenGoal))) {      
+        childGoals.add(parameters.childrenGoal)        
+        parameters.childrenGoal.parentRefinement.add(this)      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void removeLinkToAParentGoal(Goal parentGoal) {    
+      parameters.parentGoal.childrenRefinement.remove(this);      
+      parentGoal.remove(parameters.parentGoal);    
+    }    
+  
+    @ActionScheme    
+    Void removeLinkToAChildrenGoal(Goal childrenGoal) {    
+      log "Behaviour removeLinkToAChildrenGoal"      
+      parameters.childrenGoal.parentRefinement.remove(this);      
+      childGoals.remove(parameters.childrenGoal);    
+    }    
+  
+    @ActionScheme    
+    Void removeAllLinksToParentGoal() {    
+      for (item : parentGoal) {      
+        this.removeLinkToAParentGoal(item)      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void removeAllLinksToChildGoals() {    
+      for (item : childGoals) {      
+        this.removeLinkToAChildrenGoal(item)      
+      }    
+    }    
+  
+    @CreationScheme    
+    Refinement:create() {    
+      this.setLogicalTypeToAnd()    
+    }    
+  
+    @CreationScheme    
+    Refinement:createLinke(Goal parentGoal, Goal childrenGoal) {    
+      parentGoal.add(parameters.parentGoal)      
+      childGoals.add(parameters.childrenGoal)      
+      parameters.parentGoal.childrenRefinement.add(this)      
+      parameters.childrenGoal.parentRefinement.add(this)      
+      this.setLogicalTypeToAnd()    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      this.removeAllLinksToParentGoal()      
+      this.removeAllLinksToChildGoals()    
+    }    
+  
+    @ActionScheme    
+    Void setLogicalTypeToAnd() {    
+      isOr = false;      
+      isAnd = true;      
+      isMilestone = false;      
+      isData = false;    
+    }    
+  
+    @ActionScheme    
+    Void setLogicalTypeToOr() {    
+      isAnd = false;      
+      isOr = true;      
+      isMilestone = false;      
+      isData = false;    
+    }    
+  
+    @ActionScheme    
+    Void setLogicalTypeToNone() {    
+      isAnd = false;      
+      isOr = false;      
+      isData = false;      
+      isMilestone = false;    
+    }    
+  
+    @ActionScheme    
+    Void setLogicalTypeToMilestone() {    
+      isAnd = false;      
+      isOr = false;      
+      isData = false;      
+      isMilestone = true;    
+    }    
+  
+    @ActionScheme    
+    Void setLogicalTypeToData() {    
+      isAnd = false;      
+      isOr = false;      
+      isData = true;      
+      isMilestone = false;    
+    }    
+  
+  }  
+
+  /**  
+   * An abstract Goal.  
+  Might be a functional or non-functional goal.  
+  A Goal might be achived by one of its defined refinments  
+   *   
+   */  
+  @FlexoConcept  
+  public class Goal {  
+  
+    public String name;  
+    public String description;  
+    public List parentRefinement;  
+    public List childrenRefinement;  
+    public GoalGroup goalGroup;  
+    @GetSetProperty(value="parentGoal", access=get)    
+    public Goal getParentGoal {    
+      for (refinement : parentRefinement) {      
+        for (parentGoal : refinement.parentGoal) {        
+          return parentGoal;        
+        }      
+      }      
+      return null;    
+    }  
+    @GetSetProperty(value="refines", access=get)    
+    public Refinement getRefines {    
+      for (refinement : parentRefinement) {      
+        return refinement;      
+      }      
+      return null;    
+    }  
+  
+    @DeletionScheme    
+    public Void delete() {    
+      log ("On arrive la avec " + container)      
+      SysMLKaosModel containerModel = container;      
+      log ("On va supprimer le goal, containerModel=" + containerModel)      
+      for (item : parentRefinement) {      
+        item.childGoals.remove(this);      
+      }      
+      for (item : childrenRefinement) {      
+        item.parentGoal.remove(this);      
+      }      
+      delete this;      
+      log ("Ca y est goal supprime, containerModel=" + containerModel)      
+      fireEvent DeletedGoal      
+      containerModel.firePropertyChange goals    
+    }    
+  
+    @ActionScheme    
+    Void createGoal(String name, String description) {    
+      name = parameters.name;      
+      description = parameters.description;    
+    }    
+  
+  }  
+
+  /**  
+   * A non functional goal.  
+  This concept implements here many notions of the model.  
+  When no contributions are defined, this is a normal goal, to be refined.  
+  When at least one contribution is defined, this is an Elementary NonFunctionalGoal  
+   *   
+   */  
+  @FlexoConcept  
+  public class NonFunctionalGoal extends Goal  {  
+  
+    public String nonFunctionalGoalType;  
+    public String topic;  
+    public List contributions;  
+  
+    @CreationScheme    
+    NonFunctionalGoal:create(String name, String type, String description) {    
+      this.createGoal(parameters.name,parameters.description)      
+      log ("Ici avec " + parameters.name)      
+      nonFunctionalGoalType = parameters.type;      
+      fireEvent NewGoal      
+      container.firePropertyChange ungroupedGoals    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class EnvironmentalAgent extends Agent  {  
+  
+    @CreationScheme    
+    EnvironmentalAgent:createEnvironmentalAgent(String name, String description) {    
+      this.createAgent(parameters.name,parameters.description)      
+      container.firePropertyChange agents    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class SoftwareAgent extends Agent  {  
+  
+    @CreationScheme    
+    SoftwareAgent:createSoftwareAgent(String name, String description) {    
+      this.createAgent(parameters.name,parameters.description)      
+      container.firePropertyChange agents    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Contribution {  
+  
+    public ContributionGoal contributionGoal;  
+    public NonFunctionalGoal nonFunctionalGoal;  
+    public boolean isPositive;  
+    public String description;  
+  
+    @CreationScheme    
+    Contribution:create(ContributionGoal contributionGoal, NonFunctionalGoal nonFunctionalGoal, Boolean isPositive) {    
+      contributionGoal = parameters.contributionGoal;      
+      nonFunctionalGoal = parameters.nonFunctionalGoal;      
+      isPositive = parameters.isPositive;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class NewGoal {  
+  
+    public Goal goal;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    NewGoal:create(Goal aGoal) {    
+      goal = parameters.aGoal;      
+      log ("Created event " + this)      
+      log ("NewGoal name=" + goal.name)      
+      log ("new goal " + goal)    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DeletedGoal {  
+  
+    public Goal goal;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    DeletedGoal:create(Goal aGoal) {    
+      log ("Create DeletedGoal with " + parameters.aGoal)      
+      goal = parameters.aGoal;      
+      log ("Created event " + this)    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class AgentAssignment {  
+  
+    public Agent agent;  
+    public Goal goal;  
+  
+    @CreationScheme    
+    AgentAssignment:create(Agent anAgent, Goal aGoal) {    
+      agent = parameters.anAgent;      
+      goal = parameters.aGoal;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      agent = null;      
+      goal = null;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class ContributionGoal extends Goal  {  
+  
+    public String contributionGoalType;  
+  
+    @CreationScheme    
+    ContributionGoal:create(String name, String type, String description) {    
+      this.createGoal(parameters.name,parameters.description)      
+      log ("Ici avec " + parameters.name)      
+      contributionGoalType = parameters.type;      
+      fireEvent NewGoal      
+      container.firePropertyChange ungroupedGoals    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Impact {  
+  
+    public ContributionGoal contributionGoal;  
+    public FunctionalGoal functionalGoal;  
+    public boolean isPositive;  
+    public String description;  
+  
+    @CreationScheme    
+    Impact:create(ContributionGoal contributionGoal, FunctionalGoal functionalGoal, Boolean isPositive) {    
+      contributionGoal = parameters.contributionGoal;      
+      functionalGoal = parameters.functionalGoal;      
+      isPositive = parameters.isPositive;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DeletedAgent {  
+  
+    public Agent agent;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    DeletedAgent:create(Agent anAgent) {    
+      log ("Create DeletedAgent with " + parameters.anAgent)      
+      agent = parameters.anAgent;      
+      log ("Created event " + this)    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class GoalGroup {  
+  
+    public List goals;  
+    public String title;  
+    @GetSetProperty(value="parentGroup", access=get)    
+    public GoalGroup getParentGroup {    
+      for (goal : goals) {      
+        if (goal.parentGoal != null) {        
+          if (goal.parentGoal.goalGroup != null) {          
+            return goal.parentGoal.goalGroup;          
+          }        
+        }      
+      }      
+      return null;    
+    }  
+    @GetSetProperty(value="childrenGroups", access=get)    
+    public List<GoalGroup> getChildrenGroups {    
+      return container.SelectFlexoConceptInstance(type=GoalGroup,where=where=(selected.parentGroup = this));    
+    }  
+  
+    @CreationScheme    
+    GoalGroup:create(String title, List<FlexoConceptInstance> goals) {    
+      title = parameters.title;      
+      goals = parameters.goals;      
+      fireEvent NewGoalGroup      
+      container.firePropertyChange groups      
+      container.firePropertyChange ungroupedGoals    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class NewGoalGroup {  
+  
+    public String group;  
+  
+    @CreationScheme    
+    NewGoalGroup:create(GoalGroup aGroup) {    
+      group = parameters.aGroup;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      group = null;    
+    }    
+  
+  }  
+
+}

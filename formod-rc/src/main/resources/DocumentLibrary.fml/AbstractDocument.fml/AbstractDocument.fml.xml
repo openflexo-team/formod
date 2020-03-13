@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-4" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml" version="0.1" isAbstract="true" name="AbstractDocument" userID="FLX" flexoID="4">
+  <FlexoConcept id="FLX-8" isAbstract="true" name="Reference" description="We define reference as a portion of a document (which can be of various formats)&#xA;" userID="FLX" flexoID="8">
+    <Inspector id="FLX-7" inspectorTitle="Reference" userID="FLX" flexoID="7">
+      <InspectorEntry id="SYL-41" readOnly="true" widget="TEXT_FIELD" data="documentName" name="document" label="document" type="java.lang.String" userID="SYL" flexoID="41" />
+    </Inspector>
+    <AbstractProperty id="FLX-24" type="java.lang.String" name="rawText" userID="FLX" flexoID="24" />
+    <AbstractProperty id="FLX-34" type="java.lang.String" name="preview" userID="FLX" flexoID="34" />
+  </FlexoConcept>
+  <Inspector id="FLX-1" inspectorTitle="AbstractDocument" userID="FLX" flexoID="1">
+    <InspectorEntry id="SYL-42" widget="TEXT_FIELD" data="documentName" name="document_name" label="document_name" type="java.lang.String" userID="SYL" flexoID="42" />
+    <InspectorEntry id="SYL-43" widget="TEXT_AREA" data="documentDescription" name="document_description" label="document_description" type="java.lang.String" userID="SYL" flexoID="43" />
+  </Inspector>
+  <PrimitiveRole id="FLX-28" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="documentName" userID="FLX" flexoID="28" />
+  <PrimitiveRole id="FLX-29" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="documentDescription" userID="FLX" flexoID="29" />
+</VirtualModel>

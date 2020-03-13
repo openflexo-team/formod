@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<db_xml>
+    <atelierb version="3_7_ubuntu-cvs" />
+    <project decomp_dir="/Users/sylvain/Documents/TestsFlexo/TestAtelierB/Test1/bdp/expand_src" old_decomp_dir="/Users/sylvain/Documents/TestsFlexo/TestAtelierB/Test1/bdp/src" type="SYSTEM">
+        <!-- Definition directory list -->
+        <!-- Component file list -->
+        <component_file path="/Users/sylvain/Documents/TestsFlexo/TestAtelierB/Test1" name="Refinment" suffix="ref" user="sylvain">
+            <component name="Refinment" type="refinement" />
+        </component_file>
+        <component_file path="/Users/sylvain/Documents/TestsFlexo/TestAtelierB/Test1" name="System1" suffix="sys" user="sylvain">
+            <component name="System1" type="system" />
+        </component_file>
+    </project>
+</db_xml>

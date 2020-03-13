@@ -1,0 +1,17 @@
+/* System2
+ * Test visibility clauses
+ */
+SYSTEM
+    System2
+INCLUDES
+	System1_i, Full.Qualified.Machine
+SEES
+	System1,System1_r
+IMPORTS
+	System1
+EXTENDS
+	System1
+USES
+	System1,Full.Qualified.Machine
+
+END

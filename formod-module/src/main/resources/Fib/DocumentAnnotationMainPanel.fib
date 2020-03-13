@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" flowAlignment="LEADING" borderLeft="0" imageFile="../Icons/FormoseBackground.jpg" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" imageWidth="626" sizeAdjustment="FitToAvailableSize" imageHeight="417" layout="twocols" borderRight="0" vGap="5" hGap="5" controllerClassName="org.openflexo.module.formose.view.DocumentAnnotationModuleView$DocumentAnnotationModuleViewFIBController" name="Panel">
+  <Panel id="1" align="left" borderTop="0" borderTitle="Panel" flowAlignment="CENTER" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="flow" borderRight="0" vGap="5" hGap="5" constraints="twocols(anchor=south;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=10;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="FIBPanel2">
+    <Image id="2" imageWidth="80" sizeAdjustment="OriginalSize" align="left" imageHeight="46" data="controller.projectIcon.image" constraints="flow()" name="Image2" />
+    <Label id="3" label="" align="center" data="(data.owner.name + &quot;.prj&quot;)" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=50;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="ArialMT,0,30" name="Label" />
+  </Panel>
+  <Table id="4" backgroundSelectionColor="9,80,208" visibleRowCount="5" boundToSelectionManager="true" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml&gt;" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" textSecondarySelectionColor="0,0,0" lookAndFeel="FlatDesign" textNonSelectionColor="0,0,0" selectionMode="MultipleIntervalSelection" rowHeight="18" manageDynamicModel="true" rightClickAction="controller.rightClick(DocumentsTable.selected,event)" doubleClickAction="controller.doubleClick(DocumentsTable.selected)" data="formoseView.documentAnnotationMethodology.documentLibrary.documents" clickAction="controller.singleClick(DocumentsTable.selected)" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=10;insetsLeft=20;insetsRight=20;insetsTop=10;location=right)" name="DocumentsTable">
+    <IconColumn id="5" data="controller.iconForObject(iterator)" resizable="false" title="icon" displayTitle="false" columnWidth="20" showIcon="false" name="icon" />
+    <LabelColumn id="6" data="iterator.documentName" resizable="true" title="document" displayTitle="true" columnWidth="200" showIcon="false" name="label" />
+    <LabelColumn id="7" data="iterator.documentDescription" resizable="true" title="description" displayTitle="true" columnWidth="400" showIcon="false" name="label" />
+    <AddAction id="8" method="controller.importNewDocXDocument(formoseView.documentAnnotationMethodology.documentLibrary)" name="add_action" />
+    <RemoveAction id="9" method="controller.removeDocument(DocumentsTable.selected)" name="delete_action" />
+  </Table>
+  <Panel id="10" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="twocols" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=20;insetsRight=20;insetsTop=10;location=right)" name="FIBPanel">
+    <Browser id="11" backgroundSelectionColor="9,80,208" visibleRowCount="5" boundToSelectionManager="true" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" allowsDragAndDrop="true" textNonSelectionColor="0,0,0" root="formoseView.documentAnnotationMethodology" selectionMode="DiscontiguousTreeSelection" rowHeight="18" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(ReferencesBrowser.selected,event)" doubleClickAction="controller.doubleClick(ReferencesBrowser.selected)" clickAction="controller.singleClick(ReferencesBrowser.selected)" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" height="100" index="0" width="300" name="ReferencesBrowser">
+      <BrowserElement id="12" dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml&gt;" icon="controller.iconForObject(methodology)" label="&quot;References&quot;" isEditable="false" name="methodology">
+        <Children id="13" data="formoseView.formoseVMI.projectElement" name="elementReferences" />
+        <Children id="14" data="methodology.unclassified" name="unclassified" />
+      </BrowserElement>
+      <BrowserElement id="15" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#Unclassified&gt;" icon="controller.iconForObject(unclassified)" label="&quot;Unclassified references&quot;" isEditable="false" defaultVisible="false" name="unclassified">
+        <Children id="16" data="unclassified.unclassifiedReferences" name="unclassifiedReferences" />
+      </BrowserElement>
+      <BrowserElement id="17" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" icon="controller.iconForObject(reference)" label="reference.preview" isEditable="false" defaultVisible="false" name="reference">
+        <DragOperation id="18" isAvailable="(!(formoseView.documentAnnotationMethodology.getElementReference(target).references.contains(dragged)))" targetElementName="element" action="controller.moveReferenceToElement(dragged,target)" name="dragToElement" />
+        <DragOperation id="19" isAvailable="(!(formoseView.documentAnnotationMethodology.getRequirementReference(target).references.contains(dragged)))" targetElementName="requirement" action="controller.moveReferenceToRequirement(dragged,target)" name="dragToRequirement" />
+      </BrowserElement>
+      <BrowserElement id="20" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" icon="controller.iconForObject(element)" label="element.identifier" isEditable="false" name="element">
+        <Children id="21" data="formoseView.documentAnnotationMethodology.getElementReference(element).references" name="annotations" />
+        <Children id="22" data="element.childrenElements" name="children" />
+        <Children id="23" data="element.requirements" name="children1" />
+        <BrowserAddAction id="24" method="controller.createChildrenElement(ReferencesBrowser.selected)" name="create_sub_element" />
+        <BrowserAddAction id="25" method="controller.createRequirement(ReferencesBrowser.selected)" name="create_requirement" />
+      </BrowserElement>
+      <BrowserElement id="26" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" icon="controller.iconForObject(requirement)" label="requirement.name" isEditable="false" name="requirement">
+        <Children id="27" data="formoseView.documentAnnotationMethodology.getRequirementReference(requirement).references" name="children" />
+      </BrowserElement>
+    </Browser>
+    <Panel id="28" align="left" borderTop="0" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="twocols" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=0;location=right)" name="Panel2">
+      <Label id="29" label="document" align="left" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="Label2" />
+      <Panel id="30" align="left" borderTop="0" borderTitle="Panel" flowAlignment="LEADING" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="border" borderRight="0" vGap="5" hGap="5" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="Panel3">
+        <TextField id="31" columns="7" readOnly="true" data="selectedReference.documentName" constraints="border(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="TextField3" />
+        <Button id="32" buttonType="Trigger" action="controller.openReference(selectedReference)" label="open" enable="(selectedReference.concept.name = &quot;DocXReference&quot;)" constraints="border(location=east)" name="Button3" />
+      </Panel>
+      <TextArea id="33" rows="3" columns="8" validateOnReturn="true" text="TextArea" data="selectedReference.rawText" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" name="TextArea" />
+      <FIBVariable id="34" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" value="ReferencesBrowser.selected" name="selectedReference" />
+    </Panel>
+  </Panel>
+  <Panel id="35" align="left" borderTop="0" borderTitle="Panel" flowAlignment="CENTER" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="flow" borderRight="0" vGap="5" hGap="5" constraints="twocols(anchor=east;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=-1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=10;insetsLeft=20;insetsRight=20;insetsTop=10;location=center;padX=0;padY=0;weightX=1.0;weightY=0.1)" name="FIBPanel">
+    <Button id="36" buttonType="Trigger" action="controller.importNewDocXDocument(formoseView.documentAnnotationMethodology.documentLibrary)" label="import_docx_document" localize="true" constraints="flow()" name="Button2" />
+    <Button id="37" buttonType="Trigger" action="controller.removeDocument(DocumentsTable.selected)" label="remove_document" localize="true" enable="(DocumentsTable.selected != null)" constraints="flow()" name="Button" />
+  </Panel>
+  <LocalizedDictionary id="38">
+    <Localized id="39" lang="English" value="Import docx document" key="import_docx_document" />
+    <Localized id="40" lang="Dutch" value="Import docx document" key="import_docx_document" />
+    <Localized id="41" lang="French" value="Importer un document &quot;.docx&quot;" key="import_docx_document" />
+    <Localized id="42" lang="English" value="Remove document" key="remove_document" />
+    <Localized id="43" lang="Dutch" value="Remove document" key="remove_document" />
+    <Localized id="44" lang="French" value="Supprimer le document" key="remove_document" />
+  </LocalizedDictionary>
+  <FIBVariable id="45" type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
+  <FIBVariable id="46" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;" name="formoseView" />
+</Panel>

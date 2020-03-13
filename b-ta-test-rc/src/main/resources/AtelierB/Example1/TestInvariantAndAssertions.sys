@@ -1,0 +1,12 @@
+SYSTEM
+    System9
+PROPERTIES
+   Cte1 : INT &
+   Cte2 : NAT
+INVARIANT
+   V1 : BOOL
+ASSERTIONS
+   Cte1 < Cte2 ;
+   Cte2 >= 0 &
+   Cte2 <= MAXINT
+END

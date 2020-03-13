@@ -1,0 +1,49 @@
+/* UnSysteme
+ * Author: 
+ * Creation date: 17/01/2019
+ */
+SYSTEM
+    UnSysteme
+    
+CONSTANTS    
+    dd, nm
+PROPERTIES
+    dd :  NATURAL &
+    dd>0 &
+    nm =dd|->dd
+VARIABLES
+    nn
+ INVARIANT
+     nn: NATURAL &
+     nn <= dd
+ INITIALISATION
+     nn := 0
+ EVENTS
+ 	Toto = skip ;
+     ML_In=
+             SELECT nn>0 
+             THEN        nn:= nn-1
+                 END;
+    ML_Out=
+               SELECT nn < dd
+              THEN   nn:= nn+1
+               END;
+    IL_In=
+             SELECT aa>0 
+             THEN        aa:= aa-1|| bb:=bb+1
+                 END;
+ 	CaptureRelativeLocalization = //blablablaN
+		ANY
+			sensorsLoc_post
+		WHERE
+			subcomponantsLoc : (SUBCOMPONENTS --> ((LATITUDE - {null}) * (LONGITUDE - {null}))) &
+			sensorsLoc_post : (SUBSENSORS --> ((LATITUDE - {null}) * (LONGITUDE - {null}))) &
+			sensorsLoc_post /= {}
+		THEN
+			sensorsLoc := sensorsLoc_post
+		END;
+    BRC_Centralised_Get ref_or Centralised_Get = SELECT implementation = CENTRALISED & communication = BROADCAST THEN s_in_l : ( s_in_l = s_in_r ) END
+
+               
+
+END

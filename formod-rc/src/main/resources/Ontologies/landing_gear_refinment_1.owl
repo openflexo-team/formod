@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY LandingGearRefinment1 "http://formose.lacl.fr/Formose/LandingGearRefinment1#" >
+    <!ENTITY LandingGearRefinment "http://formose.lacl.fr/Formose/LandingGearRefinment#" >
+    <!ENTITY lacl2 "http://formose.lacl.fr/Formose/SysMLKAOSDomainModelTemplate#lacl:" >
+    <!ENTITY lacl1 "http://formose.lacl.fr/Formose/LandingGearRefinment#lacl:" >
+    <!ENTITY lacl "http://formose.lacl.fr/Formose/LandingGearRefinment1#lacl:" >
+]>
+
+
+<rdf:RDF xmlns="http://formose.lacl.fr/Formose/LandingGearRefinment1#"
+     xml:base="http://formose.lacl.fr/Formose/LandingGearRefinment1"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:lacl1="&LandingGearRefinment;lacl:"
+     xmlns:lacl2="http://formose.lacl.fr/Formose/SysMLKAOSDomainModelTemplate#lacl:"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:LandingGearRefinment="http://formose.lacl.fr/Formose/LandingGearRefinment#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:lacl="&LandingGearRefinment1;lacl:"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:LandingGearRefinment1="http://formose.lacl.fr/Formose/LandingGearRefinment1#">
+    <owl:Ontology rdf:about="">
+        <owl:imports rdf:resource="http://formose.lacl.fr/Formose/LandingGearRefinment"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LgOfHd -->
+
+    <owl:ObjectProperty rdf:about="#LgOfHd">
+        <rdfs:range rdf:resource="&LandingGearRefinment;LandingGear"/>
+        <rdfs:domain rdf:resource="#Handle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LgOfLs -->
+
+    <owl:ObjectProperty rdf:about="#LgOfLs">
+        <rdfs:range rdf:resource="&LandingGearRefinment;LandingGear"/>
+        <rdfs:domain rdf:resource="#LandingSet"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LsOfLg -->
+
+    <owl:ObjectProperty rdf:about="#LsOfLg">
+        <owl:inverseOf rdf:resource="#LgOfLs"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment#landingGearState -->
+
+    <owl:DatatypeProperty rdf:about="&LandingGearRefinment;landingGearState"/>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#handleState -->
+
+    <owl:DatatypeProperty rdf:about="#handleState">
+        <rdfs:domain rdf:resource="#Handle"/>
+        <rdfs:range>
+            <rdf:Description>
+                <rdf:type rdf:resource="&owl;DataRange"/>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdf;List"/>
+                        <rdf:first rdf:datatype="&xsd;string">down</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="&rdf;List"/>
+                                <rdf:first rdf:datatype="&xsd;string">up</rdf:first>
+                                <rdf:rest rdf:resource="&rdf;nil"/>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdf:Description>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#landingSetState -->
+
+    <owl:DatatypeProperty rdf:about="#landingSetState">
+        <rdfs:domain rdf:resource="#LandingSet"/>
+        <rdfs:range>
+            <rdf:Description>
+                <rdf:type rdf:resource="&owl;DataRange"/>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdf;List"/>
+                        <rdf:first rdf:datatype="&xsd;string">ls_extended</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="&rdf;List"/>
+                                <rdf:first rdf:datatype="&xsd;string">ls_retracted</rdf:first>
+                                <rdf:rest rdf:resource="&rdf;nil"/>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdf:Description>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/SysMLKAOSDomainModelTemplate#lacl:propertyType -->
+
+    <owl:DatatypeProperty rdf:about="&lacl2;propertyType"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment#LandingGear -->
+
+    <owl:Class rdf:about="&LandingGearRefinment;LandingGear">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <owl:ObjectProperty>
+                        <owl:inverseOf rdf:resource="#LgOfLs"/>
+                    </owl:ObjectProperty>
+                </owl:onProperty>
+                <owl:onClass rdf:resource="#LandingSet"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">3</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#Handle -->
+
+    <owl:Class rdf:about="#Handle">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#LgOfHd"/>
+                <owl:onClass rdf:resource="&LandingGearRefinment;LandingGear"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LandingSet -->
+
+    <owl:Class rdf:about="#LandingSet">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#LgOfLs"/>
+                <owl:onClass rdf:resource="&LandingGearRefinment;LandingGear"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment#LG1 -->
+
+    <owl:Thing rdf:about="&LandingGearRefinment;LG1">
+        <LandingGearRefinment:landingGearState rdf:datatype="&xsd;string">lg_extended</LandingGearRefinment:landingGearState>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#HD1 -->
+
+    <owl:Thing rdf:about="#HD1">
+        <rdf:type rdf:resource="#Handle"/>
+        <handleState rdf:datatype="&xsd;string">down</handleState>
+        <LgOfHd rdf:resource="&LandingGearRefinment;LG1"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LS1 -->
+
+    <owl:Thing rdf:about="#LS1">
+        <rdf:type rdf:resource="#LandingSet"/>
+        <landingSetState rdf:datatype="&xsd;string">ls_extended</landingSetState>
+        <LgOfLs rdf:resource="&LandingGearRefinment;LG1"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LS2 -->
+
+    <owl:Thing rdf:about="#LS2">
+        <rdf:type rdf:resource="#LandingSet"/>
+        <landingSetState rdf:datatype="&xsd;string">ls_extended</landingSetState>
+        <LgOfLs rdf:resource="&LandingGearRefinment;LG1"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LS3 -->
+
+    <owl:Thing rdf:about="#LS3">
+        <rdf:type rdf:resource="#LandingSet"/>
+        <landingSetState rdf:datatype="&xsd;string">ls_extended</landingSetState>
+        <LgOfLs rdf:resource="&LandingGearRefinment;LG1"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LgOfHd -->
+
+    <owl:Thing rdf:about="#LgOfHd">
+        <lacl2:propertyType>constant</lacl2:propertyType>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#LgOfLs -->
+
+    <owl:Thing rdf:about="#LgOfLs">
+        <lacl2:propertyType>constant</lacl2:propertyType>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#handleState -->
+
+    <owl:Thing rdf:about="#handleState">
+        <lacl2:propertyType>variable</lacl2:propertyType>
+    </owl:Thing>
+    
+
+
+    <!-- http://formose.lacl.fr/Formose/LandingGearRefinment1#landingSetState -->
+
+    <owl:Thing rdf:about="#landingSetState">
+        <lacl2:propertyType>variable</lacl2:propertyType>
+    </owl:Thing>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

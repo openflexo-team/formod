@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.openflexo</groupId>
+          	<artifactId>openflexo-root-pom</artifactId>
+          	<version>0.5-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>formose</artifactId>
+  <version>2.0.0-SNAPSHOT</version>
+	<name>Formose</name>
+	<packaging>pom</packaging>
+	<scm>
+		<connection>scm:git:ssh://gitlab@server-one.openflexo.org/home/gitlab/repositories/formose.git</connection>
+		<url>https://server-one.openflexo.org/home/gitlab/repositories/formose</url>
+	  <tag>2.0.0</tag>
+  </scm>
+	<modules>
+		<module>formose-app</module>
+	</modules>	
+</project>

@@ -1,0 +1,10 @@
+/* System1_i
+ * Author: 
+ * Creation date: 12/12/2018
+ */
+
+IMPLEMENTATION System1_i
+REFINES System1_r
+
+
+ END

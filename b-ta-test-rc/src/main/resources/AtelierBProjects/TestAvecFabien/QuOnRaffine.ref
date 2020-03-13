@@ -1,0 +1,51 @@
+/* QuOnRaffine
+ * Author: 
+ * Creation date: 17/01/2019
+ */
+
+REFINEMENT QuOnRaffine
+REFINES UnSysteme
+
+CONSTANTS
+    ee
+    
+PROPERTIES
+    ee=dd
+    
+VARIABLES
+    aa,bb,cc
+    
+INVARIANT
+    aa:NATURAL&
+    bb:NATURAL&
+    cc:NATURAL&
+    aa+bb+cc=nn &
+    (aa=0 or cc=0)
+  
+INITIALISATION
+    aa:=0||
+    bb:=0||
+    cc:=0 
+
+OPERATIONS
+     ML_In=
+             SELECT aa>0 
+             THEN        aa:= aa-1
+                 END;
+
+    ML_Out=
+               SELECT aa+bb < dd & cc=0
+              THEN   aa:= aa+1
+               END;
+               
+    IL_In=
+             SELECT aa>0 
+             THEN        aa:= aa-1|| bb:=bb+1
+                 END;
+
+    IL_Out=
+               SELECT aa =0 &  bb> 0
+              THEN   cc:= cc+1||bb:=bb-1
+               END
+
+ END

@@ -1,0 +1,351 @@
+<Proof_Obligations>
+<Define merge="=" name="B definitions">
+<Nary_Pred op="&amp;" translate="((NAT) = (((0) .. (2147483647)))) &amp; ((INT) = (((-2147483647) .. (2147483647))))">
+<Exp_Comparison op="=">
+<Id value="NAT"/>
+<Binary_Exp op="..">
+<Integer_Literal value="0"/>
+<Id value="MAXINT"/>
+</Binary_Exp>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Id value="INT"/>
+<Binary_Exp op="..">
+<Id value="MININT"/>
+<Id value="MAXINT"/>
+</Binary_Exp>
+</Exp_Comparison>
+</Nary_Pred>
+</Define>
+<Define merge="=" name="ctx"/>
+<Define merge="=" name="seext"/>
+<Define merge="-" name="inv">
+<Nary_Pred op="&amp;" translate="nn : INTEGER &amp; 0 &lt;= nn &amp; ((nn) : (NATURAL)) &amp; (nn &lt;= dd)">
+<Exp_Comparison op=":" initialTag="((nn) : (NATURAL))" translate="nn : INTEGER &amp; 0 &lt;= nn &amp; ((nn) : (NATURAL))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op="&lt;=" initialTag="(nn &lt;= dd)" translate="(nn &lt;= dd)">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Nary_Pred>
+</Define>
+<Define merge="=" name="ass"/>
+<Define merge="-" name="lprp">
+<Nary_Pred op="&amp;" translate="dd : INTEGER &amp; 0 &lt;= dd &amp; ((dd) : (NATURAL)) &amp; (0 +1 &lt;= dd) &amp; ((nm) = (((dd) |-> (dd))))">
+<Exp_Comparison op=":" translate="dd : INTEGER &amp; 0 &lt;= dd &amp; ((dd) : (NATURAL))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:1:1" typref="2701647786" value="dd"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op=">" translate="(0 +1 &lt;= dd)">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:2:1" typref="2701647786" value="dd"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=" translate="((nm) = (((dd) |-> (dd))))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:3:1" typref="3672872563" value="nm"/>
+<Binary_Exp op="|->" typref="3672872563">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:3:2:1" typref="2701647786" value="dd"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:3:2:2" typref="2701647786" value="dd"/>
+</Binary_Exp>
+</Exp_Comparison>
+</Nary_Pred>
+</Define>
+<Define merge="=" name="inprp"/>
+<Define merge="=" name="inext"/>
+<Define merge="=" name="cst"/>
+<Proof_Obligation merge="-">
+<Comment>Initialisation dans une machine abstraite</Comment>
+<Tag>Initialisation</Tag>
+<Tag>Invariant</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Simple_Goal merge="">
+<Tag>Invariant is preserved</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Ref_Hyp num="1"/>
+<Exp_Comparison op=":" initialTag="((nn) : (NATURAL))" goalTag="Invariant is preserved">
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:5:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:5:1:1:1" typref="2701647786" value="0"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal merge="">
+<Tag>Invariant is preserved</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Ref_Hyp num="1"/>
+<Exp_Comparison op="&lt;=" initialTag="(nn &lt;= dd)" goalTag="Invariant is preserved">
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:5:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:5:1:1:1" typref="2701647786" value="0"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans une machine abstraite</Comment>
+<Tag>ML_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis/>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Exp_Comparison op=">">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:1:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:1:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Simple_Goal>
+<Tag>Invariant is preserved</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((nn) : (NATURAL))" goalTag="Invariant is preserved">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:1:1" typref="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:2:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Invariant is preserved</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="&lt;=" initialTag="(nn &lt;= dd)" goalTag="Invariant is preserved">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:1:1" typref="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:2:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans une machine abstraite</Comment>
+<Tag>ML_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis/>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Exp_Comparison op="&lt;">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:1:1:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:1:1:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Simple_Goal>
+<Tag>Invariant is preserved</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((nn) : (NATURAL))" goalTag="Invariant is preserved">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:1:1" typref="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:2:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Invariant is preserved</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="&lt;=" initialTag="(nn &lt;= dd)" goalTag="Invariant is preserved">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:1:1" typref="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:2:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation merge="=">
+<Tag>WellDefinednessConstraints</Tag>
+</Proof_Obligation>
+<Proof_Obligation merge="-">
+<Tag>WellDefinednessProperties</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Hypothesis/>
+<Local_Hyp num="1">
+<Exp_Comparison op=">">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:2:1" typref="2701647786" value="dd"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Exp_Comparison op=":">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:1:1" typref="2701647786" value="dd"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation merge="-">
+<Tag>WellDefinednessInvariant</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Local_Hyp num="1">
+<Exp_Comparison op=":" initialTag="((nn) : (NATURAL))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation merge="-">
+<Tag>WellDefinednessAssertions</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+</Proof_Obligation>
+<Proof_Obligation merge="-">
+<Tag>WellDefinednessInitialisation</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans une machine abstraite</Comment>
+<Tag>WellDefinedness_Precondition_ML_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans une machine abstraite</Comment>
+<Tag>WellDefinedness_ML_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis/>
+<Local_Hyp num="1"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans une machine abstraite</Comment>
+<Tag>WellDefinedness_Precondition_ML_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans une machine abstraite</Comment>
+<Tag>WellDefinedness_ML_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="cst"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis/>
+<Local_Hyp num="1"/>
+</Proof_Obligation>
+<TypeInfos merge="=">
+<Type id="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:1:1" value="INTEGER"/>
+</Type>
+<Type id="3672872563">
+<Binary_Exp op="*">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:2:1:1" value="INTEGER"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:2:1:2" value="INTEGER"/>
+</Binary_Exp>
+</Type>
+<Type id="3603043417">
+<Unary_Exp op="POW">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:3:1:1" value="INTEGER"/>
+</Unary_Exp>
+</Type>
+</TypeInfos>
+</Proof_Obligations>

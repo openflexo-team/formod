@@ -1,0 +1,192 @@
+Scénario de création du modèle en commençant par un diagramme SysMLKaos:
+Le modèle B est généré à partir du modèle SysMLKaos.
+TODO définir quel concepts à ne pas linker
+
+X)
+
+Création d'un projet FORMOSE.
+
+X)
+Structuration en Elements
+
+X)
+A partir d'un Element, on instancie une SYKBGMethodology
+Implicitement creation d'un diagramme vide + SYSMLKaos + B 
++ transition entre diagramme et Element.
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On ajoute le premier but : LocalizeVehicle.
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On ajoute le nouveau but : CaptureRawLocalizationData.
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On ajoute le nouveau but : ValidateData.
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On ajoute le raffinement :
+	LocalizeVehicle
+		AND
+			CaptureRawLocalizationData
+			ValidateData
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On définie le premier niveau de raffinement R1 qui est composé, du but LocalizeVehicle.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On créé le modèle B correspondant au niveau de raffinement R1.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+A partir du but LocalizeVehicle on fait générer le squelet de l'événement LocalizeVehicle.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On définie le premier niveau de raffinement R2 qui est composé, du raffinement AND et des buts CaptureRawLocalizationData et ValidateData.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On créé le modèle B correspondant au raffinement R2.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+Définir que R2 est un raffinement de R1
+
+X)
+Dans l'interface graphique de fédération SKBG.
+A partir du but CaptureRawLocalizationData on fait générer le squelet de l'événement CaptureRawLocalizationData.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+A partir du but ValidateData on fait générer le squelet de l'événement ValidateData.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+A partir du raffinement R1, on génère les PO.
+
+X)
+TODO Pour le raffinement R1, vérification les PO.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+A partir du raffinement R2, on créé les PO.
+
+X)
+TODO Pour le raffinement R2, vérification les PO.
+
+X)
+Dans l'interface graphique du modèle B.
+On complète manuellement le corps de LocalizeVehicle.
+
+X)
+Dans l'interface graphique du modèle B.
+On complète manuellement le corps de CaptureRawLocalizationData.
+
+X)
+Dans l'interface graphique du modèle B.
+On complète manuellement le corps de ValidateData.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+A partir du raffinement R2, on créé les PO.
+
+X)
+TODO Pour le raffinement R2, vérification les PO.
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On ajoute le nouveau but : MergeData.
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On connecte le but MergeData au raffinement du AND.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On définie le but MergeData comme un but à ne pas formaliser en BG.
+TODO(C'est impossible d'avoir un sous-arbre non formalisé!)
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On génère les PO.
+
+#############
+R1 et R2 FINI
+#############
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+Ajoute du but ValidateWithSpeedSensor
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+Ajoute du but ValidateWithAccellSensor
+
+X)
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+On ajoute le raffinement :
+	ValidateData
+		OR
+			ValidateWithSpeedSensor
+			ValidateWithAccellSensor
+
+X)
+Dans l'interface graphique de fédération SKBG.
+On définie le niveau de raffinement R3 qui est composé, des buts:
+	CaptureRawLocalizationData
+	ValidateWithSpeedSensor
+	ValidateWithAccellSensor
+et le raffinement:
+	OR
+
+X)
+Dans l'interface graphique du modèle B.
+On créé le modèle B correspondant au raffinement R3.
+
+X)
+Dans l'interface graphique du modèle B.
+On considère que l'on avais déjà la modèle du raffinement R3 et on vas simplement le récupérer.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+Connecter le but B CaptureRawLocalizationData avec le but SysMLKaos correspondant.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+Connecter le but B ValidateWithSpeedSensor avec le but SysMLKaos correspondant.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+Connecter le but B ValidateWithAccellSensor avec le but SysMLKaos correspondant.
+
+X)
+Dans l'interface graphique de fédération SKBG.
+Connecter le raffinement SysMLKaos avec les PO.
+
+#######
+R3 FINI
+#######
+
+X)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

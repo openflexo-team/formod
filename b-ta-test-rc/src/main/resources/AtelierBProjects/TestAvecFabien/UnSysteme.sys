@@ -1,0 +1,31 @@
+/* UnSysteme
+ * Author: 
+ * Creation date: 17/01/2019
+ */
+SYSTEM
+    UnSysteme
+    
+CONSTANTS    
+    dd, nm
+PROPERTIES
+    dd :  NATURAL &
+    dd>0 &
+    nm =dd|->dd
+VARIABLES
+    nn
+ INVARIANT
+     nn: NATURAL &
+     nn <= dd
+ INITIALISATION
+     nn := 0
+ EVENTS
+     ML_In=
+             SELECT nn>0 
+             THEN        nn:= nn-1
+                 END;
+    ML_Out=
+               SELECT nn < dd
+              THEN   nn:= nn+1
+               END
+
+END

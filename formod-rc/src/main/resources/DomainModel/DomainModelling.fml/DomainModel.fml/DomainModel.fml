@@ -1,0 +1,332 @@
+
+/**
+ * 
+ * @author steve
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml")
+public class DomainModel {
+
+  public String modelName;
+  public DomainModel parentDomainModel;
+  @GetSetProperty(value="concepts", access=get)  
+  public List<FlexoConceptInstanceType<Concept>> getConcepts {  
+    return this.SelectFlexoConceptInstance(type=Concept);  
+  }
+  @GetSetProperty(value="sole_individuals", access=get)  
+  public List<FlexoConceptInstanceType<Individual>> getSole_individuals {  
+    return this.SelectFlexoConceptInstance(type=Individual,where=where=selected.isSole);  
+  }
+
+  @CreationScheme  
+  DomainModel:create(String name, VirtualModelInstanceType<DomainModel> parent) {  
+    modelName = parameters.name;    
+    parentDomainModel = parameters.parent;  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+    modelName = null;  
+  }  
+
+  @ActionScheme  
+  ArrayList conceptIndividuals(FlexoConceptInstanceType<Concept> concept) {  
+    VirtualModelInstanceType<DomainModel> dm = this;    
+    ArrayList list = new ArrayList();    
+    log ("BEGIN: dm=" + dm)    
+    List<FlexoConceptInstanceType<Individual>> individuals = dm.SelectFlexoConceptInstance(type=Individual,where=where=((!(selected.isSole)) & (selected.individualOf = parameters.concept)));    
+    list.addAll(individuals)    
+    while (dm != rootDomainModel) {    
+      dm = dm.parentDomainModel;      
+      log ("NOW dm=" + dm)      
+      individuals = dm.SelectFlexoConceptInstance(type=Individual,where=where=((!(selected.isSole)) & (selected.individualOf = parameters.concept)));      
+      list.addAll(individuals)    
+    }    
+    return list;  
+  }  
+
+
+  /**  
+   * A set of individuals that share common characteristics  
+   *   
+   * @author steve  
+   */  
+  @FlexoConcept  
+  public class Concept {  
+  
+    public String name;  
+    public boolean isVariable;  
+    public boolean isEnumeration;  
+    public Concept parentConcept;  
+  
+    @CreationScheme    
+    Concept:create(String aName, Boolean anIsVariable, Boolean anIsEnumeration, FlexoConceptInstanceType<Concept> aParentConcept) {    
+      this.creationAction(parameters.aName,parameters.anIsVariable,parameters.anIsEnumeration,parameters.aParentConcept)    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      container.firePropertyChange concepts    
+    }    
+  
+    @ActionScheme    
+    Void addIndividual(String name, Boolean isVariable, FlexoConceptInstanceType<Individual> initialValue) {    
+      
+    }    
+  
+    @ActionScheme    
+    Void creationAction(String name, Boolean isVariable, Boolean isEnumeration, FlexoConceptInstanceType<Concept> parentConcept) {    
+      name = parameters.name;      
+      isVariable = parameters.isVariable;      
+      isEnumeration = parameters.isEnumeration;      
+      parentConcept = parameters.parentConcept;      
+      container.firePropertyChange concepts    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DefaultDataType extends Concept  {  
+  
+    @DeletionScheme    
+    Void delete() {    
+      container.firePropertyChange concepts    
+    }    
+  
+    @CreationScheme    
+    DefaultDataType:create(String aName, Boolean isEnumeration) {    
+      this.creationAction(parameters.aName,false,parameters.isEnumeration,null)    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DefinedConcept extends Concept  {  
+  
+    public List definedWith;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      for (item : definedWith) {      
+        item.delete();      
+      }      
+      container.firePropertyChange concepts    
+    }    
+  
+    @CreationScheme    
+    DefinedConcept:create(String aName, Boolean anIsVariable, Boolean anIsEnumeration, FlexoConceptInstanceType<Concept> aParentConcept, FlexoConceptInstanceType<LogicalFormula> definedWith) {    
+      this.creationAction(parameters.aName,parameters.anIsVariable,parameters.anIsEnumeration,parameters.aParentConcept)      
+      this.definedWith.add(parameters.definedWith)    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Association extends Concept  {  
+  
+    public boolean isTransitive;  
+    public boolean isSysmmetric;  
+    public boolean isASymmetric;  
+    public boolean isReflexive;  
+    public boolean isIrreflexive;  
+    public Concept domain;  
+    public Concept range;  
+    public Cardinality domainCardinality;  
+    public Cardinality rangeCardinality;  
+  
+    @CreationScheme    
+    Association:create(String aName, Boolean isVariable, Boolean isEnumeration, FlexoConceptInstanceType<Concept> parentConcept, FlexoConceptInstanceType<Concept> aDomain, FlexoConceptInstanceType<Concept> aRange, FlexoConceptInstanceType<Cardinality> domainCardinality, FlexoConceptInstanceType<Cardinality> rangeCardinality, Boolean anIsTransitive, Boolean anIsSysmmetric, Boolean anIsASymmetric, Boolean anIsReflexive, Boolean anIsIrreflexive) {    
+      isTransitive = parameters.anIsTransitive;      
+      isSysmmetric = parameters.anIsSysmmetric;      
+      isASymmetric = parameters.anIsASymmetric;      
+      isReflexive = parameters.anIsReflexive;      
+      isIrreflexive = parameters.anIsIrreflexive;      
+      this.domain = parameters.aDomain;      
+      this.range = parameters.aRange;      
+      domainCardinality = parameters.domainCardinality;      
+      this.rangeCardinality = parameters.rangeCardinality;      
+      this.creationAction(parameters.aName,parameters.isVariable,parameters.isEnumeration,parameters.parentConcept)    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      domainCardinality.delete();      
+      rangeCardinality.delete();      
+      container.firePropertyChange concepts    
+    }    
+  
+  }  
+
+  /**  
+   * cardinality.matches("(([0-9]+)\\.\\.([0-9]+))")?(cardinality.split("\\.\\.")[0].compareTo(cardinality.split("\\.\\.")[1])<=0):true  
+   *   
+   */  
+  @FlexoConcept  
+  public class Cardinality {  
+  
+    public String cardinality;  
+  
+    @CreationScheme    
+    Cardinality:create(String cardinality) {    
+      cardinality = parameters.cardinality;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    String getMinCardinality() {    
+      if cardinality.contains("..") {      
+        return cardinality.substring(0,cardinality.indexOf(".."));      
+      } else {      
+        return cardinality.substring(0,cardinality.length);      
+      }    
+    }    
+  
+    @ActionScheme    
+    String getMaxCardinality() {    
+      if cardinality.contains("..") {      
+        if cardinality.contains("*") {        
+          return "-1";        
+        } else {        
+          return cardinality.substring((cardinality.indexOf("..") + 2),cardinality.length);        
+        }      
+      } else {      
+        return cardinality.substring(0,cardinality.length);      
+      }    
+    }    
+  
+  }  
+
+  /**  
+   * Items of the world  
+   *   
+   * @author steve  
+   */  
+  @FlexoConcept  
+  public class Individual {  
+  
+    public String name;  
+    public boolean isVariable;  
+    public Individual initialValue;  
+    public Concept individualOf;  
+    @GetSetProperty(value="isSole", access=get)    
+    public Boolean getIsSole {    
+      if (this.individualOf = null) {      
+        return true;      
+      } else {      
+        return (this.individualOf.container != this.container);      
+      }    
+    }  
+  
+    @CreationScheme    
+    Individual:create(String aName, FlexoConceptInstanceType<Concept> concept, Boolean anIsVariable, FlexoConceptInstanceType<Individual> initialValue) {    
+      this.creationAction(parameters.aName,parameters.concept,parameters.anIsVariable,parameters.initialValue)    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      container.firePropertyChange concepts      
+      container.firePropertyChange sole_individuals    
+    }    
+  
+    @ActionScheme    
+    Void creationAction(String name, FlexoConceptInstanceType<Concept> concept, Boolean isVariable, FlexoConceptInstanceType<Individual> initialValue) {    
+      this.name = parameters.name;      
+      isVariable = parameters.isVariable;      
+      this.initialValue = parameters.initialValue;      
+      individualOf = parameters.concept;      
+      container.firePropertyChange sole_individuals      
+      container.firePropertyChange concepts    
+    }    
+  
+    @ActionScheme    
+    String getCanonicalString() {    
+      return this.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class MapletIndividual extends Individual  {  
+  
+    public Individual antecedent;  
+    public Individual image;  
+    public Association individualOf;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      container.firePropertyChange concepts      
+      container.firePropertyChange sole_individuals    
+    }    
+  
+    @CreationScheme    
+    MapletIndividual:create(String aName, FlexoConceptInstanceType<Concept> concept, FlexoConceptInstanceType<Individual> antecedent, FlexoConceptInstanceType<Individual> image, Boolean anIsVariable, FlexoConceptInstanceType<Individual> initialValue) {    
+      this.creationAction(parameters.aName,parameters.concept,parameters.anIsVariable,parameters.initialValue)      
+      this.antecedent = parameters.antecedent;      
+      this.image = parameters.image;      
+      this.individualOf = parameters.concept;    
+    }    
+  
+    @ActionScheme    
+    String getCanonicalString() {    
+      if (this.name = null) {      
+        return ((this.antecedent.name + " |-> ") + this.image.name);      
+      } else {      
+        return this.name;      
+      }    
+    }    
+  
+    @ActionScheme    
+    String getNormalisedString() {    
+      return ((antecedent.name + "_") + image.name);    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class LogicalFormula {  
+  
+    public String assertion;  
+    public List concepts;  
+    public List individuals;  
+    public List variables;  
+  
+    @CreationScheme    
+    LogicalFormula:create(String anAssertion) {    
+      assertion = parameters.anAssertion;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      for (item : variables) {      
+        item.delete();      
+      }    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class QuantVariable {  
+  
+    public String name;  
+  
+    @CreationScheme    
+    QuantVariable:create(String aName) {    
+      name = parameters.aName;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DefaultDataTypeEnum {  
+  }  
+
+}

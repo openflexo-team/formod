@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" imageWidth="960" sizeAdjustment="FitToAvailableSize" titleFont="Lucida Grande,0,13" imageHeight="640" layout="twocols" borderRight="0" opaque="false" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Image id="1" imageWidth="80" sizeAdjustment="OriginalSize" imageFile="../../Icons/Help_32x32.png" align="left" imageHeight="46" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=20;insetsRight=20;insetsTop=25;location=left)" name="Image" />
+  <Label id="2" label="step_description" align="center" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=20;insetsLeft=0;insetsRight=40;insetsTop=25;location=right)" font="SansSerif,0,12" name="Label2" />
+  <LocalizedDictionary id="3">
+    <Localized id="4" lang="English" value="&lt;html&gt;&#xA;  &lt;head&gt;&#xA;    &#xA;  &lt;/head&gt;&#xA;  &lt;body&gt;&#xA;    You indicates here that this project is of type &amp;quot;Formose&amp;quot;. If your project &#xA;    already contains an instance of Formose VirtualModel, then this instance &#xA;    will be considered, otherwise a new instance will be created.&#xA;  &lt;/body&gt;&#xA;&lt;/html&gt;&#xA;" key="step_description" />
+    <Localized id="5" lang="Dutch" value="&lt;html&gt;&#xA;&lt;head&gt;&#xA;&lt;/head&gt;&#xA;&lt;body&gt;&#xA;step_description&#xA;&lt;/body&gt;&#xA;&lt;/html&gt;" key="step_description" />
+    <Localized id="6" lang="French" value="&lt;html&gt;&#xA;  &lt;head&gt;&#xA;    &#xA;  &lt;/head&gt;&#xA;  &lt;body&gt;&#xA;    Vous indiquez ici que ce projet est un projet de type &amp;quot;Formose&amp;quot;. Si votre &#xA;    projet contient d&amp;#233;j&amp;#224; une instance du VirtualModel Formose, alors cette &#xA;    instance sera m&amp;#233;moris&amp;#233;e, et sinon une nouvelle instance va &amp;#234;tre cr&amp;#233;&amp;#233;e.&#xA;  &lt;/body&gt;&#xA;&lt;/html&gt;&#xA;" key="step_description" />
+  </LocalizedDictionary>
+  <FIBVariable id="7" type="org.openflexo.module.formose.controller.action.GivesFormoseNatureWizard$ConfigureFormoseNature" name="data" />
+</Panel>

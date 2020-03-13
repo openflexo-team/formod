@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" borderLeft="0"
+	trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0"
+	border="empty" sizeAdjustment="OriginalSize" layout="twocols"
+	borderRight="0"
+	controllerClassName="org.openflexo.module.formose.widget.AbstractFormoseProjectBrowser$FormoseProjectBrowserFIBController">
+	<Browser id="2" backgroundSelectionColor="9,80,208"
+		visibleRowCount="5" backgroundNonSelectionColor="255,255,255"
+		boundToSelectionManager="true" textSelectionColor="255,255,255"
+		backgroundSecondarySelectionColor="178,215,255" iteratorClassName="java.lang.Object"
+		showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0"
+		root="data" selectionMode="DiscontiguousTreeSelection" rowHeight="18"
+		localize="true" manageDynamicModel="true"
+		rightClickAction="controller.rightClick(FormoseProjectBrowser.selected,event)"
+		doubleClickAction="controller.doubleClick(FormoseProjectBrowser.selected)"
+		clickAction="controller.singleClick(FormoseProjectBrowser.selected)"
+		constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)"
+		index="0" name="FormoseProjectBrowser">
+		<BrowserElement id="3"
+			dataClassName="org.openflexo.module.formose.model.FormoseProjectNature"
+			icon="controller.iconForObject(formoseView)" label="formoseView.projectName"
+			isEditable="false" defaultVisible="false" name="nature">
+			<Children id="4" data="formoseView.formoseVMI.projectElement"
+				name="rootElement" />
+		</BrowserElement>
+		<BrowserElement id="16"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;"
+			icon="controller.iconForObject(element)" label="element.identifier"
+			isEditable="false" defaultVisible="false" name="element">
+			<Children id="17" data="element.childrenElements" name="childrenElement" />
+			<Children id="18" data="element.requirements" name="requirements" />
+		</BrowserElement>
+		<BrowserElement id="35"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;"
+			icon="controller.iconForObject(requirement)" label="requirement.name"
+			isEditable="false" name="requirement">
+		</BrowserElement>
+	</Browser>
+	<LocalizedDictionary id="52" />
+	<FIBVariable id="53"
+		type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
+	<FIBVariable id="54"
+		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;"
+		value="data.formoseInstance.accessedVirtualModelInstance" name="formoseView" />
+</Panel>

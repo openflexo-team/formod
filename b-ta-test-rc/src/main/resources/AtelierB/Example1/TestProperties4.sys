@@ -1,0 +1,5 @@
+SYSTEM
+    System5Ter
+PROPERTIES
+    !xx.(xx:RA=>card(RA~[{xx}])=2)
+END

@@ -1,0 +1,12 @@
+dependencies {
+  compile project(":b-ta")
+  // Use following to test b-ta using jar artefact
+  //compile group: 'org.openflexo', name: 'b-ta', version: '2.0.0-SNAPSHOT'
+  compile flexoFoundation()
+
+  compile testUtils()
+  compile flexoFoundationTest()
+
+  // Test resource center
+  testRuntime project(':b-ta-test-rc')
+}

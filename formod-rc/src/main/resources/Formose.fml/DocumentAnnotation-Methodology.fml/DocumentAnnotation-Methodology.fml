@@ -1,0 +1,226 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml")
+public class DocumentAnnotation-Methodology extends Methodology  {
+
+  public DocumentLibrary documentLibrary;
+  public Unclassified unclassified;
+  @GetSetProperty(value="elementReferences", access=get)  
+  public List<FlexoConceptInstanceType<ElementReference>> getElementReferences {  
+    return this.SelectFlexoConceptInstance(type=ElementReference);  
+  }
+
+  @CreationScheme  
+  DocumentAnnotation-Methodology:create() {  
+    unclassified = Unclassified.create();    
+    declaringElement = formoseVMI.projectElement;    
+    documentLibrary = DocumentLibrary.create();  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<ElementReference> getElementReference(FlexoConceptInstanceType<Element> element) {  
+    List<FlexoConceptInstanceType<ElementReference>> list = this.SelectFlexoConceptInstance(type=ElementReference,where=where=(selected.element = parameters.element));    
+    if (list.size > 0) {    
+      return list.get(0);    
+    } else {    
+      return ElementReference.createNewEmptyElementReference(parameters.element);    
+    }  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<RequirementReference> getRequirementReference(FlexoConceptInstanceType<Requirement> requirement) {  
+    FlexoConceptInstanceType<Element> containerElement = parameters.requirement.container;    
+    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(containerElement);    
+    List<FlexoConceptInstanceType<RequirementReference>> list = this.SelectFlexoConceptInstance(type=RequirementReference,where=where=(selected.requirement = parameters.requirement));    
+    if (list.size > 0) {    
+      return list.get(0);    
+    } else {    
+      return RequirementReference.createEmpty(parameters.requirement);    
+    }  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<ElementReference> identifyElement(String elementName, String elementDescription, FlexoConceptInstanceType<Element> parentElement, FlexoConceptInstanceType<Reference> reference) {  
+    FlexoConceptInstanceType<Element> newElement = parameters.parentElement.createChildrenElement(parameters.elementName,parameters.elementDescription);    
+    log ("Called IdentifyElement with " + parameters.reference)    
+    FlexoConceptInstanceType<ElementReference> newElementReference = this.getElementReference(newElement);    
+    newElementReference.references.add(parameters.reference)    
+    return newElementReference;  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<ElementReference> annotateElement(FlexoConceptInstanceType<Element> element, FlexoConceptInstanceType<Reference> reference) {  
+    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(parameters.element);    
+    elementReference.references.add(parameters.reference)    
+    return elementReference;  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<RequirementReference> identifyRequirement(String requirementName, String requirementDescription, FlexoConceptInstanceType<Element> parentElement, FlexoConceptInstanceType<Reference> reference) {  
+    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(parameters.parentElement);    
+    FlexoConceptInstanceType<Requirement> newRequirement = parameters.parentElement.createRequirement(parameters.requirementName,parameters.requirementDescription);    
+    FlexoConceptInstanceType<RequirementReference> newRequirementReference = this.getRequirementReference(newRequirement);    
+    newRequirementReference.references.add(parameters.reference)    
+    return newRequirementReference;  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<Reference> addUnclassifiedReference(FlexoConceptInstanceType<Reference> reference) {  
+    unclassified.addToUnclassifiedReferences(parameters.reference)    
+    return parameters.reference;  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<RequirementReference> makeRequirementReference(FlexoConceptInstanceType<Requirement> requirement) {  
+    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(parameters.requirement.container);    
+    if (elementReference = null) {    
+      elementReference = ElementReference.createNewEmptyElementReference(parameters.requirement.container);    
+    }    
+    return RequirementReference.createEmpty(parameters.requirement);  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+
+  @FlexoConcept  
+  public class ElementReference extends NamedReference  {  
+  
+    public Element element;  
+    @GetSetProperty(value="requirementReferences", access=get)    
+    public List<FlexoConceptInstanceType<RequirementReference>> getRequirementReferences {    
+      return container.SelectFlexoConceptInstance(type=RequirementReference);    
+    }  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    ElementReference:createNewEmptyElementReference(FlexoConceptInstanceType<Element> anElement) {    
+      element = parameters.anElement;      
+      log "*** Fire getElementReference(Element)"      
+      container.firePropertyChange getElementReference(Element)    
+    }    
+  
+  
+    @FlexoConcept    
+    public class RequirementReference extends NamedReference  {    
+      
+      public Requirement requirement;    
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @CreationScheme      
+      RequirementReference:createEmpty(FlexoConceptInstanceType<Requirement> aRequirement) {      
+        requirement = parameters.aRequirement;      
+      }      
+      
+    }    
+  
+  }  
+
+  /**  
+   * Represent a named reference, with a name, a description and some keywords.  
+  Points to a list of document references in the whole library.  
+   *   
+   */  
+  @FlexoConcept  
+  public class NamedReference extends Transition  {  
+  
+    public String name;  
+    public String description;  
+    public List references;  
+    public String keywords;  
+  
+    @CreationScheme    
+    NamedReference:create(String aName, String aDescription) {    
+      name = parameters.aName;      
+      description = parameters.aDescription;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    FlexoConceptInstanceType<Reference> addReference(FlexoConceptInstanceType<Reference> aReference) {    
+      if (parameters.aReference != null) {      
+        references.add(parameters.aReference)        
+        this.firePropertyChange references      
+      }      
+      return parameters.aReference;    
+    }    
+  
+    @ActionScheme    
+    Void moveReference(FlexoConceptInstanceType<Reference> aReference, FlexoConceptInstanceType<NamedReference> namedReference) {    
+      log ((("Moving reference " + parameters.aReference) + " to ") + parameters.namedReference)      
+      references.remove(parameters.aReference);      
+      parameters.namedReference.references.add(parameters.aReference)      
+      this.firePropertyChange references      
+      parameters.namedReference.firePropertyChange references    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class RequirementReference extends NamedReference  {  
+  
+    public Requirement requirement;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    RequirementReference:createEmpty(FlexoConceptInstanceType<Requirement> aRequirement) {    
+      requirement = parameters.aRequirement;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Unclassified {  
+  
+    public List unclassifiedReferences;  
+  
+    @CreationScheme    
+    Unclassified:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void addToUnclassifiedReferences(FlexoConceptInstanceType<Reference> reference) {    
+      unclassifiedReferences.add(parameters.reference)      
+      this.firePropertyChange unclassifiedReferences    
+    }    
+  
+    @ActionScheme    
+    Void moveReference(FlexoConceptInstanceType<Reference> aReference, FlexoConceptInstanceType<NamedReference> namedReference) {    
+      log ((("Moving reference " + parameters.aReference) + " to ") + parameters.namedReference)      
+      unclassifiedReferences.remove(parameters.aReference);      
+      parameters.namedReference.references.add(parameters.aReference)      
+      this.firePropertyChange unclassifiedReferences      
+      parameters.namedReference.firePropertyChange references    
+    }    
+  
+  }  
+
+}

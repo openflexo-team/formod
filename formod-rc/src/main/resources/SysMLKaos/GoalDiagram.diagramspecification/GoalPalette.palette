@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiagramPalette id="0" name="GoalPalette">
+  <DiagramPaletteElement id="1" name="Goals and requirements">
+    <ShapeGraphicalRepresentation id="2" relativeTextY="0.1" locationConstraints="FREELY_MOVABLE" allowToLeaveBounds="false" adaptBoundsToContents="false" x="10.0" y="10.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="235.0" height="82.0" identifier="2d870b68" absoluteTextY="10.0" absoluteTextX="117.0">
+      <SelectedColorBackgroundStyle id="3" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="4" joinStyle="JOIN_BEVEL" color="0,0,0" dashStyle="SMALL_DASHES" capStyle="CAP_ROUND" />
+      <FocusedColorBackgroundStyle id="5" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="6" drawShadow="false" />
+      <FocusedForegroundStyle id="7" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="8" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="9" color1="204,204,255" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" useTransparency="true" transparencyLevel="0.5" />
+      <RectangleShape id="10" isRounded="true" arcSize="20.0" />
+      <TextStyle id="11" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans Demibold,1,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="12" name="Refinment">
+    <ShapeGraphicalRepresentation id="13" relativeTextY="0.15" locationConstraints="FREELY_MOVABLE" allowToLeaveBounds="false" adaptBoundsToContents="false" x="10.0" y="101.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="235.0" height="60.35811177428106" identifier="5342dd1f" absoluteTextY="9.0" absoluteTextX="122.0" layer="1">
+      <SelectedColorBackgroundStyle id="14" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="15" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="SMALL_DASHES" capStyle="CAP_SQUARE" useTransparency="true" />
+      <FocusedColorBackgroundStyle id="16" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="17" drawShadow="false" />
+      <FocusedForegroundStyle id="18" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="19" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="20" color1="255,204,153" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" useTransparency="true" transparencyLevel="0.5" />
+      <RectangleShape id="21" isRounded="true" arcSize="20.0" />
+      <TextStyle id="22" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans Demibold,1,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="23" name="AND">
+    <ShapeGraphicalRepresentation id="24" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="25.0" y="119.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="30.0" height="30.0" identifier="69bfe0d6" layer="2" text="AND">
+      <SelectedColorBackgroundStyle id="25" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="26" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" noStroke="true" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="27" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="28" drawShadow="false" />
+      <FocusedForegroundStyle id="29" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="30" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="31" color1="255,204,0" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <CircleShape id="32" />
+      <TextStyle id="33" backgroundColor="255,255,255" color="51,51,255" font="Lucida Sans Demibold,1,9" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="34" name="OR">
+    <ShapeGraphicalRepresentation id="35" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="77.0" y="119.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="30.0" height="30.0" identifier="3f6d5bc1" layer="2" text="OR">
+      <SelectedColorBackgroundStyle id="36" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="37" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" noStroke="true" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="38" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="39" drawShadow="false" />
+      <FocusedForegroundStyle id="40" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="41" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="42" color1="255,204,0" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <CircleShape id="43" />
+      <TextStyle id="44" backgroundColor="255,255,255" color="51,51,255" font="Lucida Sans Demibold,1,9" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="45" name="F-Goal">
+    <ShapeGraphicalRepresentation id="46" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="28.0" y="35.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" height="45.0" identifier="531bfef9" lineWrap="true" layer="1" text="F-Goal" isMultilineAllowed="true">
+      <SelectedColorBackgroundStyle id="47" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="48" joinStyle="JOIN_MITER" color="0,51,204" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="49" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="50" />
+      <FocusedForegroundStyle id="51" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="52" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="53" color1="153,204,255" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ParallelogramShape id="54" />
+      <TextStyle id="55" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans,0,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="56" name="NF-Goal">
+    <ShapeGraphicalRepresentation id="57" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="125.0" y="35.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" height="45.0" identifier="79af6bbc" layer="1" text="NF-Goal" isMultilineAllowed="true">
+      <SelectedColorBackgroundStyle id="58" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="59" joinStyle="JOIN_MITER" color="153,153,0" dashStyle="MEDIUM_SPACED_DASHES" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="60" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="61" />
+      <FocusedForegroundStyle id="62" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="63" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="64" color1="254,247,217" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ParallelogramShape id="65" />
+      <TextStyle id="66" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans,0,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="67" name="Agents">
+    <ShapeGraphicalRepresentation id="68" relativeTextY="0.16" locationConstraints="FREELY_MOVABLE" allowToLeaveBounds="false" adaptBoundsToContents="false" x="10.0" y="254.7761458744926" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="235.0" height="74.02832229195424" identifier="5edf29a" absoluteTextY="10.0" absoluteTextX="119.0" layer="1">
+      <SelectedColorBackgroundStyle id="69" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="70" joinStyle="JOIN_MITER" color="102,102,102" dashStyle="SMALL_DASHES" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="71" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="72" drawShadow="false" />
+      <FocusedForegroundStyle id="73" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="74" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="75" color1="255,153,153" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" useTransparency="true" transparencyLevel="0.5" />
+      <RectangleShape id="76" isRounded="true" arcSize="20.0" />
+      <TextStyle id="77" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans Demibold,1,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="78" name="Env. Agent">
+    <ShapeGraphicalRepresentation id="79" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="36.0" y="275.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="85.0" height="40.0" identifier="4002056e" layer="2" text="Env.Agent">
+      <SelectedColorGradientBackgroundStyle id="80" color1="254,247,217" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ForegroundStyle id="81" joinStyle="JOIN_MITER" color="255,102,102" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" lineWidth="1.4000000014901162" />
+      <FocusedColorGradientBackgroundStyle id="82" color1="254,247,217" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ShadowStyle id="83" />
+      <FocusedForegroundStyle id="84" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="85" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="86" color1="255,102,102" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <CustomPolygonShape id="87">
+        <Point>0.15,0.0</Point>
+        <Point>0.0,0.5</Point>
+        <Point>0.15,1.0</Point>
+        <Point>0.85,1.0</Point>
+        <Point>1.0,0.5</Point>
+        <Point>0.85,0.0</Point>
+      </CustomPolygonShape>
+      <TextStyle id="88" backgroundColor="255,255,255" color="153,0,51" font="Lucida Sans Demibold,1,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="89" name="Soft. Agent">
+    <ShapeGraphicalRepresentation id="90" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="137.60811173784583" y="275.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="85.0" height="40.0" identifier="16164b29" layer="2" text="Soft.Agent">
+      <SelectedColorGradientBackgroundStyle id="91" color1="254,247,217" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ForegroundStyle id="92" joinStyle="JOIN_MITER" color="255,51,0" dashStyle="MEDIUM_DASHES" capStyle="CAP_SQUARE" lineWidth="0.999999998509884" />
+      <FocusedColorGradientBackgroundStyle id="93" color1="254,247,217" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ShadowStyle id="94" />
+      <FocusedForegroundStyle id="95" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="96" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="97" color1="255,204,204" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <CustomPolygonShape id="98">
+        <Point>0.15,0.0</Point>
+        <Point>0.0,0.5</Point>
+        <Point>0.15,1.0</Point>
+        <Point>0.85,1.0</Point>
+        <Point>1.0,0.5</Point>
+        <Point>0.85,0.0</Point>
+      </CustomPolygonShape>
+      <TextStyle id="99" backgroundColor="255,255,255" color="153,0,51" font="Lucida Sans Demibold,1,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="100" name="C-Goal">
+    <ShapeGraphicalRepresentation id="101" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="73.0" y="192.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" height="45.0" identifier="3ec16877" lineWrap="true" layer="1" text="F-Goal" isMultilineAllowed="true">
+      <SelectedColorBackgroundStyle id="102" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="103" joinStyle="JOIN_MITER" color="0,102,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="104" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="105" />
+      <FocusedForegroundStyle id="106" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="107" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="108" color1="0,204,0" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <ParallelogramShape id="109" />
+      <TextStyle id="110" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans,0,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="111" name="Contribution goals">
+    <ShapeGraphicalRepresentation id="112" relativeTextY="0.1" locationConstraints="FREELY_MOVABLE" allowToLeaveBounds="false" adaptBoundsToContents="false" x="10.0" y="170.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="235.0" height="76.81297709923665" identifier="2d870b68" absoluteTextY="10.0" absoluteTextX="117.0">
+      <SelectedColorBackgroundStyle id="113" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="114" joinStyle="JOIN_BEVEL" color="0,0,0" dashStyle="SMALL_DASHES" capStyle="CAP_ROUND" />
+      <FocusedColorBackgroundStyle id="115" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="116" drawShadow="false" />
+      <FocusedForegroundStyle id="117" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="118" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="119" color1="153,255,153" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" useTransparency="true" transparencyLevel="0.5" />
+      <RectangleShape id="120" isRounded="true" arcSize="20.0" />
+      <TextStyle id="121" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans Demibold,1,11" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="122" name="MilestoneRefinementGR">
+    <ShapeGraphicalRepresentation id="123" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="132.0" y="118.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="30.0" height="30.0" identifier="330c05f6" layer="2" text="MLS">
+      <SelectedColorBackgroundStyle id="124" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="125" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" noStroke="true" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="126" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="127" drawShadow="false" />
+      <FocusedForegroundStyle id="128" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="129" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="130" color1="255,204,0" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <CircleShape id="131" />
+      <TextStyle id="132" backgroundColor="255,255,255" color="51,51,255" font="Lucida Sans Demibold,1,9" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DiagramPaletteElement id="133" name="DataRefinementGR">
+    <ShapeGraphicalRepresentation id="134" relativeTextY="0.5" locationConstraints="FREELY_MOVABLE" isFloatingLabel="false" allowToLeaveBounds="false" adaptBoundsToContents="false" x="187.0" y="117.0" relativeTextX="0.5" dimensionConstraints="FREELY_RESIZABLE" width="30.0" height="30.0" identifier="329494e7" layer="2" text="DTA">
+      <SelectedColorBackgroundStyle id="135" color="254,247,217" transparencyLevel="0.5" />
+      <ForegroundStyle id="136" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" noStroke="true" capStyle="CAP_SQUARE" />
+      <FocusedColorBackgroundStyle id="137" color="254,247,217" transparencyLevel="0.5" />
+      <ShadowStyle id="138" drawShadow="false" />
+      <FocusedForegroundStyle id="139" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <SelectedForegroundStyle id="140" joinStyle="JOIN_MITER" color="0,0,0" dashStyle="PLAIN_STROKE" capStyle="CAP_SQUARE" />
+      <ColorGradientBackgroundStyle id="141" color1="255,204,0" color2="255,255,255" direction="NORTH_WEST_SOUTH_EAST" transparencyLevel="0.5" />
+      <CircleShape id="142" />
+      <TextStyle id="143" backgroundColor="255,255,255" color="51,51,255" font="Lucida Sans Demibold,1,9" />
+    </ShapeGraphicalRepresentation>
+  </DiagramPaletteElement>
+  <DrawingGraphicalRepresentation id="144" backgroundColor="255,255,255" drawWorkingArea="false" focusColor="255,0,0" selectionColor="0,0,255" width="260.0" rectangleSelectingSelectionColor="0,0,255" height="330.0" dimensionConstraints="FREELY_RESIZABLE" identifier="e20587a">
+    <TextStyle id="145" backgroundColor="255,255,255" color="0,0,0" font="Lucida Sans,0,11" />
+  </DrawingGraphicalRepresentation>
+</DiagramPalette>

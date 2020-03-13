@@ -1,0 +1,1330 @@
+use org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModelDiagram.fml")
+public class DomainModelDiagram {
+
+  public Diagram diagram;
+  public DomainModel domainModel;
+  public LogicalFormulaPaneGR logicalFormulaPane;
+
+  @CreationScheme  
+  DomainModelDiagram:init(VirtualModelInstanceType<DomainModel> domainModel, String diagramName) {  
+    diagram = CreateDiagram$CreateDiagramImpl_$$_jvste46_c3 {    
+    };    
+    domainModel = parameters.domainModel;    
+    logicalFormulaPane = LogicalFormulaPaneGR.create(this);  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+  @CreationScheme  
+  DomainModelDiagram:create(String diagramName) {  
+    domainModel = rootDomainModel;    
+    diagram = CreateDiagram$CreateDiagramImpl_$$_jvste46_c3 {    
+    };    
+    logicalFormulaPane = LogicalFormulaPaneGR.create(this);  
+  }  
+
+
+  @FlexoConcept  
+  public class ConceptGR {  
+  
+    public DiagramShape containerShape;  
+    public DiagramShape enumIcon;  
+    public DiagramShape label;  
+    public DiagramShape attributes;  
+    public DiagramShape varIcon;  
+    public Concept modelConcept;  
+    public DiagramShape icon;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return (this.container.domainModel != modelConcept.container);    
+    }  
+  
+    @DropScheme    
+    ConceptGR:dropConceptGRAtTopLevel(String conceptName, Boolean isVariable, Boolean isEnumeration) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributes = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      modelConcept = Concept.create(parameters.conceptName,parameters.isVariable,parameters.isEnumeration,null);      
+      icon = diagram.AddShape();    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      delete attributes;      
+      delete varIcon;      
+      modelConcept.delete();    
+    }    
+  
+    @ActionScheme    
+    public Void refreshConcept() {    
+      Long counter = 0;      
+      for (item : attributes.shapes) {      
+        item.graphicalRepresentation.y = (counter * 20);        
+        counter = (counter + 1);      
+      }    
+    }    
+  
+    @DropScheme    
+    ConceptGR:representConceptGRAtTopLevel(FlexoConceptInstanceType<Concept> concept) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributes = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      modelConcept = parameters.concept;      
+      this.representAdditionnalConceptLinks()    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      delete attributes;      
+      delete varIcon;      
+      modelConcept = null;    
+    }    
+  
+    @ActionScheme    
+    Void representAdditionnalConceptLinks() {    
+      if (modelConcept.parentConcept != null) {      
+        FlexoConceptInstanceType<ConceptGR> gr = container.SelectUniqueFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept = modelConcept.parentConcept));        
+        if (gr != null) {        
+          ParentConceptGR.create(this,gr)        
+        }      
+      }      
+      for (cGR : container.SelectFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept.parentConcept = modelConcept))) {      
+        ParentConceptGR.create(cGR,this)      
+      }      
+      for (iGR : container.SelectFlexoConceptInstance(type=IndividualGR,where=where=(selected.individual.individualOf = modelConcept))) {      
+        IndividualOfGR.create(iGR,this)      
+      }      
+      for (aGR : container.SelectFlexoConceptInstance(type=AssociationGR,where=where=((selected.modelConcept.domain = modelConcept) | (selected.modelConcept.range = modelConcept)))) {      
+        if (aGR.modelConcept.domain = modelConcept) {        
+          AssociationLeftArrowGR.create(this,aGR)        
+        } else {        
+              
+        }        
+        if (aGR.modelConcept.range = modelConcept) {        
+          AssociationRightArrowGR.create(this,aGR)        
+        }      
+      }    
+    }    
+  
+    @CreationScheme    
+    ConceptGR:create(FlexoConceptInstanceType<Concept> aConcept, VirtualModelInstanceType<DomainModelDiagram> aDiagram) {    
+      containerShape = parameters.aDiagram.diagram.AddShape();      
+      enumIcon = parameters.aDiagram.diagram.AddShape();      
+      label = parameters.aDiagram.diagram.AddShape();      
+      attributes = parameters.aDiagram.diagram.AddShape();      
+      varIcon = parameters.aDiagram.diagram.AddShape();      
+      icon = parameters.aDiagram.diagram.AddShape();      
+      modelConcept = parameters.aConcept;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DefinedConceptGR extends ConceptGR  {  
+  
+    public DiagramShape containerShape;  
+    public DiagramShape enumIcon;  
+    public DiagramShape label;  
+    public DiagramShape attributes;  
+    public DiagramShape varIcon;  
+    public DefinedConcept modelConcept;  
+    public DiagramShape icon;  
+    public LogicalFormulaGR logicalFormulaGR;  
+  
+    @DropScheme    
+    DefinedConceptGR:dropDefinedConceptGRAtTopLevel(String name, String logicalFormula, Boolean isVariable, Boolean isEnumeration) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributes = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      FlexoConceptInstanceType<LogicalFormula> logicalFormula = LogicalFormula.create(parameters.logicalFormula);      
+      modelConcept = DefinedConcept.create(parameters.name,parameters.isVariable,parameters.isEnumeration,null,logicalFormula);      
+      logicalFormulaGR = LogicalFormulaGR.create(logicalFormula,logicalFormulaPane);    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      delete attributes;      
+      delete varIcon;      
+      logicalFormulaGR.delete();      
+      delete modelConcept;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      delete attributes;      
+      delete varIcon;      
+      modelConcept = null;      
+      logicalFormulaGR = null;    
+    }    
+  
+    @DropScheme    
+    DefinedConceptGR:representDefinedConceptGRAtTopLevel(FlexoConceptInstanceType<DefinedConcept> concept) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributes = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      modelConcept = parameters.concept;      
+      this.representAdditionnalConceptLinks()    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class IndividualGR {  
+  
+    public DiagramShape individualShape;  
+    public DiagramShape icon;  
+    public DiagramShape label;  
+    public DiagramShape attributeValues;  
+    public DiagramShape varIcon;  
+    public Individual individual;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return (this.container.domainModel != individual.container);    
+    }  
+  
+    @DropScheme    
+    IndividualGR:dropIndividualGRAtTopLevel(String individualName, Boolean isVariable) {    
+      individualShape = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributeValues = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      individual = Individual.create(parameters.individualName,null,parameters.isVariable,null);    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete individualShape;      
+      delete icon;      
+      delete label;      
+      delete attributeValues;      
+      delete varIcon;      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualAttributeGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=InitialValueGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualAntecedentGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualImageGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=SimpleMapletIndividualGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.delete();      
+      }      
+      individual.delete();    
+    }    
+  
+    @ActionScheme    
+    public Void refreshIndividual() {    
+      Long counter = 0;      
+      for (item : attributeValues.shapes) {      
+        item.graphicalRepresentation.y = (counter * 20);        
+        counter = (counter + 1);      
+      }    
+    }    
+  
+    @DropScheme    
+    IndividualGR:representIndividualGRAtTopLevel(FlexoConceptInstanceType<Individual> individual) {    
+      individualShape = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributeValues = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      individual = parameters.individual;      
+      if (individual.individualOf != null) {      
+        FlexoConceptInstanceType<ConceptGR> gr = container.SelectUniqueFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept = individual.individualOf));        
+        if (gr != null) {        
+          IndividualOfGR.create(this,gr)        
+        }      
+      }      
+      if (individual.initialValue != null) {      
+        FlexoConceptInstanceType<IndividualGR> gr = container.SelectUniqueFlexoConceptInstance(type=IndividualGR,where=where=(selected.individual = individual.initialValue));        
+        if (gr != null) {        
+          InitialValueGR.create(this,gr)        
+        }      
+      }      
+      this.representAdditionnalIndividualLinks()    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete individualShape;      
+      delete icon;      
+      delete label;      
+      delete attributeValues;      
+      delete varIcon;      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualAttributeGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=InitialValueGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualAntecedentGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualImageGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=SimpleMapletIndividualGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.deleteView();      
+      }      
+      individual = null;    
+    }    
+  
+    @ActionScheme    
+    Void representAdditionnalIndividualLinks() {    
+      if (individual.individualOf != null) {      
+        FlexoConceptInstanceType<ConceptGR> gr = container.SelectUniqueFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept = individual.individualOf));        
+        if (gr != null) {        
+          IndividualOfGR.create(this,gr)        
+        }      
+      }      
+      if (individual.initialValue != null) {      
+        FlexoConceptInstanceType<IndividualGR> gr = container.SelectUniqueFlexoConceptInstance(type=IndividualGR,where=where=(selected.individual = individual.initialValue));        
+        if (gr != null) {        
+          InitialValueGR.create(this,gr)        
+        }      
+      }      
+      for (iGR : container.SelectFlexoConceptInstance(type=IndividualGR,where=where=(selected.individual.initialValue = individual))) {      
+        InitialValueGR.create(iGR,this)      
+      }      
+      for (miGR : container.SelectFlexoConceptInstance(type=MapletIndividualGR,where=where=((selected.individual.antecedent = individual) | (selected.individual.image = individual)))) {      
+        if (miGR.individual.antecedent = individual) {        
+          MapletIndividualAntecedentGR.create(this,miGR)        
+        }        
+        if (miGR.individual.image = individual) {        
+          MapletIndividualImageGR.create(this,miGR)        
+        }      
+      }    
+    }    
+  
+    @CreationScheme    
+    IndividualGR:create(FlexoConceptInstanceType<Individual> aIndividual, VirtualModelInstanceType<DomainModelDiagram> aDiagram) {    
+      individual = parameters.aIndividual;      
+      individualShape = parameters.aDiagram.diagram.AddShape();      
+      icon = parameters.aDiagram.diagram.AddShape();      
+      label = parameters.aDiagram.diagram.AddShape();      
+      attributeValues = parameters.aDiagram.diagram.AddShape();      
+      varIcon = parameters.aDiagram.diagram.AddShape();      
+      if (individual.individualOf != null) {      
+        FlexoConceptInstanceType<ConceptGR> gr = parameters.aDiagram.SelectUniqueFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept = individual.individualOf));        
+        if (gr != null) {        
+          IndividualOfGR.create(this,gr)        
+        }      
+      }    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class IndividualOfGR {  
+  
+    public DiagramConnector connector;  
+    public IndividualGR individualGR;  
+    public ConceptGR conceptGR;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != individualGR.individual.container) & (this.container.domainModel != conceptGR.modelConcept.container));    
+    }  
+  
+    @LinkScheme    
+    IndividualOfGR:linkIndividualGRToConceptGR() {    
+      connector = diagram.AddConnector();      
+      individualGR = fromTarget;      
+      conceptGR = toTarget;      
+      individualGR.individual.individualOf = conceptGR.modelConcept;      
+      domainModel.firePropertyChange sole_individuals      
+      domainModel.firePropertyChange concepts    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete connector;      
+      individualGR.individual.individualOf = null;      
+      individualGR = null;      
+      conceptGR = null;      
+      domainModel.firePropertyChange sole_individuals      
+      domainModel.firePropertyChange concepts    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete connector;      
+      individualGR = null;      
+      conceptGR = null;    
+    }    
+  
+    @CreationScheme    
+    IndividualOfGR:create(FlexoConceptInstanceType<IndividualGR> from, FlexoConceptInstanceType<ConceptGR> to) {    
+      individualGR = parameters.from;      
+      conceptGR = parameters.to;      
+      connector = individualGR.diagram.diagram.AddConnector();      
+      domainModel.firePropertyChange sole_individuals      
+      domainModel.firePropertyChange concepts    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class AssociationGR extends ConceptGR  {  
+  
+    public DiagramShape containerShape;  
+    public DiagramShape enumIcon;  
+    public DiagramShape label;  
+    public DiagramShape attributes;  
+    public DiagramShape varIcon;  
+    public Association modelConcept;  
+    public AssociationLeftArrowGR associationLeftArrowGR;  
+    public AssociationRightArrowGR associationRightArrowGR;  
+    public DiagramShape icon;  
+  
+    @DropScheme    
+    AssociationGR:dropAssociationGRAtTopLevel(String name, Boolean isVariable, Boolean isEnumeration) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributes = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      FlexoConceptInstanceType<Cardinality> domainCardinality = Cardinality.create("0..*");      
+      FlexoConceptInstanceType<Cardinality> rangeCardinality = Cardinality.create("0..*");      
+      modelConcept = Association.create(parameters.name,parameters.isVariable,parameters.isEnumeration,null,null,null,domainCardinality,rangeCardinality,false,false,false,false,false);    
+    }    
+  
+    @LinkScheme    
+    AssociationGR:createAssociation(String name, Boolean isVariable, Boolean isEnumeration) {    
+      FlexoConceptInstanceType<Cardinality> domainCardinality = Cardinality.create("0..*");      
+      FlexoConceptInstanceType<Cardinality> rangeCardinality = Cardinality.create("0..*");      
+      modelConcept = Association.create(parameters.name,parameters.isVariable,parameters.isEnumeration,null,fromTarget.modelConcept,toTarget.modelConcept,domainCardinality,rangeCardinality,false,false,false,false,false);      
+      containerShape = fromTarget.diagram.AddShape();      
+      enumIcon = fromTarget.diagram.AddShape();      
+      label = fromTarget.diagram.AddShape();      
+      attributes = fromTarget.diagram.AddShape();      
+      varIcon = fromTarget.diagram.AddShape();      
+      icon = diagram.AddShape();      
+      associationRightArrowGR = AssociationRightArrowGR.create(toTarget,this);      
+      associationLeftArrowGR = AssociationLeftArrowGR.create(fromTarget,this);      
+      containerShape.x=(((((fromTarget.containerShape.graphicalRepresentation.x + (fromTarget.containerShape.graphicalRepresentation.width / 2)) + toTarget.containerShape.graphicalRepresentation.x) + (toTarget.containerShape.graphicalRepresentation.width / 2)) / 2) - (containerShape.graphicalRepresentation.width / 2))      
+      containerShape.y=(((((fromTarget.containerShape.graphicalRepresentation.y + (fromTarget.containerShape.graphicalRepresentation.height / 2)) + toTarget.containerShape.graphicalRepresentation.y) + (toTarget.containerShape.graphicalRepresentation.height / 2)) / 2) - (containerShape.graphicalRepresentation.height / 2))    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      if (associationRightArrowGR != null) {      
+        associationRightArrowGR.delete();      
+      }      
+      if (associationLeftArrowGR != null) {      
+        associationLeftArrowGR.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      delete attributes;      
+      delete varIcon;      
+      modelConcept.delete();    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      delete attributes;      
+      delete varIcon;      
+      modelConcept = null;      
+      associationLeftArrowGR = null;      
+      associationRightArrowGR = null;    
+    }    
+  
+    @DropScheme    
+    AssociationGR:representAssociationGRAtTopLevel(FlexoConceptInstanceType<Association> association) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributes = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      modelConcept = parameters.association;      
+      if (modelConcept.domain != null) {      
+        FlexoConceptInstanceType<ConceptGR> gr = container.SelectUniqueFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept = modelConcept.domain));        
+        if (gr != null) {        
+          associationLeftArrowGR = AssociationLeftArrowGR.create(gr,this);        
+        }      
+      }      
+      if (modelConcept.range != null) {      
+        FlexoConceptInstanceType<ConceptGR> gr = container.SelectUniqueFlexoConceptInstance(type=ConceptGR,where=where=(selected.modelConcept = modelConcept.range));        
+        if (gr != null) {        
+          associationRightArrowGR = AssociationRightArrowGR.create(gr,this);        
+        }      
+      }      
+      this.representAdditionnalConceptLinks()    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class AssociationLeftArrowGR {  
+  
+    public DiagramConnector cardinalityShapeLeft;  
+    public ConceptGR conceptGR;  
+    public AssociationGR associationGR;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != associationGR.modelConcept.container) & (this.container.domainModel != conceptGR.modelConcept.container));    
+    }  
+  
+    @LinkScheme    
+    AssociationLeftArrowGR:linkConceptGRToAssociationGR() {    
+      conceptGR = fromTarget;      
+      associationGR = toTarget;      
+      cardinalityShapeLeft = diagram.AddConnector();      
+      associationGR.modelConcept.domain = fromTarget.modelConcept;      
+      associationGR.associationLeftArrowGR = this;    
+    }    
+  
+    @CreationScheme    
+    AssociationLeftArrowGR:create(FlexoConceptInstanceType<ConceptGR> conceptGR, FlexoConceptInstanceType<AssociationGR> assocationGR) {    
+      conceptGR = parameters.conceptGR;      
+      associationGR = parameters.assocationGR;      
+      cardinalityShapeLeft = conceptGR.diagram.AddConnector();    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete cardinalityShapeLeft;      
+      associationGR.modelConcept.domain = null;      
+      conceptGR = null;      
+      associationGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete cardinalityShapeLeft;      
+      conceptGR = null;      
+      associationGR = null;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class AssociationRightArrowGR {  
+  
+    public ConceptGR conceptGR;  
+    public AssociationGR associationGR;  
+    public DiagramConnector cardinalityShapeRight;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != associationGR.modelConcept.container) & (this.container.domainModel != conceptGR.modelConcept.container));    
+    }  
+  
+    @LinkScheme    
+    AssociationRightArrowGR:linkAssociationGRToConceptGR() {    
+      conceptGR = toTarget;      
+      associationGR = fromTarget;      
+      cardinalityShapeRight = diagram.AddConnector();      
+      associationGR.modelConcept.range = toTarget.modelConcept;      
+      associationGR.associationRightArrowGR = this;    
+    }    
+  
+    @CreationScheme    
+    AssociationRightArrowGR:create(FlexoConceptInstanceType<ConceptGR> conceptGR, FlexoConceptInstanceType<AssociationGR> assocationGR) {    
+      conceptGR = parameters.conceptGR;      
+      associationGR = parameters.assocationGR;      
+      cardinalityShapeRight = conceptGR.diagram.AddConnector();    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete cardinalityShapeRight;      
+      associationGR.modelConcept.range = null;      
+      conceptGR = null;      
+      associationGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete cardinalityShapeRight;      
+      conceptGR = null;      
+      associationGR = null;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class ParentConceptGR {  
+  
+    public DiagramConnector parentConceptShape;  
+    public ConceptGR childConceptGR;  
+    public ConceptGR parentConceptGR;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != childConceptGR.modelConcept.container) & (this.container.domainModel != parentConceptGR.modelConcept.container));    
+    }  
+  
+    @LinkScheme    
+    ParentConceptGR:linkConceptGRToConceptGR() {    
+      childConceptGR = fromTarget;      
+      parentConceptGR = toTarget;      
+      parentConceptShape = diagram.AddConnector();      
+      childConceptGR.modelConcept.parentConcept = parentConceptGR.modelConcept;    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete parentConceptShape;      
+      childConceptGR.modelConcept.parentConcept = null;      
+      childConceptGR = null;      
+      parentConceptGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete parentConceptShape;      
+      childConceptGR = null;      
+      parentConceptGR = null;    
+    }    
+  
+    @CreationScheme    
+    ParentConceptGR:create(FlexoConceptInstanceType<ConceptGR> from, FlexoConceptInstanceType<ConceptGR> to) {    
+      childConceptGR = parameters.from;      
+      parentConceptGR = parameters.to;      
+      parentConceptShape = childConceptGR.diagram.diagram.AddConnector();    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class InitialValueGR {  
+  
+    public DiagramConnector connector;  
+    public IndividualGR fromIndividualGR;  
+    public IndividualGR toIndividualGR;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != fromIndividualGR.individual.container) & (this.container.domainModel != toIndividualGR.individual.container));    
+    }  
+  
+    @LinkScheme    
+    InitialValueGR:linkIndividualGRToIndividualGR() {    
+      connector = diagram.AddConnector();      
+      fromIndividualGR = fromTarget;      
+      toIndividualGR = toTarget;      
+      fromIndividualGR.individual.initialValue = toIndividualGR.individual;    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete connector;      
+      fromIndividualGR.individual.initialValue = null;      
+      fromIndividualGR = null;      
+      toIndividualGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete connector;      
+      fromIndividualGR = null;      
+      toIndividualGR = null;    
+    }    
+  
+    @CreationScheme    
+    InitialValueGR:create(FlexoConceptInstanceType<IndividualGR> from, FlexoConceptInstanceType<IndividualGR> to) {    
+      fromIndividualGR = parameters.from;      
+      toIndividualGR = parameters.to;      
+      connector = fromIndividualGR.diagram.diagram.AddConnector();    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class MapletIndividualGR extends IndividualGR  {  
+  
+    public DiagramShape individualShape;  
+    public DiagramShape icon;  
+    public DiagramShape label;  
+    public DiagramShape attributeValues;  
+    public DiagramShape varIcon;  
+    public MapletIndividual individual;  
+    public MapletIndividualAntecedentGR mapletIndividualAntecedentGR;  
+    public MapletIndividualImageGR mapletIndividualImageGR;  
+  
+    @DropScheme    
+    MapletIndividualGR:dropMapletIndividualGRAtTopLevel(String name, Boolean isVariable) {    
+      individualShape = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributeValues = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      individual = MapletIndividual.create(parameters.name,null,null,null,parameters.isVariable,null);    
+    }    
+  
+    @LinkScheme    
+    MapletIndividualGR:createMapletIndividual(String name, Boolean isVariable) {    
+      individual = MapletIndividual.create(parameters.name,null,fromTarget.individual,toTarget.individual,parameters.isVariable,null);      
+      individualShape = fromTarget.diagram.AddShape();      
+      icon = fromTarget.diagram.AddShape();      
+      label = fromTarget.diagram.AddShape();      
+      attributeValues = fromTarget.diagram.AddShape();      
+      varIcon = fromTarget.diagram.AddShape();      
+      mapletIndividualImageGR = MapletIndividualImageGR.create(toTarget,this);      
+      mapletIndividualAntecedentGR = MapletIndividualAntecedentGR.create(fromTarget,this);      
+      individualShape.x=(((((fromTarget.individualShape.graphicalRepresentation.x + (fromTarget.individualShape.graphicalRepresentation.width / 2)) + toTarget.individualShape.graphicalRepresentation.x) + (toTarget.individualShape.graphicalRepresentation.width / 2)) / 2) - (individualShape.graphicalRepresentation.width / 2))      
+      individualShape.y=(((((fromTarget.individualShape.graphicalRepresentation.y + (fromTarget.individualShape.graphicalRepresentation.height / 2)) + toTarget.individualShape.graphicalRepresentation.y) + (toTarget.individualShape.graphicalRepresentation.height / 2)) / 2) - (individualShape.graphicalRepresentation.height / 2))    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      if (mapletIndividualImageGR != null) {      
+        mapletIndividualImageGR.delete();      
+      }      
+      if (mapletIndividualAntecedentGR != null) {      
+        mapletIndividualAntecedentGR.delete();      
+      }      
+      delete icon;      
+      delete label;      
+      delete individualShape;      
+      delete attributeValues;      
+      delete varIcon;      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualAttributeGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=InitialValueGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualAntecedentGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualImageGR,where=where=(selected.individualGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=SimpleMapletIndividualGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.delete();      
+      }      
+      individual.delete();    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete individualShape;      
+      delete icon;      
+      delete label;      
+      delete attributeValues;      
+      delete varIcon;      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualAttributeGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=InitialValueGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualAntecedentGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=MapletIndividualImageGR,where=where=(selected.individualGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=SimpleMapletIndividualGR,where=where=((selected.fromIndividualGR = this) | (selected.toIndividualGR = this)))) {      
+        item.deleteView();      
+      }      
+      individual = null;      
+      mapletIndividualAntecedentGR = null;      
+      mapletIndividualImageGR = null;    
+    }    
+  
+    @DropScheme    
+    MapletIndividualGR:representMapletIndividualGRAtTopLevel(FlexoConceptInstanceType<MapletIndividual> individual) {    
+      individualShape = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      attributeValues = diagram.AddShape();      
+      varIcon = diagram.AddShape();      
+      individual = parameters.individual;      
+      if (individual.antecedent != null) {      
+        FlexoConceptInstanceType<IndividualGR> gr = container.SelectUniqueFlexoConceptInstance(type=IndividualGR,where=where=(selected.individual = individual.antecedent));        
+        if (gr != null) {        
+          mapletIndividualAntecedentGR = MapletIndividualAntecedentGR.create(gr,this);        
+        }      
+      }      
+      if (individual.image != null) {      
+        FlexoConceptInstanceType<IndividualGR> gr = container.SelectUniqueFlexoConceptInstance(type=IndividualGR,where=where=(selected.individual = individual.image));        
+        if (gr != null) {        
+          mapletIndividualImageGR = MapletIndividualImageGR.create(gr,this);        
+        }      
+      }      
+      this.representAdditionnalIndividualLinks()    
+    }    
+  
+    @ActionScheme    
+    public Void simplifyView() {    
+      SimpleMapletIndividualGR.create(mapletIndividualAntecedentGR.individualGR,mapletIndividualImageGR.individualGR,individual)      
+      this.deleteView()    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class MapletIndividualAntecedentGR {  
+  
+    public DiagramConnector antecedentShape;  
+    public IndividualGR individualGR;  
+    public MapletIndividualGR mapletIndividualGR;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != individualGR.individual.container) & (this.container.domainModel != mapletIndividualGR.individual.container));    
+    }  
+  
+    @LinkScheme    
+    MapletIndividualAntecedentGR:linkIndividualGRToMapletIndividualGR() {    
+      individualGR = fromTarget;      
+      mapletIndividualGR = toTarget;      
+      antecedentShape = diagram.AddConnector();      
+      mapletIndividualGR.individual.antecedent = individualGR.individual;      
+      mapletIndividualGR.mapletIndividualAntecedentGR = this;    
+    }    
+  
+    @CreationScheme    
+    MapletIndividualAntecedentGR:create(FlexoConceptInstanceType<IndividualGR> individualGR, FlexoConceptInstanceType<MapletIndividualGR> mapletIndividualGR) {    
+      individualGR = parameters.individualGR;      
+      mapletIndividualGR = parameters.mapletIndividualGR;      
+      antecedentShape = individualGR.diagram.AddConnector();    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete antecedentShape;      
+      mapletIndividualGR.individual.antecedent = null;      
+      individualGR = null;      
+      mapletIndividualGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete antecedentShape;      
+      individualGR = null;      
+      mapletIndividualGR = null;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class MapletIndividualImageGR {  
+  
+    public DiagramConnector imageShape;  
+    public IndividualGR individualGR;  
+    public MapletIndividualGR mapletIndividualGR;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return ((this.container.domainModel != individualGR.individual.container) & (this.container.domainModel != mapletIndividualGR.individual.container));    
+    }  
+  
+    @LinkScheme    
+    MapletIndividualImageGR:linkMapletIndividualGRToIndividualGR() {    
+      mapletIndividualGR = fromTarget;      
+      individualGR = toTarget;      
+      imageShape = diagram.AddConnector();      
+      mapletIndividualGR.individual.image = individualGR.individual;      
+      mapletIndividualGR.mapletIndividualImageGR = this;    
+    }    
+  
+    @CreationScheme    
+    MapletIndividualImageGR:create(FlexoConceptInstanceType<IndividualGR> individualGR, FlexoConceptInstanceType<MapletIndividualGR> mapletIndividualGR) {    
+      individualGR = parameters.individualGR;      
+      mapletIndividualGR = parameters.mapletIndividualGR;      
+      imageShape = individualGR.diagram.AddConnector();    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete imageShape;      
+      mapletIndividualGR.individual.image = null;      
+      individualGR = null;      
+      mapletIndividualGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete imageShape;      
+      individualGR = null;      
+      mapletIndividualGR = null;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DefaultDataTypeGR extends ConceptGR  {  
+  
+    public DiagramShape containerShape;  
+    public DiagramShape enumIcon;  
+    public DiagramShape label;  
+    public DiagramShape icon;  
+    public DefaultDataType modelConcept;  
+  
+    @DropScheme    
+    DefaultDataTypeGR:dropDefaultDataTypeGRAtTopLevel(FlexoEnumType<DefaultDataTypeEnum> dataType) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      modelConcept = rootDomainModel.SelectUniqueFlexoConceptInstance(type=DefaultDataType,where=where=selected.name.equalsIgnoreCase(parameters.dataType.toString));    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.deleteView();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.deleteView();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      modelConcept = null;    
+    }    
+  
+    @DropScheme    
+    DefaultDataTypeGR:representDefaultDataTypeGRAtTopLevel(FlexoConceptInstanceType<DefaultDataType> dataType) {    
+      containerShape = diagram.AddShape();      
+      enumIcon = diagram.AddShape();      
+      label = diagram.AddShape();      
+      icon = diagram.AddShape();      
+      modelConcept = parameters.dataType;      
+      this.representAdditionnalConceptLinks()    
+    }    
+  
+    @ActionScheme    
+    public Void changeType(FlexoEnumType<DefaultDataTypeEnum> newType) {    
+      FlexoConceptInstanceType<DefaultDataType> dataType = rootDomainModel.SelectUniqueFlexoConceptInstance(type=DefaultDataType,where=where=selected.name.equalsIgnoreCase(parameters.newType.toString));      
+      modelConcept = dataType;    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      for (item : container.SelectFlexoConceptInstance(type=IndividualOfGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationLeftArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=AssociationRightArrowGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ParentConceptGR,where=where=((selected.childConceptGR = this) | (selected.parentConceptGR = this)))) {      
+        item.delete();      
+      }      
+      for (item : container.SelectFlexoConceptInstance(type=ConceptAttributeGR,where=where=(selected.conceptGR = this))) {      
+        item.delete();      
+      }      
+      delete containerShape;      
+      delete enumIcon;      
+      delete label;      
+      delete icon;      
+      modelConcept = null;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class SimpleMapletIndividualGR {  
+  
+    public DiagramConnector connector;  
+    public IndividualGR fromIndividualGR;  
+    public IndividualGR toIndividualGR;  
+    public MapletIndividual individual;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return (this.container.domainModel != individual.container);    
+    }  
+  
+    @LinkScheme    
+    SimpleMapletIndividualGR:linkIndividualGRToIndividualGR(FlexoConceptInstanceType<Association> association) {    
+      connector = diagram.AddConnector();      
+      fromIndividualGR = fromTarget;      
+      toIndividualGR = toTarget;      
+      individual = MapletIndividual.create(null,parameters.association,fromIndividualGR.individual,toIndividualGR.individual,false,null);    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      delete connector;      
+      individual.delete();      
+      fromIndividualGR = null;      
+      toIndividualGR = null;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete connector;      
+      fromIndividualGR = null;      
+      toIndividualGR = null;      
+      individual = null;    
+    }    
+  
+    @CreationScheme    
+    SimpleMapletIndividualGR:create(FlexoConceptInstanceType<IndividualGR> fromGR, FlexoConceptInstanceType<IndividualGR> toGR, FlexoConceptInstanceType<Individual> individual) {    
+      fromIndividualGR = parameters.fromGR;      
+      toIndividualGR = parameters.toGR;      
+      connector = fromIndividualGR.diagram.diagram.AddConnector();      
+      individual = parameters.individual;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class ConceptAttributeGR {  
+  
+    public DiagramShape attributeLabel;  
+    public ConceptGR conceptGR;  
+    public Association modelConcept;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return (this.container.domainModel != modelConcept.container);    
+    }  
+  
+    @DropScheme    
+    ConceptAttributeGR:dropAttributeGRonConceptGR(String name, FlexoEnumType<DefaultDataTypeEnum> dataType, Boolean isVariable, String rangeCardinality) {    
+      conceptGR = target;      
+      FlexoConceptInstanceType<DefaultDataType> dataType = rootDomainModel.SelectUniqueFlexoConceptInstance(type=DefaultDataType,where=where=selected.name.equalsIgnoreCase(parameters.dataType.toString));      
+      FlexoConceptInstanceType<Cardinality> domainCardinality = Cardinality.create("0..*");      
+      FlexoConceptInstanceType<Cardinality> rangeCardinality = Cardinality.create(parameters.rangeCardinality);      
+      modelConcept = Association.create(parameters.name,parameters.isVariable,false,null,conceptGR.modelConcept,dataType,domainCardinality,rangeCardinality,false,false,false,false,false);      
+      attributeLabel = diagram.AddShape();      
+      log "addition of an attribute in a concept"      
+      conceptGR.refreshConcept()    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      modelConcept.delete();      
+      if (attributeLabel != null) {      
+        delete attributeLabel;      
+      }      
+      conceptGR = null;      
+      conceptGR.refreshConcept()    
+    }    
+  
+    @ActionScheme    
+    public Void setAttributeRange(FlexoEnumType<DefaultDataTypeEnum> newType) {    
+      FlexoConceptInstanceType<DefaultDataType> dataType = rootDomainModel.SelectUniqueFlexoConceptInstance(type=DefaultDataType,where=where=selected.name.equalsIgnoreCase(parameters.newType.toString));      
+      modelConcept.range = dataType;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete attributeLabel;      
+      conceptGR.refreshConcept()    
+    }    
+  
+    @DropScheme    
+    ConceptAttributeGR:representAssociationGRInConcept(FlexoConceptInstanceType<Association> association) {    
+      conceptGR = target;      
+      if ((parameters.association.domain != null) & (parameters.association.domain = conceptGR.modelConcept)) {      
+        modelConcept = parameters.association;        
+        attributeLabel = diagram.AddShape();      
+      }      
+      conceptGR.refreshConcept()    
+    }    
+  
+    @ActionScheme    
+    public Void setAssociationRange(FlexoConceptInstanceType<Concept> newType) {    
+      modelConcept.range = parameters.newType;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class IndividualAttributeGR {  
+  
+    public DiagramShape attributeLabel;  
+    public IndividualGR individualGR;  
+    public MapletIndividual individual;  
+    @GetSetProperty(value="isView", access=get)    
+    public Boolean getIsView {    
+      return (this.container.domainModel != individual.container);    
+    }  
+  
+    @DropScheme    
+    IndividualAttributeGR:dropAttributeGRonIndividualGR(FlexoConceptInstanceType<Association> attribute, FlexoConceptInstanceType<Individual> valueIndividual, String valueString) {    
+      individualGR = target;      
+      if (parameters.attribute.domain != individualGR.individual.individualOf) {      
+        log "INVALID TYPE"      
+      }      
+      individual = MapletIndividual.create("",parameters.attribute,individualGR.individual,null,false,null);      
+      if (parameters.valueIndividual != null) {      
+        individual.image = parameters.valueIndividual;      
+      } else {      
+        individual.image = domainModel.SelectUniqueFlexoConceptInstance(type=Individual,where=where=selected.name.equalsIgnoreCase(parameters.valueString));        
+        if (individual.image = null) {        
+          individual.image = Individual.create(parameters.valueString,individual.individualOf.range,false,null);        
+        }      
+      }      
+      attributeLabel = diagram.AddShape();      
+      log "addition of an attribute in an individual"      
+      individualGR.refreshIndividual()    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      individual.delete();      
+      if (attributeLabel != null) {      
+        delete attributeLabel;      
+      }      
+      individualGR = null;      
+      individualGR.refreshIndividual()    
+    }    
+  
+    @ActionScheme    
+    public Void setAttributeType(FlexoConceptInstanceType<Association> newType) {    
+      if (parameters.newType.domain != individualGR.individual.individualOf) {      
+        log "INVALID TYPE"      
+      }      
+      individual.individualOf = parameters.newType;    
+    }    
+  
+    @ActionScheme    
+    public Void setAttributeValue(FlexoConceptInstanceType<Individual> newValue) {    
+      if (parameters.newValue.individualOf != individual.individualOf.range) {      
+        log "INVALID VALUE"      
+      }      
+      individual.image = parameters.newValue;    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteView() {    
+      delete attributeLabel;      
+      individualGR.refreshIndividual()    
+    }    
+  
+    @DropScheme    
+    IndividualAttributeGR:representMapletIndividualGRInIndividual(FlexoConceptInstanceType<MapletIndividual> maplet) {    
+      individualGR = target;      
+      if ((parameters.maplet.antecedent != null) & (parameters.maplet.antecedent = individualGR.individual)) {      
+        individual = parameters.maplet;        
+        attributeLabel = diagram.AddShape();      
+      }      
+      individualGR.refreshIndividual()    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class LogicalFormulaPaneGR {  
+  
+    public DiagramShape logicalFormulas;  
+    public DiagramShape label;  
+    public DiagramShape formulas;  
+  
+    @CreationScheme    
+    LogicalFormulaPaneGR:create(VirtualModelInstanceType<DomainModelDiagram> diagram) {    
+      logicalFormulas = parameters.diagram.diagram.AddShape();      
+      label = parameters.diagram.diagram.AddShape();      
+      formulas = parameters.diagram.diagram.AddShape();      
+      logicalFormulas.width=(parameters.diagram.diagram.diagram.graphicalRepresentation.width - 60)    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      delete logicalFormulas;      
+      delete label;      
+      delete formulas;    
+    }    
+  
+    @ActionScheme    
+    public Void refreshFormulaPanel() {    
+      Long counter = 0;      
+      for (item : formulas.shapes) {      
+        item.graphicalRepresentation.y = (counter * 20);        
+        counter = (counter + 1);      
+      }    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class LogicalFormulaGR {  
+  
+    public LogicalFormula logicalFormula;  
+    public DiagramShape logicalFormulaShape;  
+    public LogicalFormulaPaneGR logicalFormulaPaneGR;  
+  
+    @DropScheme    
+    LogicalFormulaGR:dropLogicalFormulaGROnFormulaPane(String formula) {    
+      logicalFormulaPaneGR = target;      
+      logicalFormula = LogicalFormula.create(parameters.formula);      
+      logicalFormulaShape = diagram.AddShape();      
+      logicalFormulaPaneGR.refreshFormulaPanel()    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      logicalFormula.delete();      
+      if (logicalFormulaShape != null) {      
+        delete logicalFormulaShape;      
+      }      
+      logicalFormulaPaneGR.refreshFormulaPanel()    
+    }    
+  
+    @CreationScheme    
+    LogicalFormulaGR:create(FlexoConceptInstanceType<LogicalFormula> formula, FlexoConceptInstanceType<LogicalFormulaPaneGR> aLogicalFormulaPane) {    
+      logicalFormula = parameters.formula;      
+      this.logicalFormulaPaneGR = parameters.aLogicalFormulaPane;      
+      logicalFormulaShape = diagram.AddShape();      
+      logicalFormulaPaneGR.refreshFormulaPanel()    
+    }    
+  
+  }  
+
+}

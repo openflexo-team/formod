@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="twocols" borderRight="0" height="300" width="270" controllerClassName="org.openflexo.module.formose.widget.GoalDiagramBrowser$GoalDiagramBrowserFIBController" name="Panel">
+  <Panel id="1" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="border" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="Panel2">
+    <TextField id="2" columns="7" data="controller.filteredName" constraints="border(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="TextField" />
+  </Panel>
+  <Panel id="3" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="gridbag" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" index="1" name="Matches">
+    <Label id="4" label="dsffdsmksdfmkfdsmkfdsmkdfskmsdf" align="right" data="((&quot;Found &quot; + controller.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="controller.isFiltered" index="0" font="SansSerif,2,10" name="MatchesLabel" />
+  </Panel>
+  <Browser id="5" allowsExternalDragAndDrop="true" backgroundSelectionColor="9,80,208" visibleRowCount="5" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0" root="model" selectionMode="DiscontiguousTreeSelection" rowHeight="18" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(GoalDiagramBrowser.selected,event)" enterPressedAction="controller.apply()" doubleClickAction="controller.doubleClick(GoalDiagramBrowser.selected)" clickAction="controller.singleClick(GoalDiagramBrowser.selected)" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" index="2" name="GoalDiagramBrowser">
+    <BrowserElement id="6" dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml&gt;" icon="controller.iconForObject(model)" label="model.stringRepresentation" isEditable="false" name="model">
+      <Children data="model.groups" name="groups" />
+      <Children data="model.ungroupedGoals" name="ungroupedGoals" />
+      <Children data="model.agents" name="agents" />
+    </BrowserElement>
+    <BrowserElement id="8" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup&gt;" icon="controller.iconForObject(group)" label="group.stringRepresentation" isEditable="false" name="group">
+      <Children data="group.goals" name="goals" />
+    </BrowserElement>
+    <BrowserElement id="9" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" icon="controller.iconForObject(goal)" label="goal.stringRepresentation" isEditable="false" name="goal" />
+  </Browser>
+  <LocalizedDictionary id="10" />
+  <FIBVariable id="11" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml&gt;" name="model" />
+</Panel>

@@ -1,0 +1,1000 @@
+<Proof_Obligations>
+<Define name="B definitions">
+<Nary_Pred op="&amp;" translate="((NAT) = (((0) .. (2147483647)))) &amp; ((INT) = (((-2147483647) .. (2147483647))))">
+<Exp_Comparison op="=" translate="((NAT) = (((0) .. (2147483647))))">
+<Id value="NAT"/>
+<Binary_Exp op="..">
+<Integer_Literal value="0"/>
+<Id value="MAXINT"/>
+</Binary_Exp>
+</Exp_Comparison>
+<Exp_Comparison op="=" translate="((INT) = (((-2147483647) .. (2147483647))))">
+<Id value="INT"/>
+<Binary_Exp op="..">
+<Id value="MININT"/>
+<Id value="MAXINT"/>
+</Binary_Exp>
+</Exp_Comparison>
+</Nary_Pred>
+</Define>
+<Define name="ctx"/>
+<Define name="seext"/>
+<Define name="inv">
+<Nary_Pred op="&amp;" translate="aa$1 : INTEGER &amp; 0 &lt;= aa$1 &amp; ((aa$1) : (NATURAL)) &amp; bb$1 : INTEGER &amp; 0 &lt;= bb$1 &amp; ((bb$1) : (NATURAL)) &amp; cc$1 : INTEGER &amp; 0 &lt;= cc$1 &amp; ((cc$1) : (NATURAL)) &amp; ((((aa$1 + bb$1) + cc$1)) = (nn)) &amp; ((((aa$1) = (0))) or (((cc$1) = (0))))">
+<Exp_Comparison op=":" initialTag="((aa$1) : (NATURAL))" translate="aa$1 : INTEGER &amp; 0 &lt;= aa$1 &amp; ((aa$1) : (NATURAL))">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:1," typref="2701647786" value="aa"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op=":" initialTag="((bb$1) : (NATURAL))" translate="bb$1 : INTEGER &amp; 0 &lt;= bb$1 &amp; ((bb$1) : (NATURAL))">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:1," typref="2701647786" value="bb"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op=":" initialTag="((cc$1) : (NATURAL))" translate="cc$1 : INTEGER &amp; 0 &lt;= cc$1 &amp; ((cc$1) : (NATURAL))">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:3:1," typref="2701647786" value="cc"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:3:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))" translate="((((aa$1 + bb$1) + cc$1)) = (nn))">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1," typref="2701647786" value="aa"/>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2," typref="2701647786" value="bb"/>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2," typref="2701647786" value="cc"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2" typref="2701647786" value="nn"/>
+</Exp_Comparison>
+<Binary_Pred op="or" initialTag="((((aa$1) = (0))) or (((cc$1) = (0))))" translate="((((aa$1) = (0))) or (((cc$1) = (0))))">
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:1," typref="2701647786" value="cc"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Nary_Pred>
+</Define>
+<Define name="ass"/>
+<Define name="lprp">
+<Exp_Comparison op="=" translate="((ee) = (dd))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:4:1:1" typref="2701647786" value="ee"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:4:1:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Define>
+<Define name="inprp"/>
+<Define name="inext"/>
+<Define name="mchcst"/>
+<Define name="aprp">
+<Nary_Pred op="&amp;" translate="dd : INTEGER &amp; 0 &lt;= dd &amp; ((dd) : (NATURAL)) &amp; (0 +1 &lt;= dd) &amp; ((nm) = (((dd) |-> (dd))))">
+<Exp_Comparison op=":" translate="dd : INTEGER &amp; 0 &lt;= dd &amp; ((dd) : (NATURAL))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:1:1" typref="2701647786" value="dd"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op=">" translate="(0 +1 &lt;= dd)">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:2:1" typref="2701647786" value="dd"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=" translate="((nm) = (((dd) |-> (dd))))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:3:1" typref="3672872563" value="nm"/>
+<Binary_Exp op="|->" typref="3672872563">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:3:2:1" typref="2701647786" value="dd"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:3:1:3:2:2" typref="2701647786" value="dd"/>
+</Binary_Exp>
+</Exp_Comparison>
+</Nary_Pred>
+</Define>
+<Define name="abs">
+<Nary_Pred op="&amp;" translate="nn : INTEGER &amp; 0 &lt;= nn &amp; ((nn) : (NATURAL)) &amp; (nn &lt;= dd)">
+<Exp_Comparison op=":" initialTag="((nn) : (NATURAL))" translate="nn : INTEGER &amp; 0 &lt;= nn &amp; ((nn) : (NATURAL))">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+<Exp_Comparison op="&lt;=" initialTag="(nn &lt;= dd)" translate="(nn &lt;= dd)">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:4:1:2:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Nary_Pred>
+</Define>
+<Proof_Obligation>
+<Comment>Initialisation dans un raffinement</Comment>
+<Tag>Initialisation</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Ref_Hyp num="1"/>
+<Exp_Comparison op=":" initialTag="((aa$1) : (NATURAL))" goalTag="Refinement is correct">
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:1:1:1," typref="2701647786" value="0"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Ref_Hyp num="1"/>
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))" goalTag="Refinement is correct">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:1:1:1," typref="2701647786" value="0"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:2:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:2:1:1," typref="2701647786" value="0"/>
+</Binary_Exp>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:3:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:3:1:1," typref="2701647786" value="0"/>
+</Binary_Exp>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:5:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:5:1:1:1" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Ref_Hyp num="1"/>
+<Binary_Pred op="or" initialTag="((((aa$1) = (0))) or (((cc$1) = (0))))" goalTag="Refinement is correct">
+<Exp_Comparison op="=">
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:1:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:1:1:1," typref="2701647786" value="0"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:3:2:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:6:1:3:1:1," typref="2701647786" value="0"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement / Precondition</Comment>
+<Tag>ML_In</Tag>
+<Tag>PRECONDITION</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>ML_In</Tag>
+<Tag>Refinement of ML_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Exp_Comparison op=">">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:1:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:1:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Local_Hyp num="3">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Simple_Goal>
+<Goal>
+<Binary_Pred op="=>" goalTag="">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=">">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:1:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:1:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((aa$1) : (NATURAL))" goalTag="Refinement is correct">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:2:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))" goalTag="Refinement is correct">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:2:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2," typref="2701647786" value="bb"/>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2," typref="2701647786" value="cc"/>
+</Binary_Exp>
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:1:1" typref="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:2:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:1:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Binary_Pred op="or" initialTag="((((aa$1) = (0))) or (((cc$1) = (0))))" goalTag="Refinement is correct">
+<Exp_Comparison op="=">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:2:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:1:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:1," typref="2701647786" value="cc"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement / Precondition</Comment>
+<Tag>ML_Out</Tag>
+<Tag>PRECONDITION</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>ML_Out</Tag>
+<Tag>Refinement of ML_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Nary_Pred op="&amp;">
+<Exp_Comparison op="&lt;">
+<Binary_Exp op="+" typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:1:1:1:1:1," typref="2701647786" value="aa"/>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:1:1:1:1:2," typref="2701647786" value="bb"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:1:1:1:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:1:1:2:1," typref="2701647786" value="cc"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:1:1:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Nary_Pred>
+</Local_Hyp>
+<Local_Hyp num="3">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Simple_Goal>
+<Goal>
+<Binary_Pred op="=>" goalTag="">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="&lt;">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:1:1:1" typref="2701647786" value="nn"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:1:1:2" typref="2701647786" value="dd"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((aa$1) : (NATURAL))" goalTag="Refinement is correct">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:2:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))" goalTag="Refinement is correct">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:2:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2," typref="2701647786" value="bb"/>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2," typref="2701647786" value="cc"/>
+</Binary_Exp>
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2,/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:1:1" typref="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:2:1:1" typref="2701647786" value="nn"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:6:2:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Binary_Pred op="or" initialTag="((((aa$1) = (0))) or (((cc$1) = (0))))" goalTag="Refinement is correct">
+<Exp_Comparison op="=">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:2:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:2:1:1:1:1:2:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:1," typref="2701647786" value="cc"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement / Precondition</Comment>
+<Tag>IL_In</Tag>
+<Tag>PRECONDITION</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>IL_In</Tag>
+<Tag>Refinement of IL_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Exp_Comparison op=">">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:1:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:1:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Local_Hyp num="3">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((aa$1) : (NATURAL))" goalTag="Refinement is correct">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:2:1:1," typref="2701647786" value="aa" fixed="false"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((bb$1) : (NATURAL))" goalTag="Refinement is correct">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:2:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:2:2:1:1," typref="2701647786" value="bb"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:2:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))" goalTag="Refinement is correct">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:2:1:1," typref="2701647786" value="aa" fixed="false"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:2:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:2:2:1:1," typref="2701647786" value="bb"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:2:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2," typref="2701647786" value="cc"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2" typref="2701647786" value="nn"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Binary_Pred op="or" initialTag="((((aa$1) = (0))) or (((cc$1) = (0))))" goalTag="Refinement is correct">
+<Exp_Comparison op="=">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:2:1:1," typref="2701647786" value="aa" fixed="false"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:3:1:1:1:1:2:1:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:1," typref="2701647786" value="cc"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement / Precondition</Comment>
+<Tag>IL_Out</Tag>
+<Tag>PRECONDITION</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>IL_Out</Tag>
+<Tag>Refinement of IL_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Nary_Pred op="&amp;">
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:1:1:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:1:1:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op=">">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:1:1:2:1," typref="2701647786" value="bb"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:1:1:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Nary_Pred>
+</Local_Hyp>
+<Local_Hyp num="3">
+<Nary_Pred op="&amp;"/>
+</Local_Hyp>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((bb$1) : (NATURAL))" goalTag="Refinement is correct">
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:2:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:2:2:1:1," typref="2701647786" value="bb"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:2:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op=":" initialTag="((cc$1) : (NATURAL))" goalTag="Refinement is correct">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:3:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:2:1:1," typref="2701647786" value="cc" fixed="false"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:3:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))" goalTag="Refinement is correct">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1," typref="2701647786" value="aa"/>
+<Binary_Exp op="-" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:2:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:2:2:1:1," typref="2701647786" value="bb"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:2:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+</Binary_Exp>
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:2:1:1," typref="2701647786" value="cc" fixed="false"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2" typref="2701647786" value="nn"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+<Simple_Goal>
+<Tag>Refinement is correct</Tag>
+<Goal>
+<Binary_Pred op="=>">
+<Nary_Pred op="&amp;">
+<Ref_Hyp num="3"/>
+<Ref_Hyp num="2"/>
+<Ref_Hyp num="1"/>
+</Nary_Pred>
+<Binary_Pred op="or" initialTag="((((aa$1) = (0))) or (((cc$1) = (0))))" goalTag="Refinement is correct">
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+<Exp_Comparison op="=">
+<Binary_Exp op="+" tag=",/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:1,,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:1:1," typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:2:1:1," typref="2701647786" value="cc" fixed="false"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:7:4:1:1:1:1:2:1:1:2:1:2" typref="2701647786" value="1"/>
+</Binary_Exp>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:2:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Binary_Pred>
+</Binary_Pred>
+</Goal>
+</Simple_Goal>
+</Proof_Obligation>
+<Proof_Obligation>
+<Tag>WellDefinednessProperties</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Hypothesis/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Tag>WellDefinednessInvariant</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Local_Hyp num="1">
+<Unary_Pred op="not">
+<Exp_Comparison op="=">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:1," typref="2701647786" value="aa"/>
+<Integer_Literal tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:5:1:2" typref="2701647786" value="0"/>
+</Exp_Comparison>
+</Unary_Pred>
+</Local_Hyp>
+<Local_Hyp num="2">
+<Exp_Comparison op="=" initialTag="((((aa$1 + bb$1) + cc$1)) = (nn))">
+<Binary_Exp op="+" typref="2701647786">
+<Binary_Exp op="+" typref="2701647786">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:1," typref="2701647786" value="aa"/>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:1:2," typref="2701647786" value="bb"/>
+</Binary_Exp>
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:1:2," typref="2701647786" value="cc"/>
+</Binary_Exp>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:4:2" typref="2701647786" value="nn"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Local_Hyp num="3">
+<Exp_Comparison op=":" initialTag="((cc$1) : (NATURAL))">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:3,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:3:1," typref="2701647786" value="cc"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:3:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Local_Hyp num="4">
+<Exp_Comparison op=":" initialTag="((bb$1) : (NATURAL))">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:2,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:1," typref="2701647786" value="bb"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:2:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Local_Hyp>
+<Local_Hyp num="5">
+<Exp_Comparison op=":" initialTag="((aa$1) : (NATURAL))">
+<Id suffix="1" tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:3:1,/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:1," typref="2701647786" value="aa"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:5:1:1:2" typref="3603043417" value="NATURAL"/>
+</Exp_Comparison>
+</Local_Hyp>
+</Proof_Obligation>
+<Proof_Obligation>
+<Tag>WellDefinednessAssertions</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Tag>WellDefinednessInitialisation</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_Precondition_ML_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_ML_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_Precondition_ML_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_ML_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_Precondition_IL_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_IL_In</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_Precondition_IL_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+</Proof_Obligation>
+<Proof_Obligation>
+<Comment>Operations dans un raffinement</Comment>
+<Tag>WellDefinedness_IL_Out</Tag>
+<Tag>INVARIANT</Tag>
+<Definition name="B definitions"/>
+<Definition name="ctx"/>
+<Definition name="mchcst"/>
+<Definition name="aprp"/>
+<Definition name="lprp"/>
+<Definition name="inprp"/>
+<Definition name="inext"/>
+<Definition name="seext"/>
+<Definition name="abs"/>
+<Definition name="inv"/>
+<Definition name="ass"/>
+<Hypothesis>
+<Nary_Pred op="&amp;"/>
+</Hypothesis>
+<Local_Hyp num="1"/>
+</Proof_Obligation>
+<TypeInfos>
+<Type id="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:8:1:1" value="INTEGER"/>
+</Type>
+<Type id="3603043417">
+<Unary_Exp op="POW">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/QuOnRaffine.bxml:1:8:2:1:1" value="INTEGER"/>
+</Unary_Exp>
+</Type>
+<Type id="2701647786">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:1:1" value="INTEGER"/>
+</Type>
+<Type id="3672872563">
+<Binary_Exp op="*">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:2:1:1" value="INTEGER"/>
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:2:1:2" value="INTEGER"/>
+</Binary_Exp>
+</Type>
+<Type id="3603043417">
+<Unary_Exp op="POW">
+<Id tag="/Users/sylvain/Temp/TestAvecFabien/bdp/UnSysteme.bxml:1:7:3:1:1" value="INTEGER"/>
+</Unary_Exp>
+</Type>
+</TypeInfos>
+</Proof_Obligations>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="twocols" borderRight="0" height="300" width="270" controllerClassName="org.openflexo.module.formose.widget.DomainModelBrowser$DomainModelBrowserFIBController" name="Panel">
+  <Panel id="1" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="border" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="Panel2">
+    <TextField id="2" columns="7" data="controller.filteredName" constraints="border(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="TextField" />
+  </Panel>
+  <Panel id="3" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="gridbag" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" index="1" name="Matches">
+    <Label id="4" label="dsffdsmksdfmkfdsmkfdsmkdfskmsdf" align="right" data="((&quot;Found &quot; + controller.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="controller.isFiltered" index="0" font="SansSerif,2,10" name="MatchesLabel" />
+  </Panel>
+  <Browser id="5" backgroundSelectionColor="9,80,208" allowsExternalDragAndDrop="true" visibleRowCount="5" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0" root="model" selectionMode="DiscontiguousTreeSelection" rowHeight="18" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(DomainModelBrowser.selected,event)" enterPressedAction="controller.apply()" doubleClickAction="controller.doubleClick(DomainModelBrowser.selected)" clickAction="controller.singleClick(DomainModelBrowser.selected)" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" index="2" name="DomainModelBrowser">
+    <BrowserElement id="6" dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml&gt;" icon="controller.iconForObject(model)" label="model.stringRepresentation" isEditable="false" name="model">
+      <Children id="7" data="model.concepts" name="concepts" />
+      <Children id="8" data="model.sole_individuals" name="sole_individuals" />
+      <Children id="9" data="model.parentDomainModel" name="parentDomainModel" />
+    </BrowserElement>
+    <BrowserElement id="10" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#Concept&gt;" icon="controller.iconForObject(concept)" label="concept.stringRepresentation" isEditable="false" name="concept">
+      <Children id="11" data="model.conceptIndividuals(concept)" name="conceptIndividuals" />
+    </BrowserElement>
+    <BrowserElement id="12" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#Individual&gt;" icon="controller.iconForObject(individual)" label="individual.stringRepresentation" isEditable="false" name="individual"/>
+  </Browser>
+  <LocalizedDictionary id="13" />
+  <FIBVariable id="14" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml&gt;" name="model" />
+</Panel>

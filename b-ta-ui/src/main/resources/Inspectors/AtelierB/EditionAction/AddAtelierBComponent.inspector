@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="border"
+	titleFont="SansSerif,0,12" darkLevel="0"
+	controllerClassName="org.openflexo.fml.controller.FMLFIBInspectorController"
+	font="SansSerif,0,12" name="Inspector">
+	<TabPanel name="Tab" constraints="border(location=center)">
+		<Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11"
+			darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true"
+			horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED"
+			verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+			<Label label="component_type" index="5"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)"
+				name="ComponentTypeLabel" localize="true" />
+			<DropDown index="6" data="data.componentType"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)"
+				name="ComponentType" format="object.name" localize="true"
+				iteratorClassName="org.openflexo.ta.b.model.BComponent$BComponentType"
+				autoSelectFirstRow="true" />
+			<Label label="component_name" align="right" index="7" name="componentNameLabel"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)"
+				localize="true" />
+			<Custom componentClassName="org.openflexo.gina.swing.utils.BindingSelector"
+				localize="true" name="componentName"
+				manageDynamicModel="true" opaque="false" index="8"
+				data="data.componentName"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+				<Assignment variable="component.bindable" value="data" />
+			</Custom>
+			<Label label="refines" align="right" index="9" visible="data.isRefinement"
+				constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)"
+				localize="true" />
+			<Custom componentClassName="org.openflexo.gina.swing.utils.BindingSelector"
+				localize="true" visible="data.isRefinement"
+				manageDynamicModel="true" opaque="false" index="10"
+				data="data.refines"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+				<Assignment variable="component.bindable" value="data" />
+			</Custom>
+			<Label label="extends" align="right" index="11" 
+				constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)"
+				localize="true" />
+			<Custom componentClassName="org.openflexo.gina.swing.utils.BindingSelector"
+				localize="true" 
+				manageDynamicModel="true" opaque="false" index="12"
+				data="data.extends"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+				<Assignment variable="component.bindable" value="data" />
+			</Custom>
+			<Label label="sees" align="right" index="13" 
+				constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)"
+				localize="true" />
+			<Custom componentClassName="org.openflexo.gina.swing.utils.BindingSelector"
+				localize="true"
+				manageDynamicModel="true" opaque="false" index="14"
+				data="data.sees"
+				constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+				<Assignment variable="component.bindable" value="data" />
+			</Custom>
+		</Tab>
+	</TabPanel>
+	<FIBVariable name="data"
+		type="org.openflexo.ta.b.fml.atelierb.AddAtelierBComponent" />
+	<LocalizedDictionary>
+		<Localized key="Advanced" lang="French" value="Avancé" />
+		<Localized key="Basic" lang="French" value="Basique" />
+	</LocalizedDictionary>
+	<Parameter name="title" value="AddAtelierBComponent action" />
+</Panel>

@@ -1,0 +1,178 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/DomainModel-Methodology.fml")
+public class DomainModel-Methodology extends Methodology  {
+
+  public DomainModelling domainModelling;
+  public SysMLKaos-Methodology sysMLKaosMethodology;
+  public DomainModellingElementMapping rootElementMapping;
+
+  @ActionScheme  
+  FlexoConceptInstanceType<DomainModellingElementMapping> getDomainModelElementMapping(UndefinedFlexoConceptInstanceType element) {  
+    return this.SelectUniqueFlexoConceptInstance(type=DomainModellingElementMapping,where=where=(selected.element = parameters.element));  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+  @CreationScheme  
+  DomainModel-Methodology:create(VirtualModelInstanceType<SysMLKaos-Methodology> sysmlKaosMethodology) {  
+    domainModelling = DomainModelling.create();    
+    log ("On arrive la avec " + parameters.sysmlKaosMethodology)    
+    sysMLKaosMethodology = parameters.sysmlKaosMethodology;    
+    declaringElement = sysMLKaosMethodology.declaringElement;    
+    log ("declaringElement=" + declaringElement)    
+    rootElementMapping = DomainModellingElementMapping.create(declaringElement,null);  
+  }  
+
+
+  @FlexoConcept  
+  public class DomainModellingElementMapping {  
+  
+    public SysMLKaosElementMapping sysMLKaosElementMapping;  
+      
+    public FlexoConceptInstanceType<Element> element = sysMLKaosElementMapping.element;  
+      
+    public VirtualModelInstanceType<SysMLKaosModel> goalModel = sysMLKaosElementMapping.goalModel;  
+    public DomainModelMapping parentDomainModelMapping;  
+    public List topLevelDomainModelMappings;  
+      
+    public VirtualModelInstanceType<DomainModel> parentDomainModel = parentDomainModelMapping.domainModel;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    DomainModellingElementMapping:create(UndefinedFlexoConceptInstanceType anElement, FlexoConceptInstanceType<DomainModelMapping> parentDomainModelMapping) {    
+      sysMLKaosElementMapping = sysMLKaosMethodology.getElementMapping(parameters.anElement);      
+      parentDomainModelMapping = parameters.parentDomainModelMapping;      
+      this.updateFromSysMLKAOS()    
+    }    
+  
+    @ActionScheme    
+    public Void createTopLevelDomainModelMapping(String name, FlexoConceptInstanceType<DomainModelMapping> parent) {    
+      log "Create top-level domain model mapping"      
+      FlexoConceptInstanceType<DomainModelMapping> topLevel = DomainModelMapping.create(parameters.name,parameters.parent);      
+      topLevelDomainModelMappings.add(topLevel)      
+      container.firePropertyChange getDomainModelElementMapping(element)    
+    }    
+  
+    @ActionScheme    
+    public Void updateFromSysMLKAOS() {    
+      for (topLevelGroup : goalModel.topLevelGroups) {      
+        FlexoConceptInstanceType<DomainModelMapping> mapping = container.SelectUniqueFlexoConceptInstance(type=DomainModelMapping,where=where=(selected.goalGroup = topLevelGroup));        
+        if (mapping = null) {        
+          log "Create top-level mapping"          
+          mapping = DomainModelMapping.create(topLevelGroup,parentDomainModelMapping);          
+          topLevelDomainModelMappings.add(mapping)        
+        }        
+        mapping.updateFromSysMLKAOS()      
+      }    
+    }    
+  
+  
+    @FlexoConcept    
+    public class DomainModelMapping {    
+      
+      public DomainModel domainModel;    
+      public DomainModelDiagram defaultDiagram;    
+      public DomainModelMapping parent;    
+      public List children;    
+      public GoalGroup goalGroup;    
+          
+      public String modelName = domainModel.modelName;    
+      
+      @CreationScheme      
+      DomainModelMapping:create(FlexoConceptInstanceType<GoalGroup> goalGroup, FlexoConceptInstanceType<DomainModelMapping> parentDomainModelMapping) {      
+        parent = parameters.parentDomainModelMapping;        
+        goalGroup = parameters.goalGroup;        
+        if (parent != null) {        
+          parent.children.add(this)        
+        }        
+        log "creating domain mapping"        
+        domainModel = DomainModel.create(((element.identifier + "-") + parameters.goalGroup.title),((parameters.parentDomainModelMapping != null) ? parameters.parentDomainModelMapping.domainModel : domainModelling.rootDomainModel));        
+        defaultDiagram = DomainModelDiagram.init(domainModel,(((element.identifier + "-DomainModel-") + parameters.goalGroup.title) + "-Diagram"));        
+        this.firePropertyChange domainModel        
+        this.firePropertyChange defaultDiagram      
+      }      
+      
+      @ActionScheme      
+      public FlexoConceptInstanceType<DomainModelMapping> createChildDomainModel(String name) {      
+        FlexoConceptInstanceType<DomainModelMapping> newDomainModelMapping = DomainModelMapping.create(parameters.name,this);        
+        this.firePropertyChange children        
+        return newDomainModelMapping;      
+      }      
+      
+      @ActionScheme      
+      public Void updateFromSysMLKAOS() {      
+        for (childGroup : goalGroup.childrenGroups) {        
+          FlexoConceptInstanceType<DomainModelMapping> mapping = container.container.SelectUniqueFlexoConceptInstance(type=DomainModelMapping,where=where=(selected.goalGroup = childGroup));          
+          if (mapping = null) {          
+            log "Create child mapping"            
+            mapping = DomainModelMapping.create(childGroup,this);            
+            children.add(mapping)          
+          }          
+          mapping.updateFromSysMLKAOS()        
+        }      
+      }      
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DomainModelMapping {  
+  
+    public DomainModel domainModel;  
+    public DomainModelDiagram defaultDiagram;  
+    public DomainModelMapping parent;  
+    public List children;  
+    public GoalGroup goalGroup;  
+      
+    public String modelName = domainModel.modelName;  
+  
+    @CreationScheme    
+    DomainModelMapping:create(FlexoConceptInstanceType<GoalGroup> goalGroup, FlexoConceptInstanceType<DomainModelMapping> parentDomainModelMapping) {    
+      parent = parameters.parentDomainModelMapping;      
+      goalGroup = parameters.goalGroup;      
+      if (parent != null) {      
+        parent.children.add(this)      
+      }      
+      log "creating domain mapping"      
+      domainModel = DomainModel.create(((element.identifier + "-") + parameters.goalGroup.title),((parameters.parentDomainModelMapping != null) ? parameters.parentDomainModelMapping.domainModel : domainModelling.rootDomainModel));      
+      defaultDiagram = DomainModelDiagram.init(domainModel,(((element.identifier + "-DomainModel-") + parameters.goalGroup.title) + "-Diagram"));      
+      this.firePropertyChange domainModel      
+      this.firePropertyChange defaultDiagram    
+    }    
+  
+    @ActionScheme    
+    public FlexoConceptInstanceType<DomainModelMapping> createChildDomainModel(String name) {    
+      FlexoConceptInstanceType<DomainModelMapping> newDomainModelMapping = DomainModelMapping.create(parameters.name,this);      
+      this.firePropertyChange children      
+      return newDomainModelMapping;    
+    }    
+  
+    @ActionScheme    
+    public Void updateFromSysMLKAOS() {    
+      for (childGroup : goalGroup.childrenGroups) {      
+        FlexoConceptInstanceType<DomainModelMapping> mapping = container.container.SelectUniqueFlexoConceptInstance(type=DomainModelMapping,where=where=(selected.goalGroup = childGroup));        
+        if (mapping = null) {        
+          log "Create child mapping"          
+          mapping = DomainModelMapping.create(childGroup,this);          
+          children.add(mapping)        
+        }        
+        mapping.updateFromSysMLKAOS()      
+      }    
+    }    
+  
+  }  
+
+}

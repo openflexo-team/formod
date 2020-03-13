@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<db_xml>
+    <atelierb version="3_7_ubuntu-cvs" />
+    <project decomp_dir="/full/path/to/BlankAtelierBProject/bdp/expand_src" old_decomp_dir="/full/path/to/BlankAtelierBProject/bdp/src" type="VALIDATION">
+        <!-- Definition directory list -->
+        <!-- Component file list -->
+    </project>
+</db_xml>

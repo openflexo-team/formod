@@ -1,0 +1,8 @@
+create=Create
+docXDocumentResource=DocXDocumentResource
+documentDescription=DocumentDescription
+documentName=DocumentName
+documentVMI=DocumentVMI
+import_doc_x_document=Import doc x document
+removeDocXDocument=RemoveDocXDocument
+remove_doc_x_document=Remove doc x document

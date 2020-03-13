@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-2" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml" version="0.1" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml" name="DocumentAnnotation-Methodology" description="" userID="FLX" flexoID="2">
+  <FlexoConcept id="FLX-24" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#NamedReference" name="ElementReference" userID="FLX" flexoID="24">
+    <Inspector id="FLX-2379" renderer="((&quot;ElementReference[&quot; + element) + &quot;]&quot;)" inspectorTitle="DiagramElementMapping" userID="FLX" flexoID="2379" />
+    <EmbeddedFlexoConcept id="FLX-2419" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#NamedReference" name="RequirementReference" userID="FLX" flexoID="2419">
+      <Inspector id="FLX-2418" inspectorTitle="RequirementReference" userID="FLX" flexoID="2418" />
+      <FlexoConceptInstanceRole id="FLX-2420" virtualModelInstance="formoseVMI" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement" cloningStrategy="Reference" cardinality="ZeroOne" name="requirement" userID="FLX" flexoID="2420" />
+      <DeletionScheme id="FLX-2426" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="2426">
+        <BehaviourControlGraph_EmptyControlGraph id="FLX-2425" userID="FLX" flexoID="2425" />
+      </DeletionScheme>
+      <CreationScheme id="FLX-2788" name="createEmpty" width="800" label="create_empty" height="600" userID="FLX" flexoID="2788">
+        <BehaviourControlGraph_AssignationAction id="FLX-2791" assign="requirement" ownerContext="controlGraph1" userID="FLX" flexoID="2791">
+          <AssignableAction_ExpressionAction id="FLX-2790" expression="parameters.aRequirement" userID="FLX" flexoID="2790" />
+        </BehaviourControlGraph_AssignationAction>
+        <GenericBehaviourParameter id="FLX-2793" container="formoseVMI" isRequired="true" widget="CUSTOM_WIDGET" name="aRequirement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" userID="FLX" flexoID="2793" />
+      </CreationScheme>
+    </EmbeddedFlexoConcept>
+    <FlexoConceptInstanceRole id="FLX-12" virtualModelInstance="formoseVMI" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element" cloningStrategy="Reference" cardinality="ZeroOne" name="element" userID="FLX" flexoID="12" />
+    <GetSetProperty id="FLX-2471" name="requirementReferences" userID="FLX" flexoID="2471">
+      <SetControlGraph_EmptyControlGraph id="FLX-2472" ownerContext="setControlGraph" userID="FLX" flexoID="2472" />
+      <GetControlGraph_ReturnStatement id="FLX-2470" ownerContext="getControlGraph" userID="FLX" flexoID="2470">
+        <AssignableAction_SelectFlexoConceptInstance id="FLX-2473" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#RequirementReference" receiver="container" userID="FLX" flexoID="2473" />
+      </GetControlGraph_ReturnStatement>
+    </GetSetProperty>
+    <DeletionScheme id="FLX-22" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="22">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-21" userID="FLX" flexoID="21" />
+    </DeletionScheme>
+    <CreationScheme id="FLX-2555" name="createNewEmptyElementReference" width="800" label="create_new_empty_element_reference" height="600" userID="FLX" flexoID="2555">
+      <BehaviourControlGraph_Sequence id="FLX-2744" ownerContext="controlGraph1" userID="FLX" flexoID="2744">
+        <ControlGraph2_Sequence id="FLX-12824" ownerContext="controlGraph2" userID="FLX" flexoID="12824">
+          <ControlGraph2_NotifyPropertyChangedAction id="FLX-12823" propertyName="getElementReference(Element)" object="container" ownerContext="controlGraph2" userID="FLX" flexoID="12823" />
+          <ControlGraph1_LogAction id="FLX-2742" logLevel="INFO" logString="&quot;*** Fire getElementReference(Element)&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="2742" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-2558" assign="element" ownerContext="controlGraph1" userID="FLX" flexoID="2558">
+          <AssignableAction_ExpressionAction id="FLX-2557" expression="parameters.anElement" userID="FLX" flexoID="2557" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2560" container="formoseVMI" isRequired="true" widget="CUSTOM_WIDGET" name="anElement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2560" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-2395" isAbstract="true" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml#Transition" name="NamedReference" description="Represent a named reference, with a name, a description and some keywords.&#xA;Points to a list of document references in the whole library.&#xA;" userID="FLX" flexoID="2395">
+    <Inspector id="FLX-36" inspectorTitle="ReferenceGroup" userID="FLX" flexoID="36" />
+    <PrimitiveRole id="FLX-2380" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="name" userID="FLX" flexoID="2380" />
+    <PrimitiveRole id="FLX-2381" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="description" userID="FLX" flexoID="2381" />
+    <FlexoConceptInstanceRole id="FLX-2382" flexoConceptTypeURI="http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference" cloningStrategy="Reference" cardinality="ZeroMany" name="references" userID="FLX" flexoID="2382" />
+    <PrimitiveRole id="FLX-2383" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="keywords" userID="FLX" flexoID="2383" />
+    <CreationScheme id="FLX-2391" name="create" width="800" label="create" height="600" userID="FLX" flexoID="2391">
+      <BehaviourControlGraph_Sequence id="FLX-2388" userID="FLX" flexoID="2388">
+        <ControlGraph2_AssignationAction id="FLX-2385" assign="description" ownerContext="controlGraph2" userID="FLX" flexoID="2385">
+          <AssignableAction_ExpressionAction id="FLX-2384" expression="parameters.aDescription" userID="FLX" flexoID="2384" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="FLX-2387" assign="name" ownerContext="controlGraph1" userID="FLX" flexoID="2387">
+          <AssignableAction_ExpressionAction id="FLX-2386" expression="parameters.aName" userID="FLX" flexoID="2386" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2389" isRequired="true" widget="TEXT_FIELD" name="aName" type="java.lang.String" userID="FLX" flexoID="2389" />
+      <GenericBehaviourParameter id="FLX-2390" isRequired="true" widget="TEXT_FIELD" name="aDescription" type="java.lang.String" userID="FLX" flexoID="2390" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-2393" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="2393">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-2392" ownerContext="controlGraph2" userID="FLX" flexoID="2392" />
+    </DeletionScheme>
+    <ActionScheme id="FLX-2703" name="addReference" width="800" label="add_reference" height="600" userID="FLX" flexoID="2703">
+      <BehaviourControlGraph_Sequence id="FLX-2759" userID="FLX" flexoID="2759">
+        <ControlGraph2_ReturnStatement id="FLX-2758" ownerContext="controlGraph2" userID="FLX" flexoID="2758">
+          <AssignableAction_ExpressionAction id="FLX-2757" expression="parameters.aReference" userID="FLX" flexoID="2757" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_ConditionalAction id="FLX-2706" condition="(parameters.aReference != null)" ownerContext="controlGraph1" userID="FLX" flexoID="2706">
+          <ThenControlGraph_Sequence id="FLX-12816" ownerContext="thenControlGraph" userID="FLX" flexoID="12816">
+            <ControlGraph2_NotifyPropertyChangedAction id="FLX-12815" propertyName="references" object="this" ownerContext="controlGraph2" userID="FLX" flexoID="12815" />
+            <ControlGraph1_AddToListAction id="FLX-2707" list="references" ownerContext="controlGraph1" userID="FLX" flexoID="2707">
+              <AssignableAction_ExpressionAction id="FLX-2583" expression="parameters.aReference" userID="FLX" flexoID="2583" />
+            </ControlGraph1_AddToListAction>
+          </ThenControlGraph_Sequence>
+        </ControlGraph1_ConditionalAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2705" widget="CUSTOM_WIDGET" name="aReference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2705" />
+    </ActionScheme>
+    <ActionScheme id="FLX-2798" name="moveReference" width="800" label="move_reference" height="600" userID="FLX" flexoID="2798">
+      <BehaviourControlGraph_Sequence id="FLX-2816" userID="FLX" flexoID="2816">
+        <ControlGraph2_Sequence id="FLX-2815" ownerContext="controlGraph2" userID="FLX" flexoID="2815">
+          <ControlGraph2_Sequence id="FLX-2814" ownerContext="controlGraph2" userID="FLX" flexoID="2814">
+            <ControlGraph2_Sequence id="FLX-2813" ownerContext="controlGraph2" userID="FLX" flexoID="2813">
+              <ControlGraph2_NotifyPropertyChangedAction id="FLX-2812" propertyName="references" object="parameters.namedReference" ownerContext="controlGraph2" userID="FLX" flexoID="2812" />
+              <ControlGraph1_NotifyPropertyChangedAction id="FLX-2809" propertyName="references" object="this" ownerContext="controlGraph1" userID="FLX" flexoID="2809" />
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AddToListAction id="FLX-2807" list="parameters.namedReference.references" ownerContext="controlGraph1" userID="FLX" flexoID="2807">
+              <AssignableAction_ExpressionAction id="FLX-2806" expression="parameters.aReference" userID="FLX" flexoID="2806" />
+            </ControlGraph1_AddToListAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_RemoveFromListAction id="FLX-2805" list="references" value="parameters.aReference" ownerContext="controlGraph1" userID="FLX" flexoID="2805" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="FLX-2803" logLevel="INFO" logString="(((&quot;Moving reference &quot; + parameters.aReference) + &quot; to &quot;) + parameters.namedReference)" ownerContext="controlGraph1" userID="FLX" flexoID="2803" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2800" widget="CUSTOM_WIDGET" name="aReference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2800" />
+      <GenericBehaviourParameter id="FLX-2799" widget="CUSTOM_WIDGET" name="namedReference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#NamedReference&gt;" userID="FLX" flexoID="2799" />
+    </ActionScheme>
+  </FlexoConcept>
+  <FlexoConcept idref="FLX-2419" />
+  <FlexoConcept id="FLX-2438" name="Unclassified" userID="FLX" flexoID="2438">
+    <Inspector id="FLX-2439" inspectorTitle="Unclassified" userID="FLX" flexoID="2439" />
+    <FlexoConceptInstanceRole id="FLX-2450" virtualModelInstance="documentLibrary" flexoConceptTypeURI="http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference" cloningStrategy="Reference" cardinality="ZeroMany" name="unclassifiedReferences" userID="FLX" flexoID="2450" />
+    <CreationScheme id="FLX-2443" name="create" width="800" label="create" height="600" userID="FLX" flexoID="2443">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-2442" userID="FLX" flexoID="2442" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-2445" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="2445">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-2444" userID="FLX" flexoID="2444" />
+    </DeletionScheme>
+    <ActionScheme id="FLX-2451" name="addToUnclassifiedReferences" width="800" label="add_to_unclassified_references" height="600" userID="FLX" flexoID="2451">
+      <BehaviourControlGraph_Sequence id="FLX-2729" userID="FLX" flexoID="2729">
+        <ControlGraph2_NotifyPropertyChangedAction id="FLX-2728" propertyName="unclassifiedReferences" object="this" ownerContext="controlGraph2" userID="FLX" flexoID="2728" />
+        <ControlGraph1_AddToListAction id="FLX-2456" list="unclassifiedReferences" ownerContext="controlGraph1" userID="FLX" flexoID="2456">
+          <AssignableAction_ExpressionAction id="FLX-2455" expression="parameters.reference" userID="FLX" flexoID="2455" />
+        </ControlGraph1_AddToListAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2453" isRequired="true" widget="CUSTOM_WIDGET" name="reference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2453" />
+    </ActionScheme>
+    <ActionScheme id="FLX-2821" name="moveReference" width="800" label="move_reference" height="600" userID="FLX" flexoID="2821">
+      <BehaviourControlGraph_Sequence id="FLX-2830" userID="FLX" flexoID="2830">
+        <ControlGraph2_Sequence id="FLX-2828" ownerContext="controlGraph2" userID="FLX" flexoID="2828">
+          <ControlGraph2_Sequence id="FLX-2826" ownerContext="controlGraph2" userID="FLX" flexoID="2826">
+            <ControlGraph2_Sequence id="FLX-2824" ownerContext="controlGraph2" userID="FLX" flexoID="2824">
+              <ControlGraph2_NotifyPropertyChangedAction id="FLX-2822" propertyName="references" object="parameters.namedReference" ownerContext="controlGraph2" userID="FLX" flexoID="2822" />
+              <ControlGraph1_NotifyPropertyChangedAction id="FLX-2823" propertyName="unclassifiedReferences" object="this" ownerContext="controlGraph1" userID="FLX" flexoID="2823" />
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AddToListAction id="FLX-2825" list="parameters.namedReference.references" ownerContext="controlGraph1" userID="FLX" flexoID="2825">
+              <AssignableAction_ExpressionAction id="FLX-12806" expression="parameters.aReference" userID="FLX" flexoID="12806" />
+            </ControlGraph1_AddToListAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_RemoveFromListAction id="FLX-2827" list="unclassifiedReferences" value="parameters.aReference" ownerContext="controlGraph1" userID="FLX" flexoID="2827" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="FLX-2829" logLevel="INFO" logString="(((&quot;Moving reference &quot; + parameters.aReference) + &quot; to &quot;) + parameters.namedReference)" ownerContext="controlGraph1" userID="FLX" flexoID="2829" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2831" widget="CUSTOM_WIDGET" name="aReference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2831" />
+      <GenericBehaviourParameter id="FLX-2832" widget="CUSTOM_WIDGET" name="namedReference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#NamedReference&gt;" userID="FLX" flexoID="2832" />
+    </ActionScheme>
+  </FlexoConcept>
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="-1" />
+  <Inspector id="FLX-1" inspectorTitle="DocumentAnnotation-Methodology" userID="FLX" flexoID="1" />
+  <FMLRTVirtualModelInstanceModelSlot id="FLX-6" virtualModelURI="http://formose.lacl.fr/DocumentLibrary.viewpoint" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="documentLibrary" userID="FLX" flexoID="6" />
+  <FlexoConceptInstanceRole id="FLX-2446" virtualModelInstance="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#Unclassified" cloningStrategy="Reference" cardinality="ZeroOne" name="unclassified" description="Unclassified references in this methodology" userID="FLX" flexoID="2446" />
+  <GetSetProperty id="FLX-2457" name="elementReferences" userID="FLX" flexoID="2457">
+    <SetControlGraph_EmptyControlGraph id="FLX-2461" ownerContext="setControlGraph" userID="FLX" flexoID="2461" />
+    <GetControlGraph_ReturnStatement id="FLX-2460" ownerContext="getControlGraph" userID="FLX" flexoID="2460">
+      <AssignableAction_SelectFlexoConceptInstance id="FLX-2459" container="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#ElementReference" receiver="this" userID="FLX" flexoID="2459" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <CreationScheme id="FLX-7" name="create" width="800" label="create" height="600" userID="FLX" flexoID="7">
+    <BehaviourControlGraph_Sequence id="SYL-12938" ownerContext="controlGraph2" userID="SYL" flexoID="12938">
+      <ControlGraph2_Sequence id="SYL-12939" ownerContext="controlGraph2" userID="SYL" flexoID="12939">
+        <ControlGraph2_AssignationAction id="SYL-12934" assign="documentLibrary" ownerContext="controlGraph2" userID="SYL" flexoID="12934">
+          <AssignableAction_AddVirtualModelInstance id="SYL-12933" virtualModelInstanceName="&quot;DocumentLibrary&quot;" creationSchemeURI="http://formose.lacl.fr/DocumentLibrary.viewpoint.create" receiver="container" userID="SYL" flexoID="12933" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="SYL-12931" assign="declaringElement" ownerContext="controlGraph1" userID="SYL" flexoID="12931">
+          <AssignableAction_ExpressionAction id="SYL-12930" expression="formoseVMI.projectElement" userID="SYL" flexoID="12930" />
+        </ControlGraph1_AssignationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_AssignationAction id="FLX-2449" assign="unclassified" ownerContext="controlGraph1" userID="FLX" flexoID="2449">
+        <AssignableAction_AddFlexoConceptInstance id="FLX-2448" container="virtualModelInstance" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#Unclassified.create" receiver="this" userID="FLX" flexoID="2448" />
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+  </CreationScheme>
+  <ActionScheme id="FLX-2477" name="getElementReference" width="800" label="get_element_reference" height="600" userID="FLX" flexoID="2477">
+    <BehaviourControlGraph_Sequence id="FLX-12881" ownerContext="controlGraph2" userID="FLX" flexoID="12881">
+      <ControlGraph2_ConditionalAction id="FLX-12870" condition="(list.size &gt; 0)" ownerContext="controlGraph2" userID="FLX" flexoID="12870">
+        <ElseControlGraph_ReturnStatement id="SYL-12993" ownerContext="elseControlGraph" userID="SYL" flexoID="12993">
+          <AssignableAction_AddFlexoConceptInstance id="SYL-12992" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#ElementReference.createNewEmptyElementReference" receiver="this" ownerContext="controlGraph2" userID="SYL" flexoID="12992">
+            <AddFlexoConceptInstanceParameter id="SYL-12996" paramName="anElement" value="parameters.element" userID="SYL" flexoID="12996" />
+          </AssignableAction_AddFlexoConceptInstance>
+        </ElseControlGraph_ReturnStatement>
+        <ThenControlGraph_ReturnStatement id="FLX-12872" ownerContext="thenControlGraph" userID="FLX" flexoID="12872">
+          <AssignableAction_ExpressionAction id="FLX-12871" expression="list.get(0)" userID="FLX" flexoID="12871" />
+        </ThenControlGraph_ReturnStatement>
+      </ControlGraph2_ConditionalAction>
+      <ControlGraph1_DeclarationAction id="FLX-12868" variable="list" ownerContext="controlGraph1" userID="FLX" flexoID="12868">
+        <AssignableAction_SelectFlexoConceptInstance id="FLX-12866" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#ElementReference" receiver="this" userID="FLX" flexoID="12866">
+          <Condition id="FLX-12867" condition="(selected.element = parameters.element)" userID="FLX" flexoID="12867" />
+        </AssignableAction_SelectFlexoConceptInstance>
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2491" widget="CUSTOM_WIDGET" name="element" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2491" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2514" name="getRequirementReference" width="800" label="get_requirement_reference" height="600" userID="FLX" flexoID="2514">
+    <BehaviourControlGraph_Sequence id="FLX-2538" ownerContext="controlGraph2" userID="FLX" flexoID="2538">
+      <ControlGraph2_Sequence id="FLX-2537" ownerContext="controlGraph2" userID="FLX" flexoID="2537">
+        <ControlGraph2_Sequence id="FLX-2536" ownerContext="controlGraph2" userID="FLX" flexoID="2536">
+          <ControlGraph2_ConditionalAction id="FLX-2519" condition="(list.size &gt; 0)" ownerContext="controlGraph2" userID="FLX" flexoID="2519">
+            <ElseControlGraph_ReturnStatement id="SYL-13001" ownerContext="elseControlGraph" userID="SYL" flexoID="13001">
+              <AssignableAction_AddFlexoConceptInstance id="SYL-12999" container="elementReference" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#RequirementReference.createEmpty" receiver="this" ownerContext="controlGraph2" userID="SYL" flexoID="12999">
+                <AddFlexoConceptInstanceParameter id="SYL-13000" paramName="aRequirement" value="parameters.requirement" userID="SYL" flexoID="13000" />
+              </AssignableAction_AddFlexoConceptInstance>
+            </ElseControlGraph_ReturnStatement>
+            <ThenControlGraph_ReturnStatement id="FLX-2518" ownerContext="thenControlGraph" userID="FLX" flexoID="2518">
+              <AssignableAction_ExpressionAction id="FLX-2517" expression="list.get(0)" userID="FLX" flexoID="2517" />
+            </ThenControlGraph_ReturnStatement>
+          </ControlGraph2_ConditionalAction>
+          <ControlGraph1_DeclarationAction id="FLX-2521" variable="list" ownerContext="controlGraph1" userID="FLX" flexoID="2521">
+            <AssignableAction_SelectFlexoConceptInstance id="FLX-2520" container="elementReference" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#RequirementReference" receiver="this" userID="FLX" flexoID="2520">
+              <Condition id="FLX-2513" condition="(selected.requirement = parameters.requirement)" userID="FLX" flexoID="2513" />
+            </AssignableAction_SelectFlexoConceptInstance>
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeclarationAction id="FLX-2532" variable="elementReference" ownerContext="controlGraph1" userID="FLX" flexoID="2532">
+          <AssignableAction_ExpressionAction id="FLX-2531" expression="this.getElementReference(containerElement)" ownerContext="controlGraph2" userID="FLX" flexoID="2531" />
+        </ControlGraph1_DeclarationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="FLX-2530" variable="containerElement" ownerContext="controlGraph1" userID="FLX" flexoID="2530">
+        <AssignableAction_ExpressionAction id="FLX-2525" expression="parameters.requirement.container" ownerContext="controlGraph2" userID="FLX" flexoID="2525" />
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2523" widget="CUSTOM_WIDGET" name="requirement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" userID="FLX" flexoID="2523" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2566" name="identifyElement" width="800" label="identify_element" height="600" userID="FLX" flexoID="2566">
+    <BehaviourControlGraph_Sequence id="FLX-2594" userID="FLX" flexoID="2594">
+      <ControlGraph2_Sequence id="FLX-2745" ownerContext="controlGraph2" userID="FLX" flexoID="2745">
+        <ControlGraph2_Sequence id="SYL-13029" ownerContext="controlGraph2" userID="SYL" flexoID="13029">
+          <ControlGraph2_Sequence id="SYL-13030" ownerContext="controlGraph2" userID="SYL" flexoID="13030">
+            <ControlGraph2_ReturnStatement id="SYL-13022" ownerContext="controlGraph2" userID="SYL" flexoID="13022">
+              <AssignableAction_ExpressionAction id="SYL-13021" expression="newElementReference" userID="SYL" flexoID="13021" />
+            </ControlGraph2_ReturnStatement>
+            <ControlGraph1_AddToListAction id="SYL-13020" list="newElementReference.references" ownerContext="controlGraph1" userID="SYL" flexoID="13020">
+              <AssignableAction_ExpressionAction id="SYL-13019" expression="parameters.reference" userID="SYL" flexoID="13019" />
+            </ControlGraph1_AddToListAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="SYL-13018" variable="newElementReference" ownerContext="controlGraph1" userID="SYL" flexoID="13018">
+            <AssignableAction_ExpressionAction id="SYL-13017" expression="this.getElementReference(newElement)" userID="SYL" flexoID="13017" />
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="FLX-2738" logLevel="INFO" logString="(&quot;Called IdentifyElement with &quot; + parameters.reference)" ownerContext="controlGraph1" userID="FLX" flexoID="2738" />
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="FLX-2593" variable="newElement" ownerContext="controlGraph1" userID="FLX" flexoID="2593">
+        <AssignableAction_ExpressionAction id="FLX-2592" expression="parameters.parentElement.createChildrenElement(parameters.elementName,parameters.elementDescription)" ownerContext="controlGraph2" userID="FLX" flexoID="2592" />
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2588" widget="TEXT_FIELD" name="elementName" type="java.lang.String" userID="FLX" flexoID="2588" />
+    <GenericBehaviourParameter id="FLX-2587" widget="TEXT_AREA" name="elementDescription" type="java.lang.String" userID="FLX" flexoID="2587" />
+    <GenericBehaviourParameter id="FLX-2590" widget="CUSTOM_WIDGET" name="parentElement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2590" />
+    <GenericBehaviourParameter id="FLX-2573" widget="CUSTOM_WIDGET" name="reference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2573" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2574" name="annotateElement" width="800" label="annotate_element" height="600" userID="FLX" flexoID="2574">
+    <BehaviourControlGraph_Sequence id="SYL-13062" userID="SYL" flexoID="13062">
+      <ControlGraph2_Sequence id="SYL-13061" ownerContext="controlGraph2" userID="SYL" flexoID="13061">
+        <ControlGraph2_ReturnStatement id="SYL-13060" ownerContext="controlGraph2" userID="SYL" flexoID="13060">
+          <AssignableAction_ExpressionAction id="SYL-13059" expression="elementReference" userID="SYL" flexoID="13059" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_AddToListAction id="SYL-13058" list="elementReference.references" ownerContext="controlGraph1" userID="SYL" flexoID="13058">
+          <AssignableAction_ExpressionAction id="SYL-13057" expression="parameters.reference" userID="SYL" flexoID="13057" />
+        </ControlGraph1_AddToListAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="SYL-13056" variable="elementReference" ownerContext="controlGraph1" userID="SYL" flexoID="13056">
+        <AssignableAction_ExpressionAction id="SYL-13055" expression="this.getElementReference(parameters.element)" userID="SYL" flexoID="13055" />
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2580" widget="CUSTOM_WIDGET" name="element" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2580" />
+    <GenericBehaviourParameter id="FLX-2579" widget="CUSTOM_WIDGET" name="reference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2579" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2640" name="identifyRequirement" width="800" label="identify_requirement" height="600" userID="FLX" flexoID="2640">
+    <BehaviourControlGraph_Sequence id="FLX-2677" ownerContext="controlGraph2" userID="FLX" flexoID="2677">
+      <ControlGraph2_Sequence id="FLX-2696" ownerContext="controlGraph2" userID="FLX" flexoID="2696">
+        <ControlGraph2_Sequence id="SYL-13038" ownerContext="controlGraph2" userID="SYL" flexoID="13038">
+          <ControlGraph2_Sequence id="SYL-13039" ownerContext="controlGraph2" userID="SYL" flexoID="13039">
+            <ControlGraph2_ReturnStatement id="SYL-13037" ownerContext="controlGraph2" userID="SYL" flexoID="13037">
+              <AssignableAction_ExpressionAction id="SYL-13036" expression="newRequirementReference" userID="SYL" flexoID="13036" />
+            </ControlGraph2_ReturnStatement>
+            <ControlGraph1_AddToListAction id="SYL-13035" list="newRequirementReference.references" ownerContext="controlGraph1" userID="SYL" flexoID="13035">
+              <AssignableAction_ExpressionAction id="SYL-13034" expression="parameters.reference" userID="SYL" flexoID="13034" />
+            </ControlGraph1_AddToListAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="SYL-13033" variable="newRequirementReference" ownerContext="controlGraph1" userID="SYL" flexoID="13033">
+            <AssignableAction_ExpressionAction id="SYL-13032" expression="this.getRequirementReference(newRequirement)" userID="SYL" flexoID="13032" />
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeclarationAction id="FLX-2684" variable="newRequirement" ownerContext="controlGraph1" userID="FLX" flexoID="2684">
+          <AssignableAction_ExpressionAction id="FLX-2683" expression="parameters.parentElement.createRequirement(parameters.requirementName,parameters.requirementDescription)" ownerContext="controlGraph2" description="" userID="FLX" flexoID="2683" />
+        </ControlGraph1_DeclarationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="FLX-2654" variable="elementReference" ownerContext="controlGraph1" userID="FLX" flexoID="2654">
+        <AssignableAction_ExpressionAction id="FLX-2653" expression="this.getElementReference(parameters.parentElement)" userID="FLX" flexoID="2653" />
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2648" widget="TEXT_FIELD" name="requirementName" type="java.lang.String" userID="FLX" flexoID="2648" />
+    <GenericBehaviourParameter id="FLX-2649" widget="TEXT_AREA" name="requirementDescription" type="java.lang.String" userID="FLX" flexoID="2649" />
+    <GenericBehaviourParameter id="FLX-2650" widget="CUSTOM_WIDGET" name="parentElement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="FLX" flexoID="2650" />
+    <GenericBehaviourParameter id="FLX-2651" widget="CUSTOM_WIDGET" name="reference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2651" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2715" name="addUnclassifiedReference" width="800" label="annotate_element" height="600" userID="FLX" flexoID="2715">
+    <BehaviourControlGraph_Sequence id="FLX-2726" userID="FLX" flexoID="2726">
+      <ControlGraph2_ReturnStatement id="FLX-2725" ownerContext="controlGraph2" userID="FLX" flexoID="2725">
+        <AssignableAction_ExpressionAction id="FLX-2724" expression="parameters.reference" userID="FLX" flexoID="2724" />
+      </ControlGraph2_ReturnStatement>
+      <ControlGraph1_ExpressionAction id="FLX-2723" expression="unclassified.addToUnclassifiedReferences(parameters.reference)" ownerContext="controlGraph1" userID="FLX" flexoID="2723" />
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2721" widget="CUSTOM_WIDGET" name="reference" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml#Reference&gt;" userID="FLX" flexoID="2721" />
+  </ActionScheme>
+  <ActionScheme id="FLX-2763" name="makeRequirementReference" width="800" label="identify_requirement" height="600" userID="FLX" flexoID="2763">
+    <BehaviourControlGraph_Sequence id="FLX-2779" ownerContext="controlGraph2" userID="FLX" flexoID="2779">
+      <ControlGraph2_Sequence id="FLX-2776" ownerContext="controlGraph2" userID="FLX" flexoID="2776">
+        <ControlGraph2_ReturnStatement id="FLX-2767" ownerContext="controlGraph2" userID="FLX" flexoID="2767">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-2766" container="elementReference" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#RequirementReference.createEmpty" receiver="this" ownerContext="controlGraph2" userID="FLX" flexoID="2766">
+            <AddFlexoConceptInstanceParameter id="FLX-2795" paramName="aRequirement" value="parameters.requirement" userID="FLX" flexoID="2795" />
+          </AssignableAction_AddFlexoConceptInstance>
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_ConditionalAction id="FLX-2775" condition="(elementReference = null)" ownerContext="controlGraph1" userID="FLX" flexoID="2775">
+          <ThenControlGraph_AssignationAction id="FLX-2774" assign="elementReference" ownerContext="thenControlGraph" userID="FLX" flexoID="2774">
+            <AssignableAction_AddFlexoConceptInstance id="FLX-2773" container="virtualModelInstance" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml#ElementReference.createNewEmptyElementReference" receiver="this" userID="FLX" flexoID="2773">
+              <AddFlexoConceptInstanceParameter id="FLX-2785" paramName="anElement" value="parameters.requirement.container" userID="FLX" flexoID="2785" />
+            </AssignableAction_AddFlexoConceptInstance>
+          </ThenControlGraph_AssignationAction>
+        </ControlGraph1_ConditionalAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="FLX-2778" variable="elementReference" ownerContext="controlGraph1" userID="FLX" flexoID="2778">
+        <AssignableAction_ExpressionAction id="FLX-2777" expression="this.getElementReference(parameters.requirement.container)" userID="FLX" flexoID="2777" />
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2784" widget="CUSTOM_WIDGET" name="requirement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" userID="FLX" flexoID="2784" />
+  </ActionScheme>
+  <DeletionScheme id="SYL-12913" name="delete" width="800" label="delete" height="600" userID="SYL" flexoID="12913">
+    <BehaviourControlGraph_EmptyControlGraph id="SYL-12914" userID="SYL" flexoID="12914" />
+  </DeletionScheme>
+</VirtualModel>

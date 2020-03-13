@@ -1,0 +1,105 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * This methologogy is based on both SysML/Kaos methodology and DomainModel methodology and provide a way to generate B
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-B-Methodology.fml")
+public class SysMLKaos-B-Methodology extends Methodology  {
+
+  public FMLRTVirtualModelInstance b;
+
+  @CreationScheme  
+  SysMLKaos-B-Methodology:create(String sysMLKaosViewName, String bViewName, FlexoConceptInstanceType<Element> element) {  
+    sysMLKaos = <no_assignable_action>;    
+    b = <no_assignable_action>;    
+    declaringElement = parameters.element;    
+    virtualModelInstance.AddFlexoConceptInstance()  
+  }  
+
+  @ActionScheme  
+  Void mapSKFunctionalGoalAndSystem(FlexoConceptInstanceType<FunctionalGoal> goal, FlexoConceptInstanceType<NotFound:http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Event> event) {  
+    mappings.add(sysMLKaos.AddFlexoConceptInstance())  
+  }  
+
+  @ActionScheme  
+  Void mapSKRefinementAndPO(FlexoConceptInstanceType<Refinement> refinement, FlexoConceptInstanceType<NotFound:http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#PO> po) {  
+    mappings.add(sysMLKaos.AddFlexoConceptInstance())  
+  }  
+
+
+  @FlexoConcept  
+  public class SKFunctionalGoalAndBGEvent {  
+  
+    public FunctionalGoal goal;  
+    public FlexoConceptInstance event;  
+  
+    @CreationScheme    
+    SKFunctionalGoalAndBGEvent:create(FlexoConceptInstanceType<FunctionalGoal> goal, FlexoConceptInstanceType<NotFound:http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Event> event) {    
+      goal = parameters.goal;      
+      event = parameters.event;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class GenerateBSystem extends Transition  {  
+  
+    public String systemName;  
+    public FlexoConceptInstance goals;  
+    public FlexoConceptInstance refinements;  
+    public FlexoConceptInstance system;  
+  
+    @CreationScheme    
+    GenerateBSystem:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class UpdateBSystem extends Transition  {  
+  
+    @CreationScheme    
+    UpdateBSystem:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class SKRefinmentAndBGPO {  
+  
+    public FlexoConceptInstance refinement;  
+    public FlexoConceptInstance po;  
+  
+    @CreationScheme    
+    SKRefinmentAndBGPO:create(FlexoConceptInstanceType<Refinement> refinement, FlexoConceptInstanceType<NotFound:http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#PO> po) {    
+      refinement = parameters.refinement;      
+      po = parameters.po;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+}

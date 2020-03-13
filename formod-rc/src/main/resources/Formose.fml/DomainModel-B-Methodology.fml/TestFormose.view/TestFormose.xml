@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<View id="0" viewPointVersion="0.1" uri="http://formose.lacl.fr//TestFormose.view" viewPointURI="http://formose.lacl.fr/Formose.viewpoint" virtualModelURI="http://formose.lacl.fr/Formose.viewpoint" modelVersion="1.0" title="TestFormose" version="0.1" flexoConceptURI="http://formose.lacl.fr/Formose.viewpoint" userID="FLX" flexoID="1">
+  <PrimitiveActorReference id="1" valueAsString="TestFormose" roleName="projectName" userID="FLX" flexoID="2" />
+  <VirtualModelModelSlotInstance id="2" virtualModelInstanceURI="http://formose.lacl.fr//TestFormose.view/FormoseVMI.vmxml" modelSlotName="formoseVMI" roleName="formoseVMI" userID="FLX" flexoID="3" />
+  <FreeModelSlotInstance id="3" resourceURI="http://formose.lacl.fr/Fib/ProjectUI.fib" modelSlotName="projectUI" roleName="projectUI" userID="FLX" flexoID="4" />
+  <ModelObjectActorReference id="4" objectReference="http://formose.lacl.fr//TestFormose.view/DocumentAnnotationMethodology.vmxml#FLX_1" roleName="documentAnnotationMethodology" userID="FLX" flexoID="5" />
+  <ModelObjectActorReference id="5" objectReference="http://formose.lacl.fr//TestFormose.view/DomainModelMethodology.vmxml#FLX_1" roleName="domainModelMethodology" userID="FLX" flexoID="6" />
+</View>

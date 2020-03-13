@@ -1,0 +1,13 @@
+buildscript {
+    repositories {
+        maven { url uri('https://maven.openflexo.org/artifactory/openflexo-deps/') }
+    }
+    dependencies {
+        classpath group: 'org.openflexo', name: 'buildplugin', version: '0.2'
+        classpath group: 'org.openflexo', name: 'buildconfig', version: '2.0.0'
+        classpath 'org.openflexo:gradle-sablecc-plugin:[1.2.0,)'
+    }
+}
+
+version = "1"
+apply plugin: 'org.openflexo.buildconfig'

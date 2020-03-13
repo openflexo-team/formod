@@ -1,0 +1,127 @@
+<Machine name='UnSysteme' type='abstraction'>
+<Concrete_Constants>
+<Id value='dd' typref='2701647786'/>
+<Id value='nm' typref='3672872563'/>
+</Concrete_Constants>
+<Abstract_Variables>
+<Id value='nn' typref='2701647786'/>
+</Abstract_Variables>
+<Properties>
+<Nary_Pred op='&amp;'>
+<Exp_Comparison op=':'>
+<Id value='dd' typref='2701647786'/>
+<Id value='NATURAL' typref='3603043417'/>
+</Exp_Comparison>
+<Exp_Comparison op='&gt;'>
+<Id value='dd' typref='2701647786'/>
+<Integer_Literal value='0' typref='2701647786'/>
+</Exp_Comparison>
+<Exp_Comparison op='='>
+<Id value='nm' typref='3672872563'/>
+<Binary_Exp op='|-&gt;' typref='3672872563'>
+<Id value='dd' typref='2701647786'/>
+<Id value='dd' typref='2701647786'/>
+</Binary_Exp>
+</Exp_Comparison>
+</Nary_Pred>
+</Properties>
+<Invariant>
+<Nary_Pred op='&amp;'>
+<Exp_Comparison op=':'>
+<Id value='nn' typref='2701647786'/>
+<Id value='NATURAL' typref='3603043417'/>
+</Exp_Comparison>
+<Exp_Comparison op='&lt;='>
+<Id value='nn' typref='2701647786'/>
+<Id value='dd' typref='2701647786'/>
+</Exp_Comparison>
+</Nary_Pred>
+</Invariant>
+<Initialisation>
+<Assignement_Sub>
+<Variables>
+<Id value='nn' typref='2701647786'/>
+</Variables>
+<Values>
+<Integer_Literal value='0' typref='2701647786'/>
+</Values>
+</Assignement_Sub>
+</Initialisation>
+<Operations>
+<Operation name='ML_In'>
+<Body>
+<Select>
+<When_Clauses>
+<When>
+<Condition>
+<Exp_Comparison op='&gt;'>
+<Id value='nn' typref='2701647786'/>
+<Integer_Literal value='0' typref='2701647786'/>
+</Exp_Comparison>
+</Condition>
+<Then>
+<Assignement_Sub>
+<Variables>
+<Id value='nn' typref='2701647786'/>
+</Variables>
+<Values>
+<Binary_Exp op='-' typref='2701647786'>
+<Id value='nn' typref='2701647786'/>
+<Integer_Literal value='1' typref='2701647786'/>
+</Binary_Exp>
+</Values>
+</Assignement_Sub>
+</Then>
+</When>
+</When_Clauses>
+</Select>
+</Body>
+</Operation>
+<Operation name='ML_Out'>
+<Body>
+<Select>
+<When_Clauses>
+<When>
+<Condition>
+<Exp_Comparison op='&lt;'>
+<Id value='nn' typref='2701647786'/>
+<Id value='dd' typref='2701647786'/>
+</Exp_Comparison>
+</Condition>
+<Then>
+<Assignement_Sub>
+<Variables>
+<Id value='nn' typref='2701647786'/>
+</Variables>
+<Values>
+<Binary_Exp op='+' typref='2701647786'>
+<Id value='nn' typref='2701647786'/>
+<Integer_Literal value='1' typref='2701647786'/>
+</Binary_Exp>
+</Values>
+</Assignement_Sub>
+</Then>
+</When>
+</When_Clauses>
+</Select>
+</Body>
+</Operation>
+</Operations>
+<TypeInfos>
+<Type id='2701647786'>
+<Id value='INTEGER'/>
+</Type>
+<Type id='3672872563'>
+<Binary_Exp op='*'>
+<Id value='INTEGER'/>
+<Id value='INTEGER'/>
+</Binary_Exp>
+</Type>
+<Type id='3603043417'>
+<Unary_Exp op='POW'>
+<Id value='INTEGER'/>
+</Unary_Exp>
+</Type>
+</TypeInfos>
+
+</Machine>

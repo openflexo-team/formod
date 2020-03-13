@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-2" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint" version="0.1" name="SysMLKaos" userID="FLX" flexoID="2">
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="-1" />
+  <UseModelSlotDeclaration id="1" modelSlotClass="org.openflexo.technologyadapter.excel.BasicExcelModelSlot" userID="STE" flexoID="-1" />
+  <Inspector id="FLX-1" inspectorTitle="Kaos" userID="FLX" flexoID="1" />
+  <FMLRTVirtualModelInstanceModelSlot id="FLX-18" virtualModelURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="rootModel" userID="FLX" flexoID="18" />
+  <BasicExcelModelSlot id="STE-91" templateWorkbookURI="http://formose.lacl.fr/Data/SysMLKAOS_models_serialization_template.xlsx" cloningStrategy="Reference" cardinality="ZeroOne" name="serializingDocument" userID="STE" flexoID="91" />
+  <GetSetProperty id="STE-92" name="getGoalModelSheet" userID="STE" flexoID="92">
+    <SetControlGraph_EmptyControlGraph id="STE-199" ownerContext="setControlGraph" userID="STE" flexoID="199" />
+    <GetControlGraph_ReturnStatement id="STE-94" ownerContext="getControlGraph" userID="STE" flexoID="94">
+      <AssignableAction_ExpressionAction id="STE-93" expression="serializingDocument.getExcelSheetByName(&quot;Goal Model&quot;)" userID="STE" flexoID="93" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <CreationScheme id="FLX-15" label="init" name="init" width="800" height="600" description="Creates a new view conform to Kaos viewpoint.&#xA;A new KAOS model is instanciated.&#xA;" userID="FLX" flexoID="15">
+    <BehaviourControlGraph_AssignationAction id="FLX-21" assign="rootModel" ownerContext="controlGraph1" userID="FLX" flexoID="21">
+      <AssignableAction_AddVirtualModelInstance id="FLX-20" virtualModelInstanceTitle="&quot;RootModel&quot;" virtualModelInstanceName="&quot;RootModel&quot;" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml.init(name,title,description,parentModel)" receiver="this" userID="FLX" flexoID="20">
+        <AddFlexoConceptInstanceParameter id="SYL-84" paramName="name" value="(parameters.name + &quot;RootModel&quot;)" userID="SYL" flexoID="84" />
+        <AddFlexoConceptInstanceParameter id="SYL-85" paramName="title" value="(&quot;Root model for &quot; + parameters.name)" userID="SYL" flexoID="85" />
+        <AddFlexoConceptInstanceParameter id="SYL-86" paramName="description" value="&quot;Root model&quot;" userID="SYL" flexoID="86" />
+        <AddFlexoConceptInstanceParameter id="SYL-87" paramName="parentModel" value="null" userID="SYL" flexoID="87" />
+      </AssignableAction_AddVirtualModelInstance>
+    </BehaviourControlGraph_AssignationAction>
+    <GenericBehaviourParameter id="FLX-73" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="73" />
+    <GenericBehaviourParameter id="FLX-74" widget="TEXT_FIELD" name="title" type="java.lang.String" userID="FLX" flexoID="74" />
+    <GenericBehaviourParameter id="FLX-75" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="75" />
+  </CreationScheme>
+</VirtualModel>

@@ -1,0 +1,9 @@
+include 'formod-app',
+        'formod-module',
+        'formod-rc',
+        'b-ta',
+        'b-ta-parser',
+        'b-ta-ui',
+        'b-ta-test',
+        'b-ta-test-rc'
+

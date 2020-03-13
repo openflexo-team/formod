@@ -1,0 +1,12 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:base="http://formose.lacl.fr/Ontologies/lg_system_ref_0.owl"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:j.0="http://formose.lacl.fr/Ontologies/lg_system_ref_0.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+  xml:base="http://formose.lacl.fr/Ontologies/lg_system_ref_0.owl">
+  <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="LandingGear"/>
+  <j.0:LandingGear rdf:ID="LG1"/>
+</rdf:RDF>

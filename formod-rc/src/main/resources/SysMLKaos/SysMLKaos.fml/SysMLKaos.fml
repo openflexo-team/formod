@@ -1,0 +1,23 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint")
+public class SysMLKaos {
+
+  public SysMLKaosModel rootModel;
+  public ExcelWorkbook serializingDocument;
+  @GetSetProperty(value="getGoalModelSheet", access=get)  
+  public ExcelSheet getGetGoalModelSheet {  
+    return serializingDocument.getExcelSheetByName("Goal Model");  
+  }
+
+  @CreationScheme  
+  SysMLKaos:init(String name, String title, String description) {  
+    rootModel = SysMLKaosModel.init((parameters.name + "RootModel"),("Root model for " + parameters.name),"Root model",null);  
+  }  
+
+}

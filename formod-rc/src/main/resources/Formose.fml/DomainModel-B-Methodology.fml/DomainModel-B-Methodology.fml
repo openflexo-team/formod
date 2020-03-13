@@ -1,0 +1,155 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * This methodology  provide a way to generate B specifications from Domain Models
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/DomainModel-B-Methodology.fml")
+public class DomainModel-B-Methodology extends Methodology  {
+
+  @FMLRTVirtualModelInstanceModelSlot(cardinality=ZeroOne,readOnly=false)  
+  public VirtualModelInstanceType<BSystemExtentions> BSystem;
+  @FMLRTVirtualModelInstanceModelSlot(cardinality=ZeroOne,readOnly=false)  
+  public VirtualModelInstanceType<DomainModel> DomainModel;
+
+  @CreationScheme  
+  public DomainModel-B-Methodology:createUsingExistingSlots(VirtualModelInstanceType<BusinessDomainModel> aDomainModel, VirtualModelInstanceType<BSystemExtentions> aBSystem, FlexoConceptInstanceType<Element> declaringElement) {  
+    DomainModel = parameters.aDomainModel;    
+    declaringElement = parameters.declaringElement;    
+    BSystem = parameters.aBSystem;  
+  }  
+
+
+  @FlexoConcept  
+  public class DomainModelSystem extends Transition  {  
+  
+    @FlexoConceptInstanceRole(cardinality=One,readOnly=false)    
+    public VirtualModelInstanceType<BusinessDomainModel> domainModel;  
+    @FlexoConceptInstanceRole(cardinality=One,readOnly=false)    
+    public FlexoConceptInstanceType<System> system;  
+  
+    @CreationScheme    
+    public DomainModelSystem:create(VirtualModelInstanceType<BusinessDomainModel> adomainModel, FlexoConceptInstanceType<System> asystem) {    
+      if ((parameters.adomainModel = null) & (parameters.asystem = null)) {      
+        return null;      
+      } else {      
+        if (parameters.asystem = null) {        
+          domainModel = parameters.adomainModel;          
+          system = System.create();          
+          if (parameters.adomainModel.parentDomainModel != null) {          
+            List<FlexoConceptInstanceType<DomainModelSystem>> parentDomainModelSystemMapping = virtualModelInstance.SelectFlexoConceptInstance(type=DomainModelSystem,where=where=(selected.domainModel = parameters.adomainModel.parentDomainModel));            
+            if (parentDomainModelSystemMapping.size() > 0) {            
+              system.refines.add(parentDomainModelSystemMapping.get(0).system)            
+            } else {            
+              FlexoConceptInstanceType<DomainModelSystem> newParentDomainModelSystemMapping = DomainModelSystem.create(parameters.adomainModel.parentDomainModel,null);              
+              system.refines.add(newParentDomainModelSystemMapping.system)            
+            }          
+          }        
+        } else {        
+          if (parameters.adomainModel = null) {          
+            system = parameters.asystem;            
+            domainModel = BusinessDomainModel.create(parameters.asystem.name,null);            
+            if ((parameters.asystem.refines != null) & (parameters.asystem.refines.size > 0)) {            
+              List<FlexoConceptInstanceType<DomainModelSystem>> parentMappingList = virtualModelInstance.SelectFlexoConceptInstance(type=DomainModelSystem,where=where=(selected.system = parameters.asystem.refines.get(0)));              
+              if (parentMappingList.size > 0) {              
+                domainModel.SetParent(parentMappingList.get(0).domainModel)              
+              } else {              
+                FlexoConceptInstanceType<DomainModelSystem> newParentMapping = DomainModelSystem.create(null,parameters.asystem.refines.get(0));                
+                domainModel.SetParent(newParentMapping.domainModel)              
+              }            
+            }          
+          } else {          
+            domainModel = parameters.adomainModel;            
+            system = parameters.asystem;          
+          }        
+        }      
+      }    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class ConceptSet extends Transition  {  
+  
+    @FlexoConceptInstanceRole(cardinality=One,readOnly=false)    
+    public FlexoConceptInstanceType<NotFound:null> concept;  
+    @FlexoConceptInstanceRole(cardinality=One,readOnly=false)    
+    public FlexoConceptInstanceType<NotFound:null> set;  
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @CreationScheme    
+    public ConceptSet:create(FlexoConceptInstanceType<Concept> aconcept, FlexoConceptInstanceType<Set> aset) {    
+      if ((((parameters.aconcept = null) & (parameters.aset = null)) | ((parameters.aconcept != null) & (parameters.aconcept.parentConcept != null))) | ((parameters.aset != null) & parameters.aset.isEnumeratedSet)) {      
+        return ;      
+      } else {      
+        if (parameters.aset = null) {        
+          concept = parameters.aconcept;          
+          set = Set.create(parameters.aconcept.name);        
+        } else {        
+          if (parameters.aconcept = null) {          
+            set = parameters.aset;            
+            concept = Concept.createNewConcept(false,null,);          
+          } else {          
+            concept = parameters.aconcept;            
+            set = parameters.aset;          
+          }        
+        }      
+      }    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class EnumeratedDataSetBSet extends Transition  {  
+  
+    @FlexoConceptInstanceRole(cardinality=One,readOnly=false)    
+    public FlexoConceptInstanceType<EnumeratedDataSet> enumeratedDataSet;  
+    @FlexoConceptInstanceRole(cardinality=One,readOnly=false)    
+    public FlexoConceptInstanceType<Set> set;  
+  
+    @CreationScheme    
+    public EnumeratedDataSetBSet:create(FlexoConceptInstanceType<EnumeratedDataSet> anenum, FlexoConceptInstanceType<Set> aset) {    
+      if (((parameters.anenum = null) & (parameters.aset = null)) | ((parameters.aset != null) & (!(parameters.aset.isEnumeratedSet)))) {      
+        return ;      
+      } else {      
+        if (parameters.aset = null) {        
+          enumeratedDataSet = parameters.anenum;          
+          set = Set.create();          
+          for (dataValue : parameters.anenum.elements) {          
+            FlexoConceptInstanceType<SetItem> setItem = SetItem.create(dataValue.name);            
+            set.addItem(setItem)          
+          }        
+        } else {        
+          if (parameters.anenum = null) {          
+            set = parameters.aset;            
+            enumeratedDataSet = EnumeratedDataSet.create(,);            
+            for (setItem : parameters.aset.constants) {            
+              FlexoConceptInstanceType<DataValue> dataValue = DataValue.create(setItem.name,enumeratedDataSet);              
+              enumeratedDataSet.addElement(dataValue)            
+            }          
+          } else {          
+            enumeratedDataSet = parameters.anenum;            
+            set = parameters.aset;          
+          }        
+        }      
+      }    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+}

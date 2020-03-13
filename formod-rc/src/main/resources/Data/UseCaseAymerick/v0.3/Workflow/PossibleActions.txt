@@ -1,0 +1,20 @@
+Création d'un projet vide.
+
+Dans l'interface graphique d'édition des diagrammes SysMLKaos.
+	Créer le diagramme SysMLKaos vide.
+	Ajoute de but.
+	Ajoute de raffinement.
+
+Dans l'interface graphique de fédération SKBG.
+	Définir un niveau de raffinement.
+	A partir d'un niveau de raffinement SysMLKaos, on créé un fichier de modèle BG.
+	A partir d'un but SysMLKaos, on créé le squelet de l'événement.
+	A partir d'un raffinement, on créé les PO.
+	Définir qu'un but SysmlKaos n'est pas à lier avec BG.
+	Connecter un but B avec un but SysMLKaos.
+	Connexion d'un raffinement SysMLKaos avec des PO.
+
+Dans l'interface graphique du modèle B.
+	On complète manuellement le corps d'un but.
+	Pour un raffinement, vérification les PO.
+	Récupération d'un modèle existant.

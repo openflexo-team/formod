@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-4" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/Formose.viewpoint/Glossary.fml" version="0.1" name="Glossary" userID="FLX" flexoID="4">
+  <FlexoConcept id="FLX-6" name="Term" userID="FLX" flexoID="6">
+    <Inspector id="FLX-7" inspectorTitle="Term" userID="FLX" flexoID="7" />
+    <CreationScheme id="FLX-9" name="create" width="800" label="create" height="600" userID="FLX" flexoID="9">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-8" userID="FLX" flexoID="8" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-11" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="11">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-10" userID="FLX" flexoID="10" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <Inspector id="FLX-1" inspectorTitle="GlossaryVM" userID="FLX" flexoID="1" />
+</VirtualModel>

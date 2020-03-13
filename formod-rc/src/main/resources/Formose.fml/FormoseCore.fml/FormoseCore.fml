@@ -1,0 +1,229 @@
+use org.openflexo.technologyadapter.gina.FIBComponentModelSlot;
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml")
+public class FormoseCore {
+
+  @GetSetProperty(value="allElements", access=get)  
+  public List<FlexoConceptInstanceType<Element>> getAllElements {  
+    return this.SelectFlexoConceptInstance(type=Element);  
+  }
+  public Element projectElement;
+
+  @ActionScheme  
+  Void addElement() {  
+    Element.createElement("elementTODO")  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+  @ActionScheme  
+  Void removeElement(FlexoConceptInstanceType<Element> element) {  
+    parameters.element.delete();  
+  }  
+
+  @CreationScheme  
+  FormoseCore:init(String projectName) {  
+    projectElement = Element.createElement("Project");    
+    this.firePropertyChange projectElement  
+  }  
+
+
+  @FlexoConcept  
+  public class Element {  
+  
+    public String identifier;  
+    public List childrenElements;  
+    public String description;  
+    public Element parent;  
+    public GINAFIBComponent ui;  
+    @GetSetProperty(value="requirements", access=get)    
+    public List<FlexoConceptInstanceType<Requirement>> getRequirements {    
+      return container.SelectFlexoConceptInstance(type=Requirement);    
+    }  
+    @GetSetProperty(value="applicableSysMLKaosMethodology", access=get)    
+    public VirtualModelInstanceType<SysMLKaos-Methodology> getApplicableSysMLKaosMethodology {    
+      VirtualModelInstanceType<SysMLKaos-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
+      if (returned != null) {      
+        return returned;      
+      }      
+      if (parent != null) {      
+        return parent.applicableSysMLKaosMethodology;      
+      }      
+      return null;    
+    }  
+    @GetSetProperty(value="applicableDomainModelMethodology", access=get)    
+    public VirtualModelInstanceType<DomainModel-Methodology> getApplicableDomainModelMethodology {    
+      VirtualModelInstanceType<DomainModel-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
+      if (returned != null) {      
+        return returned;      
+      }      
+      if (parent != null) {      
+        return parent.applicableDomainModelMethodology;      
+      }      
+      return null;    
+    }  
+    @GetSetProperty(value="applicableBMethodology", access=get)    
+    public VirtualModelInstanceType<B-Methodology> getApplicableBMethodology {    
+      VirtualModelInstanceType<B-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
+      if (returned != null) {      
+        return returned;      
+      }      
+      if (parent != null) {      
+        return parent.applicableBMethodology;      
+      }      
+      return null;    
+    }  
+  
+    @CreationScheme    
+    Element:createElement(String elementIdentifier) {    
+      identifier = parameters.elementIdentifier;      
+      ui = ui.ConfigureGINAFIBComponent();    
+    }    
+  
+    @ActionScheme    
+    VirtualModelInstanceType<SysMLKaos-Methodology> createSysMLKaosMethodology() {    
+      VirtualModelInstanceType<SysMLKaos-Methodology> methodology = SysMLKaos-Methodology.create((identifier + "-SysMLKaos"),this);      
+      this.firePropertyChange applicableSysMLKaosMethodology      
+      return methodology;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    FlexoConceptInstanceType<Element> createChildrenElement(String elementIdentifier, String elementDescription) {    
+      log ("Creating new element " + parameters.elementIdentifier)      
+      FlexoConceptInstanceType<Element> newElement = Element.createElement(parameters.elementIdentifier);      
+      newElement.description = parameters.elementDescription;      
+      newElement.parent = this;      
+      childrenElements.add(newElement)      
+      FlexoConceptInstanceType<NewElement> event = fireEvent NewElement;      
+      log ((("Firing event " + event) + " from ") + container)      
+      return newElement;    
+    }    
+  
+    @ActionScheme    
+    FlexoConceptInstanceType<Requirement> createRequirement(String name, String description) {    
+      log ("Creating new requirement " + parameters.name)      
+      log ("Description for new requirement " + parameters.description)      
+      FlexoConceptInstanceType<Requirement> newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
+      this.firePropertyChange requirements      
+      log ((("On declenche NewRequirement " + newRequirement) + " dans ") + newRequirement.container)      
+      fireEvent NewRequirement      
+      return newRequirement;    
+    }    
+  
+    @ActionScheme    
+    FlexoConceptInstanceType<Requirement> createRequirementNoNotification(String name, String description) {    
+      FlexoConceptInstanceType<Requirement> newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
+      this.firePropertyChange requirements      
+      return newRequirement;    
+    }    
+  
+    @ActionScheme    
+    VirtualModelInstanceType<DomainModel-Methodology> createDomainModelMethodology() {    
+      log ("applicableSysMLKaosMethodology:" + applicableSysMLKaosMethodology)      
+      VirtualModelInstanceType<DomainModel-Methodology> methodology = DomainModel-Methodology.create(applicableSysMLKaosMethodology);      
+      this.firePropertyChange applicableDomainModelMethodology      
+      return methodology;    
+    }    
+  
+    @ActionScheme    
+    VirtualModelInstanceType<B-Methodology> createBMethodology(AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject) {    
+      VirtualModelInstanceType<B-Methodology> methodology = B-Methodology.create(applicableDomainModelMethodology,parameters.sourceProject,parameters.generatedProject);      
+      this.firePropertyChange applicableBMethodology      
+      return methodology;    
+    }    
+  
+  
+    @FlexoConcept    
+    public class Requirement {    
+      
+      public String name;    
+      public String description;    
+      public String status;    
+      
+      @CreationScheme      
+      Requirement:createRequirement(String name, String description) {      
+        log ("*********** Create new requirement " + parameters.name)        
+        name = parameters.name;        
+        description = parameters.description;        
+        container.firePropertyChange requirements      
+      }      
+      
+      @DeletionScheme      
+      public Void delete() {      
+        container.firePropertyChange requirements      
+      }      
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Requirement {  
+  
+    public String name;  
+    public String description;  
+    public String status;  
+  
+    @CreationScheme    
+    Requirement:createRequirement(String name, String description) {    
+      log ("*********** Create new requirement " + parameters.name)      
+      name = parameters.name;      
+      description = parameters.description;      
+      container.firePropertyChange requirements    
+    }    
+  
+    @DeletionScheme    
+    public Void delete() {    
+      container.firePropertyChange requirements    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class NewRequirement {  
+  
+    public Requirement requirement;  
+  
+    @CreationScheme    
+    NewRequirement:create(FlexoConceptInstanceType<Requirement> aRequirement) {    
+      requirement = parameters.aRequirement;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class NewElement {  
+  
+    public Element element;  
+  
+    @CreationScheme    
+    NewElement:create(FlexoConceptInstanceType<Element> anElement) {    
+      element = parameters.anElement;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+}

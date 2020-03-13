@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-2" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/Formose.viewpoint/DomainModel-B-Methodology.fml" version="0.1" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml" name="DomainModel-B-Methodology" description="This methodology  provide a way to generate B specifications from Domain Models" userID="FLX" flexoID="2">
+  <FlexoConcept id="FLX-47" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml#Transition" name="DomainModelSystem" description="" userID="FLX" flexoID="47">
+    <Inspector id="FLX-38" inspectorTitle="DomainModelSystem" userID="FLX" flexoID="38" />
+    <FlexoConceptInstanceRole id="FLX-43" virtualModelInstance="DomainModel" flexoConceptTypeURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml" cloningStrategy="Reference" cardinality="One" name="domainModel" userID="FLX" flexoID="43" />
+    <FlexoConceptInstanceRole id="FLX-44" virtualModelInstance="BSystem" flexoConceptTypeURI="http://formose.lacl.fr/BSystem.viewpoint#System" cloningStrategy="Reference" cardinality="One" name="system" description="" userID="FLX" flexoID="44" />
+    <CreationScheme id="FLX-41" visibility="Public" name="create" width="800" label="create" height="600" userID="FLX" flexoID="41">
+      <BehaviourControlGraph_ConditionalAction id="FLX-2915" condition="((parameters.adomainModel = null) &amp; (parameters.asystem = null))" ownerContext="controlGraph2" description="" userID="FLX" flexoID="2915">
+        <ElseControlGraph_ConditionalAction id="FLX-2919" condition="(parameters.asystem = null)" ownerContext="elseControlGraph" userID="FLX" flexoID="2919">
+          <ElseControlGraph_ConditionalAction id="FLX-2932" condition="(parameters.adomainModel = null)" ownerContext="elseControlGraph" userID="FLX" flexoID="2932">
+            <ElseControlGraph_Sequence id="FLX-2969" ownerContext="elseControlGraph" userID="FLX" flexoID="2969">
+              <ControlGraph2_AssignationAction id="FLX-2968" assign="system" ownerContext="controlGraph2" userID="FLX" flexoID="2968">
+                <AssignableAction_ExpressionAction id="FLX-2967" expression="parameters.asystem" userID="FLX" flexoID="2967" />
+              </ControlGraph2_AssignationAction>
+              <ControlGraph1_AssignationAction id="FLX-2966" assign="domainModel" ownerContext="controlGraph1" userID="FLX" flexoID="2966">
+                <AssignableAction_ExpressionAction id="FLX-2965" expression="parameters.adomainModel" userID="FLX" flexoID="2965" />
+              </ControlGraph1_AssignationAction>
+            </ElseControlGraph_Sequence>
+            <ThenControlGraph_Sequence id="FLX-2939" ownerContext="thenControlGraph" userID="FLX" flexoID="2939">
+              <ControlGraph2_Sequence id="FLX-2964" ownerContext="controlGraph2" userID="FLX" flexoID="2964">
+                <ControlGraph2_ConditionalAction id="FLX-2947" condition="((parameters.asystem.refines != null) &amp; (parameters.asystem.refines.size &gt; 0))" ownerContext="controlGraph2" description="" userID="FLX" flexoID="2947">
+                  <ThenControlGraph_Sequence id="FLX-2963" ownerContext="thenControlGraph" userID="FLX" flexoID="2963">
+                    <ControlGraph2_ConditionalAction id="FLX-2954" condition="(parentMappingList.size &gt; 0)" ownerContext="controlGraph2" userID="FLX" flexoID="2954">
+                      <ElseControlGraph_Sequence id="FLX-2962" ownerContext="elseControlGraph" userID="FLX" flexoID="2962">
+                        <ControlGraph2_ExpressionAction id="FLX-2961" expression="domainModel.SetParent(newParentMapping.domainModel)" ownerContext="controlGraph2" userID="FLX" flexoID="2961" />
+                        <ControlGraph1_DeclarationAction id="FLX-2960" variable="newParentMapping" ownerContext="controlGraph1" userID="FLX" flexoID="2960">
+                          <AssignableAction_AddFlexoConceptInstance id="FLX-2957" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DomainModel-B-Methodology.fml#DomainModelSystem.create" receiver="virtualModelInstance" userID="FLX" flexoID="2957">
+                            <AddFlexoConceptInstanceParameter id="FLX-2958" paramName="adomainModel" value="null" userID="FLX" flexoID="2958" />
+                            <AddFlexoConceptInstanceParameter id="FLX-2959" paramName="asystem" value="parameters.asystem.refines.get(0)" userID="FLX" flexoID="2959" />
+                          </AssignableAction_AddFlexoConceptInstance>
+                        </ControlGraph1_DeclarationAction>
+                      </ElseControlGraph_Sequence>
+                      <ThenControlGraph_ExpressionAction id="FLX-2955" expression="domainModel.SetParent(parentMappingList.get(0).domainModel)" ownerContext="thenControlGraph" userID="FLX" flexoID="2955" />
+                    </ControlGraph2_ConditionalAction>
+                    <ControlGraph1_DeclarationAction id="FLX-2952" variable="parentMappingList" ownerContext="controlGraph1" userID="FLX" flexoID="2952">
+                      <AssignableAction_SelectFlexoConceptInstance id="FLX-2950" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DomainModel-B-Methodology.fml#DomainModelSystem" receiver="virtualModelInstance" userID="FLX" flexoID="2950">
+                        <Condition id="FLX-2951" condition="(selected.system = parameters.asystem.refines.get(0))" userID="FLX" flexoID="2951" />
+                      </AssignableAction_SelectFlexoConceptInstance>
+                    </ControlGraph1_DeclarationAction>
+                  </ThenControlGraph_Sequence>
+                </ControlGraph2_ConditionalAction>
+                <ControlGraph1_AssignationAction id="FLX-2938" assign="domainModel" ownerContext="controlGraph1" userID="FLX" flexoID="2938">
+                  <AssignableAction_AddFlexoConceptInstance id="FLX-2936" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml.create" receiver="DomainModel" description="" userID="FLX" flexoID="2936">
+                    <AddFlexoConceptInstanceParameter id="FLX-755" paramName="domainModelName" value="parameters.asystem.name" userID="FLX" flexoID="755" />
+                    <AddFlexoConceptInstanceParameter id="FLX-756" paramName="parentDomainModel" value="null" userID="FLX" flexoID="756" />
+                  </AssignableAction_AddFlexoConceptInstance>
+                </ControlGraph1_AssignationAction>
+              </ControlGraph2_Sequence>
+              <ControlGraph1_AssignationAction id="FLX-2934" assign="system" ownerContext="controlGraph1" userID="FLX" flexoID="2934">
+                <AssignableAction_ExpressionAction id="FLX-2933" expression="parameters.asystem" userID="FLX" flexoID="2933" />
+              </ControlGraph1_AssignationAction>
+            </ThenControlGraph_Sequence>
+          </ElseControlGraph_ConditionalAction>
+          <ThenControlGraph_Sequence id="FLX-2941" ownerContext="thenControlGraph" userID="FLX" flexoID="2941">
+            <ControlGraph2_Sequence id="FLX-2940" ownerContext="controlGraph2" userID="FLX" flexoID="2940">
+              <ControlGraph2_ConditionalAction id="FLX-68" condition="(parameters.adomainModel.parentDomainModel != null)" ownerContext="controlGraph2" userID="FLX" flexoID="68">
+                <ThenControlGraph_Sequence id="FLX-94" ownerContext="thenControlGraph" userID="FLX" flexoID="94">
+                  <ControlGraph2_ConditionalAction id="FLX-81" condition="(parentDomainModelSystemMapping.size() &gt; 0)" ownerContext="controlGraph2" description="" userID="FLX" flexoID="81">
+                    <ElseControlGraph_Sequence id="FLX-93" ownerContext="elseControlGraph" userID="FLX" flexoID="93">
+                      <ControlGraph2_AddToListAction id="FLX-92" list="system.refines" ownerContext="controlGraph2" userID="FLX" flexoID="92">
+                        <AssignableAction_ExpressionAction id="FLX-91" expression="newParentDomainModelSystemMapping.system" userID="FLX" flexoID="91" />
+                      </ControlGraph2_AddToListAction>
+                      <ControlGraph1_DeclarationAction id="FLX-90" variable="newParentDomainModelSystemMapping" ownerContext="controlGraph1" userID="FLX" flexoID="90">
+                        <AssignableAction_AddFlexoConceptInstance id="FLX-88" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DomainModel-B-Methodology.fml#DomainModelSystem.create" receiver="virtualModelInstance" description="" userID="FLX" flexoID="88">
+                          <AddFlexoConceptInstanceParameter id="FLX-2929" paramName="adomainModel" value="parameters.adomainModel.parentDomainModel" userID="FLX" flexoID="2929" />
+                          <AddFlexoConceptInstanceParameter id="FLX-2930" paramName="asystem" value="null" userID="FLX" flexoID="2930" />
+                        </AssignableAction_AddFlexoConceptInstance>
+                      </ControlGraph1_DeclarationAction>
+                    </ElseControlGraph_Sequence>
+                    <ThenControlGraph_AddToListAction id="FLX-83" list="system.refines" ownerContext="thenControlGraph" userID="FLX" flexoID="83">
+                      <AssignableAction_ExpressionAction id="FLX-82" expression="parentDomainModelSystemMapping.get(0).system" userID="FLX" flexoID="82" />
+                    </ThenControlGraph_AddToListAction>
+                  </ControlGraph2_ConditionalAction>
+                  <ControlGraph1_DeclarationAction id="FLX-72" variable="parentDomainModelSystemMapping" ownerContext="controlGraph1" userID="FLX" flexoID="72">
+                    <AssignableAction_SelectFlexoConceptInstance id="FLX-70" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DomainModel-B-Methodology.fml#DomainModelSystem" receiver="virtualModelInstance" userID="FLX" flexoID="70">
+                      <Condition id="FLX-71" condition="(selected.domainModel = parameters.adomainModel.parentDomainModel)" userID="FLX" flexoID="71" />
+                    </AssignableAction_SelectFlexoConceptInstance>
+                  </ControlGraph1_DeclarationAction>
+                </ThenControlGraph_Sequence>
+              </ControlGraph2_ConditionalAction>
+              <ControlGraph1_AssignationAction id="FLX-2928" assign="system" ownerContext="controlGraph1" userID="FLX" flexoID="2928">
+                <AssignableAction_AddFlexoConceptInstance id="FLX-2927" creationSchemeURI="http://formose.lacl.fr/BSystem.viewpoint#System.create" receiver="BSystem" userID="FLX" flexoID="2927" />
+              </ControlGraph1_AssignationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AssignationAction id="FLX-2921" assign="domainModel" ownerContext="controlGraph1" userID="FLX" flexoID="2921">
+              <AssignableAction_ExpressionAction id="FLX-2920" expression="parameters.adomainModel" userID="FLX" flexoID="2920" />
+            </ControlGraph1_AssignationAction>
+          </ThenControlGraph_Sequence>
+        </ElseControlGraph_ConditionalAction>
+        <ThenControlGraph_ReturnStatement id="FLX-2917" ownerContext="thenControlGraph" userID="FLX" flexoID="2917">
+          <AssignableAction_ExpressionAction id="FLX-2916" expression="null" userID="FLX" flexoID="2916" />
+        </ThenControlGraph_ReturnStatement>
+      </BehaviourControlGraph_ConditionalAction>
+      <GenericBehaviourParameter id="FLX-53" widget="CUSTOM_WIDGET" name="adomainModel" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml&gt;" userID="FLX" flexoID="53" />
+      <GenericBehaviourParameter id="FLX-54" widget="CUSTOM_WIDGET" name="asystem" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/BSystem.viewpoint#System&gt;" userID="FLX" flexoID="54" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-42" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="42">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-46" userID="FLX" flexoID="46" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-2844" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml#Transition" name="ConceptSet" description="" userID="FLX" flexoID="2844">
+    <Inspector id="FLX-2837" inspectorTitle="ConceptSet" userID="FLX" flexoID="2837" />
+    <FlexoConceptInstanceRole id="FLX-2845" virtualModelInstance="DomainModel" cloningStrategy="Reference" cardinality="One" name="concept" userID="FLX" flexoID="2845" />
+    <FlexoConceptInstanceRole id="FLX-2846" virtualModelInstance="BSystem" cloningStrategy="Reference" cardinality="One" name="set" userID="FLX" flexoID="2846" />
+    <DeletionScheme id="FLX-2841" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="2841">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-2843" userID="FLX" flexoID="2843" />
+    </DeletionScheme>
+    <CreationScheme id="FLX-2970" visibility="Public" name="create" width="800" label="create" height="600" userID="FLX" flexoID="2970">
+      <BehaviourControlGraph_ConditionalAction id="FLX-3094" condition="((((parameters.aconcept = null) &amp; (parameters.aset = null)) | ((parameters.aconcept != null) &amp; (parameters.aconcept.parentConcept != null))) | ((parameters.aset != null) &amp; parameters.aset.isEnumeratedSet))" ownerContext="controlGraph2" description="" userID="FLX" flexoID="3094">
+        <ElseControlGraph_ConditionalAction id="FLX-3095" condition="(parameters.aset = null)" ownerContext="elseControlGraph" description="" userID="FLX" flexoID="3095">
+          <ElseControlGraph_ConditionalAction id="FLX-3097" condition="(parameters.aconcept = null)" ownerContext="elseControlGraph" userID="FLX" flexoID="3097">
+            <ElseControlGraph_Sequence id="FLX-3101" ownerContext="elseControlGraph" userID="FLX" flexoID="3101">
+              <ControlGraph2_AssignationAction id="FLX-3099" assign="set" ownerContext="controlGraph2" userID="FLX" flexoID="3099">
+                <AssignableAction_ExpressionAction id="FLX-3093" expression="parameters.aset" description="" userID="FLX" flexoID="3093" />
+              </ControlGraph2_AssignationAction>
+              <ControlGraph1_AssignationAction id="FLX-3100" assign="concept" ownerContext="controlGraph1" userID="FLX" flexoID="3100">
+                <AssignableAction_ExpressionAction id="FLX-3092" expression="parameters.aconcept" userID="FLX" flexoID="3092" />
+              </ControlGraph1_AssignationAction>
+            </ElseControlGraph_Sequence>
+            <ThenControlGraph_Sequence id="FLX-3118" ownerContext="thenControlGraph" userID="FLX" flexoID="3118">
+              <ControlGraph2_AssignationAction id="FLX-3115" assign="concept" ownerContext="controlGraph2" userID="FLX" flexoID="3115">
+                <AssignableAction_AddFlexoConceptInstance id="FLX-3114" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml#Concept.createNewConcept" receiver="DomainModel" description="" userID="FLX" flexoID="3114">
+                  <AddFlexoConceptInstanceParameter id="FLX-757" paramName="isVariable" value="false" userID="FLX" flexoID="757" />
+                  <AddFlexoConceptInstanceParameter id="FLX-758" paramName="parentConcept" value="null" userID="FLX" flexoID="758" />
+                  <AddFlexoConceptInstanceParameter id="STE-1792" paramName="conceptName" userID="STE" flexoID="1792" />
+                </AssignableAction_AddFlexoConceptInstance>
+              </ControlGraph2_AssignationAction>
+              <ControlGraph1_AssignationAction id="FLX-3117" assign="set" ownerContext="controlGraph1" userID="FLX" flexoID="3117">
+                <AssignableAction_ExpressionAction id="FLX-3091" expression="parameters.aset" userID="FLX" flexoID="3091" />
+              </ControlGraph1_AssignationAction>
+            </ThenControlGraph_Sequence>
+          </ElseControlGraph_ConditionalAction>
+          <ThenControlGraph_Sequence id="FLX-3137" ownerContext="thenControlGraph" userID="FLX" flexoID="3137">
+            <ControlGraph2_AssignationAction id="FLX-3134" assign="set" ownerContext="controlGraph2" userID="FLX" flexoID="3134">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-3133" creationSchemeURI="http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Set.create" receiver="BSystem" userID="FLX" flexoID="3133">
+                <AddFlexoConceptInstanceParameter id="FLX-329" paramName="aName" value="parameters.aconcept.name" userID="FLX" flexoID="329" />
+              </AssignableAction_AddFlexoConceptInstance>
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="FLX-3136" assign="concept" ownerContext="controlGraph1" description="&lt;html&gt;&#xA;  &lt;head&gt;&#xA;&#xA;  &lt;/head&gt;&#xA;  &lt;body&gt;&#xA;    &lt;p style=&quot;margin-top: 0&quot;&gt;&#xA;      &#xA;    &lt;/p&gt;&#xA;  &lt;/body&gt;&#xA;&lt;/html&gt;&#xA;" userID="FLX" flexoID="3136">
+              <AssignableAction_ExpressionAction id="FLX-3090" expression="parameters.aconcept" description="" userID="FLX" flexoID="3090" />
+            </ControlGraph1_AssignationAction>
+          </ThenControlGraph_Sequence>
+        </ElseControlGraph_ConditionalAction>
+        <ThenControlGraph_ReturnStatement id="FLX-3139" ownerContext="thenControlGraph" userID="FLX" flexoID="3139">
+          <AssignableAction_ExpressionAction id="FLX-3138" userID="FLX" flexoID="3138" />
+        </ThenControlGraph_ReturnStatement>
+      </BehaviourControlGraph_ConditionalAction>
+      <GenericBehaviourParameter id="FLX-3027" widget="CUSTOM_WIDGET" name="aconcept" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml#Concept&gt;" userID="FLX" flexoID="3027" />
+      <GenericBehaviourParameter id="FLX-3028" widget="CUSTOM_WIDGET" name="aset" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Set&gt;" userID="FLX" flexoID="3028" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-2885" parentFlexoConceptsList="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml#Transition" name="EnumeratedDataSetBSet" description="" userID="FLX" flexoID="2885">
+    <Inspector id="FLX-2872" inspectorTitle="EnumeratedDataSetBSet" userID="FLX" flexoID="2872" />
+    <FlexoConceptInstanceRole id="FLX-2880" virtualModelInstance="DomainModel" flexoConceptTypeURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml#EnumeratedDataSet" cloningStrategy="Reference" cardinality="One" name="enumeratedDataSet" description="" userID="FLX" flexoID="2880" />
+    <FlexoConceptInstanceRole id="FLX-2881" virtualModelInstance="BSystem" flexoConceptTypeURI="http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Set" cloningStrategy="Reference" cardinality="One" name="set" description="" userID="FLX" flexoID="2881" />
+    <CreationScheme id="FLX-2875" visibility="Public" name="create" width="800" label="create" height="600" userID="FLX" flexoID="2875">
+      <BehaviourControlGraph_ConditionalAction id="FLX-3203" condition="(((parameters.anenum = null) &amp; (parameters.aset = null)) | ((parameters.aset != null) &amp; (!(parameters.aset.isEnumeratedSet))))" description="" userID="FLX" flexoID="3203">
+        <ElseControlGraph_ConditionalAction id="FLX-3204" condition="(parameters.aset = null)" ownerContext="elseControlGraph" description="" userID="FLX" flexoID="3204">
+          <ElseControlGraph_ConditionalAction id="FLX-3206" condition="(parameters.anenum = null)" ownerContext="elseControlGraph" userID="FLX" flexoID="3206">
+            <ElseControlGraph_Sequence id="FLX-3210" ownerContext="elseControlGraph" userID="FLX" flexoID="3210">
+              <ControlGraph2_AssignationAction id="FLX-3208" assign="set" ownerContext="controlGraph2" userID="FLX" flexoID="3208">
+                <AssignableAction_ExpressionAction id="FLX-3202" expression="parameters.aset" description="" userID="FLX" flexoID="3202" />
+              </ControlGraph2_AssignationAction>
+              <ControlGraph1_AssignationAction id="FLX-3209" assign="enumeratedDataSet" ownerContext="controlGraph1" userID="FLX" flexoID="3209">
+                <AssignableAction_ExpressionAction id="FLX-3201" expression="parameters.anenum" userID="FLX" flexoID="3201" />
+              </ControlGraph1_AssignationAction>
+            </ElseControlGraph_Sequence>
+            <ThenControlGraph_Sequence id="FLX-3226" ownerContext="thenControlGraph" userID="FLX" flexoID="3226">
+              <ControlGraph2_Sequence id="FLX-3286" ownerContext="controlGraph2" userID="FLX" flexoID="3286">
+                <ControlGraph2_IterationAction id="FLX-3280" iteratorName="setItem" ownerContext="controlGraph2" userID="FLX" flexoID="3280">
+                  <Iteration_ExpressionAction id="FLX-3283" expression="parameters.aset.constants" ownerContext="iterationControlGraph" description="" userID="FLX" flexoID="3283" />
+                  <ControlGraph_Sequence id="FLX-3285" ownerContext="controlGraph" userID="FLX" flexoID="3285">
+                    <ControlGraph2_ExpressionAction id="FLX-3282" expression="enumeratedDataSet.addElement(dataValue)" ownerContext="controlGraph2" description="" userID="FLX" flexoID="3282" />
+                    <ControlGraph1_DeclarationAction id="FLX-3281" variable="dataValue" ownerContext="controlGraph1" userID="FLX" flexoID="3281">
+                      <AssignableAction_AddFlexoConceptInstance id="FLX-3284" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml#DataValue.create" receiver="DomainModel" description="" userID="FLX" flexoID="3284">
+                        <AddFlexoConceptInstanceParameter id="FLX-764" paramName="lexicalForm" value="setItem.name" userID="FLX" flexoID="764" />
+                        <AddFlexoConceptInstanceParameter id="FLX-765" paramName="type" value="enumeratedDataSet" userID="FLX" flexoID="765" />
+                      </AssignableAction_AddFlexoConceptInstance>
+                    </ControlGraph1_DeclarationAction>
+                  </ControlGraph_Sequence>
+                </ControlGraph2_IterationAction>
+                <ControlGraph1_AssignationAction id="FLX-3223" assign="enumeratedDataSet" ownerContext="controlGraph1" userID="FLX" flexoID="3223">
+                  <AssignableAction_AddFlexoConceptInstance id="FLX-3222" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml#EnumeratedDataSet.create" receiver="DomainModel" description="" userID="FLX" flexoID="3222">
+                    <AddFlexoConceptInstanceParameter id="STE-1793" paramName="name" userID="STE" flexoID="1793" />
+                    <AddFlexoConceptInstanceParameter id="STE-1794" paramName="element" userID="STE" flexoID="1794" />
+                  </AssignableAction_AddFlexoConceptInstance>
+                </ControlGraph1_AssignationAction>
+              </ControlGraph2_Sequence>
+              <ControlGraph1_AssignationAction id="FLX-3225" assign="set" ownerContext="controlGraph1" userID="FLX" flexoID="3225">
+                <AssignableAction_ExpressionAction id="FLX-3200" expression="parameters.aset" description="" userID="FLX" flexoID="3200" />
+              </ControlGraph1_AssignationAction>
+            </ThenControlGraph_Sequence>
+          </ElseControlGraph_ConditionalAction>
+          <ThenControlGraph_Sequence id="FLX-3245" ownerContext="thenControlGraph" userID="FLX" flexoID="3245">
+            <ControlGraph2_Sequence id="FLX-3243" ownerContext="controlGraph2" userID="FLX" flexoID="3243">
+              <ControlGraph2_IterationAction id="FLX-3255" iteratorName="dataValue" ownerContext="controlGraph2" userID="FLX" flexoID="3255">
+                <Iteration_ExpressionAction id="FLX-3257" expression="parameters.anenum.elements" ownerContext="iterationControlGraph" description="" userID="FLX" flexoID="3257" />
+                <ControlGraph_Sequence id="FLX-3272" ownerContext="controlGraph" userID="FLX" flexoID="3272">
+                  <ControlGraph2_ExpressionAction id="FLX-3270" expression="set.addItem(setItem)" ownerContext="controlGraph2" description="" userID="FLX" flexoID="3270" />
+                  <ControlGraph1_DeclarationAction id="FLX-3264" variable="setItem" ownerContext="controlGraph1" userID="FLX" flexoID="3264">
+                    <AssignableAction_AddFlexoConceptInstance id="FLX-3263" creationSchemeURI="http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#SetItem.create" receiver="BSystem" description="" userID="FLX" flexoID="3263">
+                      <AddFlexoConceptInstanceParameter id="FLX-345" paramName="aName" value="dataValue.name" userID="FLX" flexoID="345" />
+                    </AssignableAction_AddFlexoConceptInstance>
+                  </ControlGraph1_DeclarationAction>
+                </ControlGraph_Sequence>
+              </ControlGraph2_IterationAction>
+              <ControlGraph1_AssignationAction id="FLX-3242" assign="set" ownerContext="controlGraph1" userID="FLX" flexoID="3242">
+                <AssignableAction_AddFlexoConceptInstance id="FLX-3241" creationSchemeURI="http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Set.create" receiver="BSystem" userID="FLX" flexoID="3241">
+                  <AddFlexoConceptInstanceParameter id="STE-412" paramName="aName" userID="STE" flexoID="412" />
+                </AssignableAction_AddFlexoConceptInstance>
+              </ControlGraph1_AssignationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AssignationAction id="FLX-3244" assign="enumeratedDataSet" ownerContext="controlGraph1" userID="FLX" flexoID="3244">
+              <AssignableAction_ExpressionAction id="FLX-3199" expression="parameters.anenum" userID="FLX" flexoID="3199" />
+            </ControlGraph1_AssignationAction>
+          </ThenControlGraph_Sequence>
+        </ElseControlGraph_ConditionalAction>
+        <ThenControlGraph_ReturnStatement id="FLX-3247" ownerContext="thenControlGraph" userID="FLX" flexoID="3247">
+          <AssignableAction_ExpressionAction id="FLX-3246" userID="FLX" flexoID="3246" />
+        </ThenControlGraph_ReturnStatement>
+      </BehaviourControlGraph_ConditionalAction>
+      <GenericBehaviourParameter id="FLX-2882" isRequired="true" widget="CUSTOM_WIDGET" name="anenum" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml#EnumeratedDataSet&gt;" description="" userID="FLX" flexoID="2882" />
+      <GenericBehaviourParameter id="FLX-2883" isRequired="true" widget="CUSTOM_WIDGET" name="aset" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/BSystem.viewpoint/BSystemModel.fml#Set&gt;" userID="FLX" flexoID="2883" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-2876" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="2876">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-2884" userID="FLX" flexoID="2884" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="-1" />
+  <Inspector id="FLX-1" inspectorTitle="DomainModel-B-Methodology" userID="FLX" flexoID="1" />
+  <FMLRTVirtualModelInstanceModelSlot id="FLX-6" virtualModelURI="http://formose.lacl.fr/Formose.viewpoint/BSystemExtentions.fml" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="BSystem" description="&lt;html&gt;&#xA;  &lt;head&gt;&#xA;&#xA;  &lt;/head&gt;&#xA;  &lt;body&gt;&#xA;    &lt;p style=&quot;margin-top: 0&quot;&gt;&#xA;      &#xA;    &lt;/p&gt;&#xA;  &lt;/body&gt;&#xA;&lt;/html&gt;&#xA;" userID="FLX" flexoID="6" />
+  <FMLRTVirtualModelInstanceModelSlot id="FLX-7" virtualModelURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="DomainModel" userID="FLX" flexoID="7" />
+  <CreationScheme id="FLX-2889" visibility="Public" name="createUsingExistingSlots" width="800" label="create_using_existing_slots" height="600" userID="FLX" flexoID="2889">
+    <BehaviourControlGraph_Sequence id="FLX-2902" ownerContext="controlGraph2" userID="FLX" flexoID="2902">
+      <ControlGraph2_Sequence id="FLX-2901" ownerContext="controlGraph2" userID="FLX" flexoID="2901">
+        <ControlGraph2_AssignationAction id="FLX-2913" assign="BSystem" ownerContext="controlGraph2" userID="FLX" flexoID="2913">
+          <AssignableAction_ExpressionAction id="FLX-2912" expression="parameters.aBSystem" userID="FLX" flexoID="2912" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="FLX-2898" assign="declaringElement" ownerContext="controlGraph1" userID="FLX" flexoID="2898">
+          <AssignableAction_ExpressionAction id="FLX-2899" expression="parameters.declaringElement" userID="FLX" flexoID="2899" />
+        </ControlGraph1_AssignationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_AssignationAction id="FLX-2896" assign="DomainModel" ownerContext="controlGraph1" userID="FLX" flexoID="2896">
+        <AssignableAction_ExpressionAction id="FLX-2895" expression="parameters.aDomainModel" userID="FLX" flexoID="2895" />
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-2891" isRequired="true" widget="CUSTOM_WIDGET" name="aDomainModel" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr//resources/DomainModel/DomainModel.viewpoint/BusinessDomainModel.fml&gt;" userID="FLX" flexoID="2891" />
+    <GenericBehaviourParameter id="FLX-2945" isRequired="true" widget="CUSTOM_WIDGET" name="aBSystem" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/BSystemExtentions.fml&gt;" userID="FLX" flexoID="2945" />
+    <GenericBehaviourParameter id="STE-3300" widget="CUSTOM_WIDGET" name="declaringElement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" userID="STE" flexoID="3300" />
+  </CreationScheme>
+</VirtualModel>

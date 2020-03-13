@@ -1,0 +1,17 @@
+/* System4
+ * Test variables and constants
+ */
+SYSTEM
+    System4
+ABSTRACT_CONSTANTS
+   MaxNumber,
+   MinNumber
+CONCRETE_CONSTANTS
+   PosMin
+ABSTRACT_VARIABLES
+   Abscisse,
+   Ordinate0,
+   Ordinate1
+CONCRETE_VARIABLES
+   Position
+END

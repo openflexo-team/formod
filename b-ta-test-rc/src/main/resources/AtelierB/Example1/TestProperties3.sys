@@ -1,0 +1,6 @@
+SYSTEM
+    System5Bis
+PROPERTIES
+   Cte1 : INTEGER &
+   Cte2 : NAT
+END

@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-1" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml" version="0.1" bigIconResource="../../Icons/SysML_64x64.png" smallIconResource="../../Icons/SysML_16x16.png" name="SysMLKaosModel" userID="FLX" flexoID="1">
+  <FlexoConcept id="FLX-5" bigIconResource="../../Icons/FGoal.png" smallIconResource="../../Icons/FGoal-16x16.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" name="FunctionalGoal" description="A functional goal.&#xA;This concept implements here many notions of the model.&#xA;When no responsability is defined, this is a normal goal, to be refined.&#xA;When a responsability is defined:&#xA;- this is an Expectation if the responsability references an EnvironmentalAgent&#xA;- this is a Requirement if the responsability references a SoftwareAgent&#xA;&#xA;" userID="FLX" flexoID="5">
+    <Inspector id="FLX-2" renderer="name" inspectorTitle="Functional Goal" userID="FLX" flexoID="2">
+      <InspectorEntry id="SYL-2336" widget="TEXT_FIELD" data="functionalGoalType" name="type" label="type" type="java.lang.String" userID="SYL" flexoID="2336" />
+    </Inspector>
+    <FlexoConceptInstanceRole id="FLX-353" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" cloningStrategy="Reference" cardinality="ZeroMany" name="responsability" description="Responsibility is used when there’s only one agent who is responsible for it." userID="FLX" flexoID="353" />
+    <FlexoConceptInstanceRole id="FLX-354" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" cloningStrategy="Reference" cardinality="ZeroMany" name="assignments" description="Assignment is used when several agents may  be  made  responsible  for  some  requirement  or  expectation." userID="FLX" flexoID="354" />
+    <PrimitiveRole id="FLX-361" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="functionalGoalType" description="Type of FunctionalGoal&#xA;TODO" userID="FLX" flexoID="361" />
+    <CreationScheme id="FLX-49" label="create" name="create" width="800" height="600" userID="FLX" flexoID="49">
+      <BehaviourControlGraph_Sequence id="FLX-990" ownerContext="controlGraph2" userID="FLX" flexoID="990">
+        <ControlGraph2_Sequence id="SYL-1526" ownerContext="controlGraph2" userID="SYL" flexoID="1526">
+          <ControlGraph2_Sequence id="SYL-2242" ownerContext="controlGraph2" userID="SYL" flexoID="2242">
+            <ControlGraph2_NotifyPropertyChangedAction id="SYL-1704" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1704" />
+            <ControlGraph1_ConditionalAction id="SYL-2238" condition="parameters.notify" ownerContext="controlGraph1" userID="SYL" flexoID="2238">
+              <ThenControlGraph_Sequence id="SYL-2243" ownerContext="thenControlGraph" userID="SYL" flexoID="2243">
+                <ControlGraph2_FireEventAction id="SYL-1517" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" receiver="container" ownerContext="controlGraph2" userID="SYL" flexoID="1517">
+                  <AddFlexoConceptInstanceParameter id="SYL-1518" paramName="aGoal" value="this" userID="SYL" flexoID="1518" />
+                </ControlGraph2_FireEventAction>
+                <ControlGraph1_LogAction id="SYL-2241" logLevel="INFO" logString="&quot;Notify new event&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="2241" />
+              </ThenControlGraph_Sequence>
+            </ControlGraph1_ConditionalAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_ExpressionAction id="FLX-989" expression="this.createGoal(parameters.name,parameters.description)" ownerContext="controlGraph1" description="&#xA;" userID="FLX" flexoID="989" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-364" assign="functionalGoalType" ownerContext="controlGraph1" userID="FLX" flexoID="364">
+          <AssignableAction_ExpressionAction id="FLX-363" expression="parameters.type" userID="FLX" flexoID="363" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-452" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="452" />
+      <GenericBehaviourParameter id="FLX-453" widget="TEXT_FIELD" name="type" type="java.lang.String" userID="FLX" flexoID="453" />
+      <GenericBehaviourParameter id="FLX-454" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="454" />
+      <GenericBehaviourParameter id="SYL-2244" widget="CHECKBOX" defaultValue="true" name="notify" type="java.lang.Boolean" description="When set to true, indicates that we should notify creation" userID="SYL" flexoID="2244" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-29" bigIconResource="../../Icons/Agent.png" smallIconResource="../../Icons/Agent-16x16.png" isAbstract="true" name="Agent" userID="FLX" flexoID="29">
+    <Inspector id="FLX-28" inspectorTitle="Agent" userID="FLX" flexoID="28">
+      <InspectorEntry id="SYL-2340" widget="TEXT_FIELD" data="name" name="agentName" label="agent_name" type="java.lang.String" userID="SYL" flexoID="2340" />
+      <InspectorEntry id="SYL-2341" widget="TEXT_AREA" data="description" name="description" label="description" type="java.lang.String" userID="SYL" flexoID="2341" />
+    </Inspector>
+    <PrimitiveRole id="FLX-376" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="name" userID="FLX" flexoID="376" />
+    <PrimitiveRole id="FLX-377" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="description" userID="FLX" flexoID="377" />
+    <ActionScheme id="FLX-1007" label="createAgent" name="createAgent" width="800" height="600" userID="FLX" flexoID="1007">
+      <BehaviourControlGraph_Sequence id="FLX-1014" userID="FLX" flexoID="1014">
+        <ControlGraph2_AssignationAction id="FLX-1013" assign="description" ownerContext="controlGraph2" userID="FLX" flexoID="1013">
+          <AssignableAction_ExpressionAction id="FLX-1012" expression="parameters.description" userID="FLX" flexoID="1012" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="FLX-1011" assign="name" ownerContext="controlGraph1" userID="FLX" flexoID="1011">
+          <AssignableAction_ExpressionAction id="FLX-1010" expression="parameters.name" userID="FLX" flexoID="1010" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-1009" isRequired="true" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="1009" />
+      <GenericBehaviourParameter id="FLX-1015" widget="TEXT_FIELD" name="description" type="java.lang.String" userID="FLX" flexoID="1015" />
+    </ActionScheme>
+    <DeletionScheme id="FLX-2384" visibility="Public" label="delete" name="delete" width="800" height="600" userID="FLX" flexoID="2384">
+      <BehaviourControlGraph_Sequence id="SYL-2407" userID="SYL" flexoID="2407">
+        <ControlGraph2_Sequence id="SYL-2405" ownerContext="controlGraph2" userID="SYL" flexoID="2405">
+          <ControlGraph2_Sequence id="SYL-2402" ownerContext="controlGraph2" userID="SYL" flexoID="2402">
+            <ControlGraph2_Sequence id="SYL-2392" ownerContext="controlGraph2" userID="SYL" flexoID="2392">
+              <ControlGraph2_Sequence id="SYL-2390" ownerContext="controlGraph2" userID="SYL" flexoID="2390">
+                <ControlGraph2_Sequence id="SYL-2388" ownerContext="controlGraph2" userID="SYL" flexoID="2388">
+                  <ControlGraph2_NotifyPropertyChangedAction id="SYL-2385" propertyName="agents" object="containerModel" ownerContext="controlGraph2" userID="SYL" flexoID="2385" />
+                  <ControlGraph1_FireEventAction id="SYL-2387" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedAgent.create(anAgent)" receiver="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="2387">
+                    <AddFlexoConceptInstanceParameter id="SYL-2427" paramName="anAgent" value="this" userID="SYL" flexoID="2427" />
+                  </ControlGraph1_FireEventAction>
+                </ControlGraph2_Sequence>
+                <ControlGraph1_LogAction id="SYL-2389" logLevel="INFO" logString="(&quot;Ca y est agent supprime, containerModel=&quot; + containerModel)" ownerContext="controlGraph1" userID="SYL" flexoID="2389" />
+              </ControlGraph2_Sequence>
+              <ControlGraph1_DeleteAction id="SYL-2391" object="this" ownerContext="controlGraph1" userID="SYL" flexoID="2391" />
+            </ControlGraph2_Sequence>
+            <ControlGraph1_LogAction id="SYL-2401" logLevel="INFO" logString="(&quot;On va supprimer l'agent, containerModel=&quot; + containerModel)" ownerContext="controlGraph1" userID="SYL" flexoID="2401" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="SYL-2404" variable="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="2404">
+            <AssignableAction_ExpressionAction id="SYL-2403" expression="container" userID="SYL" flexoID="2403" />
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="SYL-2406" logLevel="INFO" logString="(&quot;On arrive la avec &quot; + container)" ownerContext="controlGraph1" userID="SYL" flexoID="2406" />
+      </BehaviourControlGraph_Sequence>
+    </DeletionScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-30" name="Refinement" description="Defines a refinment relationship between a Goal and a collection of Goals&#xA;Goals should be compatible (a functional requirement cannot emerge from a non functional requirement for example)&#xA;Semantics of refinment is defined by sub-classes&#xA;" userID="FLX" flexoID="30">
+    <Inspector id="FLX-31" inspectorTitle="Refinment" userID="FLX" flexoID="31" />
+    <FlexoConceptInstanceRole id="FLX-234" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroMany" name="parentGoal" description="The goal beeing refined" userID="FLX" flexoID="234" />
+    <FlexoConceptInstanceRole id="FLX-235" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroMany" name="childGoals" description="Collection of goals that define the refinment" userID="FLX" flexoID="235" />
+    <PrimitiveRole id="FLX-948" primitiveType="Boolean" cloningStrategy="Clone" cardinality="ZeroOne" name="isAnd" userID="FLX" flexoID="948" />
+    <PrimitiveRole id="FLX-949" primitiveType="Boolean" cloningStrategy="Clone" cardinality="ZeroOne" name="isOr" userID="FLX" flexoID="949" />
+    <GetSetProperty id="SYL-2993" name="refinementType" userID="SYL" flexoID="2993">
+      <SetControlGraph_EmptyControlGraph id="SYL-3002" ownerContext="setControlGraph" userID="SYL" flexoID="3002" />
+      <GetControlGraph_ConditionalAction id="SYL-2995" condition="this.isAnd" ownerContext="getControlGraph" userID="SYL" flexoID="2995">
+        <ElseControlGraph_ConditionalAction id="SYL-2998" condition="this.isOr" ownerContext="elseControlGraph" userID="SYL" flexoID="2998">
+          <ElseControlGraph_ConditionalAction id="STE-3203" condition="isMilestone" ownerContext="elseControlGraph" userID="STE" flexoID="3203">
+            <ElseControlGraph_ReturnStatement id="STE-3212" ownerContext="elseControlGraph" userID="STE" flexoID="3212">
+              <AssignableAction_ExpressionAction id="STE-3211" expression="&quot;ref&quot;" userID="STE" flexoID="3211" />
+            </ElseControlGraph_ReturnStatement>
+            <ThenControlGraph_ReturnStatement id="STE-3205" ownerContext="thenControlGraph" userID="STE" flexoID="3205">
+              <AssignableAction_ExpressionAction id="STE-3204" expression="&quot;ref_milestone&quot;" userID="STE" flexoID="3204" />
+            </ThenControlGraph_ReturnStatement>
+          </ElseControlGraph_ConditionalAction>
+          <ThenControlGraph_ReturnStatement id="SYL-3000" ownerContext="thenControlGraph" userID="SYL" flexoID="3000">
+            <AssignableAction_ExpressionAction id="SYL-2999" expression="&quot;ref_or&quot;" userID="SYL" flexoID="2999" />
+          </ThenControlGraph_ReturnStatement>
+        </ElseControlGraph_ConditionalAction>
+        <ThenControlGraph_ReturnStatement id="SYL-3055" ownerContext="thenControlGraph" userID="SYL" flexoID="3055">
+          <AssignableAction_ExpressionAction id="SYL-2996" expression="&quot;ref_and&quot;" ownerContext="thenControlGraph" userID="SYL" flexoID="2996" />
+        </ThenControlGraph_ReturnStatement>
+      </GetControlGraph_ConditionalAction>
+    </GetSetProperty>
+    <PrimitiveRole id="FLX-3107" primitiveType="Boolean" cloningStrategy="Clone" cardinality="ZeroOne" name="isMilestone" userID="FLX" flexoID="3107" />
+    <PrimitiveRole id="FLX-3108" primitiveType="Boolean" cloningStrategy="Clone" cardinality="ZeroOne" name="isData" userID="FLX" flexoID="3108" />
+    <ActionScheme id="FLX-554" label="addLinkToAParentGoal" name="addLinkToAParentGoal" width="800" height="600" userID="FLX" flexoID="554">
+      <BehaviourControlGraph_ConditionalAction id="FLX-1274" condition="(!(parentGoal.contains(parameters.parentGoal)))" ownerContext="controlGraph2" userID="FLX" flexoID="1274">
+        <ThenControlGraph_Sequence id="FLX-1281" ownerContext="thenControlGraph" userID="FLX" flexoID="1281">
+          <ControlGraph2_AddToListAction id="FLX-1280" list="parameters.parentGoal.childrenRefinement" ownerContext="controlGraph2" userID="FLX" flexoID="1280">
+            <AssignableAction_ExpressionAction id="FLX-1279" expression="this" userID="FLX" flexoID="1279" />
+          </ControlGraph2_AddToListAction>
+          <ControlGraph1_AddToListAction id="FLX-1278" list="parentGoal" ownerContext="controlGraph1" userID="FLX" flexoID="1278">
+            <AssignableAction_ExpressionAction id="FLX-1277" expression="parameters.parentGoal" userID="FLX" flexoID="1277" />
+          </ControlGraph1_AddToListAction>
+        </ThenControlGraph_Sequence>
+      </BehaviourControlGraph_ConditionalAction>
+      <GenericBehaviourParameter id="FLX-556" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="parentGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="556" />
+    </ActionScheme>
+    <ActionScheme id="FLX-586" label="addLinkToAChildrenGoal" name="addLinkToAChildrenGoal" width="800" height="600" userID="FLX" flexoID="586">
+      <BehaviourControlGraph_ConditionalAction id="FLX-1284" condition="(!(childGoals.contains(parameters.childrenGoal)))" ownerContext="controlGraph2" userID="FLX" flexoID="1284">
+        <ThenControlGraph_Sequence id="FLX-1289" ownerContext="thenControlGraph" userID="FLX" flexoID="1289">
+          <ControlGraph2_AddToListAction id="FLX-1288" list="parameters.childrenGoal.parentRefinement" ownerContext="controlGraph2" userID="FLX" flexoID="1288">
+            <AssignableAction_ExpressionAction id="FLX-1287" expression="this" userID="FLX" flexoID="1287" />
+          </ControlGraph2_AddToListAction>
+          <ControlGraph1_AddToListAction id="FLX-1286" list="childGoals" ownerContext="controlGraph1" userID="FLX" flexoID="1286">
+            <AssignableAction_ExpressionAction id="FLX-1285" expression="parameters.childrenGoal" userID="FLX" flexoID="1285" />
+          </ControlGraph1_AddToListAction>
+        </ThenControlGraph_Sequence>
+      </BehaviourControlGraph_ConditionalAction>
+      <GenericBehaviourParameter id="FLX-592" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="childrenGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="592" />
+    </ActionScheme>
+    <ActionScheme id="FLX-635" label="removeLinkToAParentGoal" name="removeLinkToAParentGoal" width="800" height="600" description="parentGoals.contains(parameters.parentGoal)" userID="FLX" flexoID="635">
+      <BehaviourControlGraph_Sequence id="FLX-659" userID="FLX" flexoID="659">
+        <ControlGraph2_RemoveFromListAction id="FLX-651" list="parentGoal" value="parameters.parentGoal" ownerContext="controlGraph2" userID="FLX" flexoID="651" />
+        <ControlGraph1_RemoveFromListAction id="FLX-1115" list="parameters.parentGoal.childrenRefinement" value="this" ownerContext="controlGraph1" userID="FLX" flexoID="1115" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-646" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="parentGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" description="" userID="FLX" flexoID="646" />
+    </ActionScheme>
+    <ActionScheme id="FLX-641" label="removeLinkToAChildrenGoal" name="removeLinkToAChildrenGoal" width="800" height="600" description="childGoals.contains(parameters.childrenGoal)" userID="FLX" flexoID="641">
+      <BehaviourControlGraph_Sequence id="FLX-660" userID="FLX" flexoID="660">
+        <ControlGraph2_RemoveFromListAction id="FLX-658" list="childGoals" value="parameters.childrenGoal" ownerContext="controlGraph2" userID="FLX" flexoID="658" />
+        <ControlGraph1_Sequence id="FLX-1124" ownerContext="controlGraph1" userID="FLX" flexoID="1124">
+          <ControlGraph2_RemoveFromListAction id="FLX-1120" list="parameters.childrenGoal.parentRefinement" value="this" ownerContext="controlGraph2" userID="FLX" flexoID="1120" />
+          <ControlGraph1_LogAction id="FLX-1122" logLevel="INFO" logString="&quot;Behaviour removeLinkToAChildrenGoal&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="1122" />
+        </ControlGraph1_Sequence>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-643" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="childrenGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="643" />
+    </ActionScheme>
+    <ActionScheme id="FLX-700" label="removeAllLinksToParentGoal" name="removeAllLinksToParentGoal" width="800" height="600" userID="FLX" flexoID="700">
+      <BehaviourControlGraph_IterationAction id="FLX-708" iteratorName="item" userID="FLX" flexoID="708">
+        <Iteration_ExpressionAction id="FLX-710" expression="parentGoal" ownerContext="iterationControlGraph" userID="FLX" flexoID="710" />
+        <ControlGraph_ExpressionAction id="FLX-712" expression="this.removeLinkToAParentGoal(item)" ownerContext="controlGraph" userID="FLX" flexoID="712" />
+      </BehaviourControlGraph_IterationAction>
+    </ActionScheme>
+    <ActionScheme id="FLX-713" label="removeAllLinksToChildGoals" name="removeAllLinksToChildGoals" width="800" height="600" userID="FLX" flexoID="713">
+      <BehaviourControlGraph_IterationAction id="FLX-716" iteratorName="item" userID="FLX" flexoID="716">
+        <Iteration_ExpressionAction id="FLX-718" expression="childGoals" ownerContext="iterationControlGraph" userID="FLX" flexoID="718" />
+        <ControlGraph_ExpressionAction id="FLX-719" expression="this.removeLinkToAChildrenGoal(item)" ownerContext="controlGraph" userID="FLX" flexoID="719" />
+      </BehaviourControlGraph_IterationAction>
+    </ActionScheme>
+    <CreationScheme id="FLX-916" label="create" name="create" width="800" height="600" userID="FLX" flexoID="916">
+      <BehaviourControlGraph_ExpressionAction id="FLX-1054" expression="this.setLogicalTypeToAnd()" ownerContext="controlGraph2" userID="FLX" flexoID="1054" />
+    </CreationScheme>
+    <CreationScheme id="FLX-919" label="createLinke" name="createLinke" width="800" height="600" userID="FLX" flexoID="919">
+      <BehaviourControlGraph_Sequence id="FLX-926" userID="FLX" flexoID="926">
+        <ControlGraph2_Sequence id="FLX-938" ownerContext="controlGraph2" userID="FLX" flexoID="938">
+          <ControlGraph2_Sequence id="FLX-937" ownerContext="controlGraph2" userID="FLX" flexoID="937">
+            <ControlGraph2_Sequence id="FLX-956" ownerContext="controlGraph2" userID="FLX" flexoID="956">
+              <ControlGraph2_ExpressionAction id="FLX-1290" expression="this.setLogicalTypeToAnd()" ownerContext="controlGraph2" userID="FLX" flexoID="1290" />
+              <ControlGraph1_AddToListAction id="FLX-930" list="parameters.childrenGoal.parentRefinement" ownerContext="controlGraph1" userID="FLX" flexoID="930">
+                <AssignableAction_ExpressionAction id="FLX-929" expression="this" userID="FLX" flexoID="929" />
+              </ControlGraph1_AddToListAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AddToListAction id="FLX-928" list="parameters.parentGoal.childrenRefinement" ownerContext="controlGraph1" userID="FLX" flexoID="928">
+              <AssignableAction_ExpressionAction id="FLX-927" expression="this" userID="FLX" flexoID="927" />
+            </ControlGraph1_AddToListAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AddToListAction id="FLX-925" list="childGoals" ownerContext="controlGraph1" userID="FLX" flexoID="925">
+            <AssignableAction_ExpressionAction id="FLX-924" expression="parameters.childrenGoal" userID="FLX" flexoID="924" />
+          </ControlGraph1_AddToListAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AddToListAction id="FLX-923" list="parentGoal" ownerContext="controlGraph1" userID="FLX" flexoID="923">
+          <AssignableAction_ExpressionAction id="FLX-922" expression="parameters.parentGoal" userID="FLX" flexoID="922" />
+        </ControlGraph1_AddToListAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-939" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="parentGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" description="" userID="FLX" flexoID="939" />
+      <GenericBehaviourParameter id="FLX-940" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="childrenGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" description="" userID="FLX" flexoID="940" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-932" label="delete" name="delete" width="800" height="600" userID="FLX" flexoID="932">
+      <BehaviourControlGraph_Sequence id="FLX-941" userID="FLX" flexoID="941">
+        <ControlGraph2_ExpressionAction id="FLX-935" expression="this.removeAllLinksToChildGoals()" ownerContext="controlGraph2" userID="FLX" flexoID="935" />
+        <ControlGraph1_ExpressionAction id="FLX-934" expression="this.removeAllLinksToParentGoal()" ownerContext="controlGraph1" userID="FLX" flexoID="934" />
+      </BehaviourControlGraph_Sequence>
+    </DeletionScheme>
+    <ActionScheme id="FLX-958" label="setLogicalTypeToAnd" name="setLogicalTypeToAnd" width="800" height="600" userID="FLX" flexoID="958">
+      <BehaviourControlGraph_Sequence id="FLX-978" userID="FLX" flexoID="978">
+        <ControlGraph2_Sequence id="STE-3147" ownerContext="controlGraph2" userID="STE" flexoID="3147">
+          <ControlGraph2_Sequence id="STE-3148" ownerContext="controlGraph2" userID="STE" flexoID="3148">
+            <ControlGraph2_AssignationAction id="STE-3112" assign="isData" ownerContext="controlGraph2" userID="STE" flexoID="3112">
+              <AssignableAction_ExpressionAction id="STE-3111" expression="false" userID="STE" flexoID="3111" />
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="STE-3110" assign="isMilestone" ownerContext="controlGraph1" userID="STE" flexoID="3110">
+              <AssignableAction_ExpressionAction id="STE-3109" expression="false" userID="STE" flexoID="3109" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-963" assign="isAnd" ownerContext="controlGraph1" userID="FLX" flexoID="963">
+            <AssignableAction_ExpressionAction id="FLX-962" expression="true" userID="FLX" flexoID="962" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-961" assign="isOr" ownerContext="controlGraph1" userID="FLX" flexoID="961">
+          <AssignableAction_ExpressionAction id="FLX-960" expression="false" userID="FLX" flexoID="960" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+    <ActionScheme id="FLX-964" label="setLogicalTypeToOr" name="setLogicalTypeToOr" width="800" height="600" userID="FLX" flexoID="964">
+      <BehaviourControlGraph_Sequence id="FLX-970" userID="FLX" flexoID="970">
+        <ControlGraph2_Sequence id="STE-3149" ownerContext="controlGraph2" userID="STE" flexoID="3149">
+          <ControlGraph2_Sequence id="STE-3150" ownerContext="controlGraph2" userID="STE" flexoID="3150">
+            <ControlGraph2_AssignationAction id="STE-3115" assign="isData" ownerContext="controlGraph2" userID="STE" flexoID="3115">
+              <AssignableAction_ExpressionAction id="STE-3116" expression="false" userID="STE" flexoID="3116" />
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="STE-3113" assign="isMilestone" ownerContext="controlGraph1" userID="STE" flexoID="3113">
+              <AssignableAction_ExpressionAction id="STE-3114" expression="false" userID="STE" flexoID="3114" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-969" assign="isOr" ownerContext="controlGraph1" userID="FLX" flexoID="969">
+            <AssignableAction_ExpressionAction id="FLX-968" expression="true" userID="FLX" flexoID="968" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-967" assign="isAnd" ownerContext="controlGraph1" userID="FLX" flexoID="967">
+          <AssignableAction_ExpressionAction id="FLX-966" expression="false" userID="FLX" flexoID="966" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+    <ActionScheme id="FLX-972" label="setLogicalTypeToNone" name="setLogicalTypeToNone" width="800" height="600" userID="FLX" flexoID="972">
+      <BehaviourControlGraph_Sequence id="FLX-979" userID="FLX" flexoID="979">
+        <ControlGraph2_Sequence id="STE-3122" ownerContext="controlGraph2" userID="STE" flexoID="3122">
+          <ControlGraph2_Sequence id="STE-3121" ownerContext="controlGraph2" userID="STE" flexoID="3121">
+            <ControlGraph2_AssignationAction id="STE-3119" assign="isMilestone" ownerContext="controlGraph2" userID="STE" flexoID="3119">
+              <AssignableAction_ExpressionAction id="STE-3120" expression="false" userID="STE" flexoID="3120" />
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="STE-3117" assign="isData" ownerContext="controlGraph1" userID="STE" flexoID="3117">
+              <AssignableAction_ExpressionAction id="STE-3118" expression="false" userID="STE" flexoID="3118" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-977" assign="isOr" ownerContext="controlGraph1" userID="FLX" flexoID="977">
+            <AssignableAction_ExpressionAction id="FLX-976" expression="false" userID="FLX" flexoID="976" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-975" assign="isAnd" ownerContext="controlGraph1" userID="FLX" flexoID="975">
+          <AssignableAction_ExpressionAction id="FLX-974" expression="false" userID="FLX" flexoID="974" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+    <ActionScheme id="FLX-3123" label="setLogicalTypeToMilestone" name="setLogicalTypeToMilestone" width="800" height="600" userID="FLX" flexoID="3123">
+      <BehaviourControlGraph_Sequence id="FLX-3134" userID="FLX" flexoID="3134">
+        <ControlGraph2_Sequence id="STE-3131" ownerContext="controlGraph2" userID="STE" flexoID="3131">
+          <ControlGraph2_Sequence id="STE-3128" ownerContext="controlGraph2" userID="STE" flexoID="3128">
+            <ControlGraph2_AssignationAction id="STE-3125" assign="isMilestone" ownerContext="controlGraph2" userID="STE" flexoID="3125">
+              <AssignableAction_ExpressionAction id="STE-3124" expression="true" userID="STE" flexoID="3124" />
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="STE-3127" assign="isData" ownerContext="controlGraph1" userID="STE" flexoID="3127">
+              <AssignableAction_ExpressionAction id="STE-3126" expression="false" userID="STE" flexoID="3126" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-3130" assign="isOr" ownerContext="controlGraph1" userID="FLX" flexoID="3130">
+            <AssignableAction_ExpressionAction id="FLX-3129" expression="false" userID="FLX" flexoID="3129" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-3133" assign="isAnd" ownerContext="controlGraph1" userID="FLX" flexoID="3133">
+          <AssignableAction_ExpressionAction id="FLX-3132" expression="false" userID="FLX" flexoID="3132" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+    <ActionScheme id="FLX-3135" label="setLogicalTypeToData" name="setLogicalTypeToData" width="800" height="600" userID="FLX" flexoID="3135">
+      <BehaviourControlGraph_Sequence id="FLX-3146" userID="FLX" flexoID="3146">
+        <ControlGraph2_Sequence id="STE-3143" ownerContext="controlGraph2" userID="STE" flexoID="3143">
+          <ControlGraph2_Sequence id="STE-3140" ownerContext="controlGraph2" userID="STE" flexoID="3140">
+            <ControlGraph2_AssignationAction id="STE-3137" assign="isMilestone" ownerContext="controlGraph2" userID="STE" flexoID="3137">
+              <AssignableAction_ExpressionAction id="STE-3136" expression="false" userID="STE" flexoID="3136" />
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="STE-3139" assign="isData" ownerContext="controlGraph1" userID="STE" flexoID="3139">
+              <AssignableAction_ExpressionAction id="STE-3138" expression="true" userID="STE" flexoID="3138" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-3142" assign="isOr" ownerContext="controlGraph1" userID="FLX" flexoID="3142">
+            <AssignableAction_ExpressionAction id="FLX-3141" expression="false" userID="FLX" flexoID="3141" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-3145" assign="isAnd" ownerContext="controlGraph1" userID="FLX" flexoID="3145">
+          <AssignableAction_ExpressionAction id="FLX-3144" expression="false" userID="FLX" flexoID="3144" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+    </ActionScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-110" isAbstract="true" name="Goal" description="An abstract Goal.&#xA;Might be a functional or non-functional goal.&#xA;A Goal might be achived by one of its defined refinments&#xA;" userID="FLX" flexoID="110">
+    <Inspector id="FLX-107" renderer="((&quot;Goal{&quot; + name) + &quot;}&quot;)" inspectorTitle="AbstractKaosElement" userID="FLX" flexoID="107">
+      <InspectorEntry id="SYL-2334" widget="TEXT_FIELD" data="name" name="goalName" label="goal_name" type="java.lang.String" userID="SYL" flexoID="2334" />
+      <InspectorEntry id="SYL-2335" widget="TEXT_AREA" data="description" name="description" label="description" type="java.lang.String" userID="SYL" flexoID="2335" />
+      <InspectorEntry id="SYL-2790" readOnly="true" widget="TEXT_FIELD" data="parentGoal.name" name="parent" label="parent" type="java.lang.String" userID="SYL" flexoID="2790" />
+    </Inspector>
+    <PrimitiveRole id="FLX-130" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="name" userID="FLX" flexoID="130" />
+    <PrimitiveRole id="FLX-125" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="description" description="Formal description for the goal" userID="FLX" flexoID="125" />
+    <FlexoConceptInstanceRole id="FLX-365" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" cloningStrategy="Reference" cardinality="ZeroMany" name="parentRefinement" userID="FLX" flexoID="365" />
+    <FlexoConceptInstanceRole id="FLX-501" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" cloningStrategy="Reference" cardinality="ZeroMany" name="childrenRefinement" userID="FLX" flexoID="501" />
+    <FlexoConceptInstanceRole id="SYL-2637" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup" cloningStrategy="Reference" cardinality="ZeroOne" name="goalGroup" userID="SYL" flexoID="2637" />
+    <GetSetProperty id="SYL-2778" name="parentGoal" description="Return first found parent goal" userID="SYL" flexoID="2778">
+      <SetControlGraph_EmptyControlGraph id="SYL-2779" ownerContext="setControlGraph" userID="SYL" flexoID="2779" />
+      <GetControlGraph_Sequence id="SYL-2791" ownerContext="getControlGraph" userID="SYL" flexoID="2791">
+        <ControlGraph2_ReturnStatement id="SYL-2789" ownerContext="controlGraph2" userID="SYL" flexoID="2789">
+          <AssignableAction_ExpressionAction id="SYL-2788" expression="null" userID="SYL" flexoID="2788" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_IterationAction id="SYL-2781" iteratorName="refinement" ownerContext="controlGraph1" userID="SYL" flexoID="2781">
+          <Iteration_ExpressionAction id="SYL-2782" expression="parentRefinement" ownerContext="iterationControlGraph" userID="SYL" flexoID="2782" />
+          <ControlGraph_IterationAction id="SYL-2784" iteratorName="parentGoal" ownerContext="controlGraph" userID="SYL" flexoID="2784">
+            <Iteration_ExpressionAction id="SYL-2785" expression="refinement.parentGoal" ownerContext="iterationControlGraph" userID="SYL" flexoID="2785" />
+            <ControlGraph_ReturnStatement id="SYL-2787" ownerContext="controlGraph" userID="SYL" flexoID="2787">
+              <AssignableAction_ExpressionAction id="SYL-2786" expression="parentGoal" userID="SYL" flexoID="2786" />
+            </ControlGraph_ReturnStatement>
+          </ControlGraph_IterationAction>
+        </ControlGraph1_IterationAction>
+      </GetControlGraph_Sequence>
+    </GetSetProperty>
+    <GetSetProperty id="SYL-2977" name="refines" description="Return first found parent goal" userID="SYL" flexoID="2977">
+      <SetControlGraph_EmptyControlGraph id="SYL-2978" ownerContext="setControlGraph" userID="SYL" flexoID="2978" />
+      <GetControlGraph_Sequence id="SYL-2987" ownerContext="getControlGraph" userID="SYL" flexoID="2987">
+        <ControlGraph2_ReturnStatement id="SYL-2980" ownerContext="controlGraph2" userID="SYL" flexoID="2980">
+          <AssignableAction_ExpressionAction id="SYL-2979" expression="null" userID="SYL" flexoID="2979" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_IterationAction id="SYL-2986" iteratorName="refinement" ownerContext="controlGraph1" userID="SYL" flexoID="2986">
+          <Iteration_ExpressionAction id="SYL-2981" expression="parentRefinement" ownerContext="iterationControlGraph" userID="SYL" flexoID="2981" />
+          <ControlGraph_ReturnStatement id="SYL-2992" ownerContext="controlGraph" userID="SYL" flexoID="2992">
+            <AssignableAction_ExpressionAction id="SYL-2991" expression="refinement" userID="SYL" flexoID="2991" />
+          </ControlGraph_ReturnStatement>
+        </ControlGraph1_IterationAction>
+      </GetControlGraph_Sequence>
+    </GetSetProperty>
+    <DeletionScheme id="FLX-764" visibility="Public" label="delete" name="delete" width="800" height="600" userID="FLX" flexoID="764">
+      <BehaviourControlGraph_Sequence id="SYL-2044" userID="SYL" flexoID="2044">
+        <ControlGraph2_Sequence id="SYL-2085" ownerContext="controlGraph2" userID="SYL" flexoID="2085">
+          <ControlGraph2_Sequence id="SYL-2087" ownerContext="controlGraph2" userID="SYL" flexoID="2087">
+            <ControlGraph2_Sequence id="SYL-2045" ownerContext="controlGraph2" userID="SYL" flexoID="2045">
+              <ControlGraph2_Sequence id="SYL-1909" ownerContext="controlGraph2" userID="SYL" flexoID="1909">
+                <ControlGraph2_Sequence id="SYL-1955" ownerContext="controlGraph2" userID="SYL" flexoID="1955">
+                  <ControlGraph2_Sequence id="SYL-2001" ownerContext="controlGraph2" userID="SYL" flexoID="2001">
+                    <ControlGraph2_Sequence id="SYL-1956" ownerContext="controlGraph2" userID="SYL" flexoID="1956">
+                      <ControlGraph2_NotifyPropertyChangedAction id="SYL-1953" propertyName="goals" object="containerModel" ownerContext="controlGraph2" userID="SYL" flexoID="1953" />
+                      <ControlGraph1_FireEventAction id="SYL-1951" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedGoal.create(aGoal)" receiver="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="1951">
+                        <AddFlexoConceptInstanceParameter id="SYL-1952" paramName="aGoal" value="this" userID="SYL" flexoID="1952" />
+                      </ControlGraph1_FireEventAction>
+                    </ControlGraph2_Sequence>
+                    <ControlGraph1_LogAction id="SYL-1999" logLevel="INFO" logString="(&quot;Ca y est goal supprime, containerModel=&quot; + containerModel)" ownerContext="controlGraph1" userID="SYL" flexoID="1999" />
+                  </ControlGraph2_Sequence>
+                  <ControlGraph1_DeleteAction id="SYL-1908" object="this" ownerContext="controlGraph1" userID="SYL" flexoID="1908" />
+                </ControlGraph2_Sequence>
+                <ControlGraph1_IterationAction id="FLX-778" iteratorName="item" ownerContext="controlGraph1" userID="FLX" flexoID="778">
+                  <Iteration_ExpressionAction id="FLX-780" expression="childrenRefinement" ownerContext="iterationControlGraph" userID="FLX" flexoID="780" />
+                  <ControlGraph_RemoveFromListAction id="FLX-789" list="item.parentGoal" value="this" ownerContext="controlGraph" userID="FLX" flexoID="789" />
+                </ControlGraph1_IterationAction>
+              </ControlGraph2_Sequence>
+              <ControlGraph1_IterationAction id="FLX-773" iteratorName="item" ownerContext="controlGraph1" userID="FLX" flexoID="773">
+                <Iteration_ExpressionAction id="FLX-775" expression="parentRefinement" ownerContext="iterationControlGraph" userID="FLX" flexoID="775" />
+                <ControlGraph_RemoveFromListAction id="FLX-785" list="item.childGoals" value="this" ownerContext="controlGraph" userID="FLX" flexoID="785" />
+              </ControlGraph1_IterationAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_LogAction id="SYL-2086" logLevel="INFO" logString="(&quot;On va supprimer le goal, containerModel=&quot; + containerModel)" ownerContext="controlGraph1" userID="SYL" flexoID="2086" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_DeclarationAction id="SYL-1950" variable="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="1950">
+            <AssignableAction_ExpressionAction id="SYL-1949" expression="container" userID="SYL" flexoID="1949" />
+          </ControlGraph1_DeclarationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="SYL-2043" logLevel="INFO" logString="(&quot;On arrive la avec &quot; + container)" ownerContext="controlGraph1" userID="SYL" flexoID="2043" />
+      </BehaviourControlGraph_Sequence>
+    </DeletionScheme>
+    <ActionScheme id="FLX-847" label="createGoal" name="createGoal" width="800" height="600" userID="FLX" flexoID="847">
+      <BehaviourControlGraph_Sequence id="FLX-853" userID="FLX" flexoID="853">
+        <ControlGraph2_AssignationAction id="FLX-852" assign="description" ownerContext="controlGraph2" userID="FLX" flexoID="852">
+          <AssignableAction_ExpressionAction id="FLX-851" expression="parameters.description" userID="FLX" flexoID="851" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="FLX-850" assign="name" ownerContext="controlGraph1" userID="FLX" flexoID="850">
+          <AssignableAction_ExpressionAction id="FLX-849" expression="parameters.name" userID="FLX" flexoID="849" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-854" isRequired="true" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="854" />
+      <GenericBehaviourParameter id="FLX-855" widget="TEXT_FIELD" name="description" type="java.lang.String" userID="FLX" flexoID="855" />
+    </ActionScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-334" bigIconResource="../../Icons/NFGoal.png" smallIconResource="../../Icons/NFGoal-16x16.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" name="NonFunctionalGoal" description="A non functional goal.&#xA;This concept implements here many notions of the model.&#xA;When no contributions are defined, this is a normal goal, to be refined.&#xA;When at least one contribution is defined, this is an Elementary NonFunctionalGoal&#xA;&#xA;" userID="FLX" flexoID="334">
+    <Inspector id="FLX-331" renderer="name" inspectorTitle="Non Functional Goal" userID="FLX" flexoID="331">
+      <InspectorEntry id="SYL-2337" widget="TEXT_FIELD" data="nonFunctionalGoalType" name="type" label="type" type="java.lang.String" userID="SYL" flexoID="2337" />
+      <InspectorEntry id="SYL-2338" widget="TEXT_FIELD" data="topic" name="topic" label="topic" type="java.lang.String" userID="SYL" flexoID="2338" />
+    </Inspector>
+    <PrimitiveRole id="FLX-366" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="nonFunctionalGoalType" description="Type of non functional goal" userID="FLX" flexoID="366" />
+    <PrimitiveRole id="FLX-367" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="topic" userID="FLX" flexoID="367" />
+    <FlexoConceptInstanceRole id="FLX-368" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution" cloningStrategy="Reference" cardinality="OneMany" name="contributions" description="Non functional goal" userID="FLX" flexoID="368" />
+    <CreationScheme id="FLX-395" label="create" name="create" width="800" height="600" userID="FLX" flexoID="395">
+      <BehaviourControlGraph_Sequence id="SYL-1384" userID="SYL" flexoID="1384">
+        <ControlGraph2_Sequence id="SYL-1379" ownerContext="controlGraph2" userID="SYL" flexoID="1379">
+          <ControlGraph2_Sequence id="SYL-1528" ownerContext="controlGraph2" userID="SYL" flexoID="1528">
+            <ControlGraph2_Sequence id="SYL-1707" ownerContext="controlGraph2" userID="SYL" flexoID="1707">
+              <ControlGraph2_NotifyPropertyChangedAction id="SYL-1705" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1705" />
+              <ControlGraph1_FireEventAction id="SYL-1515" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="1515">
+                <AddFlexoConceptInstanceParameter id="SYL-1516" paramName="aGoal" value="this" userID="SYL" flexoID="1516" />
+              </ControlGraph1_FireEventAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AssignationAction id="FLX-403" assign="nonFunctionalGoalType" ownerContext="controlGraph1" userID="FLX" flexoID="403">
+              <AssignableAction_ExpressionAction id="FLX-402" expression="parameters.type" userID="FLX" flexoID="402" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="SYL-1378" logLevel="INFO" logString="(&quot;Ici avec &quot; + parameters.name)" ownerContext="controlGraph1" userID="SYL" flexoID="1378" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_ExpressionAction id="FLX-1380" expression="this.createGoal(parameters.name,parameters.description)" ownerContext="controlGraph1" description="&#xA;" userID="FLX" flexoID="1380" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-457" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="457" />
+      <GenericBehaviourParameter id="FLX-458" widget="TEXT_FIELD" name="type" type="java.lang.String" userID="FLX" flexoID="458" />
+      <GenericBehaviourParameter id="FLX-459" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="459" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-349" bigIconResource="../../Icons/Agent.png" smallIconResource="../../Icons/Agent-16x16.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" name="EnvironmentalAgent" userID="FLX" flexoID="349">
+    <Inspector id="FLX-350" renderer="name" inspectorTitle="Environmental Agent" userID="FLX" flexoID="350" />
+    <CreationScheme id="FLX-380" label="create_environmental_agent" name="createEnvironmentalAgent" width="800" height="600" userID="FLX" flexoID="380">
+      <BehaviourControlGraph_Sequence id="SYL-1750" ownerContext="controlGraph2" userID="SYL" flexoID="1750">
+        <ControlGraph2_NotifyPropertyChangedAction id="SYL-1748" propertyName="agents" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1748" />
+        <ControlGraph1_ExpressionAction id="FLX-1016" expression="this.createAgent(parameters.name,parameters.description)" ownerContext="controlGraph1" description="" userID="FLX" flexoID="1016" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-460" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="460" />
+      <GenericBehaviourParameter id="FLX-461" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="461" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-356" bigIconResource="../../Icons/SoftAgent.png" smallIconResource="../../Icons/SoftAgent-16x16.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" name="SoftwareAgent" userID="FLX" flexoID="356">
+    <Inspector id="FLX-355" renderer="name" inspectorTitle="Software Agent" userID="FLX" flexoID="355" />
+    <CreationScheme id="FLX-415" label="create_software_agent" name="createSoftwareAgent" width="800" height="600" userID="FLX" flexoID="415">
+      <BehaviourControlGraph_Sequence id="SYL-1751" ownerContext="controlGraph2" userID="SYL" flexoID="1751">
+        <ControlGraph2_NotifyPropertyChangedAction id="SYL-1749" propertyName="agents" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1749" />
+        <ControlGraph1_ExpressionAction id="FLX-1023" expression="this.createAgent(parameters.name,parameters.description)" ownerContext="controlGraph1" userID="FLX" flexoID="1023" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-462" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="462" />
+      <GenericBehaviourParameter id="FLX-463" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="463" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="FLX-369" name="Contribution" userID="FLX" flexoID="369">
+    <Inspector id="FLX-371" inspectorTitle="Contribution" userID="FLX" flexoID="371" />
+    <FlexoConceptInstanceRole id="FLX-1294" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal" cloningStrategy="Reference" cardinality="ZeroOne" name="contributionGoal" userID="FLX" flexoID="1294" />
+    <FlexoConceptInstanceRole id="FLX-1293" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NonFunctionalGoal" cloningStrategy="Reference" cardinality="ZeroOne" name="nonFunctionalGoal" userID="FLX" flexoID="1293" />
+    <PrimitiveRole id="SYL-2170" primitiveType="Boolean" cloningStrategy="Clone" cardinality="ZeroOne" name="isPositive" userID="SYL" flexoID="2170" />
+    <PrimitiveRole id="SYL-2289" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="description" userID="SYL" flexoID="2289" />
+    <CreationScheme id="FLX-1305" label="create" name="create" width="800" height="600" userID="FLX" flexoID="1305">
+      <BehaviourControlGraph_Sequence id="FLX-1317" userID="FLX" flexoID="1317">
+        <ControlGraph2_Sequence id="FLX-1316" ownerContext="controlGraph2" userID="FLX" flexoID="1316">
+          <ControlGraph2_AssignationAction id="FLX-1312" assign="isPositive" ownerContext="controlGraph2" userID="FLX" flexoID="1312">
+            <AssignableAction_ExpressionAction id="FLX-1311" expression="parameters.isPositive" userID="FLX" flexoID="1311" />
+          </ControlGraph2_AssignationAction>
+          <ControlGraph1_AssignationAction id="FLX-1310" assign="nonFunctionalGoal" ownerContext="controlGraph1" userID="FLX" flexoID="1310">
+            <AssignableAction_ExpressionAction id="FLX-1309" expression="parameters.nonFunctionalGoal" userID="FLX" flexoID="1309" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-1308" assign="contributionGoal" ownerContext="controlGraph1" userID="FLX" flexoID="1308">
+          <AssignableAction_ExpressionAction id="FLX-1307" expression="parameters.contributionGoal" userID="FLX" flexoID="1307" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-1318" isRequired="true" widget="CUSTOM_WIDGET" name="contributionGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal&gt;" userID="FLX" flexoID="1318" />
+      <GenericBehaviourParameter id="FLX-1319" isRequired="true" widget="CUSTOM_WIDGET" name="nonFunctionalGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NonFunctionalGoal&gt;" userID="FLX" flexoID="1319" />
+      <GenericBehaviourParameter id="FLX-1320" isRequired="true" widget="CHECKBOX" name="isPositive" type="java.lang.Boolean" userID="FLX" flexoID="1320" />
+    </CreationScheme>
+    <DeletionScheme id="SYL-2475" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="2475">
+      <BehaviourControlGraph_EmptyControlGraph id="SYL-2476" userID="SYL" flexoID="2476" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <FlexoEvent id="SYL-1478" name="NewGoal" userID="SYL" flexoID="1478">
+    <Inspector id="SYL-1479" inspectorTitle="NewGoal" userID="SYL" flexoID="1479" />
+    <FlexoConceptInstanceRole id="FLX-1485" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroOne" name="goal" userID="FLX" flexoID="1485" />
+    <DeletionScheme id="SYL-1484" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="1484">
+      <BehaviourControlGraph_EmptyControlGraph id="SYL-1497" userID="SYL" flexoID="1497" />
+    </DeletionScheme>
+    <CreationScheme id="FLX-1486" label="create" name="create" width="800" height="600" userID="FLX" flexoID="1486">
+      <BehaviourControlGraph_Sequence id="FLX-1494" userID="FLX" flexoID="1494">
+        <ControlGraph2_Sequence id="FLX-1491" ownerContext="controlGraph2" userID="FLX" flexoID="1491">
+          <ControlGraph2_Sequence id="FLX-1489" ownerContext="controlGraph2" userID="FLX" flexoID="1489">
+            <ControlGraph2_LogAction id="FLX-1487" logLevel="INFO" logString="(&quot;new goal &quot; + goal)" ownerContext="controlGraph2" userID="FLX" flexoID="1487" />
+            <ControlGraph1_LogAction id="FLX-1488" logLevel="INFO" logString="(&quot;NewGoal name=&quot; + goal.name)" ownerContext="controlGraph1" userID="FLX" flexoID="1488" />
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="FLX-1490" logLevel="INFO" logString="(&quot;Created event &quot; + this)" ownerContext="controlGraph1" userID="FLX" flexoID="1490" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-1493" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="1493">
+          <AssignableAction_ExpressionAction id="FLX-1492" expression="parameters.aGoal" userID="FLX" flexoID="1492" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-1495" isRequired="true" widget="CUSTOM_WIDGET" name="aGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="1495" />
+    </CreationScheme>
+  </FlexoEvent>
+  <FlexoEvent id="SYL-1498" name="DeletedGoal" userID="SYL" flexoID="1498">
+    <Inspector id="SYL-1499" inspectorTitle="DeletedGoal" userID="SYL" flexoID="1499" />
+    <FlexoConceptInstanceRole id="FLX-1507" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroOne" name="goal" userID="FLX" flexoID="1507" />
+    <DeletionScheme id="SYL-1502" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="1502">
+      <BehaviourControlGraph_EmptyControlGraph id="SYL-1503" userID="SYL" flexoID="1503" />
+    </DeletionScheme>
+    <CreationScheme id="FLX-1508" label="create" name="create" width="800" height="600" userID="FLX" flexoID="1508">
+      <BehaviourControlGraph_Sequence id="SYL-2129" userID="SYL" flexoID="2129">
+        <ControlGraph2_Sequence id="SYL-2130" ownerContext="controlGraph2" userID="SYL" flexoID="2130">
+          <ControlGraph2_LogAction id="FLX-1509" logLevel="INFO" logString="(&quot;Created event &quot; + this)" ownerContext="controlGraph2" userID="FLX" flexoID="1509" />
+          <ControlGraph1_AssignationAction id="FLX-1511" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="1511">
+            <AssignableAction_ExpressionAction id="FLX-1510" expression="parameters.aGoal" userID="FLX" flexoID="1510" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="SYL-2128" logLevel="INFO" logString="(&quot;Create DeletedGoal with &quot; + parameters.aGoal)" ownerContext="controlGraph1" userID="SYL" flexoID="2128" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-1513" isRequired="true" widget="CUSTOM_WIDGET" name="aGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="FLX" flexoID="1513" />
+    </CreationScheme>
+  </FlexoEvent>
+  <FlexoConcept id="SYL-1564" name="AgentAssignment" userID="SYL" flexoID="1564">
+    <Inspector id="SYL-1563" inspectorTitle="AgentAssignment" userID="SYL" flexoID="1563">
+      <InspectorEntry id="SYL-1624" widget="CUSTOM_WIDGET" data="agent" name="agent" label="agent" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent&gt;" userID="SYL" flexoID="1624" />
+      <InspectorEntry id="SYL-1625" widget="CUSTOM_WIDGET" data="goal" name="goal" label="goal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="SYL" flexoID="1625" />
+    </Inspector>
+    <FlexoConceptInstanceRole id="SYL-1577" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" cloningStrategy="Reference" cardinality="ZeroOne" name="agent" userID="SYL" flexoID="1577" />
+    <FlexoConceptInstanceRole id="SYL-1583" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroOne" name="goal" userID="SYL" flexoID="1583" />
+    <CreationScheme id="SYL-1568" label="create" name="create" width="800" height="600" userID="SYL" flexoID="1568">
+      <BehaviourControlGraph_Sequence id="SYL-1584" userID="SYL" flexoID="1584">
+        <ControlGraph2_AssignationAction id="SYL-1575" assign="goal" ownerContext="controlGraph2" userID="SYL" flexoID="1575">
+          <AssignableAction_ExpressionAction id="SYL-1580" expression="parameters.aGoal" userID="SYL" flexoID="1580" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="SYL-1574" assign="agent" ownerContext="controlGraph1" userID="SYL" flexoID="1574">
+          <AssignableAction_ExpressionAction id="SYL-1576" expression="parameters.anAgent" userID="SYL" flexoID="1576" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="SYL-1578" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="anAgent" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent&gt;" userID="SYL" flexoID="1578" />
+      <GenericBehaviourParameter id="SYL-1579" container="container" isRequired="true" widget="CUSTOM_WIDGET" name="aGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" userID="SYL" flexoID="1579" />
+    </CreationScheme>
+    <DeletionScheme id="SYL-1569" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="1569">
+      <BehaviourControlGraph_Sequence id="SYL-1585" userID="SYL" flexoID="1585">
+        <ControlGraph2_AssignationAction id="SYL-1582" assign="goal" ownerContext="controlGraph2" userID="SYL" flexoID="1582">
+          <AssignableAction_ExpressionAction id="SYL-1586" expression="null" userID="SYL" flexoID="1586" />
+        </ControlGraph2_AssignationAction>
+        <ControlGraph1_AssignationAction id="SYL-1581" assign="agent" ownerContext="controlGraph1" userID="SYL" flexoID="1581">
+          <AssignableAction_ExpressionAction id="SYL-1587" expression="null" userID="SYL" flexoID="1587" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+    </DeletionScheme>
+  </FlexoConcept>
+  <FlexoConcept id="SYL-1788" bigIconResource="../../Icons/CGoal.png" smallIconResource="../../Icons/CGoal-16x16.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" name="ContributionGoal" userID="SYL" flexoID="1788">
+    <Inspector id="SYL-1789" renderer="name" inspectorTitle="Contribution Goal" userID="SYL" flexoID="1789">
+      <InspectorEntry id="SYL-2339" widget="TEXT_FIELD" data="contributionGoalType" name="type" label="type" type="java.lang.String" userID="SYL" flexoID="2339" />
+    </Inspector>
+    <PrimitiveRole id="FLX-1800" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="contributionGoalType" description="Type of non functional goal" userID="FLX" flexoID="1800" />
+    <CreationScheme id="FLX-1802" label="create" name="create" width="800" height="600" userID="FLX" flexoID="1802">
+      <BehaviourControlGraph_Sequence id="SYL-1812" userID="SYL" flexoID="1812">
+        <ControlGraph2_Sequence id="SYL-1810" ownerContext="controlGraph2" userID="SYL" flexoID="1810">
+          <ControlGraph2_Sequence id="SYL-1808" ownerContext="controlGraph2" userID="SYL" flexoID="1808">
+            <ControlGraph2_Sequence id="SYL-1805" ownerContext="controlGraph2" userID="SYL" flexoID="1805">
+              <ControlGraph2_NotifyPropertyChangedAction id="SYL-1803" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1803" />
+              <ControlGraph1_FireEventAction id="SYL-1804" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="1804">
+                <AddFlexoConceptInstanceParameter id="SYL-1801" paramName="aGoal" value="this" userID="SYL" flexoID="1801" />
+              </ControlGraph1_FireEventAction>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AssignationAction id="FLX-1807" assign="contributionGoalType" ownerContext="controlGraph1" userID="FLX" flexoID="1807">
+              <AssignableAction_ExpressionAction id="FLX-1806" expression="parameters.type" userID="FLX" flexoID="1806" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_LogAction id="SYL-1809" logLevel="INFO" logString="(&quot;Ici avec &quot; + parameters.name)" ownerContext="controlGraph1" userID="SYL" flexoID="1809" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_ExpressionAction id="FLX-1811" expression="this.createGoal(parameters.name,parameters.description)" ownerContext="controlGraph1" description="&#xA;" userID="FLX" flexoID="1811" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-1813" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="1813" />
+      <GenericBehaviourParameter id="FLX-1814" widget="TEXT_FIELD" name="type" type="java.lang.String" userID="FLX" flexoID="1814" />
+      <GenericBehaviourParameter id="FLX-1815" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="1815" />
+    </CreationScheme>
+  </FlexoConcept>
+  <FlexoConcept id="SYL-2171" name="Impact" userID="SYL" flexoID="2171">
+    <Inspector id="SYL-2172" inspectorTitle="Impact" userID="SYL" flexoID="2172" />
+    <FlexoConceptInstanceRole id="FLX-2178" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal" cloningStrategy="Reference" cardinality="ZeroOne" name="contributionGoal" userID="FLX" flexoID="2178" />
+    <FlexoConceptInstanceRole id="FLX-2179" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal" cloningStrategy="Reference" cardinality="ZeroOne" name="functionalGoal" userID="FLX" flexoID="2179" />
+    <PrimitiveRole id="SYL-2180" primitiveType="Boolean" cloningStrategy="Clone" cardinality="ZeroOne" name="isPositive" userID="SYL" flexoID="2180" />
+    <PrimitiveRole id="SYL-2288" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="description" userID="SYL" flexoID="2288" />
+    <CreationScheme id="FLX-2183" label="create" name="create" width="800" height="600" userID="FLX" flexoID="2183">
+      <BehaviourControlGraph_Sequence id="FLX-2191" userID="FLX" flexoID="2191">
+        <ControlGraph2_Sequence id="FLX-2188" ownerContext="controlGraph2" userID="FLX" flexoID="2188">
+          <ControlGraph2_AssignationAction id="FLX-2185" assign="isPositive" ownerContext="controlGraph2" userID="FLX" flexoID="2185">
+            <AssignableAction_ExpressionAction id="FLX-2184" expression="parameters.isPositive" userID="FLX" flexoID="2184" />
+          </ControlGraph2_AssignationAction>
+          <ControlGraph1_AssignationAction id="FLX-2187" assign="functionalGoal" ownerContext="controlGraph1" userID="FLX" flexoID="2187">
+            <AssignableAction_ExpressionAction id="FLX-2186" expression="parameters.functionalGoal" userID="FLX" flexoID="2186" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-2190" assign="contributionGoal" ownerContext="controlGraph1" userID="FLX" flexoID="2190">
+          <AssignableAction_ExpressionAction id="FLX-2189" expression="parameters.contributionGoal" userID="FLX" flexoID="2189" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2192" isRequired="true" widget="CUSTOM_WIDGET" name="contributionGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal&gt;" userID="FLX" flexoID="2192" />
+      <GenericBehaviourParameter id="FLX-2193" isRequired="true" widget="CUSTOM_WIDGET" name="functionalGoal" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal&gt;" userID="FLX" flexoID="2193" />
+      <GenericBehaviourParameter id="FLX-2194" isRequired="true" widget="CHECKBOX" name="isPositive" type="java.lang.Boolean" userID="FLX" flexoID="2194" />
+    </CreationScheme>
+    <DeletionScheme id="SYL-2473" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="2473">
+      <BehaviourControlGraph_EmptyControlGraph id="SYL-2474" userID="SYL" flexoID="2474" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <FlexoEvent id="SYL-2409" name="DeletedAgent" userID="SYL" flexoID="2409">
+    <Inspector id="SYL-2410" inspectorTitle="DeletedAgent" userID="SYL" flexoID="2410" />
+    <FlexoConceptInstanceRole id="FLX-2416" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" cloningStrategy="Reference" cardinality="ZeroOne" name="agent" userID="FLX" flexoID="2416" />
+    <DeletionScheme id="SYL-2415" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="2415">
+      <BehaviourControlGraph_EmptyControlGraph id="SYL-2426" userID="SYL" flexoID="2426" />
+    </DeletionScheme>
+    <CreationScheme id="FLX-2418" label="create" name="create" width="800" height="600" userID="FLX" flexoID="2418">
+      <BehaviourControlGraph_Sequence id="SYL-2424" userID="SYL" flexoID="2424">
+        <ControlGraph2_Sequence id="SYL-2422" ownerContext="controlGraph2" userID="SYL" flexoID="2422">
+          <ControlGraph2_LogAction id="FLX-2419" logLevel="INFO" logString="(&quot;Created event &quot; + this)" ownerContext="controlGraph2" userID="FLX" flexoID="2419" />
+          <ControlGraph1_AssignationAction id="FLX-2421" assign="agent" ownerContext="controlGraph1" userID="FLX" flexoID="2421">
+            <AssignableAction_ExpressionAction id="FLX-2420" expression="parameters.anAgent" userID="FLX" flexoID="2420" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_LogAction id="SYL-2423" logLevel="INFO" logString="(&quot;Create DeletedAgent with &quot; + parameters.anAgent)" ownerContext="controlGraph1" userID="SYL" flexoID="2423" />
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="FLX-2425" isRequired="true" widget="CUSTOM_WIDGET" name="anAgent" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent&gt;" userID="FLX" flexoID="2425" />
+    </CreationScheme>
+  </FlexoEvent>
+  <FlexoConcept id="SYL-2522" smallIconResource="../../Icons/Group.png" name="GoalGroup" userID="SYL" flexoID="2522">
+    <Inspector id="SYL-2523" renderer="title" inspectorTitle="GoalGroup" userID="SYL" flexoID="2523">
+      <InspectorEntry id="SYL-2532" widget="CHECKBOX_LIST" data="goals" name="goals" label="goals" type="java.util.List&lt;org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;&gt;" list="container.goals" userID="SYL" flexoID="2532" />
+      <InspectorEntry id="SYL-2802" readOnly="true" widget="TEXT_FIELD" data="parentGroup.title" name="parent" label="parent" type="java.lang.String" userID="SYL" flexoID="2802" />
+    </Inspector>
+    <FlexoConceptInstanceRole id="SYL-2529" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" cloningStrategy="Reference" cardinality="ZeroMany" name="goals" userID="SYL" flexoID="2529" />
+    <PrimitiveRole id="SYL-2581" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="title" userID="SYL" flexoID="2581" />
+    <GetSetProperty id="SYL-2792" name="parentGroup" userID="SYL" flexoID="2792">
+      <SetControlGraph_EmptyControlGraph id="SYL-2809" ownerContext="setControlGraph" userID="SYL" flexoID="2809" />
+      <GetControlGraph_Sequence id="SYL-2810" ownerContext="getControlGraph" userID="SYL" flexoID="2810">
+        <ControlGraph2_ReturnStatement id="SYL-2801" ownerContext="controlGraph2" userID="SYL" flexoID="2801">
+          <AssignableAction_ExpressionAction id="SYL-2800" expression="null" userID="SYL" flexoID="2800" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_IterationAction id="SYL-2794" iteratorName="goal" ownerContext="controlGraph1" userID="SYL" flexoID="2794">
+          <Iteration_ExpressionAction id="SYL-2795" expression="goals" ownerContext="iterationControlGraph" userID="SYL" flexoID="2795" />
+          <ControlGraph_ConditionalAction id="SYL-2797" condition="(goal.parentGoal != null)" ownerContext="controlGraph" userID="SYL" flexoID="2797">
+            <ThenControlGraph_ConditionalAction id="SYL-2806" condition="(goal.parentGoal.goalGroup != null)" ownerContext="thenControlGraph" userID="SYL" flexoID="2806">
+              <ThenControlGraph_ReturnStatement id="SYL-2808" ownerContext="thenControlGraph" userID="SYL" flexoID="2808">
+                <AssignableAction_ExpressionAction id="SYL-2807" expression="goal.parentGoal.goalGroup" userID="SYL" flexoID="2807" />
+              </ThenControlGraph_ReturnStatement>
+            </ThenControlGraph_ConditionalAction>
+          </ControlGraph_ConditionalAction>
+        </ControlGraph1_IterationAction>
+      </GetControlGraph_Sequence>
+    </GetSetProperty>
+    <GetSetProperty id="SYL-2869" name="childrenGroups" userID="SYL" flexoID="2869">
+      <SetControlGraph_EmptyControlGraph id="SYL-2873" ownerContext="setControlGraph" userID="SYL" flexoID="2873" />
+      <GetControlGraph_ReturnStatement id="SYL-2925" ownerContext="getControlGraph" userID="SYL" flexoID="2925">
+        <AssignableAction_SelectFlexoConceptInstance id="SYL-2871" container="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup" receiver="container" ownerContext="getControlGraph" userID="SYL" flexoID="2871">
+          <Condition id="SYL-2872" condition="(selected.parentGroup = this)" userID="SYL" flexoID="2872" />
+        </AssignableAction_SelectFlexoConceptInstance>
+      </GetControlGraph_ReturnStatement>
+    </GetSetProperty>
+    <CreationScheme id="SYL-2527" label="create" name="create" width="800" height="600" userID="SYL" flexoID="2527">
+      <BehaviourControlGraph_Sequence id="SYL-2586" userID="SYL" flexoID="2586">
+        <ControlGraph2_Sequence id="SYL-2701" ownerContext="controlGraph2" userID="SYL" flexoID="2701">
+          <ControlGraph2_Sequence id="SYL-2722" ownerContext="controlGraph2" userID="SYL" flexoID="2722">
+            <ControlGraph2_Sequence id="SYL-2702" ownerContext="controlGraph2" userID="SYL" flexoID="2702">
+              <ControlGraph2_NotifyPropertyChangedAction id="SYL-2700" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="2700" />
+              <ControlGraph1_NotifyPropertyChangedAction id="SYL-2699" propertyName="groups" object="container" ownerContext="controlGraph1" userID="SYL" flexoID="2699" />
+            </ControlGraph2_Sequence>
+            <ControlGraph1_FireEventAction id="SYL-2719" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoalGroup.create(aGroup)" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="2719">
+              <AddFlexoConceptInstanceParameter id="SYL-2721" paramName="aGroup" value="this" userID="SYL" flexoID="2721" />
+            </ControlGraph1_FireEventAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="SYL-2585" assign="goals" ownerContext="controlGraph1" userID="SYL" flexoID="2585">
+            <AssignableAction_ExpressionAction id="SYL-2584" expression="parameters.goals" userID="SYL" flexoID="2584" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="SYL-2583" assign="title" ownerContext="controlGraph1" userID="SYL" flexoID="2583">
+          <AssignableAction_ExpressionAction id="SYL-2582" expression="parameters.title" userID="SYL" flexoID="2582" />
+        </ControlGraph1_AssignationAction>
+      </BehaviourControlGraph_Sequence>
+      <GenericBehaviourParameter id="SYL-2587" widget="CUSTOM_WIDGET" name="title" type="java.lang.String" userID="SYL" flexoID="2587" />
+      <GenericBehaviourParameter id="SYL-2588" widget="DROPDOWN" name="goals" type="java.util.List&lt;org.openflexo.foundation.fml.rt.FlexoConceptInstance&gt;" userID="SYL" flexoID="2588" />
+    </CreationScheme>
+    <DeletionScheme id="SYL-2528" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="2528">
+      <BehaviourControlGraph_EmptyControlGraph id="SYL-2531" userID="SYL" flexoID="2531" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <FlexoEvent id="SYL-2709" name="NewGoalGroup" userID="SYL" flexoID="2709">
+    <Inspector id="SYL-2710" inspectorTitle="NewGoalGroup" userID="SYL" flexoID="2710" />
+    <PrimitiveRole id="SYL-2723" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="group" userID="SYL" flexoID="2723" />
+    <CreationScheme id="SYL-2714" label="create" name="create" width="800" height="600" userID="SYL" flexoID="2714">
+      <BehaviourControlGraph_AssignationAction id="SYL-2716" assign="group" userID="SYL" flexoID="2716">
+        <AssignableAction_ExpressionAction id="SYL-2717" expression="parameters.aGroup" userID="SYL" flexoID="2717" />
+      </BehaviourControlGraph_AssignationAction>
+      <GenericBehaviourParameter id="SYL-2724" isRequired="true" widget="CUSTOM_WIDGET" name="aGroup" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup&gt;" userID="SYL" flexoID="2724" />
+    </CreationScheme>
+    <DeletionScheme id="SYL-2715" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="2715">
+      <BehaviourControlGraph_AssignationAction id="SYL-2725" assign="group" userID="SYL" flexoID="2725">
+        <AssignableAction_ExpressionAction id="SYL-2726" expression="null" userID="SYL" flexoID="2726" />
+      </BehaviourControlGraph_AssignationAction>
+    </DeletionScheme>
+  </FlexoEvent>
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="SYL" flexoID="-1" />
+  <Inspector id="FLX-6" renderer="modelName" inspectorTitle="KAOS Model" userID="FLX" flexoID="6">
+    <InspectorEntry id="SYL-2332" widget="TEXT_FIELD" data="modelTitle" name="modelTitle" label="modelTitle" type="java.lang.String" userID="SYL" flexoID="2332" />
+    <InspectorEntry id="SYL-2333" widget="TEXT_AREA" data="modelDescription" name="modelDescription" label="modelDescription" type="java.lang.String" userID="SYL" flexoID="2333" />
+  </Inspector>
+  <PrimitiveRole id="FLX-53" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="modelName" userID="FLX" flexoID="53" />
+  <PrimitiveRole id="FLX-54" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="modelTitle" userID="FLX" flexoID="54" />
+  <PrimitiveRole id="FLX-55" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="modelDescription" userID="FLX" flexoID="55" />
+  <FMLRTVirtualModelInstanceModelSlot id="SYL-1443" virtualModelURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml" cloningStrategy="Reference" cardinality="ZeroOne" name="parentModel" userID="SYL" flexoID="1443" />
+  <GetSetProperty id="SYL-1662" name="goals" userID="SYL" flexoID="1662">
+    <SetControlGraph_EmptyControlGraph id="SYL-1663" ownerContext="setControlGraph" userID="SYL" flexoID="1663" />
+    <GetControlGraph_ReturnStatement id="SYL-1666" ownerContext="getControlGraph" userID="SYL" flexoID="1666">
+      <AssignableAction_SelectFlexoConceptInstance id="SYL-1665" container="this" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" receiver="this" userID="SYL" flexoID="1665" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <GetSetProperty id="SYL-1744" name="agents" userID="SYL" flexoID="1744">
+    <SetControlGraph_EmptyControlGraph id="SYL-1745" ownerContext="setControlGraph" userID="SYL" flexoID="1745" />
+    <GetControlGraph_ReturnStatement id="SYL-1747" ownerContext="getControlGraph" userID="SYL" flexoID="1747">
+      <AssignableAction_SelectFlexoConceptInstance id="SYL-1746" container="this" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent" receiver="this" userID="SYL" flexoID="1746" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <GetSetProperty id="SYL-2642" name="groups" userID="SYL" flexoID="2642">
+    <SetControlGraph_EmptyControlGraph id="SYL-2643" ownerContext="setControlGraph" userID="SYL" flexoID="2643" />
+    <GetControlGraph_ReturnStatement id="SYL-2645" ownerContext="getControlGraph" userID="SYL" flexoID="2645">
+      <AssignableAction_SelectFlexoConceptInstance id="SYL-2644" container="this" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup" receiver="this" userID="SYL" flexoID="2644" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <GetSetProperty id="SYL-2646" name="ungroupedGoals" userID="SYL" flexoID="2646">
+    <SetControlGraph_EmptyControlGraph id="SYL-2647" ownerContext="setControlGraph" userID="SYL" flexoID="2647" />
+    <GetControlGraph_ReturnStatement id="SYL-2649" ownerContext="getControlGraph" userID="SYL" flexoID="2649">
+      <AssignableAction_SelectFlexoConceptInstance id="SYL-2648" container="this" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal" receiver="this" userID="SYL" flexoID="2648">
+        <Condition id="SYL-2650" condition="(selected.goalGroup = null)" userID="SYL" flexoID="2650" />
+      </AssignableAction_SelectFlexoConceptInstance>
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <GetSetProperty id="SYL-2813" name="topLevelGroups" userID="SYL" flexoID="2813">
+    <SetControlGraph_EmptyControlGraph id="SYL-2814" ownerContext="setControlGraph" userID="SYL" flexoID="2814" />
+    <GetControlGraph_ReturnStatement id="SYL-2816" ownerContext="getControlGraph" userID="SYL" flexoID="2816">
+      <AssignableAction_SelectFlexoConceptInstance id="SYL-2815" container="this" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup" receiver="this" userID="SYL" flexoID="2815">
+        <Condition id="SYL-2817" condition="(selected.parentGroup = null)" userID="SYL" flexoID="2817" />
+      </AssignableAction_SelectFlexoConceptInstance>
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <CreationScheme id="FLX-25" label="init" name="init" width="800" height="600" userID="FLX" flexoID="25">
+    <BehaviourControlGraph_Sequence id="FLX-65" userID="FLX" flexoID="65">
+      <ControlGraph2_Sequence id="FLX-66" ownerContext="controlGraph2" userID="FLX" flexoID="66">
+        <ControlGraph2_Sequence id="SYL-1446" ownerContext="controlGraph2" userID="SYL" flexoID="1446">
+          <ControlGraph2_AssignationAction id="SYL-1445" assign="parentModel" ownerContext="controlGraph2" userID="SYL" flexoID="1445">
+            <AssignableAction_ExpressionAction id="SYL-1444" expression="parameters.parentModel" userID="SYL" flexoID="1444" />
+          </ControlGraph2_AssignationAction>
+          <ControlGraph1_AssignationAction id="FLX-61" assign="modelDescription" ownerContext="controlGraph1" userID="FLX" flexoID="61">
+            <AssignableAction_ExpressionAction id="FLX-60" expression="parameters.description" userID="FLX" flexoID="60" />
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-59" assign="modelTitle" ownerContext="controlGraph1" userID="FLX" flexoID="59">
+          <AssignableAction_ExpressionAction id="FLX-58" expression="parameters.title" userID="FLX" flexoID="58" />
+        </ControlGraph1_AssignationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_AssignationAction id="FLX-57" assign="modelName" ownerContext="controlGraph1" userID="FLX" flexoID="57">
+        <AssignableAction_ExpressionAction id="FLX-56" expression="parameters.name" userID="FLX" flexoID="56" />
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-464" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="464" />
+    <GenericBehaviourParameter id="FLX-465" widget="TEXT_FIELD" name="title" type="java.lang.String" userID="FLX" flexoID="465" />
+    <GenericBehaviourParameter id="FLX-466" widget="TEXT_AREA" name="description" type="java.lang.String" userID="FLX" flexoID="466" />
+    <GenericBehaviourParameter id="SYL-1447" widget="CUSTOM_WIDGET" name="parentModel" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml&gt;" userID="SYL" flexoID="1447" />
+  </CreationScheme>
+  <ActionScheme id="FLX-1199" label="addFunctionalGoal" name="addFunctionalGoal" width="800" height="600" userID="FLX" flexoID="1199">
+    <BehaviourControlGraph_AddFlexoConceptInstance id="FLX-1245" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" receiver="rootModel" userID="FLX" flexoID="1245">
+      <AddFlexoConceptInstanceParameter id="FLX-1246" paramName="name" value="parameters.name" userID="FLX" flexoID="1246" />
+      <AddFlexoConceptInstanceParameter id="FLX-1247" paramName="type" value="parameters.type" userID="FLX" flexoID="1247" />
+      <AddFlexoConceptInstanceParameter id="FLX-1248" paramName="description" value="parameters.description" userID="FLX" flexoID="1248" />
+      <AddFlexoConceptInstanceParameter id="SYL-2245" paramName="notify" value="true" userID="SYL" flexoID="2245" />
+    </BehaviourControlGraph_AddFlexoConceptInstance>
+    <GenericBehaviourParameter id="FLX-1206" isRequired="true" widget="TEXT_FIELD" name="name" type="java.lang.String" userID="FLX" flexoID="1206" />
+    <GenericBehaviourParameter id="FLX-1207" widget="TEXT_FIELD" name="type" type="java.lang.String" userID="FLX" flexoID="1207" />
+    <GenericBehaviourParameter id="FLX-1208" widget="TEXT_FIELD" name="description" type="java.lang.String" userID="FLX" flexoID="1208" />
+  </ActionScheme>
+  <ActionScheme id="FLX-1249" label="addRefinement" name="addRefinement" width="800" height="600" userID="FLX" flexoID="1249">
+    <BehaviourControlGraph_AddFlexoConceptInstance id="FLX-1252" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" receiver="rootModel" userID="FLX" flexoID="1252" />
+  </ActionScheme>
+  <ActionScheme id="FLX-1253" label="removeRefinement" name="removeRefinement" width="800" height="600" userID="FLX" flexoID="1253">
+    <BehaviourControlGraph_DeleteFlexoConceptInstance id="FLX-1258" deletionSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.delete()" object="parameters.refinement" userID="FLX" flexoID="1258" />
+    <GenericBehaviourParameter id="FLX-1259" isRequired="true" widget="CUSTOM_WIDGET" name="refinement" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement&gt;" userID="FLX" flexoID="1259" />
+  </ActionScheme>
+  <DeletionScheme id="FLX-1260" label="delete" name="delete" width="800" height="600" userID="FLX" flexoID="1260">
+    <BehaviourControlGraph_EmptyControlGraph id="FLX-1321" ownerContext="controlGraph2" userID="FLX" flexoID="1321" />
+  </DeletionScheme>
+</VirtualModel>

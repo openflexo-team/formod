@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-4" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml" version="0.1" isAbstract="true" name="Methodology" userID="FLX" flexoID="4">
+  <FlexoConcept id="FLX-6" isAbstract="true" name="Transition" userID="FLX" flexoID="6">
+    <Inspector id="FLX-7" inspectorTitle="Transition" userID="FLX" flexoID="7" />
+    <PrimitiveRole id="FLX-12" primitiveType="String" cloningStrategy="Clone" cardinality="One" name="user" userID="FLX" flexoID="12" />
+    <PrimitiveRole id="FLX-13" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="timestamp" description="Date when the transition was initiated by a user" userID="FLX" flexoID="13" />
+    <PrimitiveRole id="FLX-14" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="comments" description="Justification of the transition" userID="FLX" flexoID="14" />
+    <CreationScheme id="FLX-10" name="create" width="800" label="create" height="600" userID="FLX" flexoID="10">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-15" userID="FLX" flexoID="15" />
+    </CreationScheme>
+    <DeletionScheme id="FLX-11" name="delete" width="800" label="delete" height="600" userID="FLX" flexoID="11">
+      <BehaviourControlGraph_EmptyControlGraph id="FLX-16" userID="FLX" flexoID="16" />
+    </DeletionScheme>
+  </FlexoConcept>
+  <Inspector id="FLX-1" inspectorTitle="Methodology" userID="FLX" flexoID="1" />
+  <PrimitiveRole id="FLX-20" primitiveType="String" cloningStrategy="Clone" cardinality="One" name="name" userID="FLX" flexoID="20" />
+  <FlexoConceptInstanceRole id="FLX-24" virtualModelInstance="formoseVMI" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element" cloningStrategy="Reference" cardinality="ZeroOne" name="declaringElement" description="Element in which this methodology has been declared" userID="FLX" flexoID="24" />
+</VirtualModel>

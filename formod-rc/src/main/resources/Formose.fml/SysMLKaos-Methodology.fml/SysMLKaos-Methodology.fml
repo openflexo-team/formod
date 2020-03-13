@@ -1,0 +1,433 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+use org.openflexo.technologyadapter.gina.FIBComponentModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml")
+public class SysMLKaos-Methodology extends Methodology  {
+
+  public SysMLKaos sysMLKaos;
+  @GetSetProperty(value="elementMappings", access=get)  
+  public List<FlexoConceptInstanceType<SysMLKaosElementMapping>> getElementMappings {  
+    return this.SelectFlexoConceptInstance(type=SysMLKaosElementMapping);  
+  }
+
+  @CreationScheme  
+  SysMLKaos-Methodology:create(String sysMLKaosViewName, UndefinedFlexoConceptInstanceType element) {  
+    sysMLKaos = SysMLKaos.init(parameters.sysMLKaosViewName,parameters.sysMLKaosViewName,"");    
+    declaringElement = parameters.element;    
+    log ("Hop on arrive ici avec " + sysMLKaos.toString)    
+    log ("Jusqu'ici tout va bien, rootModel=" + sysMLKaos.rootModel)    
+    SysMLKaosElementMapping.createNewMapping(parameters.element)  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<SysMLKaosElementMapping> getElementMapping(UndefinedFlexoConceptInstanceType element) {  
+    List<FlexoConceptInstanceType<SysMLKaosElementMapping>> list = this.SelectFlexoConceptInstance(type=SysMLKaosElementMapping,where=where=(selected.element = parameters.element));    
+    if (list.size > 0) {    
+      return list.get(0);    
+    }    
+    return null;  
+  }  
+
+  @ActionScheme  
+  FlexoConceptInstanceType<SysMLKaosElementMapping> retrieveDiagramElementMapping(UndefinedFlexoConceptInstanceType element) {  
+    log ("On cherche le mapping pour " + parameters.element)    
+    FlexoConceptInstanceType<SysMLKaosElementMapping> returned = this.getElementMapping(parameters.element);    
+    if (returned = null) {    
+      log "On le trouve pas, on le reconstruit"      
+      returned = SysMLKaosElementMapping.createNewMapping(parameters.element);    
+    }    
+    return returned;  
+  }  
+
+  @EventListener  
+  FlexoConceptInstanceType<SysMLKaosElementMapping> newElementCreated() {  
+    log "New element created"    
+    FlexoConceptInstanceType<SysMLKaosElementMapping> parentElementMapping = this.getElementMapping(event.element.parent);    
+    FlexoConceptInstanceType<SysMLKaosElementMapping> newElementMapping = SysMLKaosElementMapping.createNewMapping(event.element);    
+    newElementMapping.parentDiagramElementMapping = parentElementMapping;    
+    return newElementMapping;  
+  }  
+
+
+  @FlexoConcept  
+  public class SysMLKaosElementMapping {  
+  
+    public Element element;  
+    public DiagramMapping mainFunctionalGoalDiagram;  
+    public Agent agent;  
+    public SysMLKaosElementMapping parentDiagramElementMapping;  
+    public SysMLKaosModel goalModel;  
+    @GetSetProperty(value="goalDiagrams", access=get)    
+    public List<FlexoConceptInstanceType<DiagramMapping>> getGoalDiagrams {    
+      return container.SelectFlexoConceptInstance(type=DiagramMapping);    
+    }  
+    public GINAFIBComponent ui;  
+    @GetSetProperty(value="childrenDiagramElementMapping", access=get)    
+    public List<FlexoConceptInstanceType<SysMLKaosElementMapping>> getChildrenDiagramElementMapping {    
+      return container.SelectFlexoConceptInstance(type=SysMLKaosElementMapping,where=where=(selected.parentDiagramElementMapping = this));    
+    }  
+  
+    @CreationScheme    
+    SysMLKaosElementMapping:createNewMapping(FlexoConceptInstanceType<Element> anElement) {    
+      element = parameters.anElement;      
+      if (parameters.anElement.parent != null) {      
+        parentDiagramElementMapping = container.getElementMapping(parameters.anElement.parent);      
+      }      
+      goalModel = SysMLKaosModel.init((parameters.anElement.identifier + "-GoalModel"),("GoalModel for " + parameters.anElement.identifier),"",parentDiagramElementMapping.goalModel);      
+      mainFunctionalGoalDiagram = DiagramMapping.createMainFunctionalGoalDiagram();      
+      log "On vient de creer un nouveau GoalModellingDiagram"      
+      this.updateMapping()      
+      ui = projectUI.ConfigureGINAFIBComponent();      
+      if (parentDiagramElementMapping != null) {      
+        parentDiagramElementMapping.firePropertyChange childrenDiagramElementMapping      
+      }    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void refineUsingAgentAllocation() {    
+      log "Refining using agent allocation"      
+      for (agent : goalModel.SelectFlexoConceptInstance(type=SoftwareAgent)) {      
+        log ("Tiens on s'occupe de l'agent " + agent)        
+        FlexoConceptInstanceType<SysMLKaosElementMapping> agentMapping = container.SelectUniqueFlexoConceptInstance(type=SysMLKaosElementMapping,where=where=(selected.agent = agent));        
+        if (agentMapping = null) {        
+          agentMapping = this.allocateAgent(agent);        
+        }        
+        log ("Found agentMapping:" + agentMapping)        
+        this.updateTopGoals(agentMapping)        
+        agentMapping.mainFunctionalGoalDiagram.representTopGoalRequirements()      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void updateMapping() {    
+      MatchingSet matchingSet = this.initiateMatching(GoalRequirementMapping);      
+      log "Updating SysMLKaosElementMapping"      
+      for (requirement : element.requirements) {      
+        FML@RT::MatchFlexoConceptInstance as GoalRequirementMapping match=(requirement=requirement) using GoalRequirementMapping:createNewGoal(requirement)      
+      }      
+      matchingSet.finalizeMatching()    
+    }    
+  
+    @EventListener    
+    Void newRequirement() {    
+      log ("Hop je recois NewRequirement " + event.requirement)      
+      log ("container=" + event.requirement.container)      
+      if (event.requirement.container = element) {      
+        log ("**** Tiens un nouveau requirement " + event.requirement)        
+        FlexoConceptInstanceType<GoalRequirementMapping> newGoalRequirementMapping = this.ensureGoalRequirementMappingExists(event.requirement);        
+        log ("OK c'est bon je retourne " + newGoalRequirementMapping)      
+      }    
+    }    
+  
+    @ActionScheme    
+    FlexoConceptInstanceType<GoalRequirementMapping> ensureGoalRequirementMappingExists(UndefinedFlexoConceptInstanceType requirement) {    
+      List<FlexoConceptInstanceType<GoalRequirementMapping>> list = container.SelectFlexoConceptInstance(type=GoalRequirementMapping,where=where=(selected.requirement = parameters.requirement));      
+      if (list.size > 0) {      
+        return list.get(0);      
+      } else {      
+        return GoalRequirementMapping.createNewGoal(parameters.requirement);      
+      }    
+    }    
+  
+    @ActionScheme    
+    private FlexoConceptInstanceType<SysMLKaosElementMapping> allocateAgent(FlexoConceptInstanceType<SoftwareAgent> agent) {    
+      log ("Allocate agent " + parameters.agent)      
+      FlexoConceptInstanceType<Element> newElement = element.createChildrenElement(parameters.agent.name,parameters.agent.description);      
+      log ("Nouvel element: " + newElement)      
+      FlexoConceptInstanceType<SysMLKaosElementMapping> newElementMapping = container.getElementMapping(newElement);      
+      log ("Hop, on a bien le nouveau mapping " + newElementMapping)      
+      newElementMapping.agent = parameters.agent;      
+      newElementMapping.goalModel.parentModel = goalModel;      
+      this.firePropertyChange childrenDiagramElementMapping      
+      return newElementMapping;    
+    }    
+  
+    @ActionScheme    
+    private FlexoConceptInstanceType<GoalRequirementMapping> getGoalRequirementMapping(FlexoConceptInstanceType<Goal> goal) {    
+      List<FlexoConceptInstanceType<GoalRequirementMapping>> list = container.SelectFlexoConceptInstance(type=GoalRequirementMapping,where=where=(selected.goal = parameters.goal));      
+      if (list.size > 0) {      
+        return list.get(0);      
+      } else {      
+        return null;      
+      }    
+    }    
+  
+    @EventListener    
+    FlexoConceptInstanceType<GoalRequirementMapping> newGoalCreated() {    
+      log ("Received new event " + event)      
+      log ("Name equals " + event.goal.name)      
+      List<FlexoConceptInstanceType<GoalRequirementMapping>> matchingMappings = container.SelectFlexoConceptInstance(type=GoalRequirementMapping,where=where=(selected.goal = event.goal));      
+      if (matchingMappings.size = 0) {      
+        log "OK je dois instancier un nouveau mapping"        
+        FlexoConceptInstanceType<Requirement> newRequirement = element.createRequirementNoNotification(event.goal.name,event.goal.description);        
+        return GoalRequirementMapping.create(newRequirement,event.goal);      
+      } else {      
+        log "OK, j'ai deja mon mapping"        
+        return matchingMappings.get(0);      
+      }    
+    }    
+  
+    @ActionScheme    
+    FlexoConceptInstanceType<DiagramMapping> createNewGoalDiagram(String diagramTitle, String diagramDescription) {    
+      FlexoConceptInstanceType<DiagramMapping> newDiagramMapping = DiagramMapping.createGoalDiagram(parameters.diagramTitle,parameters.diagramDescription);      
+      this.firePropertyChange goalDiagrams      
+      return newDiagramMapping;    
+    }    
+  
+    @ActionScheme    
+    private FlexoConceptInstanceType<SysMLKaosElementMapping> updateTopGoals(FlexoConceptInstanceType<SysMLKaosElementMapping> newElementMapping) {    
+      for (assignment : goalModel.SelectFlexoConceptInstance(type=AgentAssignment,where=where=(selected.agent = parameters.newElementMapping.agent))) {      
+        log ("On doit reporter le goal " + assignment.goal)        
+        FlexoConceptInstanceType<GoalRequirementMapping> parentMapping = this.getGoalRequirementMapping(assignment.goal);        
+        FlexoConceptInstanceType<TopGoalRequirementMapping> topGoalRequirement = container.SelectUniqueFlexoConceptInstance(type=TopGoalRequirementMapping,where=where=(selected.parentGoalRequirementMapping = parentMapping));        
+        if (topGoalRequirement = null) {        
+          log ("Missing top goal requirement " + assignment.goal)          
+          FlexoConceptInstanceType<Requirement> newRequirement = parameters.newElementMapping.element.createRequirement(assignment.goal.name,assignment.goal.description);          
+          FlexoConceptInstanceType<GoalRequirementMapping> newMapping = parameters.newElementMapping.ensureGoalRequirementMappingExists(newRequirement);          
+          log ((("On instancie un top goal entre " + parentMapping) + " et ") + newMapping)          
+          topGoalRequirement = TopGoalRequirementMapping.create(parentMapping,newMapping);        
+        }      
+      }      
+      return parameters.newElementMapping;    
+    }    
+  
+  
+    @FlexoConcept    
+    public class GoalRequirementMapping {    
+      
+      public Requirement requirement;    
+      public Goal goal;    
+      
+      @CreationScheme      
+      GoalRequirementMapping:create(UndefinedFlexoConceptInstanceType aRequirement, FlexoConceptInstanceType<Goal> aGoal) {      
+        requirement = parameters.aRequirement;        
+        goal = parameters.aGoal;      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+        log ("Delete " + this)        
+        requirement.delete();        
+        container.element.firePropertyChange requirements      
+      }      
+      
+      @EventListener      
+      Void listenGoalDeletion() {      
+        if (event.goal = goal) {        
+          log ("Deleting goal " + goal)          
+          this.delete();        
+        }      
+      }      
+      
+      @CreationScheme      
+      GoalRequirementMapping:createNewGoal(FlexoConceptInstanceType<Requirement> requirement) {      
+        requirement = parameters.requirement;        
+        FlexoConceptInstanceType<FunctionalGoal> newGoal = FunctionalGoal.create(parameters.requirement.name,"",parameters.requirement.description,false);        
+        log ("on vient de creer FunctionalGoal  " + newGoal)        
+        goal = newGoal;      
+      }      
+      
+      @CreationScheme      
+      GoalRequirementMapping:createNewRequirement(FlexoConceptInstanceType<Goal> goal) {      
+        goal = parameters.goal;        
+        requirement = Requirement.createRequirement(parameters.goal.name,parameters.goal.description);        
+        log ("on vient de creer le requirement  " + requirement)      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class TopGoalRequirementMapping {    
+      
+      public GoalRequirementMapping parentGoalRequirementMapping;    
+      public GoalRequirementMapping goalRequirementMapping;    
+      
+      @CreationScheme      
+      TopGoalRequirementMapping:create(FlexoConceptInstanceType<GoalRequirementMapping> parentMapping, FlexoConceptInstanceType<GoalRequirementMapping> mapping) {      
+        parentGoalRequirementMapping = parameters.parentMapping;        
+        goalRequirementMapping = parameters.mapping;      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class DiagramMapping {    
+      
+      public GoalModelingDiagram goalModelingDiagram;    
+          
+      public String diagramTitle = goalModelingDiagram.diagramTitle;    
+      
+      @CreationScheme      
+      DiagramMapping:createMainFunctionalGoalDiagram() {      
+        log ("Create diagram for model " + goalModel)        
+        goalModelingDiagram = GoalModelingDiagram.init((element.identifier + "-MainFunctionalGoalModelingDiagram"),"Functional Goal Diagram",goalModel);        
+        this.firePropertyChange diagramTitle      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @EventListener      
+      Void requirementsShouldBeUpdated() {      
+        log "OK, on doit mettre a jour le diagramme"      
+      }      
+      
+      @CreationScheme      
+      DiagramMapping:createGoalDiagram(String diagramTitle, String diagramDescription) {      
+        goalModelingDiagram = GoalModelingDiagram.init(((element.identifier + "-") + parameters.diagramTitle),parameters.diagramTitle,goalModel);        
+        this.firePropertyChange diagramTitle      
+      }      
+      
+      @ActionScheme      
+      Void representTopGoalRequirements() {      
+        Long index = 0;        
+        log ("On represente les top goals pour " + diagramTitle)        
+        for (topGoalRequirementMapping : container.container.SelectFlexoConceptInstance(type=TopGoalRequirementMapping)) {        
+          FlexoConceptInstanceType<FunctionalGoalGR> goalGR = goalModelingDiagram.SelectUniqueFlexoConceptInstance(type=FunctionalGoalGR,where=where=(selected.goal = topGoalRequirementMapping.goalRequirementMapping.goal));          
+          if (goalGR = null) {          
+            log "Il faut representer le goal"            
+            goalGR = FunctionalGoalGR.representTopFunctionalGoal(topGoalRequirementMapping.goalRequirementMapping.goal,index);          
+          } else {          
+            log (("C'est bon " + topGoalRequirementMapping.goalRequirementMapping.goal) + " est deja represente")          
+          }          
+          index = (index + 1);        
+        }      
+      }      
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class GoalRequirementMapping {  
+  
+    public Requirement requirement;  
+    public Goal goal;  
+  
+    @CreationScheme    
+    GoalRequirementMapping:create(UndefinedFlexoConceptInstanceType aRequirement, FlexoConceptInstanceType<Goal> aGoal) {    
+      requirement = parameters.aRequirement;      
+      goal = parameters.aGoal;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      log ("Delete " + this)      
+      requirement.delete();      
+      container.element.firePropertyChange requirements    
+    }    
+  
+    @EventListener    
+    Void listenGoalDeletion() {    
+      if (event.goal = goal) {      
+        log ("Deleting goal " + goal)        
+        this.delete();      
+      }    
+    }    
+  
+    @CreationScheme    
+    GoalRequirementMapping:createNewGoal(FlexoConceptInstanceType<Requirement> requirement) {    
+      requirement = parameters.requirement;      
+      FlexoConceptInstanceType<FunctionalGoal> newGoal = FunctionalGoal.create(parameters.requirement.name,"",parameters.requirement.description,false);      
+      log ("on vient de creer FunctionalGoal  " + newGoal)      
+      goal = newGoal;    
+    }    
+  
+    @CreationScheme    
+    GoalRequirementMapping:createNewRequirement(FlexoConceptInstanceType<Goal> goal) {    
+      goal = parameters.goal;      
+      requirement = Requirement.createRequirement(parameters.goal.name,parameters.goal.description);      
+      log ("on vient de creer le requirement  " + requirement)    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class TopGoalRequirementMapping {  
+  
+    public GoalRequirementMapping parentGoalRequirementMapping;  
+    public GoalRequirementMapping goalRequirementMapping;  
+  
+    @CreationScheme    
+    TopGoalRequirementMapping:create(FlexoConceptInstanceType<GoalRequirementMapping> parentMapping, FlexoConceptInstanceType<GoalRequirementMapping> mapping) {    
+      parentGoalRequirementMapping = parameters.parentMapping;      
+      goalRequirementMapping = parameters.mapping;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class DiagramMapping {  
+  
+    public GoalModelingDiagram goalModelingDiagram;  
+      
+    public String diagramTitle = goalModelingDiagram.diagramTitle;  
+  
+    @CreationScheme    
+    DiagramMapping:createMainFunctionalGoalDiagram() {    
+      log ("Create diagram for model " + goalModel)      
+      goalModelingDiagram = GoalModelingDiagram.init((element.identifier + "-MainFunctionalGoalModelingDiagram"),"Functional Goal Diagram",goalModel);      
+      this.firePropertyChange diagramTitle    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @EventListener    
+    Void requirementsShouldBeUpdated() {    
+      log "OK, on doit mettre a jour le diagramme"    
+    }    
+  
+    @CreationScheme    
+    DiagramMapping:createGoalDiagram(String diagramTitle, String diagramDescription) {    
+      goalModelingDiagram = GoalModelingDiagram.init(((element.identifier + "-") + parameters.diagramTitle),parameters.diagramTitle,goalModel);      
+      this.firePropertyChange diagramTitle    
+    }    
+  
+    @ActionScheme    
+    Void representTopGoalRequirements() {    
+      Long index = 0;      
+      log ("On represente les top goals pour " + diagramTitle)      
+      for (topGoalRequirementMapping : container.container.SelectFlexoConceptInstance(type=TopGoalRequirementMapping)) {      
+        FlexoConceptInstanceType<FunctionalGoalGR> goalGR = goalModelingDiagram.SelectUniqueFlexoConceptInstance(type=FunctionalGoalGR,where=where=(selected.goal = topGoalRequirementMapping.goalRequirementMapping.goal));        
+        if (goalGR = null) {        
+          log "Il faut representer le goal"          
+          goalGR = FunctionalGoalGR.representTopFunctionalGoal(topGoalRequirementMapping.goalRequirementMapping.goal,index);        
+        } else {        
+          log (("C'est bon " + topGoalRequirementMapping.goalRequirementMapping.goal) + " est deja represente")        
+        }        
+        index = (index + 1);      
+      }    
+    }    
+  
+  }  
+
+}

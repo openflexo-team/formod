@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" flowAlignment="LEADING" borderLeft="0" imageFile="../Icons/FormoseBackground.jpg" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" imageWidth="626" sizeAdjustment="FitToAvailableSize" imageHeight="417" layout="twocols" borderRight="0" vGap="5" hGap="5" controllerClassName="org.openflexo.module.formose.view.FormoseProjectNatureModuleView$FormoseProjectNatureModuleViewFIBController" name="Panel">
+  <Panel id="1" align="left" borderTop="0" borderTitle="Panel" flowAlignment="CENTER" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="flow" borderRight="0" vGap="5" hGap="5" constraints="twocols(anchor=south;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=10;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="FIBPanel2">
+    <Image id="2" imageWidth="80" sizeAdjustment="OriginalSize" align="left" imageHeight="46" data="controller.projectIcon.image" constraints="flow()" name="Image2" />
+    <Label id="3" label="" align="center" data="(data.owner.name + &quot;.prj&quot;)" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=50;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="ArialMT,0,30" name="Label" />
+  </Panel>
+  <Label id="4" label="description" align="left" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;location=left)" name="Label2" />
+  <TextArea id="5" rows="6" columns="8" validateOnReturn="true" text="TextArea" data="formoseView.projectDescription" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=10;location=right)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" name="TextArea" />
+  <Label id="6" label="methodologies" align="left" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=10;location=left)" name="Label4" />
+  <Table id="7" backgroundSelectionColor="9,80,208" visibleRowCount="3" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/Methodology.fml&gt;" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" textSecondarySelectionColor="0,0,0" lookAndFeel="FlatDesign" textNonSelectionColor="0,0,0" selectionMode="MultipleIntervalSelection" rowHeight="18" manageDynamicModel="true" data="formoseView.methodologies" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=10;insetsLeft=0;insetsRight=20;insetsTop=10;location=right)" boundToSelectionManager="true" name="MethodologiesTable">
+    <IconColumn id="8" data="controller.iconForObject(iterator)" resizable="false" title="icon" displayTitle="false" columnWidth="20" showIcon="false" name="icon" />
+    <LabelColumn id="9" data="iterator.stringRepresentation" resizable="true" title="methodology" displayTitle="true" columnWidth="100" showIcon="false" name="label" />
+    <LabelColumn id="10" data="iterator.declaringElement.identifier" resizable="true" title="element" displayTitle="true" columnWidth="100" showIcon="false" name="label" />
+  </Table>
+  <Label id="11" label="elements" align="left" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;location=left)" name="Label3" />
+  <Panel id="12" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="twocols" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=10;location=right)" name="FIBPanel">
+    <Browser id="13" boundToSelectionManager="true" backgroundSelectionColor="9,80,208" visibleRowCount="3" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0" root="formoseView.formoseVMI.projectElement" selectionMode="DiscontiguousTreeSelection" rowHeight="18" manageDynamicModel="true" rightClickAction="controller.rightClick(ElementBrowser.selected,event)" doubleClickAction="controller.doubleClick(ElementBrowser.selected)" clickAction="controller.singleClick(ElementBrowser.selected)" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" height="200" width="250" name="ElementBrowser">
+      <BrowserElement id="14" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;" icon="controller.iconForObject(element)" label="element.identifier" isEditable="false" name="element">
+        <Children id="15" data="element.childrenElements" name="children" />
+        <BrowserAddAction id="16" method="controller.createChildrenElement(ElementBrowser.selected)" name="create_sub_element" />
+        <BrowserAddAction id="17" method="controller.createRequirement(ElementBrowser.selected)" name="create_requirement" />
+      </BrowserElement>
+    </Browser>
+    <Panel id="18" align="left" borderTop="0" borderTitle="Panel" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="border" borderRight="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=0;location=right)" name="Panel2">
+      <Table id="19" backgroundSelectionColor="9,80,208" visibleRowCount="3" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" textSecondarySelectionColor="0,0,0" lookAndFeel="FlatDesign" textNonSelectionColor="0,0,0" selectionMode="MultipleIntervalSelection" rowHeight="18" manageDynamicModel="true" rightClickAction="controller.rightClick(Table.selected,event)" doubleClickAction="controller.doubleClick(Table.selected)" data="ElementBrowser.selected.requirements" clickAction="controller.singleClick(Table.selected)" constraints="border(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=0;location=north)" boundToSelectionManager="true" name="Table">
+        <IconColumn id="20" data="controller.iconForObject(iterator)" resizable="false" title="icon" displayTitle="false" columnWidth="20" showIcon="false" name="icon" />
+        <LabelColumn id="21" data="iterator.name" resizable="true" title="requirement" displayTitle="true" columnWidth="100" showIcon="false" name="label" />
+        <LabelColumn id="22" data="iterator.status" resizable="true" title="status" displayTitle="true" columnWidth="50" showIcon="false" name="label" />
+        <AddAction id="23" isAvailable="(ElementBrowser.selected != null)" method="controller.createRequirement(ElementBrowser.selected)" name="add_action" />
+      </Table>
+    </Panel>
+  </Panel>
+  <Panel id="24" align="left" borderTop="0" borderTitle="Panel" flowAlignment="CENTER" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="flow" borderRight="0" vGap="5" hGap="5" constraints="twocols(anchor=east;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=-1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=10;insetsLeft=20;insetsRight=20;insetsTop=10;location=center;padX=0;padY=0;weightX=1.0;weightY=0.1)" name="FIBPanel">
+    <Button id="25" buttonType="Trigger" action="controller.createChildrenElement(ElementBrowser.selected)" label="create_element" localize="true" enable="(ElementBrowser.selected != null)" constraints="flow()" name="Button" />
+    <Button id="26" buttonType="Trigger" action="controller.createRequirement(ElementBrowser.selected)" label="create_requirement" localize="true" enable="(ElementBrowser.selected != null)" constraints="flow()" name="Button3" />
+  </Panel>
+  <LocalizedDictionary id="27">
+    <Localized id="28" lang="English" value="Description" key="description" />
+    <Localized id="29" lang="Dutch" value="Description" key="description" />
+    <Localized id="30" lang="French" value="Description" key="description" />
+    <Localized id="31" lang="English" value="Methodologies" key="methodologies" />
+    <Localized id="32" lang="Dutch" value="methodologies" key="methodologies" />
+    <Localized id="33" lang="French" value="Méthodologies" key="methodologies" />
+    <Localized id="34" lang="English" value="Icon" key="icon" />
+    <Localized id="35" lang="Dutch" value="Icon" key="icon" />
+    <Localized id="36" lang="French" value="Icône" key="icon" />
+    <Localized id="37" lang="English" value="Methodology" key="methodology" />
+    <Localized id="38" lang="Dutch" value="Methodology" key="methodology" />
+    <Localized id="39" lang="French" value="Méthodologie" key="methodology" />
+    <Localized id="40" lang="English" value="Element" key="element" />
+    <Localized id="41" lang="Dutch" value="Element" key="element" />
+    <Localized id="42" lang="French" value="Element" key="element" />
+    <Localized id="43" lang="English" value="Elements" key="elements" />
+    <Localized id="44" lang="Dutch" value="elements" key="elements" />
+    <Localized id="45" lang="French" value="Eléments" key="elements" />
+    <Localized id="46" lang="English" value="Requirement" key="requirement" />
+    <Localized id="47" lang="Dutch" value="Requirement" key="requirement" />
+    <Localized id="48" lang="French" value="Exigence" key="requirement" />
+    <Localized id="49" lang="English" value="Status" key="status" />
+    <Localized id="50" lang="Dutch" value="Status" key="status" />
+    <Localized id="51" lang="French" value="Statut" key="status" />
+    <Localized id="52" lang="English" value="Instantiate methodology" key="instantiate_methodology" />
+    <Localized id="53" lang="Dutch" value="instantiate_methodology" key="instantiate_methodology" />
+    <Localized id="54" lang="French" value="Instancier une méthodologie" key="instantiate_methodology" />
+    <Localized id="55" lang="English" value="Create element" key="create_element" />
+    <Localized id="56" lang="Dutch" value="create_element" key="create_element" />
+    <Localized id="57" lang="French" value="Créer un élément" key="create_element" />
+    <Localized id="58" lang="English" value="Create requirement" key="create_requirement" />
+    <Localized id="59" lang="Dutch" value="create_requirement" key="create_requirement" />
+    <Localized id="60" lang="French" value="Créer une exigence" key="create_requirement" />
+    <Localized id="61" lang="English" value="Create sub-element" key="create_sub_element" />
+    <Localized id="62" lang="Dutch" value="create_sub_element" key="create_sub_element" />
+    <Localized id="63" lang="French" value="Créer un sous-élément" key="create_sub_element" />
+  </LocalizedDictionary>
+  <FIBVariable id="64" type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
+  <FIBVariable id="65" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;" name="formoseView" />
+</Panel>

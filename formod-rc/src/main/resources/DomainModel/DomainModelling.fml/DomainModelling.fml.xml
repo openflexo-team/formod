@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-2" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml" version="0.1" name="DomainModelling" userID="FLX" flexoID="2">
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="SYL" flexoID="-1" />
+  <Inspector id="FLX-1" inspectorTitle="DomainModel" userID="FLX" flexoID="1" />
+  <FMLRTVirtualModelInstanceModelSlot id="SYL-11" virtualModelURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" author="" name="rootDomainModel" description="This is the unique root domain model.&#xA;Default data types are created at this level.&#xA;(NATURAL, INTEGER, FLOAT, STRING, BOOL)&#xA;" userID="SYL" flexoID="11" />
+  <CreationScheme id="FLX-6" name="create" width="800" label="create" height="600" userID="FLX" flexoID="6">
+    <BehaviourControlGraph_Sequence id="SYL-38" userID="SYL" flexoID="38">
+      <ControlGraph2_Sequence id="SYL-39" ownerContext="controlGraph2" userID="SYL" flexoID="39">
+        <ControlGraph2_Sequence id="SYL-40" ownerContext="controlGraph2" userID="SYL" flexoID="40">
+          <ControlGraph2_Sequence id="SYL-41" ownerContext="controlGraph2" userID="SYL" flexoID="41">
+            <ControlGraph2_Sequence id="SYL-42" ownerContext="controlGraph2" userID="SYL" flexoID="42">
+              <ControlGraph2_AddFlexoConceptInstance id="SYL-33" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#DefaultDataType.create" receiver="rootDomainModel" ownerContext="controlGraph2" userID="SYL" flexoID="33">
+                <AddFlexoConceptInstanceParameter id="SYL-34" paramName="aName" value="&quot;BOOL&quot;" userID="SYL" flexoID="34" />
+                <AddFlexoConceptInstanceParameter id="SYL-35" paramName="isEnumeration" value="true" userID="SYL" flexoID="35" />
+              </ControlGraph2_AddFlexoConceptInstance>
+              <ControlGraph1_AddFlexoConceptInstance id="SYL-32" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#DefaultDataType.create" receiver="rootDomainModel" ownerContext="controlGraph1" userID="SYL" flexoID="32">
+                <AddFlexoConceptInstanceParameter id="SYL-31" paramName="aName" value="&quot;STRING&quot;" userID="SYL" flexoID="31" />
+                <AddFlexoConceptInstanceParameter id="SYL-30" paramName="isEnumeration" value="false" userID="SYL" flexoID="30" />
+              </ControlGraph1_AddFlexoConceptInstance>
+            </ControlGraph2_Sequence>
+            <ControlGraph1_AddFlexoConceptInstance id="SYL-26" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#DefaultDataType.create" receiver="rootDomainModel" ownerContext="controlGraph1" userID="SYL" flexoID="26">
+              <AddFlexoConceptInstanceParameter id="SYL-24" paramName="aName" value="&quot;FLOAT&quot;" userID="SYL" flexoID="24" />
+              <AddFlexoConceptInstanceParameter id="SYL-25" paramName="isEnumeration" value="false" userID="SYL" flexoID="25" />
+            </ControlGraph1_AddFlexoConceptInstance>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AddFlexoConceptInstance id="SYL-28" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#DefaultDataType.create" receiver="rootDomainModel" ownerContext="controlGraph1" userID="SYL" flexoID="28">
+            <AddFlexoConceptInstanceParameter id="SYL-27" paramName="aName" value="&quot;INTEGER&quot;" userID="SYL" flexoID="27" />
+            <AddFlexoConceptInstanceParameter id="SYL-29" paramName="isEnumeration" value="false" userID="SYL" flexoID="29" />
+          </ControlGraph1_AddFlexoConceptInstance>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AddFlexoConceptInstance id="SYL-20" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#DefaultDataType.create" receiver="rootDomainModel" ownerContext="controlGraph1" userID="SYL" flexoID="20">
+          <AddFlexoConceptInstanceParameter id="SYL-21" paramName="aName" value="&quot;NATURAL&quot;" userID="SYL" flexoID="21" />
+          <AddFlexoConceptInstanceParameter id="SYL-22" paramName="isEnumeration" value="false" userID="SYL" flexoID="22" />
+        </ControlGraph1_AddFlexoConceptInstance>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_AssignationAction id="SYL-14" assign="rootDomainModel" ownerContext="controlGraph1" author="" userID="SYL" flexoID="14">
+        <AssignableAction_AddVirtualModelInstance id="SYL-13" virtualModelInstanceTitle="&quot;RootDomainModel&quot;" virtualModelInstanceName="&quot;RootDomainModel&quot;" creationSchemeURI="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml.create" receiver="this" userID="SYL" flexoID="13">
+          <AddFlexoConceptInstanceParameter id="SYL-15" paramName="name" value="&quot;Root&quot;" userID="SYL" flexoID="15" />
+          <AddFlexoConceptInstanceParameter id="SYL-16" paramName="parent" value="null" userID="SYL" flexoID="16" />
+        </AssignableAction_AddVirtualModelInstance>
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+  </CreationScheme>
+  <DeletionScheme id="STE-46" name="delete" width="800" label="delete" height="600" userID="STE" flexoID="46">
+    <BehaviourControlGraph_EmptyControlGraph id="STE-47" userID="STE" flexoID="47" />
+  </DeletionScheme>
+</VirtualModel>

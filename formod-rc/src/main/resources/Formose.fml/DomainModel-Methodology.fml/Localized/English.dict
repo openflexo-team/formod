@@ -1,0 +1,14 @@
+anElement=AnElement
+create=Create
+createTopLevelDomainModelMapping=CreateTopLevelDomainModelMapping
+create_child_domain_model=Create child domain model
+create_new_diagram=Create new diagram
+create_top_level_domain_model_mapping=Create top level domain model mapping
+delete=Delete
+element=Element
+get_domain_model_element_mapping=Get domain model element mapping
+invalid_parameter=Invalid parameter
+modelName=ModelName
+parent=Parent
+retrieve_domain_model_element_mapping=Retrieve domain model element mapping
+updateFromSysMLKAOS=UpdateFromSysMLKAOS

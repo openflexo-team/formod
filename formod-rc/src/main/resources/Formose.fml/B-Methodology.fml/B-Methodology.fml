@@ -1,0 +1,3113 @@
+use org.openflexo.ta.b.AtelierBProjectModelSlot;
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+use org.openflexo.ta.b.BModelSlot;
+
+/**
+ * 
+ * @author sylvain
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/B-Methodology.fml")
+public class B-Methodology extends Methodology  {
+
+  public AtelierBProject generatedProject;
+  public DomainModel-Methodology domainModelMethodology;
+  public BElementMapping rootBElementMapping;
+  public AtelierBProject sourceProject;
+
+  @CreationScheme  
+  B-Methodology:create(DomainModel-Methodology domainModelMethodology, AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject) {  
+    log "Create B-Methodology"    
+    log ("sourceProject=" + parameters.sourceProject)    
+    log ("generatedProject=" + parameters.generatedProject)    
+    sourceProject = parameters.sourceProject.resourceData;    
+    generatedProject = parameters.generatedProject.resourceData;    
+    domainModelMethodology = parameters.domainModelMethodology;    
+    declaringElement = domainModelMethodology.declaringElement;    
+    rootBElementMapping = BElementMapping.create(declaringElement);  
+  }  
+
+  @ActionScheme  
+  BElementMapping getBElementMapping(UndefinedFlexoConceptInstanceType<http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element> element) {  
+    return this.SelectUniqueFlexoConceptInstance(type=BElementMapping,where=where=(selected.element = parameters.element));  
+  }  
+
+
+  @FlexoConcept  
+  public class BElementMapping {  
+  
+    public DomainModellingElementMapping domainModellingElementMapping;  
+      
+    public Element element = domainModellingElementMapping.element;  
+      
+    public SysMLKaosModel goalModel = domainModellingElementMapping.goalModel;  
+    public List topLevelBMappings;  
+  
+    @CreationScheme    
+    BElementMapping:create(UndefinedFlexoConceptInstanceType<http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element> anElement) {    
+      domainModellingElementMapping = domainModelMethodology.getDomainModelElementMapping(parameters.anElement);      
+      for (domainModelMapping : domainModellingElementMapping.topLevelDomainModelMappings) {      
+        BMapping newBMapping = BMapping.create(domainModelMapping,null);        
+        topLevelBMappings.add(newBMapping)      
+      }      
+      this.updateFromDomainModel()    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    public Void updateFromDomainModel() {    
+      for (domainModelMapping : domainModellingElementMapping.topLevelDomainModelMappings) {      
+        BMapping mapping = container.SelectUniqueFlexoConceptInstance(type=BMapping,where=where=(selected.domainModelMapping = domainModelMapping));        
+        if (mapping = null) {        
+          log "Create top-level B mapping"          
+          mapping = BMapping.create(domainModelMapping,null);          
+          topLevelBMappings.add(mapping)        
+        }        
+        mapping.updateFromDomainModel()      
+      }    
+    }    
+  
+  
+    @FlexoConcept    
+    public class BMapping {    
+      
+      public BMapping parent;    
+      public List children;    
+      public DomainModelMapping domainModelMapping;    
+          
+      public DomainModel domainModel = domainModelMapping.domainModel;    
+      public AtelierBComponent context;    
+      public AtelierBComponent machine;    
+      public List properties;    
+      public List invariants;    
+      public BOperation initialisationOperation;    
+      public BParallelSubstitution initialisationOperationBody;    
+      
+      @CreationScheme      
+      BMapping:create(DomainModelMapping domainModelMapping, BMapping parent) {      
+        domainModelMapping = parameters.domainModelMapping;        
+        parent = parameters.parent;        
+        if (parent != null) {        
+          parent.children.add(this)        
+        }        
+        context = this.createContext();        
+        machine = this.createMachine();        
+        initialisationOperation = this.createInitialisationAction();        
+        initialisationOperationBody = machine.componentResource.bComponent.CreateBParallelSubstitution();        
+        initialisationOperation.setOperationBody(initialisationOperationBody)        
+        this.updateStructuralPart()        
+        this.updateBehavioralPart()      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @ActionScheme      
+      AtelierBComponent createContext() {      
+        AtelierBComponent newContext = sourceProject.AddAtelierBComponent();        
+        return newContext;      
+      }      
+      
+      @ActionScheme      
+      public Void updateStructuralPart() {      
+        log "update of the structural part"        
+        Long da = 0;        
+        Long ra = 0;        
+        Long ri = 0;        
+        Long di = 0;        
+        String formula = "";        
+        MatchingSet matchingSet = this.initiateMatching(StructuralRuleMapping);        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.concept.name != "Association")(selected.concept.name != "DefinedConcept")(selected.concept.name != "DefaultDataType")(selected.parentConcept = null)))) {        
+          log "Concept without parent (rules 3 & 4)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2SetMapping match=(domainConcept=concept) using Concept2SetMapping:create(concept)        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(selected.concept.name != "MapletIndividual")(!(selected.isVariable))selected.individualOf.isEnumeration(selected.individualOf.parentConcept = null)(selected.individualOf.concept.name != "Association")(selected.individualOf.concept.name != "DefinedConcept")(selected.individualOf.concept.name != "DefaultDataType")))) {        
+          log "Constant individual of an abstract enumerated Set (rule 4)"          
+          Concept2SetMapping map = container.container.SelectUniqueFlexoConceptInstance(type=Concept2SetMapping,where=where=(selected.domainConcept = individual.individualOf));          
+          FML@RT::MatchFlexoConceptInstance as Individual2SetValueMapping match=(individual=individual) using Individual2SetValueMapping:create(individual,map)        
+        }        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.parentConcept != null)(!(selected.parentConcept.isVariable))))) {        
+          log "Concrete concept with constant parent  (rule 5)"          
+          if concept.isVariable {          
+            log "Variable concept"            
+            FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)            
+            FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Invariant:create(concept,((concept.name + " <: ") + concept.parentConcept.name))          
+          } else {          
+            log "Constant concept"            
+            FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)            
+            FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Property:create(concept,((concept.name + " <: ") + concept.parentConcept.name))          
+          }        
+        }        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.parentConcept != null)selected.parentConcept.isVariable))) {        
+          log "Concrete concept with variable parent  (rules 6 & 7)"          
+          if concept.isVariable {          
+            log "Variable concept  (rule 7)"            
+            FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)            
+            FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Invariant:create(concept,((concept.name + " <: ") + concept.parentConcept.name))          
+          } else {          
+            log "Constant concept  (rule 6)"            
+            FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)            
+            FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=((concept.name + " <: ") + this.getConstantParent(concept.parentConcept).name)) using Concept2Property:create(concept,((concept.name + " <: ") + this.getConstantParent(concept.parentConcept).name))            
+            FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Invariant:create(concept,((concept.name + " <: ") + concept.parentConcept.name))          
+          }        
+        }        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=DefinedConcept,where=where=(selected.parentConcept = null))) {        
+          log "Abstract defined concept (rule 9)"          
+          if concept.isVariable {          
+            log "Variable abstract defined concept (rule 9)"            
+            FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)          
+          } else {          
+            log "Constant abstract defined concept (rule 9)"            
+            FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)          
+          }        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(selected.concept.name != "MapletIndividual")(!(selected.individualOf.isVariable))(!(selected.individualOf.isEnumeration))))) {        
+          log "Individual of a constant concept that is not an abstract enumeration (rule 11)"          
+          if individual.isVariable {          
+            log "Variable individual"            
+            FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)            
+            FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))          
+          } else {          
+            log "Constant individual"            
+            FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual)            
+            FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Property:create(individual,((individual.name + " : ") + individual.individualOf.name))          
+          }        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)selected.individualOf.isVariable(selected.concept.name != "MapletIndividual")))) {        
+          log "Individual of a variable concept  (rules 12 & 13)"          
+          if individual.isVariable {          
+            log "Variable individual  (rule 13)"            
+            FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)            
+            FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))          
+          } else {          
+            log "Constant individual  (rule 12)"            
+            FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual)            
+            FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " : ") + this.getConstantParent(individual.individualOf).name)) using Individual2Property:create(individual,((individual.name + " : ") + this.getConstantParent(individual.individualOf).name))            
+            FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))          
+          }        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(selected.concept.name != "MapletIndividual")selected.isVariableselected.individualOf.isEnumeration(selected.individualOf.parentConcept = null)(selected.individualOf.concept.name != "Association")(selected.individualOf.concept.name != "DefinedConcept")(selected.individualOf.concept.name != "DefaultDataType")))) {        
+          log "Variable individual of a concept that is an abstract enumeration (rule 14)"          
+          FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)          
+          FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=MapletIndividual,where=where=(selected.individualOf.concept.name = "Association"))) {        
+          log "Maplet individual (rule 15)"          
+          if (individual.name != null) {          
+            if individual.isVariable {            
+              log "Variable named maplet individual (rule 15)"              
+              FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)              
+              FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))              
+              if ((individual.antecedent != null) & (individual.image != null)) {              
+                FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Invariant:create(individual,((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))              
+              }            
+            } else {            
+              log "Constant named maplet individual (rule 15)"              
+              FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual)              
+              if individual.individualOf.isVariable {              
+                FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((((individual.name + " : ") + this.getConstantParent(individual.individualOf.domain).name) + "<->") + this.getConstantParent(individual.individualOf.range).name)) using Individual2Property:create(individual,((((individual.name + " : ") + this.getConstantParent(individual.individualOf.domain).name) + "<->") + this.getConstantParent(individual.individualOf.range).name))                
+                FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))              
+              } else {              
+                FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Property:create(individual,((individual.name + " : ") + individual.individualOf.name))              
+              }              
+              if ((individual.antecedent != null) & (individual.image != null)) {              
+                FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Property:create(individual,((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))              
+              }            
+            }          
+          } else {          
+            if ((individual.antecedent.isVariable | individual.image.isVariable) | individual.individualOf.isVariable) {            
+              FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual,individual.getNormalisedString())              
+              FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Invariant:create(individual,((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))              
+              FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.getNormalisedString() + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.getNormalisedString() + " : ") + individual.individualOf.name))              
+              FML@RT::MatchFlexoConceptInstance as UnnamedMapletIndividual2Initialisation match=(individual=individual) using UnnamedMapletIndividual2Initialisation:create(individual)            
+            } else {            
+              FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual,individual.getNormalisedString())              
+              FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Property:create(individual,((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))              
+              FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.getNormalisedString() + " : ") + individual.individualOf.name)) using Individual2Property:create(individual,((individual.getNormalisedString() + " : ") + individual.individualOf.name))            
+            }          
+          }        
+        }        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.parentConcept != null)selected.isEnumeration(!(selected.isVariable))))) {        
+          log "Enumerated concept with parent  (rule 8)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=((concept.name + " = ") + this.getConstantIndividualString(concept))) using Concept2Property:create(concept,((concept.name + " = ") + this.getConstantIndividualString(concept)))        
+        }        
+        for (logicalFormula : domainModel.SelectFlexoConceptInstance(type=LogicalFormula)) {        
+          if this.isInvariant(logicalFormula) {          
+            FML@RT::MatchFlexoConceptInstance as LogicalFormula2Invariant match=(logicalFormula=logicalFormula) using LogicalFormula2Invariant:create(logicalFormula)          
+          } else {          
+            FML@RT::MatchFlexoConceptInstance as LogicalFormula2Property match=(logicalFormula=logicalFormula) using LogicalFormula2Property:create(logicalFormula)          
+          }        
+        }        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Association)) {        
+          log "Association (rules 9 & 10)"          
+          if (concept.parentConcept = null) {          
+            if concept.isVariable {            
+              log "Variable abstract association  (rule 9)"              
+              FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)            
+            } else {            
+              log "Constant abstract association (rule 9)"              
+              FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)            
+            }          
+          }          
+          da = context.componentResource.bComponent.String2Int();          
+          di = context.componentResource.bComponent.String2Int();          
+          log ((((("domainCardinality " + concept.domainCardinality) + " da=") + da) + " di=") + di)          
+          ra = context.componentResource.bComponent.String2Int();          
+          ri = context.componentResource.bComponent.String2Int();          
+          log ((((("rangeCardinality  " + concept.rangeCardinality) + " ra=") + ra) + " ri=") + ri)          
+          log ((((((("Determining Association Type di=" + di) + " da=") + da) + " ri=") + ri) + " ra=") + ra)          
+          if (ra = 1) {          
+            formula = ((concept.domain.name + " +-> ") + concept.range.name);            
+            log ("ASSOCIATION TYPE 0 : " + formula)            
+            if (ri = 1) {            
+              formula = ((concept.domain.name + " --> ") + concept.range.name);              
+              log ("ASSOCIATION TYPE 1 : " + formula)            
+            }            
+            if (di = 1) {            
+              if (ri = 1) {              
+                formula = ((concept.domain.name + " -->> ") + concept.range.name);                
+                log ("ASSOCIATION TYPE 2.1 : " + formula)              
+              } else {              
+                formula = ((concept.domain.name + " +->> ") + concept.range.name);                
+                log ("ASSOCIATION TYPE 2.2 : " + formula)              
+              }            
+            }            
+            if (da = 1) {            
+              if (ri = 1) {              
+                if (di = 1) {                
+                  formula = ((concept.domain.name + " >->> ") + concept.range.name);                  
+                  log ("ASSOCIATION TYPE 3.1 : " + formula)                
+                } else {                
+                  formula = ((concept.domain.name + " >-> ") + concept.range.name);                  
+                  log ("ASSOCIATION TYPE 3.2 : " + formula)                
+                }              
+              } else {              
+                formula = ((concept.domain.name + " >+> ") + concept.range.name);                
+                log ("ASSOCIATION TYPE 4 : " + formula)              
+              }            
+            }            
+            if (((da > (-(1))) & (da != 1)) | (di > 1)) {            
+              if (di = da) {              
+                formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) = ") + di) + ")");                
+                log ("ASSOCIATION TYPE 5.1 : " + formula)              
+              } else {              
+                if (da = (-(1))) {                
+                  formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) >= ") + di) + ")");                  
+                  log ("ASSOCIATION TYPE 5.2.1 : " + formula)                  
+                  if (da > (-(1))) {                  
+                    if (di = 0) {                    
+                      formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) <= ") + da) + ")");                      
+                      log ("ASSOCIATION TYPE 5.2.1.1 : " + formula)                    
+                    } else {                    
+                      if (di > 0) {                      
+                        formula = (((((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) : ") + di) + "..") + da) + ")");                        
+                        log ("ASSOCIATION TYPE 5.2.1.2 : " + formula)                      
+                      }                    
+                    }                  
+                  }                
+                }              
+              }            
+            }          
+          } else {          
+            formula = ((concept.domain.name + " <-> ") + concept.range.name);            
+            log ("ASSOCIATION TYPE 6 : " + formula)            
+            if (di = da) {            
+              formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) = ") + di) + ")");              
+              log ("ASSOCIATION TYPE 7.1 : " + formula)            
+            } else {            
+              if ((da = (-(1))) & (di > 0)) {              
+                formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) >= ") + di) + ")");                
+                log ("ASSOCIATION TYPE 7.1.1 : " + formula)              
+              } else {              
+                if (da > (-(1))) {                
+                  if (di = 0) {                  
+                    formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) <= ") + da) + ")");                    
+                    log ("ASSOCIATION TYPE 7.1.1.1 : " + formula)                  
+                  } else {                  
+                    if (di > 0) {                    
+                      formula = (((((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) : ") + di) + "..") + da) + ")");                      
+                      log ("ASSOCIATION TYPE 7.1.1.1.1 : " + formula)                    
+                    }                  
+                  }                
+                }              
+              }            
+            }            
+            if (ri = ra) {            
+              formula = (((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) = ") + ri) + ")");              
+              log ("ASSOCIATION TYPE 8.1 : " + formula)            
+            } else {            
+              if ((ra = (-(1))) & (ri > 0)) {              
+                formula = (((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) >= ") + ri) + ")");                
+                log ("ASSOCIATION TYPE 8.2.1 : " + formula)              
+              } else {              
+                if (ra > (-(1))) {                
+                  if (ri = 0) {                  
+                    formula = (((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) <= ") + ra) + ")");                    
+                    log ("ASSOCIATION TYPE 8.2.1.1 : " + formula)                  
+                  } else {                  
+                    if (ri > 0) {                    
+                      formula = (((((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) : ") + ri) + "..") + ra) + ")");                      
+                      log ("ASSOCIATION TYPE 8.2.1.2.1 : " + formula)                    
+                    }                  
+                  }                
+                }              
+              }            
+            }          
+          }          
+          formula = ((concept.name + " : ") + formula);          
+          log ("formula = " + formula)          
+          log "Association: rules 18-22"          
+          if concept.isASymmetric {          
+            formula = (((((((formula + " &\n (") + concept.name) + "~ /\\ ") + concept.name) + ") <: id(") + concept.domain.name) + ")");            
+            log ("ASymmetric Association; formula=" + formula)          
+          }          
+          if concept.isTransitive {          
+            formula = ((((((formula + " &\n (") + concept.name) + " ; ") + concept.name) + ") <: ") + concept.name);            
+            log ("Transitive Association; formula=" + formula)          
+          }          
+          if concept.isSysmmetric {          
+            formula = ((((formula + " &\n ") + concept.name) + "~ = ") + concept.name);            
+            log ("Sysmmetric Association; formula=" + formula)          
+          }          
+          if concept.isReflexive {          
+            formula = ((((formula + " &\n id(") + concept.domain.name) + ") <: ") + concept.name);            
+            log ("Reflexive Association; formula=" + formula)          
+          }          
+          if concept.isIrreflexive {          
+            formula = (((((formula + " &\n id(") + concept.domain.name) + ") /\\ ") + concept.name) + " = {}");            
+            log ("Irreflexive Association; formula=" + formula)          
+          }          
+          if concept.isVariable {          
+            FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=formula) using Concept2Invariant:create(concept,formula)          
+          } else {          
+            FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=formula) using Concept2Property:create(concept,formula)          
+          }        
+        }        
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=selected.isVariable)) {        
+          log "Variable concept initialisation (rule 17)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2Initialisation match=(domainConcept=concept,individualsString=this.getConstantIndividualString(concept)) using Concept2Initialisation:create(concept,this.getConstantIndividualString(concept))        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=(selected.isVariable(selected.name != null)))) {        
+          log "Variable individual initialisation (rule 16)"          
+          FML@RT::MatchFlexoConceptInstance as Individual2Initialisation match=(individual=individual) using Individual2Initialisation:create(individual)        
+        }        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        log "END STRUCTURAL PART UPDATE"        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Concept2SetMapping)) {        
+          rule.updateNameFromDM()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Concept2VariableMapping)) {        
+          rule.updateNameFromDM()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Individual2SetValueMapping)) {        
+          rule.updateNameFromDM()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Concept2ConstantMapping)) {        
+          rule.updateNameFromDM()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Individual2VariableMapping)) {        
+          rule.updateNameFromDM()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Individual2ConstantMapping)) {        
+          rule.updateNameFromDM()        
+        }      
+      }      
+      
+      @ActionScheme      
+      AtelierBComponent createMachine() {      
+        if (parent = null) {        
+          log "Create top-level machine"          
+          return sourceProject.AddAtelierBComponent();        
+        } else {        
+          log "Create child machine"          
+          return sourceProject.AddAtelierBComponent();        
+        }      
+      }      
+      
+      @ActionScheme      
+      public Void updateBehavioralPart() {      
+        log "update of the behavioral part"        
+        MatchingSet matchingSet = this.initiateMatching(BehavioralRuleMapping);        
+        for (goal : domainModelMapping.goalGroup.goals) {        
+          log ("Apply rule for goal " + goal)          
+          FML@RT::MatchFlexoConceptInstance as EventMapping match=(goal=goal) using EventMapping:create(goal)        
+        }        
+        matchingSet.finalizeMatching()        
+        for (rule : container.container.SelectFlexoConceptInstance(type=EventMapping)) {        
+          rule.updateNameFromGM()        
+        }      
+      }      
+      
+      @ActionScheme      
+      Void updateFromDomainModel() {      
+        for (childDomainModelMapping : domainModelMapping.children) {        
+          BMapping mapping = container.container.SelectUniqueFlexoConceptInstance(type=BMapping,where=where=(selected.domainModelMapping = childDomainModelMapping));          
+          if (mapping = null) {          
+            log "Create child B mapping"            
+            mapping = BMapping.create(childDomainModelMapping,this);          
+          }          
+          mapping.updateFromDomainModel()        
+        }      
+      }      
+      
+      @ActionScheme      
+      public Void updateFormalModel() {      
+        this.updateFromDomainModel()        
+        this.updateStructuralPart()        
+        this.updateBehavioralPart()      
+      }      
+      
+      @ActionScheme      
+      Concept getConstantParent(Concept concept) {      
+        if parameters.concept.isVariable {        
+          return this.getConstantParent(parameters.concept.parentConcept);        
+        } else {        
+          return parameters.concept;        
+        }      
+      }      
+      
+      @ActionScheme      
+      String getConstantIndividualString(Concept concept) {      
+        String str = "";        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=MapletIndividual,where=where=((selected.individualOf != null)(!(selected.isVariable))(selected.individualOf = parameters.concept)))) {        
+          str = ((str + individual.getCanonicalString()) + ", ");        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(!(selected.isVariable))(selected.individualOf = parameters.concept)(selected.concept.name != "MapletIndividual")))) {        
+          str = ((str + individual.getCanonicalString()) + ", ");        
+        }        
+        log ("getConstantIndividualString str=" + str)        
+        if str.contains(",") {        
+          return (("{" + str.substring(0,(str.length - 2))) + "}");        
+        } else {        
+          return "{}";        
+        }      
+      }      
+      
+      @ActionScheme      
+      BPredicate getProperties(Integer i) {      
+        if (parameters.i >= properties.size) {        
+          return null;        
+        }        
+        if (parameters.i = (properties.size - 1)) {        
+          return properties.get(parameters.i);        
+        } else {        
+              
+        }        
+        return context.componentResource.bComponent.CreateBBinaryPredicatePredicate();      
+      }      
+      
+      @ActionScheme      
+      BPredicate getInvariant(Integer i) {      
+        if (parameters.i >= invariants.size) {        
+          return null;        
+        }        
+        if (parameters.i = (invariants.size - 1)) {        
+          return invariants.get(parameters.i);        
+        } else {        
+              
+        }        
+        return machine.componentResource.bComponent.CreateBBinaryPredicatePredicate();      
+      }      
+      
+      @ActionScheme      
+      Boolean isInvariant(LogicalFormula logicalFormula) {      
+        for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=selected.isVariable)) {        
+          if parameters.logicalFormula.assertion.contains(concept.name) {          
+            return true;          
+          }        
+        }        
+        for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=selected.isVariable)) {        
+          if parameters.logicalFormula.assertion.contains(individual.name) {          
+            return true;          
+          }        
+        }        
+        return false;      
+      }      
+      
+      @ActionScheme      
+      BOperation createInitialisationAction() {      
+        if (parent = null) {        
+          return machine.componentResource.bComponent.AddBOperation();        
+        } else {        
+          return machine.componentResource.bComponent.AddBRefinedOperation();        
+        }      
+      }      
+      
+      @ActionScheme      
+      public Void backPropagateUpdates() {      
+        MatchingSet matchingSet = this.initiateMatching(BackPropagatingRuleMapping);        
+        log "back Propagating Structural Part Updates"        
+        for (set : context.componentResource.bComponent.getSets()) {        
+          log (("Back propagating the addition of a set " + set.name) + " (rules b-1 & b-2)")          
+          FlexoBSet cset = FlexoBSet.create();          
+          cset.set = set;          
+          FML@RT::MatchFlexoConceptInstance as Concept2SetMapping match=(set=set) using Concept2SetMapping:createWithSet(cset)          
+          for (setValue : set.getEnumeratedValues()) {          
+            log (("Back propagating the addition of a setValue " + setValue.name) + " (rule b-2)")            
+            FlexoBSetValue csetValue = FlexoBSetValue.create();            
+            csetValue.setValue = setValue;            
+            FML@RT::MatchFlexoConceptInstance as Individual2SetValueMapping match=(setValue=setValue,set=set) using Individual2SetValueMapping:createWithSetValue(csetValue)          
+          }        
+        }        
+        matchingSet.finalizeMatching()        
+        matchingSet.finalizeMatching()        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Concept2SetMapping)) {        
+          rule.updateNameFromB()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Concept2VariableMapping)) {        
+          rule.updateNameFromB()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Individual2SetValueMapping)) {        
+          rule.updateNameFromB()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Concept2ConstantMapping)) {        
+          rule.updateNameFromB()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Individual2VariableMapping)) {        
+          rule.updateNameFromB()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=Individual2ConstantMapping)) {        
+          rule.updateNameFromB()        
+        }        
+        for (rule : container.container.SelectFlexoConceptInstance(type=EventMapping)) {        
+          rule.updateNameFromB()        
+        }      
+      }      
+      
+      
+      @FlexoConcept      
+      public class Concept2SetMapping extends StructuralRuleMapping,BackPropagatingRuleMapping  {      
+          
+        public BSet set;      
+        public Concept domainConcept;      
+        public ConceptGR domainConceptGR;      
+          
+        @CreationScheme        
+        Concept2SetMapping:create(Concept aConcept) {        
+          log ("Concept2SetMapping: create Set related to concept " + parameters.aConcept)          
+          domainConcept = parameters.aConcept;          
+          set = context.componentResource.bComponent.AddBSet();        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          context.componentResource.bComponent.removeFromSets(set)          
+          delete set;        
+        }        
+          
+        @CreationScheme        
+        Concept2SetMapping:createWithSet(FlexoBSet aSet) {        
+          log ("Concept2SetMapping: create Concept related to set " + parameters.aSet.set.name)          
+          set = parameters.aSet.set;          
+          domainConcept = Concept.create(set.name,false,false,null);          
+          domainConceptGR = ConceptGR.create(domainConcept,domainModelMapping.defaultDiagram);        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithDMItem() {        
+          domainConceptGR.delete();        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+          set.name = domainConcept.name;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          domainConcept.name = set.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class StructuralRuleMapping {      
+          
+        @CreationScheme        
+        StructuralRuleMapping:create() {        
+              
+        }        
+          
+        @DeletionScheme        
+        Void delete() {        
+              
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+              
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+              
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+              
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Concept2VariableMapping extends StructuralRuleMapping  {      
+          
+        public Concept domainConcept;      
+        public BAbstractVariable variable;      
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          machine.componentResource.bComponent.removeFromAbstractVariables(variable)          
+          delete variable;        
+        }        
+          
+        @CreationScheme        
+        Concept2VariableMapping:create(Concept aConcept) {        
+          log ("Concept2VariableMapping: create variable related to concept " + parameters.aConcept)          
+          domainConcept = parameters.aConcept;          
+          variable = machine.componentResource.bComponent.AddBAbstractVariable();        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+          variable.name = domainConcept.name;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          domainConcept.name = variable.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class EventMapping extends BehavioralRuleMapping  {      
+          
+        public BOperation operation;      
+        public Goal goal;      
+          
+        @CreationScheme        
+        EventMapping:create(Goal aGoal) {        
+          goal = parameters.aGoal;          
+          log ((("Handling event " + goal) + " parentGoal=") + goal.parentGoal)          
+          if (goal.parentGoal != null) {          
+            operation = machine.componentResource.bComponent.AddBRefinedOperation();            
+            log "Add refined event"          
+          } else {          
+            operation = machine.componentResource.bComponent.AddBOperation();            
+            log "Add normal event"          
+          }        
+        }        
+          
+        @DeletionScheme        
+        Void delete() {        
+              
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          machine.componentResource.bComponent.removeFromOperations(operation)          
+          delete operation;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromGM() {        
+          operation.name = goal.name;          
+          if (goal.parentGoal != null) {          
+            log "Concrete event; its parent name must also be updated... but !"          
+          }        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          goal.name = operation.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class BehavioralRuleMapping {      
+          
+        @CreationScheme        
+        BehavioralRuleMapping:create() {        
+              
+        }        
+          
+        @DeletionScheme        
+        Void delete() {        
+              
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromGM() {        
+              
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+              
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Individual2SetValueMapping extends StructuralRuleMapping,BackPropagatingRuleMapping  {      
+          
+        public Individual individual;      
+        public BSetValue setValue;      
+        public BSet set;      
+        public IndividualGR individualGR;      
+          
+        @CreationScheme        
+        Individual2SetValueMapping:create(Individual individual, Concept2SetMapping concept2SetMapping) {        
+          log ("Individual2SetValueMapping: create SetValue related to individual " + parameters.individual)          
+          individual = parameters.individual;          
+          setValue = context.componentResource.bComponent.AddBSetValue();          
+          set = parameters.concept2SetMapping.set;        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          set.removeFromEnumeratedValues(setValue)          
+          delete setValue;        
+        }        
+          
+        @CreationScheme        
+        Individual2SetValueMapping:createWithSetValue(FlexoBSetValue aSetValue) {        
+          log ("Individual2SetValueMapping: create Individual related to setValue " + parameters.aSetValue.setValue.name)          
+          setValue = parameters.aSetValue.setValue;          
+          set = setValue.set;          
+          Concept2SetMapping concept2SetMapping = container.container.container.SelectUniqueFlexoConceptInstance(type=Concept2SetMapping,where=where=(selected.set.name = set.name));          
+          log ("concept found: " + concept2SetMapping.domainConcept.name)          
+          concept2SetMapping.domainConcept.isEnumeration = true;          
+          individual = Individual.create(setValue.name,concept2SetMapping.domainConcept,false,null);          
+          individualGR = IndividualGR.create(individual,domainModelMapping.defaultDiagram);        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithDMItem() {        
+          individualGR.delete();        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+          setValue.name = individual.name;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          individual.name = setValue.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Concept2ConstantMapping extends StructuralRuleMapping  {      
+          
+        public Concept domainConcept;      
+        public BAbstractConstant constant;      
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          context.componentResource.bComponent.removeFromAbstractConstants(constant)          
+          delete constant;        
+        }        
+          
+        @CreationScheme        
+        Concept2ConstantMapping:create(Concept aConcept) {        
+          log ("Concept2ConstantMapping: create Constant related to concept " + parameters.aConcept)          
+          domainConcept = parameters.aConcept;          
+          constant = context.componentResource.bComponent.AddBAbstractConstant();        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+          constant.name = domainConcept.name;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          domainConcept.name = constant.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Individual2VariableMapping extends StructuralRuleMapping  {      
+          
+        public Individual individual;      
+        public BAbstractVariable variable;      
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          machine.componentResource.bComponent.removeFromAbstractVariables(variable)          
+          delete variable;        
+        }        
+          
+        @CreationScheme        
+        Individual2VariableMapping:create(Individual anIndividual, String nameString) {        
+          log ("Individual2VariableMapping: create variable related to individual " + parameters.anIndividual)          
+          individual = parameters.anIndividual;          
+          if (individual.name = null) {          
+            variable = machine.componentResource.bComponent.AddBAbstractVariable();          
+          } else {          
+            variable = machine.componentResource.bComponent.AddBAbstractVariable();          
+          }        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+          variable.name = individual.name;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          individual.name = variable.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Individual2ConstantMapping extends StructuralRuleMapping  {      
+          
+        public Individual individual;      
+        public BAbstractConstant constant;      
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          context.componentResource.bComponent.removeFromAbstractConstants(constant)          
+          delete constant;        
+        }        
+          
+        @CreationScheme        
+        Individual2ConstantMapping:create(Individual anIndividual, String nameString) {        
+          log ("Individual2ConstantMapping: create Constant related to individual " + parameters.anIndividual)          
+          individual = parameters.anIndividual;          
+          if (individual.name = null) {          
+            constant = context.componentResource.bComponent.AddBAbstractConstant();          
+          } else {          
+            constant = context.componentResource.bComponent.AddBAbstractConstant();          
+          }        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromDM() {        
+          constant.name = individual.name;        
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+          individual.name = constant.name;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Concept2Property extends StructuralRuleMapping  {      
+          
+        public Concept domainConcept;      
+        public BPredicate typingPredicate;      
+        public String formula;      
+          
+        @CreationScheme        
+        Concept2Property:create(Concept aConcept, String formula) {        
+          log ((("Concept2Property: create Property " + formula) + " related to concept ") + parameters.aConcept)          
+          domainConcept = parameters.aConcept;          
+          formula = parameters.formula;          
+          typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();          
+          log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())          
+          properties.add(typingPredicate)          
+          context.componentResource.bComponent.setProperties(container.getProperties(0))        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItemOld() {        
+          String propertiesString = context.componentResource.bComponent.getProperties().getBPrettyPrint();          
+          log ("old properties " + propertiesString)          
+          propertiesString = propertiesString.replaceAll((("(\\s)*&(\\s)*" + formula) + "(\\s)*")," ").replaceAll((("(\\s)*" + formula) + "(\\s)*&(\\s)*")," ");          
+          log ("new properties0 " + propertiesString)          
+          int i = propertiesString.indexOf(formula);          
+          Integer i0 = this.max(1,(i - 3));          
+          Integer i1 = this.min(((i + formula.length) + 3),(propertiesString.length - 1));          
+          propertiesString = ((propertiesString.substring(1,i0) + (((i0 != 1) & (i1 != (propertiesString.length() - 1))) ? " & " : "")) + propertiesString.substring(i1,(propertiesString.length() - 1)));          
+          log ("new properties1 " + propertiesString)          
+          if ((propertiesString != null) & (propertiesString.length > 0)) {          
+            BPredicate newProperties = context.componentResource.bComponent.CreateBPredicateFromString();            
+            context.componentResource.bComponent.setProperties(newProperties)          
+          } else {          
+            context.componentResource.bComponent.setProperties(null)          
+          }        
+        }        
+          
+        @ActionScheme        
+        Integer max(Integer a, Integer b) {        
+          return ((parameters.a >= parameters.b) ? parameters.a : parameters.b);        
+        }        
+          
+        @ActionScheme        
+        Integer min(Integer a, Integer b) {        
+          return ((parameters.a >= parameters.b) ? parameters.b : parameters.a);        
+        }        
+          
+        @DeletionScheme        
+        public Void deleteWithBItemOld2() {        
+          BPredicate predicate = context.componentResource.bComponent.RemoveBPredicateInBPredicate();          
+          context.componentResource.bComponent.setProperties(predicate)        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          properties.remove(typingPredicate);          
+          context.componentResource.bComponent.setProperties(container.getProperties(0))        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Concept2Invariant extends StructuralRuleMapping  {      
+          
+        public Concept domainConcept;      
+        public BPredicate typingPredicate;      
+        public String formula;      
+          
+        @CreationScheme        
+        Concept2Invariant:create(Concept aConcept, String formula) {        
+          log ((("Concept2Invariant: create Invariant " + formula) + " related to concept ") + parameters.aConcept)          
+          domainConcept = parameters.aConcept;          
+          formula = parameters.formula;          
+          typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();          
+          log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())          
+          invariants.add(typingPredicate)          
+          machine.componentResource.bComponent.setInvariant(container.getInvariant(0))        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          invariants.remove(typingPredicate);          
+          machine.componentResource.bComponent.setInvariant(container.getInvariant(0))        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class LogicalFormula2Property extends StructuralRuleMapping  {      
+          
+        public LogicalFormula logicalFormula;      
+        public BPredicate typingPredicate;      
+          
+        @CreationScheme        
+        LogicalFormula2Property:create(LogicalFormula aLogicalFormula) {        
+          log ("LogicalFormula2Property: create Property related to logicalFormula " + parameters.aLogicalFormula.assertion)          
+          logicalFormula = parameters.aLogicalFormula;          
+          typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();          
+          log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())          
+          properties.add(typingPredicate)          
+          context.componentResource.bComponent.setProperties(container.getProperties(0))        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          properties.remove(typingPredicate);          
+          context.componentResource.bComponent.setProperties(container.getProperties(0))        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class LogicalFormula2Invariant extends StructuralRuleMapping  {      
+          
+        public LogicalFormula logicalFormula;      
+        public BPredicate typingPredicate;      
+          
+        @CreationScheme        
+        LogicalFormula2Invariant:create(LogicalFormula aLogicalFormula) {        
+          log ("LogicalFormula2Invariant: create Invariant related to logicalFormula " + parameters.aLogicalFormula.assertion)          
+          logicalFormula = parameters.aLogicalFormula;          
+          typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();          
+          log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())          
+          invariants.add(typingPredicate)          
+          machine.componentResource.bComponent.setInvariant(container.getInvariant(0))        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          invariants.remove(typingPredicate);          
+          machine.componentResource.bComponent.setInvariant(container.getInvariant(0))        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Individual2Property extends StructuralRuleMapping  {      
+          
+        public Individual individual;      
+        public BPredicate typingPredicate;      
+        public String formula;      
+          
+        @CreationScheme        
+        Individual2Property:create(Individual anIndividual, String formula) {        
+          log ((("Individual2Property: create Property " + formula) + " related to individual ") + parameters.anIndividual)          
+          individual = parameters.anIndividual;          
+          formula = parameters.formula;          
+          typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();          
+          log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())          
+          properties.add(typingPredicate)          
+          context.componentResource.bComponent.setProperties(container.getProperties(0))        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          properties.remove(typingPredicate);          
+          context.componentResource.bComponent.setProperties(container.getProperties(0))        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Individual2Invariant extends StructuralRuleMapping  {      
+          
+        public Individual individual;      
+        public BPredicate typingPredicate;      
+        public String formula;      
+          
+        @CreationScheme        
+        Individual2Invariant:create(Individual anIndividual, String formula) {        
+          log ((("Individual2Invariant: create Invariant " + formula) + " related to individual ") + parameters.anIndividual)          
+          individual = parameters.anIndividual;          
+          formula = parameters.formula;          
+          typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();          
+          log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())          
+          invariants.add(typingPredicate)          
+          machine.componentResource.bComponent.setInvariant(container.getInvariant(0))        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          invariants.remove(typingPredicate);          
+          machine.componentResource.bComponent.setInvariant(container.getInvariant(0))        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Concept2Initialisation extends StructuralRuleMapping  {      
+          
+        public Concept domainConcept;      
+        public String individualsString;      
+        public BSubstitution substitution;      
+          
+        @CreationScheme        
+        Concept2Initialisation:create(Concept aConcept, String individualsString) {        
+          log ("Concept2Initialisation: create Initialisation substitution related to concept " + parameters.aConcept)          
+          domainConcept = parameters.aConcept;          
+          individualsString = parameters.individualsString;          
+          BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          substitution = machine.componentResource.bComponent.CreateBSubstitution();          
+          log ("substitution " + substitution.getNormalizedBRepresentation())          
+          initialisationOperationBody.addToSubstitutions(substitution)        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          initialisationOperationBody.removeFromSubstitutions(substitution)          
+          delete substitution;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class Individual2Initialisation extends StructuralRuleMapping  {      
+          
+        public Individual individual;      
+        public BSubstitution substitution;      
+          
+        @CreationScheme        
+        Individual2Initialisation:create(Individual anIndividual) {        
+          log ("Individual2Initialisation: create Initialisation substitution related to individual " + parameters.anIndividual)          
+          individual = parameters.anIndividual;          
+          BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          if (individual.initialValue != null) {          
+            String rightString = "";            
+            if (individual.initialValue.name != null) {            
+              rightString = individual.initialValue.name;            
+            } else {            
+              rightString = individual.getCanonicalString();            
+            }            
+            BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();            
+            substitution = machine.componentResource.bComponent.CreateBSubstitution();          
+          } else {          
+            BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();            
+            substitution = machine.componentResource.bComponent.CreateBSubstitution();          
+          }          
+          log ("substitution " + substitution.getNormalizedBRepresentation())          
+          initialisationOperationBody.addToSubstitutions(substitution)        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          initialisationOperationBody.removeFromSubstitutions(substitution)          
+          delete substitution;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class UnnamedMapletIndividual2Initialisation extends StructuralRuleMapping  {      
+          
+        public MapletIndividual individual;      
+        public BSubstitution substitution;      
+          
+        @CreationScheme        
+        UnnamedMapletIndividual2Initialisation:create(MapletIndividual anIndividual) {        
+          log ("UnnamedMapletIndividual2Initialisation: create Initialisation substitution related to UnnamedMapletIndividual " + parameters.anIndividual)          
+          individual = parameters.anIndividual;          
+          BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          substitution = machine.componentResource.bComponent.CreateBSubstitution();          
+          log ("substitution " + substitution.getNormalizedBRepresentation())          
+          initialisationOperationBody.addToSubstitutions(substitution)        
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithBItem() {        
+          initialisationOperationBody.removeFromSubstitutions(substitution)          
+          delete substitution;        
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class FlexoBSet {      
+          
+        public BSet set;      
+          
+        @CreationScheme        
+        FlexoBSet:create() {        
+          set = null;        
+        }        
+          
+        @DeletionScheme        
+        Void delete() {        
+              
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class FlexoBSetValue {      
+          
+        public BSetValue setValue;      
+          
+        @CreationScheme        
+        FlexoBSetValue:create() {        
+          setValue = null;        
+        }        
+          
+        @DeletionScheme        
+        Void delete() {        
+              
+        }        
+          
+      }      
+      
+      @FlexoConcept      
+      public class BackPropagatingRuleMapping {      
+          
+        @CreationScheme        
+        BackPropagatingRuleMapping:create() {        
+              
+        }        
+          
+        @DeletionScheme        
+        Void delete() {        
+              
+        }        
+          
+        @DeletionScheme        
+        Void deleteWithDMItem() {        
+              
+        }        
+          
+        @ActionScheme        
+        Void updateNameFromB() {        
+              
+        }        
+          
+      }      
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class BMapping {  
+  
+    public BMapping parent;  
+    public List children;  
+    public DomainModelMapping domainModelMapping;  
+      
+    public DomainModel domainModel = domainModelMapping.domainModel;  
+    public AtelierBComponent context;  
+    public AtelierBComponent machine;  
+    public List properties;  
+    public List invariants;  
+    public BOperation initialisationOperation;  
+    public BParallelSubstitution initialisationOperationBody;  
+  
+    @CreationScheme    
+    BMapping:create(DomainModelMapping domainModelMapping, BMapping parent) {    
+      domainModelMapping = parameters.domainModelMapping;      
+      parent = parameters.parent;      
+      if (parent != null) {      
+        parent.children.add(this)      
+      }      
+      context = this.createContext();      
+      machine = this.createMachine();      
+      initialisationOperation = this.createInitialisationAction();      
+      initialisationOperationBody = machine.componentResource.bComponent.CreateBParallelSubstitution();      
+      initialisationOperation.setOperationBody(initialisationOperationBody)      
+      this.updateStructuralPart()      
+      this.updateBehavioralPart()    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    AtelierBComponent createContext() {    
+      AtelierBComponent newContext = sourceProject.AddAtelierBComponent();      
+      return newContext;    
+    }    
+  
+    @ActionScheme    
+    public Void updateStructuralPart() {    
+      log "update of the structural part"      
+      Long da = 0;      
+      Long ra = 0;      
+      Long ri = 0;      
+      Long di = 0;      
+      String formula = "";      
+      MatchingSet matchingSet = this.initiateMatching(StructuralRuleMapping);      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.concept.name != "Association")(selected.concept.name != "DefinedConcept")(selected.concept.name != "DefaultDataType")(selected.parentConcept = null)))) {      
+        log "Concept without parent (rules 3 & 4)"        
+        FML@RT::MatchFlexoConceptInstance as Concept2SetMapping match=(domainConcept=concept) using Concept2SetMapping:create(concept)      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(selected.concept.name != "MapletIndividual")(!(selected.isVariable))selected.individualOf.isEnumeration(selected.individualOf.parentConcept = null)(selected.individualOf.concept.name != "Association")(selected.individualOf.concept.name != "DefinedConcept")(selected.individualOf.concept.name != "DefaultDataType")))) {      
+        log "Constant individual of an abstract enumerated Set (rule 4)"        
+        Concept2SetMapping map = container.container.SelectUniqueFlexoConceptInstance(type=Concept2SetMapping,where=where=(selected.domainConcept = individual.individualOf));        
+        FML@RT::MatchFlexoConceptInstance as Individual2SetValueMapping match=(individual=individual) using Individual2SetValueMapping:create(individual,map)      
+      }      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.parentConcept != null)(!(selected.parentConcept.isVariable))))) {      
+        log "Concrete concept with constant parent  (rule 5)"        
+        if concept.isVariable {        
+          log "Variable concept"          
+          FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)          
+          FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Invariant:create(concept,((concept.name + " <: ") + concept.parentConcept.name))        
+        } else {        
+          log "Constant concept"          
+          FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)          
+          FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Property:create(concept,((concept.name + " <: ") + concept.parentConcept.name))        
+        }      
+      }      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.parentConcept != null)selected.parentConcept.isVariable))) {      
+        log "Concrete concept with variable parent  (rules 6 & 7)"        
+        if concept.isVariable {        
+          log "Variable concept  (rule 7)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)          
+          FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Invariant:create(concept,((concept.name + " <: ") + concept.parentConcept.name))        
+        } else {        
+          log "Constant concept  (rule 6)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)          
+          FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=((concept.name + " <: ") + this.getConstantParent(concept.parentConcept).name)) using Concept2Property:create(concept,((concept.name + " <: ") + this.getConstantParent(concept.parentConcept).name))          
+          FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=((concept.name + " <: ") + concept.parentConcept.name)) using Concept2Invariant:create(concept,((concept.name + " <: ") + concept.parentConcept.name))        
+        }      
+      }      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=DefinedConcept,where=where=(selected.parentConcept = null))) {      
+        log "Abstract defined concept (rule 9)"        
+        if concept.isVariable {        
+          log "Variable abstract defined concept (rule 9)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)        
+        } else {        
+          log "Constant abstract defined concept (rule 9)"          
+          FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)        
+        }      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(selected.concept.name != "MapletIndividual")(!(selected.individualOf.isVariable))(!(selected.individualOf.isEnumeration))))) {      
+        log "Individual of a constant concept that is not an abstract enumeration (rule 11)"        
+        if individual.isVariable {        
+          log "Variable individual"          
+          FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)          
+          FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))        
+        } else {        
+          log "Constant individual"          
+          FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual)          
+          FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Property:create(individual,((individual.name + " : ") + individual.individualOf.name))        
+        }      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)selected.individualOf.isVariable(selected.concept.name != "MapletIndividual")))) {      
+        log "Individual of a variable concept  (rules 12 & 13)"        
+        if individual.isVariable {        
+          log "Variable individual  (rule 13)"          
+          FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)          
+          FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))        
+        } else {        
+          log "Constant individual  (rule 12)"          
+          FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual)          
+          FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " : ") + this.getConstantParent(individual.individualOf).name)) using Individual2Property:create(individual,((individual.name + " : ") + this.getConstantParent(individual.individualOf).name))          
+          FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))        
+        }      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(selected.concept.name != "MapletIndividual")selected.isVariableselected.individualOf.isEnumeration(selected.individualOf.parentConcept = null)(selected.individualOf.concept.name != "Association")(selected.individualOf.concept.name != "DefinedConcept")(selected.individualOf.concept.name != "DefaultDataType")))) {      
+        log "Variable individual of a concept that is an abstract enumeration (rule 14)"        
+        FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)        
+        FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=MapletIndividual,where=where=(selected.individualOf.concept.name = "Association"))) {      
+        log "Maplet individual (rule 15)"        
+        if (individual.name != null) {        
+          if individual.isVariable {          
+            log "Variable named maplet individual (rule 15)"            
+            FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual)            
+            FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))            
+            if ((individual.antecedent != null) & (individual.image != null)) {            
+              FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Invariant:create(individual,((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))            
+            }          
+          } else {          
+            log "Constant named maplet individual (rule 15)"            
+            FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual)            
+            if individual.individualOf.isVariable {            
+              FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((((individual.name + " : ") + this.getConstantParent(individual.individualOf.domain).name) + "<->") + this.getConstantParent(individual.individualOf.range).name)) using Individual2Property:create(individual,((((individual.name + " : ") + this.getConstantParent(individual.individualOf.domain).name) + "<->") + this.getConstantParent(individual.individualOf.range).name))              
+              FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.name + " : ") + individual.individualOf.name))            
+            } else {            
+              FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " : ") + individual.individualOf.name)) using Individual2Property:create(individual,((individual.name + " : ") + individual.individualOf.name))            
+            }            
+            if ((individual.antecedent != null) & (individual.image != null)) {            
+              FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Property:create(individual,((individual.name + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))            
+            }          
+          }        
+        } else {        
+          if ((individual.antecedent.isVariable | individual.image.isVariable) | individual.individualOf.isVariable) {          
+            FML@RT::MatchFlexoConceptInstance as Individual2VariableMapping match=(individual=individual) using Individual2VariableMapping:create(individual,individual.getNormalisedString())            
+            FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Invariant:create(individual,((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))            
+            FML@RT::MatchFlexoConceptInstance as Individual2Invariant match=(individual=individual,formula=((individual.getNormalisedString() + " : ") + individual.individualOf.name)) using Individual2Invariant:create(individual,((individual.getNormalisedString() + " : ") + individual.individualOf.name))            
+            FML@RT::MatchFlexoConceptInstance as UnnamedMapletIndividual2Initialisation match=(individual=individual) using UnnamedMapletIndividual2Initialisation:create(individual)          
+          } else {          
+            FML@RT::MatchFlexoConceptInstance as Individual2ConstantMapping match=(individual=individual) using Individual2ConstantMapping:create(individual,individual.getNormalisedString())            
+            FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")"))) using Individual2Property:create(individual,((individual.getNormalisedString() + " = (") + (((individual.antecedent.name + " |-> ") + individual.image.name) + ")")))            
+            FML@RT::MatchFlexoConceptInstance as Individual2Property match=(individual=individual,formula=((individual.getNormalisedString() + " : ") + individual.individualOf.name)) using Individual2Property:create(individual,((individual.getNormalisedString() + " : ") + individual.individualOf.name))          
+          }        
+        }      
+      }      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=((selected.parentConcept != null)selected.isEnumeration(!(selected.isVariable))))) {      
+        log "Enumerated concept with parent  (rule 8)"        
+        FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=((concept.name + " = ") + this.getConstantIndividualString(concept))) using Concept2Property:create(concept,((concept.name + " = ") + this.getConstantIndividualString(concept)))      
+      }      
+      for (logicalFormula : domainModel.SelectFlexoConceptInstance(type=LogicalFormula)) {      
+        if this.isInvariant(logicalFormula) {        
+          FML@RT::MatchFlexoConceptInstance as LogicalFormula2Invariant match=(logicalFormula=logicalFormula) using LogicalFormula2Invariant:create(logicalFormula)        
+        } else {        
+          FML@RT::MatchFlexoConceptInstance as LogicalFormula2Property match=(logicalFormula=logicalFormula) using LogicalFormula2Property:create(logicalFormula)        
+        }      
+      }      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Association)) {      
+        log "Association (rules 9 & 10)"        
+        if (concept.parentConcept = null) {        
+          if concept.isVariable {          
+            log "Variable abstract association  (rule 9)"            
+            FML@RT::MatchFlexoConceptInstance as Concept2VariableMapping match=(domainConcept=concept) using Concept2VariableMapping:create(concept)          
+          } else {          
+            log "Constant abstract association (rule 9)"            
+            FML@RT::MatchFlexoConceptInstance as Concept2ConstantMapping match=(domainConcept=concept) using Concept2ConstantMapping:create(concept)          
+          }        
+        }        
+        da = context.componentResource.bComponent.String2Int();        
+        di = context.componentResource.bComponent.String2Int();        
+        log ((((("domainCardinality " + concept.domainCardinality) + " da=") + da) + " di=") + di)        
+        ra = context.componentResource.bComponent.String2Int();        
+        ri = context.componentResource.bComponent.String2Int();        
+        log ((((("rangeCardinality  " + concept.rangeCardinality) + " ra=") + ra) + " ri=") + ri)        
+        log ((((((("Determining Association Type di=" + di) + " da=") + da) + " ri=") + ri) + " ra=") + ra)        
+        if (ra = 1) {        
+          formula = ((concept.domain.name + " +-> ") + concept.range.name);          
+          log ("ASSOCIATION TYPE 0 : " + formula)          
+          if (ri = 1) {          
+            formula = ((concept.domain.name + " --> ") + concept.range.name);            
+            log ("ASSOCIATION TYPE 1 : " + formula)          
+          }          
+          if (di = 1) {          
+            if (ri = 1) {            
+              formula = ((concept.domain.name + " -->> ") + concept.range.name);              
+              log ("ASSOCIATION TYPE 2.1 : " + formula)            
+            } else {            
+              formula = ((concept.domain.name + " +->> ") + concept.range.name);              
+              log ("ASSOCIATION TYPE 2.2 : " + formula)            
+            }          
+          }          
+          if (da = 1) {          
+            if (ri = 1) {            
+              if (di = 1) {              
+                formula = ((concept.domain.name + " >->> ") + concept.range.name);                
+                log ("ASSOCIATION TYPE 3.1 : " + formula)              
+              } else {              
+                formula = ((concept.domain.name + " >-> ") + concept.range.name);                
+                log ("ASSOCIATION TYPE 3.2 : " + formula)              
+              }            
+            } else {            
+              formula = ((concept.domain.name + " >+> ") + concept.range.name);              
+              log ("ASSOCIATION TYPE 4 : " + formula)            
+            }          
+          }          
+          if (((da > (-(1))) & (da != 1)) | (di > 1)) {          
+            if (di = da) {            
+              formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) = ") + di) + ")");              
+              log ("ASSOCIATION TYPE 5.1 : " + formula)            
+            } else {            
+              if (da = (-(1))) {              
+                formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) >= ") + di) + ")");                
+                log ("ASSOCIATION TYPE 5.2.1 : " + formula)                
+                if (da > (-(1))) {                
+                  if (di = 0) {                  
+                    formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) <= ") + da) + ")");                    
+                    log ("ASSOCIATION TYPE 5.2.1.1 : " + formula)                  
+                  } else {                  
+                    if (di > 0) {                    
+                      formula = (((((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) : ") + di) + "..") + da) + ")");                      
+                      log ("ASSOCIATION TYPE 5.2.1.2 : " + formula)                    
+                    }                  
+                  }                
+                }              
+              }            
+            }          
+          }        
+        } else {        
+          formula = ((concept.domain.name + " <-> ") + concept.range.name);          
+          log ("ASSOCIATION TYPE 6 : " + formula)          
+          if (di = da) {          
+            formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) = ") + di) + ")");            
+            log ("ASSOCIATION TYPE 7.1 : " + formula)          
+          } else {          
+            if ((da = (-(1))) & (di > 0)) {            
+              formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) >= ") + di) + ")");              
+              log ("ASSOCIATION TYPE 7.1.1 : " + formula)            
+            } else {            
+              if (da > (-(1))) {              
+                if (di = 0) {                
+                  formula = (((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) <= ") + da) + ")");                  
+                  log ("ASSOCIATION TYPE 7.1.1.1 : " + formula)                
+                } else {                
+                  if (di > 0) {                  
+                    formula = (((((((((formula + " & \n !xx.(xx:") + concept.range.name) + "=> card(") + concept.name) + "~[{xx}]) : ") + di) + "..") + da) + ")");                    
+                    log ("ASSOCIATION TYPE 7.1.1.1.1 : " + formula)                  
+                  }                
+                }              
+              }            
+            }          
+          }          
+          if (ri = ra) {          
+            formula = (((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) = ") + ri) + ")");            
+            log ("ASSOCIATION TYPE 8.1 : " + formula)          
+          } else {          
+            if ((ra = (-(1))) & (ri > 0)) {            
+              formula = (((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) >= ") + ri) + ")");              
+              log ("ASSOCIATION TYPE 8.2.1 : " + formula)            
+            } else {            
+              if (ra > (-(1))) {              
+                if (ri = 0) {                
+                  formula = (((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) <= ") + ra) + ")");                  
+                  log ("ASSOCIATION TYPE 8.2.1.1 : " + formula)                
+                } else {                
+                  if (ri > 0) {                  
+                    formula = (((((((((formula + " & \n !xx.(xx:") + concept.domain.name) + "=> card(") + concept.name) + "[{xx}]) : ") + ri) + "..") + ra) + ")");                    
+                    log ("ASSOCIATION TYPE 8.2.1.2.1 : " + formula)                  
+                  }                
+                }              
+              }            
+            }          
+          }        
+        }        
+        formula = ((concept.name + " : ") + formula);        
+        log ("formula = " + formula)        
+        log "Association: rules 18-22"        
+        if concept.isASymmetric {        
+          formula = (((((((formula + " &\n (") + concept.name) + "~ /\\ ") + concept.name) + ") <: id(") + concept.domain.name) + ")");          
+          log ("ASymmetric Association; formula=" + formula)        
+        }        
+        if concept.isTransitive {        
+          formula = ((((((formula + " &\n (") + concept.name) + " ; ") + concept.name) + ") <: ") + concept.name);          
+          log ("Transitive Association; formula=" + formula)        
+        }        
+        if concept.isSysmmetric {        
+          formula = ((((formula + " &\n ") + concept.name) + "~ = ") + concept.name);          
+          log ("Sysmmetric Association; formula=" + formula)        
+        }        
+        if concept.isReflexive {        
+          formula = ((((formula + " &\n id(") + concept.domain.name) + ") <: ") + concept.name);          
+          log ("Reflexive Association; formula=" + formula)        
+        }        
+        if concept.isIrreflexive {        
+          formula = (((((formula + " &\n id(") + concept.domain.name) + ") /\\ ") + concept.name) + " = {}");          
+          log ("Irreflexive Association; formula=" + formula)        
+        }        
+        if concept.isVariable {        
+          FML@RT::MatchFlexoConceptInstance as Concept2Invariant match=(domainConcept=concept,formula=formula) using Concept2Invariant:create(concept,formula)        
+        } else {        
+          FML@RT::MatchFlexoConceptInstance as Concept2Property match=(domainConcept=concept,formula=formula) using Concept2Property:create(concept,formula)        
+        }      
+      }      
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=selected.isVariable)) {      
+        log "Variable concept initialisation (rule 17)"        
+        FML@RT::MatchFlexoConceptInstance as Concept2Initialisation match=(domainConcept=concept,individualsString=this.getConstantIndividualString(concept)) using Concept2Initialisation:create(concept,this.getConstantIndividualString(concept))      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=(selected.isVariable(selected.name != null)))) {      
+        log "Variable individual initialisation (rule 16)"        
+        FML@RT::MatchFlexoConceptInstance as Individual2Initialisation match=(individual=individual) using Individual2Initialisation:create(individual)      
+      }      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      log "END STRUCTURAL PART UPDATE"      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Concept2SetMapping)) {      
+        rule.updateNameFromDM()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Concept2VariableMapping)) {      
+        rule.updateNameFromDM()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Individual2SetValueMapping)) {      
+        rule.updateNameFromDM()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Concept2ConstantMapping)) {      
+        rule.updateNameFromDM()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Individual2VariableMapping)) {      
+        rule.updateNameFromDM()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Individual2ConstantMapping)) {      
+        rule.updateNameFromDM()      
+      }    
+    }    
+  
+    @ActionScheme    
+    AtelierBComponent createMachine() {    
+      if (parent = null) {      
+        log "Create top-level machine"        
+        return sourceProject.AddAtelierBComponent();      
+      } else {      
+        log "Create child machine"        
+        return sourceProject.AddAtelierBComponent();      
+      }    
+    }    
+  
+    @ActionScheme    
+    public Void updateBehavioralPart() {    
+      log "update of the behavioral part"      
+      MatchingSet matchingSet = this.initiateMatching(BehavioralRuleMapping);      
+      for (goal : domainModelMapping.goalGroup.goals) {      
+        log ("Apply rule for goal " + goal)        
+        FML@RT::MatchFlexoConceptInstance as EventMapping match=(goal=goal) using EventMapping:create(goal)      
+      }      
+      matchingSet.finalizeMatching()      
+      for (rule : container.container.SelectFlexoConceptInstance(type=EventMapping)) {      
+        rule.updateNameFromGM()      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void updateFromDomainModel() {    
+      for (childDomainModelMapping : domainModelMapping.children) {      
+        BMapping mapping = container.container.SelectUniqueFlexoConceptInstance(type=BMapping,where=where=(selected.domainModelMapping = childDomainModelMapping));        
+        if (mapping = null) {        
+          log "Create child B mapping"          
+          mapping = BMapping.create(childDomainModelMapping,this);        
+        }        
+        mapping.updateFromDomainModel()      
+      }    
+    }    
+  
+    @ActionScheme    
+    public Void updateFormalModel() {    
+      this.updateFromDomainModel()      
+      this.updateStructuralPart()      
+      this.updateBehavioralPart()    
+    }    
+  
+    @ActionScheme    
+    Concept getConstantParent(Concept concept) {    
+      if parameters.concept.isVariable {      
+        return this.getConstantParent(parameters.concept.parentConcept);      
+      } else {      
+        return parameters.concept;      
+      }    
+    }    
+  
+    @ActionScheme    
+    String getConstantIndividualString(Concept concept) {    
+      String str = "";      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=MapletIndividual,where=where=((selected.individualOf != null)(!(selected.isVariable))(selected.individualOf = parameters.concept)))) {      
+        str = ((str + individual.getCanonicalString()) + ", ");      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=((selected.individualOf != null)(!(selected.isVariable))(selected.individualOf = parameters.concept)(selected.concept.name != "MapletIndividual")))) {      
+        str = ((str + individual.getCanonicalString()) + ", ");      
+      }      
+      log ("getConstantIndividualString str=" + str)      
+      if str.contains(",") {      
+        return (("{" + str.substring(0,(str.length - 2))) + "}");      
+      } else {      
+        return "{}";      
+      }    
+    }    
+  
+    @ActionScheme    
+    BPredicate getProperties(Integer i) {    
+      if (parameters.i >= properties.size) {      
+        return null;      
+      }      
+      if (parameters.i = (properties.size - 1)) {      
+        return properties.get(parameters.i);      
+      } else {      
+          
+      }      
+      return context.componentResource.bComponent.CreateBBinaryPredicatePredicate();    
+    }    
+  
+    @ActionScheme    
+    BPredicate getInvariant(Integer i) {    
+      if (parameters.i >= invariants.size) {      
+        return null;      
+      }      
+      if (parameters.i = (invariants.size - 1)) {      
+        return invariants.get(parameters.i);      
+      } else {      
+          
+      }      
+      return machine.componentResource.bComponent.CreateBBinaryPredicatePredicate();    
+    }    
+  
+    @ActionScheme    
+    Boolean isInvariant(LogicalFormula logicalFormula) {    
+      for (concept : domainModel.SelectFlexoConceptInstance(type=Concept,where=where=selected.isVariable)) {      
+        if parameters.logicalFormula.assertion.contains(concept.name) {        
+          return true;        
+        }      
+      }      
+      for (individual : domainModel.SelectFlexoConceptInstance(type=Individual,where=where=selected.isVariable)) {      
+        if parameters.logicalFormula.assertion.contains(individual.name) {        
+          return true;        
+        }      
+      }      
+      return false;    
+    }    
+  
+    @ActionScheme    
+    BOperation createInitialisationAction() {    
+      if (parent = null) {      
+        return machine.componentResource.bComponent.AddBOperation();      
+      } else {      
+        return machine.componentResource.bComponent.AddBRefinedOperation();      
+      }    
+    }    
+  
+    @ActionScheme    
+    public Void backPropagateUpdates() {    
+      MatchingSet matchingSet = this.initiateMatching(BackPropagatingRuleMapping);      
+      log "back Propagating Structural Part Updates"      
+      for (set : context.componentResource.bComponent.getSets()) {      
+        log (("Back propagating the addition of a set " + set.name) + " (rules b-1 & b-2)")        
+        FlexoBSet cset = FlexoBSet.create();        
+        cset.set = set;        
+        FML@RT::MatchFlexoConceptInstance as Concept2SetMapping match=(set=set) using Concept2SetMapping:createWithSet(cset)        
+        for (setValue : set.getEnumeratedValues()) {        
+          log (("Back propagating the addition of a setValue " + setValue.name) + " (rule b-2)")          
+          FlexoBSetValue csetValue = FlexoBSetValue.create();          
+          csetValue.setValue = setValue;          
+          FML@RT::MatchFlexoConceptInstance as Individual2SetValueMapping match=(setValue=setValue,set=set) using Individual2SetValueMapping:createWithSetValue(csetValue)        
+        }      
+      }      
+      matchingSet.finalizeMatching()      
+      matchingSet.finalizeMatching()      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Concept2SetMapping)) {      
+        rule.updateNameFromB()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Concept2VariableMapping)) {      
+        rule.updateNameFromB()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Individual2SetValueMapping)) {      
+        rule.updateNameFromB()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Concept2ConstantMapping)) {      
+        rule.updateNameFromB()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Individual2VariableMapping)) {      
+        rule.updateNameFromB()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=Individual2ConstantMapping)) {      
+        rule.updateNameFromB()      
+      }      
+      for (rule : container.container.SelectFlexoConceptInstance(type=EventMapping)) {      
+        rule.updateNameFromB()      
+      }    
+    }    
+  
+  
+    @FlexoConcept    
+    public class Concept2SetMapping extends StructuralRuleMapping,BackPropagatingRuleMapping  {    
+      
+      public BSet set;    
+      public Concept domainConcept;    
+      public ConceptGR domainConceptGR;    
+      
+      @CreationScheme      
+      Concept2SetMapping:create(Concept aConcept) {      
+        log ("Concept2SetMapping: create Set related to concept " + parameters.aConcept)        
+        domainConcept = parameters.aConcept;        
+        set = context.componentResource.bComponent.AddBSet();      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        context.componentResource.bComponent.removeFromSets(set)        
+        delete set;      
+      }      
+      
+      @CreationScheme      
+      Concept2SetMapping:createWithSet(FlexoBSet aSet) {      
+        log ("Concept2SetMapping: create Concept related to set " + parameters.aSet.set.name)        
+        set = parameters.aSet.set;        
+        domainConcept = Concept.create(set.name,false,false,null);        
+        domainConceptGR = ConceptGR.create(domainConcept,domainModelMapping.defaultDiagram);      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithDMItem() {      
+        domainConceptGR.delete();      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+        set.name = domainConcept.name;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        domainConcept.name = set.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class StructuralRuleMapping {    
+      
+      @CreationScheme      
+      StructuralRuleMapping:create() {      
+          
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+          
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+          
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+          
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Concept2VariableMapping extends StructuralRuleMapping  {    
+      
+      public Concept domainConcept;    
+      public BAbstractVariable variable;    
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        machine.componentResource.bComponent.removeFromAbstractVariables(variable)        
+        delete variable;      
+      }      
+      
+      @CreationScheme      
+      Concept2VariableMapping:create(Concept aConcept) {      
+        log ("Concept2VariableMapping: create variable related to concept " + parameters.aConcept)        
+        domainConcept = parameters.aConcept;        
+        variable = machine.componentResource.bComponent.AddBAbstractVariable();      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+        variable.name = domainConcept.name;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        domainConcept.name = variable.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class EventMapping extends BehavioralRuleMapping  {    
+      
+      public BOperation operation;    
+      public Goal goal;    
+      
+      @CreationScheme      
+      EventMapping:create(Goal aGoal) {      
+        goal = parameters.aGoal;        
+        log ((("Handling event " + goal) + " parentGoal=") + goal.parentGoal)        
+        if (goal.parentGoal != null) {        
+          operation = machine.componentResource.bComponent.AddBRefinedOperation();          
+          log "Add refined event"        
+        } else {        
+          operation = machine.componentResource.bComponent.AddBOperation();          
+          log "Add normal event"        
+        }      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        machine.componentResource.bComponent.removeFromOperations(operation)        
+        delete operation;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromGM() {      
+        operation.name = goal.name;        
+        if (goal.parentGoal != null) {        
+          log "Concrete event; its parent name must also be updated... but !"        
+        }      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        goal.name = operation.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class BehavioralRuleMapping {    
+      
+      @CreationScheme      
+      BehavioralRuleMapping:create() {      
+          
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromGM() {      
+          
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+          
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Individual2SetValueMapping extends StructuralRuleMapping,BackPropagatingRuleMapping  {    
+      
+      public Individual individual;    
+      public BSetValue setValue;    
+      public BSet set;    
+      public IndividualGR individualGR;    
+      
+      @CreationScheme      
+      Individual2SetValueMapping:create(Individual individual, Concept2SetMapping concept2SetMapping) {      
+        log ("Individual2SetValueMapping: create SetValue related to individual " + parameters.individual)        
+        individual = parameters.individual;        
+        setValue = context.componentResource.bComponent.AddBSetValue();        
+        set = parameters.concept2SetMapping.set;      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        set.removeFromEnumeratedValues(setValue)        
+        delete setValue;      
+      }      
+      
+      @CreationScheme      
+      Individual2SetValueMapping:createWithSetValue(FlexoBSetValue aSetValue) {      
+        log ("Individual2SetValueMapping: create Individual related to setValue " + parameters.aSetValue.setValue.name)        
+        setValue = parameters.aSetValue.setValue;        
+        set = setValue.set;        
+        Concept2SetMapping concept2SetMapping = container.container.container.SelectUniqueFlexoConceptInstance(type=Concept2SetMapping,where=where=(selected.set.name = set.name));        
+        log ("concept found: " + concept2SetMapping.domainConcept.name)        
+        concept2SetMapping.domainConcept.isEnumeration = true;        
+        individual = Individual.create(setValue.name,concept2SetMapping.domainConcept,false,null);        
+        individualGR = IndividualGR.create(individual,domainModelMapping.defaultDiagram);      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithDMItem() {      
+        individualGR.delete();      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+        setValue.name = individual.name;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        individual.name = setValue.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Concept2ConstantMapping extends StructuralRuleMapping  {    
+      
+      public Concept domainConcept;    
+      public BAbstractConstant constant;    
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        context.componentResource.bComponent.removeFromAbstractConstants(constant)        
+        delete constant;      
+      }      
+      
+      @CreationScheme      
+      Concept2ConstantMapping:create(Concept aConcept) {      
+        log ("Concept2ConstantMapping: create Constant related to concept " + parameters.aConcept)        
+        domainConcept = parameters.aConcept;        
+        constant = context.componentResource.bComponent.AddBAbstractConstant();      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+        constant.name = domainConcept.name;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        domainConcept.name = constant.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Individual2VariableMapping extends StructuralRuleMapping  {    
+      
+      public Individual individual;    
+      public BAbstractVariable variable;    
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        machine.componentResource.bComponent.removeFromAbstractVariables(variable)        
+        delete variable;      
+      }      
+      
+      @CreationScheme      
+      Individual2VariableMapping:create(Individual anIndividual, String nameString) {      
+        log ("Individual2VariableMapping: create variable related to individual " + parameters.anIndividual)        
+        individual = parameters.anIndividual;        
+        if (individual.name = null) {        
+          variable = machine.componentResource.bComponent.AddBAbstractVariable();        
+        } else {        
+          variable = machine.componentResource.bComponent.AddBAbstractVariable();        
+        }      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+        variable.name = individual.name;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        individual.name = variable.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Individual2ConstantMapping extends StructuralRuleMapping  {    
+      
+      public Individual individual;    
+      public BAbstractConstant constant;    
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        context.componentResource.bComponent.removeFromAbstractConstants(constant)        
+        delete constant;      
+      }      
+      
+      @CreationScheme      
+      Individual2ConstantMapping:create(Individual anIndividual, String nameString) {      
+        log ("Individual2ConstantMapping: create Constant related to individual " + parameters.anIndividual)        
+        individual = parameters.anIndividual;        
+        if (individual.name = null) {        
+          constant = context.componentResource.bComponent.AddBAbstractConstant();        
+        } else {        
+          constant = context.componentResource.bComponent.AddBAbstractConstant();        
+        }      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromDM() {      
+        constant.name = individual.name;      
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+        individual.name = constant.name;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Concept2Property extends StructuralRuleMapping  {    
+      
+      public Concept domainConcept;    
+      public BPredicate typingPredicate;    
+      public String formula;    
+      
+      @CreationScheme      
+      Concept2Property:create(Concept aConcept, String formula) {      
+        log ((("Concept2Property: create Property " + formula) + " related to concept ") + parameters.aConcept)        
+        domainConcept = parameters.aConcept;        
+        formula = parameters.formula;        
+        typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();        
+        log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())        
+        properties.add(typingPredicate)        
+        context.componentResource.bComponent.setProperties(container.getProperties(0))      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItemOld() {      
+        String propertiesString = context.componentResource.bComponent.getProperties().getBPrettyPrint();        
+        log ("old properties " + propertiesString)        
+        propertiesString = propertiesString.replaceAll((("(\\s)*&(\\s)*" + formula) + "(\\s)*")," ").replaceAll((("(\\s)*" + formula) + "(\\s)*&(\\s)*")," ");        
+        log ("new properties0 " + propertiesString)        
+        int i = propertiesString.indexOf(formula);        
+        Integer i0 = this.max(1,(i - 3));        
+        Integer i1 = this.min(((i + formula.length) + 3),(propertiesString.length - 1));        
+        propertiesString = ((propertiesString.substring(1,i0) + (((i0 != 1) & (i1 != (propertiesString.length() - 1))) ? " & " : "")) + propertiesString.substring(i1,(propertiesString.length() - 1)));        
+        log ("new properties1 " + propertiesString)        
+        if ((propertiesString != null) & (propertiesString.length > 0)) {        
+          BPredicate newProperties = context.componentResource.bComponent.CreateBPredicateFromString();          
+          context.componentResource.bComponent.setProperties(newProperties)        
+        } else {        
+          context.componentResource.bComponent.setProperties(null)        
+        }      
+      }      
+      
+      @ActionScheme      
+      Integer max(Integer a, Integer b) {      
+        return ((parameters.a >= parameters.b) ? parameters.a : parameters.b);      
+      }      
+      
+      @ActionScheme      
+      Integer min(Integer a, Integer b) {      
+        return ((parameters.a >= parameters.b) ? parameters.b : parameters.a);      
+      }      
+      
+      @DeletionScheme      
+      public Void deleteWithBItemOld2() {      
+        BPredicate predicate = context.componentResource.bComponent.RemoveBPredicateInBPredicate();        
+        context.componentResource.bComponent.setProperties(predicate)      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        properties.remove(typingPredicate);        
+        context.componentResource.bComponent.setProperties(container.getProperties(0))      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Concept2Invariant extends StructuralRuleMapping  {    
+      
+      public Concept domainConcept;    
+      public BPredicate typingPredicate;    
+      public String formula;    
+      
+      @CreationScheme      
+      Concept2Invariant:create(Concept aConcept, String formula) {      
+        log ((("Concept2Invariant: create Invariant " + formula) + " related to concept ") + parameters.aConcept)        
+        domainConcept = parameters.aConcept;        
+        formula = parameters.formula;        
+        typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();        
+        log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())        
+        invariants.add(typingPredicate)        
+        machine.componentResource.bComponent.setInvariant(container.getInvariant(0))      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        invariants.remove(typingPredicate);        
+        machine.componentResource.bComponent.setInvariant(container.getInvariant(0))      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class LogicalFormula2Property extends StructuralRuleMapping  {    
+      
+      public LogicalFormula logicalFormula;    
+      public BPredicate typingPredicate;    
+      
+      @CreationScheme      
+      LogicalFormula2Property:create(LogicalFormula aLogicalFormula) {      
+        log ("LogicalFormula2Property: create Property related to logicalFormula " + parameters.aLogicalFormula.assertion)        
+        logicalFormula = parameters.aLogicalFormula;        
+        typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();        
+        log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())        
+        properties.add(typingPredicate)        
+        context.componentResource.bComponent.setProperties(container.getProperties(0))      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        properties.remove(typingPredicate);        
+        context.componentResource.bComponent.setProperties(container.getProperties(0))      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class LogicalFormula2Invariant extends StructuralRuleMapping  {    
+      
+      public LogicalFormula logicalFormula;    
+      public BPredicate typingPredicate;    
+      
+      @CreationScheme      
+      LogicalFormula2Invariant:create(LogicalFormula aLogicalFormula) {      
+        log ("LogicalFormula2Invariant: create Invariant related to logicalFormula " + parameters.aLogicalFormula.assertion)        
+        logicalFormula = parameters.aLogicalFormula;        
+        typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();        
+        log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())        
+        invariants.add(typingPredicate)        
+        machine.componentResource.bComponent.setInvariant(container.getInvariant(0))      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        invariants.remove(typingPredicate);        
+        machine.componentResource.bComponent.setInvariant(container.getInvariant(0))      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Individual2Property extends StructuralRuleMapping  {    
+      
+      public Individual individual;    
+      public BPredicate typingPredicate;    
+      public String formula;    
+      
+      @CreationScheme      
+      Individual2Property:create(Individual anIndividual, String formula) {      
+        log ((("Individual2Property: create Property " + formula) + " related to individual ") + parameters.anIndividual)        
+        individual = parameters.anIndividual;        
+        formula = parameters.formula;        
+        typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();        
+        log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())        
+        properties.add(typingPredicate)        
+        context.componentResource.bComponent.setProperties(container.getProperties(0))      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        properties.remove(typingPredicate);        
+        context.componentResource.bComponent.setProperties(container.getProperties(0))      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Individual2Invariant extends StructuralRuleMapping  {    
+      
+      public Individual individual;    
+      public BPredicate typingPredicate;    
+      public String formula;    
+      
+      @CreationScheme      
+      Individual2Invariant:create(Individual anIndividual, String formula) {      
+        log ((("Individual2Invariant: create Invariant " + formula) + " related to individual ") + parameters.anIndividual)        
+        individual = parameters.anIndividual;        
+        formula = parameters.formula;        
+        typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();        
+        log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())        
+        invariants.add(typingPredicate)        
+        machine.componentResource.bComponent.setInvariant(container.getInvariant(0))      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        invariants.remove(typingPredicate);        
+        machine.componentResource.bComponent.setInvariant(container.getInvariant(0))      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Concept2Initialisation extends StructuralRuleMapping  {    
+      
+      public Concept domainConcept;    
+      public String individualsString;    
+      public BSubstitution substitution;    
+      
+      @CreationScheme      
+      Concept2Initialisation:create(Concept aConcept, String individualsString) {      
+        log ("Concept2Initialisation: create Initialisation substitution related to concept " + parameters.aConcept)        
+        domainConcept = parameters.aConcept;        
+        individualsString = parameters.individualsString;        
+        BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        substitution = machine.componentResource.bComponent.CreateBSubstitution();        
+        log ("substitution " + substitution.getNormalizedBRepresentation())        
+        initialisationOperationBody.addToSubstitutions(substitution)      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        initialisationOperationBody.removeFromSubstitutions(substitution)        
+        delete substitution;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class Individual2Initialisation extends StructuralRuleMapping  {    
+      
+      public Individual individual;    
+      public BSubstitution substitution;    
+      
+      @CreationScheme      
+      Individual2Initialisation:create(Individual anIndividual) {      
+        log ("Individual2Initialisation: create Initialisation substitution related to individual " + parameters.anIndividual)        
+        individual = parameters.anIndividual;        
+        BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        if (individual.initialValue != null) {        
+          String rightString = "";          
+          if (individual.initialValue.name != null) {          
+            rightString = individual.initialValue.name;          
+          } else {          
+            rightString = individual.getCanonicalString();          
+          }          
+          BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          substitution = machine.componentResource.bComponent.CreateBSubstitution();        
+        } else {        
+          BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();          
+          substitution = machine.componentResource.bComponent.CreateBSubstitution();        
+        }        
+        log ("substitution " + substitution.getNormalizedBRepresentation())        
+        initialisationOperationBody.addToSubstitutions(substitution)      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        initialisationOperationBody.removeFromSubstitutions(substitution)        
+        delete substitution;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class UnnamedMapletIndividual2Initialisation extends StructuralRuleMapping  {    
+      
+      public MapletIndividual individual;    
+      public BSubstitution substitution;    
+      
+      @CreationScheme      
+      UnnamedMapletIndividual2Initialisation:create(MapletIndividual anIndividual) {      
+        log ("UnnamedMapletIndividual2Initialisation: create Initialisation substitution related to UnnamedMapletIndividual " + parameters.anIndividual)        
+        individual = parameters.anIndividual;        
+        BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        substitution = machine.componentResource.bComponent.CreateBSubstitution();        
+        log ("substitution " + substitution.getNormalizedBRepresentation())        
+        initialisationOperationBody.addToSubstitutions(substitution)      
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithBItem() {      
+        initialisationOperationBody.removeFromSubstitutions(substitution)        
+        delete substitution;      
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class FlexoBSet {    
+      
+      public BSet set;    
+      
+      @CreationScheme      
+      FlexoBSet:create() {      
+        set = null;      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class FlexoBSetValue {    
+      
+      public BSetValue setValue;    
+      
+      @CreationScheme      
+      FlexoBSetValue:create() {      
+        setValue = null;      
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+    }    
+  
+    @FlexoConcept    
+    public class BackPropagatingRuleMapping {    
+      
+      @CreationScheme      
+      BackPropagatingRuleMapping:create() {      
+          
+      }      
+      
+      @DeletionScheme      
+      Void delete() {      
+          
+      }      
+      
+      @DeletionScheme      
+      Void deleteWithDMItem() {      
+          
+      }      
+      
+      @ActionScheme      
+      Void updateNameFromB() {      
+          
+      }      
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Concept2SetMapping extends StructuralRuleMapping,BackPropagatingRuleMapping  {  
+  
+    public BSet set;  
+    public Concept domainConcept;  
+    public ConceptGR domainConceptGR;  
+  
+    @CreationScheme    
+    Concept2SetMapping:create(Concept aConcept) {    
+      log ("Concept2SetMapping: create Set related to concept " + parameters.aConcept)      
+      domainConcept = parameters.aConcept;      
+      set = context.componentResource.bComponent.AddBSet();    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      context.componentResource.bComponent.removeFromSets(set)      
+      delete set;    
+    }    
+  
+    @CreationScheme    
+    Concept2SetMapping:createWithSet(FlexoBSet aSet) {    
+      log ("Concept2SetMapping: create Concept related to set " + parameters.aSet.set.name)      
+      set = parameters.aSet.set;      
+      domainConcept = Concept.create(set.name,false,false,null);      
+      domainConceptGR = ConceptGR.create(domainConcept,domainModelMapping.defaultDiagram);    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithDMItem() {    
+      domainConceptGR.delete();    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      set.name = domainConcept.name;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      domainConcept.name = set.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class StructuralRuleMapping {  
+  
+    @CreationScheme    
+    StructuralRuleMapping:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Concept2VariableMapping extends StructuralRuleMapping  {  
+  
+    public Concept domainConcept;  
+    public BAbstractVariable variable;  
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      machine.componentResource.bComponent.removeFromAbstractVariables(variable)      
+      delete variable;    
+    }    
+  
+    @CreationScheme    
+    Concept2VariableMapping:create(Concept aConcept) {    
+      log ("Concept2VariableMapping: create variable related to concept " + parameters.aConcept)      
+      domainConcept = parameters.aConcept;      
+      variable = machine.componentResource.bComponent.AddBAbstractVariable();    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      variable.name = domainConcept.name;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      domainConcept.name = variable.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class EventMapping extends BehavioralRuleMapping  {  
+  
+    public BOperation operation;  
+    public Goal goal;  
+  
+    @CreationScheme    
+    EventMapping:create(Goal aGoal) {    
+      goal = parameters.aGoal;      
+      log ((("Handling event " + goal) + " parentGoal=") + goal.parentGoal)      
+      if (goal.parentGoal != null) {      
+        operation = machine.componentResource.bComponent.AddBRefinedOperation();        
+        log "Add refined event"      
+      } else {      
+        operation = machine.componentResource.bComponent.AddBOperation();        
+        log "Add normal event"      
+      }    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      machine.componentResource.bComponent.removeFromOperations(operation)      
+      delete operation;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromGM() {    
+      operation.name = goal.name;      
+      if (goal.parentGoal != null) {      
+        log "Concrete event; its parent name must also be updated... but !"      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      goal.name = operation.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class BehavioralRuleMapping {  
+  
+    @CreationScheme    
+    BehavioralRuleMapping:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromGM() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Individual2SetValueMapping extends StructuralRuleMapping,BackPropagatingRuleMapping  {  
+  
+    public Individual individual;  
+    public BSetValue setValue;  
+    public BSet set;  
+    public IndividualGR individualGR;  
+  
+    @CreationScheme    
+    Individual2SetValueMapping:create(Individual individual, Concept2SetMapping concept2SetMapping) {    
+      log ("Individual2SetValueMapping: create SetValue related to individual " + parameters.individual)      
+      individual = parameters.individual;      
+      setValue = context.componentResource.bComponent.AddBSetValue();      
+      set = parameters.concept2SetMapping.set;    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      set.removeFromEnumeratedValues(setValue)      
+      delete setValue;    
+    }    
+  
+    @CreationScheme    
+    Individual2SetValueMapping:createWithSetValue(FlexoBSetValue aSetValue) {    
+      log ("Individual2SetValueMapping: create Individual related to setValue " + parameters.aSetValue.setValue.name)      
+      setValue = parameters.aSetValue.setValue;      
+      set = setValue.set;      
+      Concept2SetMapping concept2SetMapping = container.container.container.SelectUniqueFlexoConceptInstance(type=Concept2SetMapping,where=where=(selected.set.name = set.name));      
+      log ("concept found: " + concept2SetMapping.domainConcept.name)      
+      concept2SetMapping.domainConcept.isEnumeration = true;      
+      individual = Individual.create(setValue.name,concept2SetMapping.domainConcept,false,null);      
+      individualGR = IndividualGR.create(individual,domainModelMapping.defaultDiagram);    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithDMItem() {    
+      individualGR.delete();    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      setValue.name = individual.name;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      individual.name = setValue.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Concept2ConstantMapping extends StructuralRuleMapping  {  
+  
+    public Concept domainConcept;  
+    public BAbstractConstant constant;  
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      context.componentResource.bComponent.removeFromAbstractConstants(constant)      
+      delete constant;    
+    }    
+  
+    @CreationScheme    
+    Concept2ConstantMapping:create(Concept aConcept) {    
+      log ("Concept2ConstantMapping: create Constant related to concept " + parameters.aConcept)      
+      domainConcept = parameters.aConcept;      
+      constant = context.componentResource.bComponent.AddBAbstractConstant();    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      constant.name = domainConcept.name;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      domainConcept.name = constant.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Individual2VariableMapping extends StructuralRuleMapping  {  
+  
+    public Individual individual;  
+    public BAbstractVariable variable;  
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      machine.componentResource.bComponent.removeFromAbstractVariables(variable)      
+      delete variable;    
+    }    
+  
+    @CreationScheme    
+    Individual2VariableMapping:create(Individual anIndividual, String nameString) {    
+      log ("Individual2VariableMapping: create variable related to individual " + parameters.anIndividual)      
+      individual = parameters.anIndividual;      
+      if (individual.name = null) {      
+        variable = machine.componentResource.bComponent.AddBAbstractVariable();      
+      } else {      
+        variable = machine.componentResource.bComponent.AddBAbstractVariable();      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      variable.name = individual.name;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      individual.name = variable.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Individual2ConstantMapping extends StructuralRuleMapping  {  
+  
+    public Individual individual;  
+    public BAbstractConstant constant;  
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      context.componentResource.bComponent.removeFromAbstractConstants(constant)      
+      delete constant;    
+    }    
+  
+    @CreationScheme    
+    Individual2ConstantMapping:create(Individual anIndividual, String nameString) {    
+      log ("Individual2ConstantMapping: create Constant related to individual " + parameters.anIndividual)      
+      individual = parameters.anIndividual;      
+      if (individual.name = null) {      
+        constant = context.componentResource.bComponent.AddBAbstractConstant();      
+      } else {      
+        constant = context.componentResource.bComponent.AddBAbstractConstant();      
+      }    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromDM() {    
+      constant.name = individual.name;    
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      individual.name = constant.name;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Concept2Property extends StructuralRuleMapping  {  
+  
+    public Concept domainConcept;  
+    public BPredicate typingPredicate;  
+    public String formula;  
+  
+    @CreationScheme    
+    Concept2Property:create(Concept aConcept, String formula) {    
+      log ((("Concept2Property: create Property " + formula) + " related to concept ") + parameters.aConcept)      
+      domainConcept = parameters.aConcept;      
+      formula = parameters.formula;      
+      typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();      
+      log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())      
+      properties.add(typingPredicate)      
+      context.componentResource.bComponent.setProperties(container.getProperties(0))    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItemOld() {    
+      String propertiesString = context.componentResource.bComponent.getProperties().getBPrettyPrint();      
+      log ("old properties " + propertiesString)      
+      propertiesString = propertiesString.replaceAll((("(\\s)*&(\\s)*" + formula) + "(\\s)*")," ").replaceAll((("(\\s)*" + formula) + "(\\s)*&(\\s)*")," ");      
+      log ("new properties0 " + propertiesString)      
+      int i = propertiesString.indexOf(formula);      
+      Integer i0 = this.max(1,(i - 3));      
+      Integer i1 = this.min(((i + formula.length) + 3),(propertiesString.length - 1));      
+      propertiesString = ((propertiesString.substring(1,i0) + (((i0 != 1) & (i1 != (propertiesString.length() - 1))) ? " & " : "")) + propertiesString.substring(i1,(propertiesString.length() - 1)));      
+      log ("new properties1 " + propertiesString)      
+      if ((propertiesString != null) & (propertiesString.length > 0)) {      
+        BPredicate newProperties = context.componentResource.bComponent.CreateBPredicateFromString();        
+        context.componentResource.bComponent.setProperties(newProperties)      
+      } else {      
+        context.componentResource.bComponent.setProperties(null)      
+      }    
+    }    
+  
+    @ActionScheme    
+    Integer max(Integer a, Integer b) {    
+      return ((parameters.a >= parameters.b) ? parameters.a : parameters.b);    
+    }    
+  
+    @ActionScheme    
+    Integer min(Integer a, Integer b) {    
+      return ((parameters.a >= parameters.b) ? parameters.b : parameters.a);    
+    }    
+  
+    @DeletionScheme    
+    public Void deleteWithBItemOld2() {    
+      BPredicate predicate = context.componentResource.bComponent.RemoveBPredicateInBPredicate();      
+      context.componentResource.bComponent.setProperties(predicate)    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      properties.remove(typingPredicate);      
+      context.componentResource.bComponent.setProperties(container.getProperties(0))    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Concept2Invariant extends StructuralRuleMapping  {  
+  
+    public Concept domainConcept;  
+    public BPredicate typingPredicate;  
+    public String formula;  
+  
+    @CreationScheme    
+    Concept2Invariant:create(Concept aConcept, String formula) {    
+      log ((("Concept2Invariant: create Invariant " + formula) + " related to concept ") + parameters.aConcept)      
+      domainConcept = parameters.aConcept;      
+      formula = parameters.formula;      
+      typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();      
+      log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())      
+      invariants.add(typingPredicate)      
+      machine.componentResource.bComponent.setInvariant(container.getInvariant(0))    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      invariants.remove(typingPredicate);      
+      machine.componentResource.bComponent.setInvariant(container.getInvariant(0))    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class LogicalFormula2Property extends StructuralRuleMapping  {  
+  
+    public LogicalFormula logicalFormula;  
+    public BPredicate typingPredicate;  
+  
+    @CreationScheme    
+    LogicalFormula2Property:create(LogicalFormula aLogicalFormula) {    
+      log ("LogicalFormula2Property: create Property related to logicalFormula " + parameters.aLogicalFormula.assertion)      
+      logicalFormula = parameters.aLogicalFormula;      
+      typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();      
+      log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())      
+      properties.add(typingPredicate)      
+      context.componentResource.bComponent.setProperties(container.getProperties(0))    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      properties.remove(typingPredicate);      
+      context.componentResource.bComponent.setProperties(container.getProperties(0))    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class LogicalFormula2Invariant extends StructuralRuleMapping  {  
+  
+    public LogicalFormula logicalFormula;  
+    public BPredicate typingPredicate;  
+  
+    @CreationScheme    
+    LogicalFormula2Invariant:create(LogicalFormula aLogicalFormula) {    
+      log ("LogicalFormula2Invariant: create Invariant related to logicalFormula " + parameters.aLogicalFormula.assertion)      
+      logicalFormula = parameters.aLogicalFormula;      
+      typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();      
+      log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())      
+      invariants.add(typingPredicate)      
+      machine.componentResource.bComponent.setInvariant(container.getInvariant(0))    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      invariants.remove(typingPredicate);      
+      machine.componentResource.bComponent.setInvariant(container.getInvariant(0))    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Individual2Property extends StructuralRuleMapping  {  
+  
+    public Individual individual;  
+    public BPredicate typingPredicate;  
+    public String formula;  
+  
+    @CreationScheme    
+    Individual2Property:create(Individual anIndividual, String formula) {    
+      log ((("Individual2Property: create Property " + formula) + " related to individual ") + parameters.anIndividual)      
+      individual = parameters.anIndividual;      
+      formula = parameters.formula;      
+      typingPredicate = context.componentResource.bComponent.CreateBPredicateFromString();      
+      log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())      
+      properties.add(typingPredicate)      
+      context.componentResource.bComponent.setProperties(container.getProperties(0))    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      properties.remove(typingPredicate);      
+      context.componentResource.bComponent.setProperties(container.getProperties(0))    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Individual2Invariant extends StructuralRuleMapping  {  
+  
+    public Individual individual;  
+    public BPredicate typingPredicate;  
+    public String formula;  
+  
+    @CreationScheme    
+    Individual2Invariant:create(Individual anIndividual, String formula) {    
+      log ((("Individual2Invariant: create Invariant " + formula) + " related to individual ") + parameters.anIndividual)      
+      individual = parameters.anIndividual;      
+      formula = parameters.formula;      
+      typingPredicate = machine.componentResource.bComponent.CreateBPredicateFromString();      
+      log ("typing predicate " + typingPredicate.getNormalizedBRepresentation())      
+      invariants.add(typingPredicate)      
+      machine.componentResource.bComponent.setInvariant(container.getInvariant(0))    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      invariants.remove(typingPredicate);      
+      machine.componentResource.bComponent.setInvariant(container.getInvariant(0))    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Concept2Initialisation extends StructuralRuleMapping  {  
+  
+    public Concept domainConcept;  
+    public String individualsString;  
+    public BSubstitution substitution;  
+  
+    @CreationScheme    
+    Concept2Initialisation:create(Concept aConcept, String individualsString) {    
+      log ("Concept2Initialisation: create Initialisation substitution related to concept " + parameters.aConcept)      
+      domainConcept = parameters.aConcept;      
+      individualsString = parameters.individualsString;      
+      BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();      
+      BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();      
+      substitution = machine.componentResource.bComponent.CreateBSubstitution();      
+      log ("substitution " + substitution.getNormalizedBRepresentation())      
+      initialisationOperationBody.addToSubstitutions(substitution)    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      initialisationOperationBody.removeFromSubstitutions(substitution)      
+      delete substitution;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class Individual2Initialisation extends StructuralRuleMapping  {  
+  
+    public Individual individual;  
+    public BSubstitution substitution;  
+  
+    @CreationScheme    
+    Individual2Initialisation:create(Individual anIndividual) {    
+      log ("Individual2Initialisation: create Initialisation substitution related to individual " + parameters.anIndividual)      
+      individual = parameters.anIndividual;      
+      BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();      
+      if (individual.initialValue != null) {      
+        String rightString = "";        
+        if (individual.initialValue.name != null) {        
+          rightString = individual.initialValue.name;        
+        } else {        
+          rightString = individual.getCanonicalString();        
+        }        
+        BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        substitution = machine.componentResource.bComponent.CreateBSubstitution();      
+      } else {      
+        BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();        
+        substitution = machine.componentResource.bComponent.CreateBSubstitution();      
+      }      
+      log ("substitution " + substitution.getNormalizedBRepresentation())      
+      initialisationOperationBody.addToSubstitutions(substitution)    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      initialisationOperationBody.removeFromSubstitutions(substitution)      
+      delete substitution;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class UnnamedMapletIndividual2Initialisation extends StructuralRuleMapping  {  
+  
+    public MapletIndividual individual;  
+    public BSubstitution substitution;  
+  
+    @CreationScheme    
+    UnnamedMapletIndividual2Initialisation:create(MapletIndividual anIndividual) {    
+      log ("UnnamedMapletIndividual2Initialisation: create Initialisation substitution related to UnnamedMapletIndividual " + parameters.anIndividual)      
+      individual = parameters.anIndividual;      
+      BExpression left = machine.componentResource.bComponent.CreateBExpressionFromString();      
+      BExpression right = machine.componentResource.bComponent.CreateBExpressionFromString();      
+      substitution = machine.componentResource.bComponent.CreateBSubstitution();      
+      log ("substitution " + substitution.getNormalizedBRepresentation())      
+      initialisationOperationBody.addToSubstitutions(substitution)    
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithBItem() {    
+      initialisationOperationBody.removeFromSubstitutions(substitution)      
+      delete substitution;    
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class FlexoBSet {  
+  
+    public BSet set;  
+  
+    @CreationScheme    
+    FlexoBSet:create() {    
+      set = null;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class FlexoBSetValue {  
+  
+    public BSetValue setValue;  
+  
+    @CreationScheme    
+    FlexoBSetValue:create() {    
+      setValue = null;    
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+  @FlexoConcept  
+  public class BackPropagatingRuleMapping {  
+  
+    @CreationScheme    
+    BackPropagatingRuleMapping:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void deleteWithDMItem() {    
+      
+    }    
+  
+    @ActionScheme    
+    Void updateNameFromB() {    
+      
+    }    
+  
+  }  
+
+}

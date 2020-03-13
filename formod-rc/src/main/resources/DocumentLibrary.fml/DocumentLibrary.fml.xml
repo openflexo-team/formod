@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-3" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/DocumentLibrary.viewpoint" version="0.1" name="DocumentLibrary" userID="FLX" flexoID="3">
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="-1" />
+  <Inspector id="FLX-2" inspectorTitle="DocumentLibrary" userID="FLX" flexoID="2" />
+  <GetSetProperty id="FLX-7" name="documents" userID="FLX" flexoID="7">
+    <SetControlGraph_EmptyControlGraph id="FLX-11" ownerContext="setControlGraph" userID="FLX" flexoID="11" />
+    <GetControlGraph_ReturnStatement id="FLX-10" ownerContext="getControlGraph" userID="FLX" flexoID="10">
+      <AssignableAction_SelectVirtualModelInstance id="FLX-9" container="this" virtualModelTypeURI="http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml" receiver="this" userID="FLX" flexoID="9" />
+    </GetControlGraph_ReturnStatement>
+  </GetSetProperty>
+  <CreationScheme id="FLX-15" name="create" width="800" label="create" height="600" userID="FLX" flexoID="15">
+    <BehaviourControlGraph_EmptyControlGraph id="FLX-58" userID="FLX" flexoID="58" />
+  </CreationScheme>
+  <ActionScheme id="FLX-16" name="importDocXDocument" width="800" label="import_doc_x_document" height="600" userID="FLX" flexoID="16">
+    <BehaviourControlGraph_Sequence id="FLX-48" userID="FLX" flexoID="48">
+      <ControlGraph2_Sequence id="FLX-54" ownerContext="controlGraph2" userID="FLX" flexoID="54">
+        <ControlGraph2_ReturnStatement id="FLX-47" ownerContext="controlGraph2" userID="FLX" flexoID="47">
+          <AssignableAction_ExpressionAction id="FLX-46" expression="newDocumentVMI" userID="FLX" flexoID="46" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_NotifyPropertyChangedAction id="FLX-53" propertyName="documents" object="this" ownerContext="controlGraph1" userID="FLX" flexoID="53" />
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="FLX-20" variable="newDocumentVMI" ownerContext="controlGraph1" userID="FLX" flexoID="20">
+        <AssignableAction_AddVirtualModelInstance id="FLX-19" virtualModelInstanceTitle="parameters.documentName" virtualModelInstanceName="parameters.documentName" creationSchemeURI="http://formose.lacl.fr/DocumentLibrary.viewpoint/DocXDocument.fml.create" receiver="this" userID="FLX" flexoID="19">
+          <AddFlexoConceptInstanceParameter id="SYL-95" paramName="documentName" value="parameters.documentName" userID="SYL" flexoID="95" />
+          <AddFlexoConceptInstanceParameter id="SYL-96" paramName="documentResource" value="parameters.docXDocumentResource" userID="SYL" flexoID="96" />
+          <AddFlexoConceptInstanceParameter id="SYL-97" paramName="documentDescription" value="parameters.documentDescription" userID="SYL" flexoID="97" />
+        </AssignableAction_AddVirtualModelInstance>
+      </ControlGraph1_DeclarationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-22" isRequired="true" widget="CUSTOM_WIDGET" name="docXDocumentResource" type="org.openflexo.foundation.resource.FlexoResourceType&lt;org.openflexo.technologyadapter.docx.model.DocXDocument&gt;" userID="FLX" flexoID="22" />
+    <GenericBehaviourParameter id="FLX-23" isRequired="true" widget="TEXT_FIELD" defaultValue="parameters.docXDocumentResource.name" name="documentName" type="java.lang.String" userID="FLX" flexoID="23" />
+    <GenericBehaviourParameter id="FLX-21" isRequired="true" widget="TEXT_AREA" name="documentDescription" type="java.lang.String" userID="FLX" flexoID="21" />
+  </ActionScheme>
+  <ActionScheme id="SYL-101" name="removeDocXDocument" width="800" label="remove_doc_x_document" height="600" userID="SYL" flexoID="101">
+    <BehaviourControlGraph_Sequence id="SYL-112" userID="SYL" flexoID="112">
+      <ControlGraph2_Sequence id="SYL-113" ownerContext="controlGraph2" userID="SYL" flexoID="113">
+        <ControlGraph2_Sequence id="SYL-109" ownerContext="controlGraph2" userID="SYL" flexoID="109">
+          <ControlGraph2_ReturnStatement id="SYL-107" ownerContext="controlGraph2" userID="SYL" flexoID="107">
+            <AssignableAction_ExpressionAction id="SYL-106" expression="parameters.documentVMI" userID="SYL" flexoID="106" />
+          </ControlGraph2_ReturnStatement>
+          <ControlGraph1_NotifyPropertyChangedAction id="FLX-105" propertyName="documents" object="this" ownerContext="controlGraph1" userID="FLX" flexoID="105" />
+        </ControlGraph2_Sequence>
+        <ControlGraph1_DeleteFlexoConceptInstance id="SYL-104" deletionSchemeURI="http://formose.lacl.fr/DocumentLibrary.viewpoint/DocXDocument.fml.delete" object="parameters.documentVMI" ownerContext="controlGraph1" userID="SYL" flexoID="104" />
+      </ControlGraph2_Sequence>
+      <ControlGraph1_LogAction id="SYL-111" logLevel="INFO" logString="(&quot;Delete &quot; + parameters.documentVMI)" ownerContext="controlGraph1" userID="SYL" flexoID="111" />
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="SYL-102" isRequired="true" widget="CUSTOM_WIDGET" name="documentVMI" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/DocXDocument.fml&gt;" userID="SYL" flexoID="102" />
+  </ActionScheme>
+</VirtualModel>

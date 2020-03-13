@@ -1,0 +1,11 @@
+/* System1
+ * Author: 
+ * Creation date: 12/12/2018
+ */
+SYSTEM
+    System1
+
+INITIALISATION
+     nn := 0
+
+END

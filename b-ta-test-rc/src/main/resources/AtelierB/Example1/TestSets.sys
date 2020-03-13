@@ -1,0 +1,11 @@
+/* System3
+ * Test SETS
+ */
+SYSTEM
+    System3
+SETS
+   POSITION;
+   LOCATION;
+   STATE = {On, Off}
+
+END

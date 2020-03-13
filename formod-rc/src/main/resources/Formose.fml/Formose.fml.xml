@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="FLX-2" virtualModelClass="org.openflexo.foundation.fml.VirtualModel" modelVersion="1.0" uri="http://formose.lacl.fr/Formose.viewpoint" version="0.1" name="Formose" description="" userID="FLX" flexoID="2">
+  <UseModelSlotDeclaration id="0" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="210" />
+  <UseModelSlotDeclaration id="1" modelSlotClass="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot" userID="FLX" flexoID="211" />
+  <UseModelSlotDeclaration id="2" modelSlotClass="org.openflexo.technologyadapter.gina.FIBComponentModelSlot" userID="FLX" flexoID="212" />
+  <Inspector id="FLX-1" inspectorTitle="Formose" userID="FLX" flexoID="1" />
+  <FMLRTVirtualModelInstanceModelSlot id="FLX-91" virtualModelURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="formoseVMI" userID="FLX" flexoID="91" />
+  <FIBComponentModelSlot id="FLX-205" templateComponentURI="http://formose.lacl.fr/Fib/ProjectUI.fib" isRequired="true" cloningStrategy="Reference" cardinality="ZeroOne" name="projectUI" userID="FLX" flexoID="205">
+    <VariableAssignment id="FLX-204" variableType="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;" variable="data" value="view" userID="FLX" flexoID="204" />
+  </FIBComponentModelSlot>
+  <PrimitiveRole id="FLX-114" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="projectName" userID="FLX" flexoID="114" />
+  <PrimitiveRole id="FLX-115" primitiveType="String" cloningStrategy="Clone" cardinality="ZeroOne" name="projectDescription" userID="FLX" flexoID="115" />
+  <GetSetProperty id="FLX-228" name="methodologies" description="Return all methodologies involved in this formose project" userID="FLX" flexoID="228">
+    <SetControlGraph_EmptyControlGraph id="FLX-232" ownerContext="setControlGraph" userID="FLX" flexoID="232" />
+    <GetControlGraph_Sequence id="SYL-2813" ownerContext="getControlGraph" userID="SYL" flexoID="2813">
+      <ControlGraph2_Sequence id="SYL-2814" ownerContext="controlGraph2" userID="SYL" flexoID="2814">
+        <ControlGraph2_ReturnStatement id="SYL-2812" ownerContext="controlGraph2" userID="SYL" flexoID="2812">
+          <AssignableAction_ExpressionAction id="SYL-2811" expression="allMethodologies" userID="SYL" flexoID="2811" />
+        </ControlGraph2_ReturnStatement>
+        <ControlGraph1_LogAction id="SYL-2810" logLevel="INFO" logString="(&quot;Calcul de toutes les methodologies: &quot; + allMethodologies)" ownerContext="controlGraph1" userID="SYL" flexoID="2810" />
+      </ControlGraph2_Sequence>
+      <ControlGraph1_DeclarationAction id="SYL-2808" variable="allMethodologies" ownerContext="controlGraph1" userID="SYL" flexoID="2808">
+        <AssignableAction_SelectVirtualModelInstance id="SYL-2807" container="this" virtualModelTypeURI="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml" receiver="this" userID="SYL" flexoID="2807" />
+      </ControlGraph1_DeclarationAction>
+    </GetControlGraph_Sequence>
+  </GetSetProperty>
+  <FlexoConceptInstanceRole id="FLX-236" virtualModelInstance="this" flexoConceptTypeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml" cloningStrategy="Reference" cardinality="ZeroOne" name="documentAnnotationMethodology" description="The unique DocumentAnnotationMethodology instantiated in the scope of the Formose project" userID="FLX" flexoID="236" />
+  <CreationScheme id="FLX-14" name="initFormoseView" width="800" label="init_formose_view" height="600" description="Initialize a new Formose view.&#xA;A new KAOS viewpoint will be instanciated." userID="FLX" flexoID="14">
+    <BehaviourControlGraph_Sequence id="FLX-200" ownerContext="controlGraph2" userID="FLX" flexoID="200">
+      <ControlGraph2_Sequence id="FLX-199" ownerContext="controlGraph2" userID="FLX" flexoID="199">
+        <ControlGraph2_Sequence id="FLX-198" ownerContext="controlGraph2" userID="FLX" flexoID="198">
+          <ControlGraph2_Sequence id="FLX-254" ownerContext="controlGraph2" userID="FLX" flexoID="254">
+            <ControlGraph2_AssignationAction id="FLX-249" assign="documentAnnotationMethodology" ownerContext="controlGraph2" userID="FLX" flexoID="249">
+              <AssignableAction_AddVirtualModelInstance id="FLX-248" virtualModelInstanceTitle="&quot;DocumentAnnotationMethodology&quot;" virtualModelInstanceName="&quot;DocumentAnnotationMethodology&quot;" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology.fml.create" receiver="this" ownerContext="controlGraph2" userID="FLX" flexoID="248" />
+            </ControlGraph2_AssignationAction>
+            <ControlGraph1_AssignationAction id="FLX-207" assign="projectUI" ownerContext="controlGraph1" userID="FLX" flexoID="207">
+              <AssignableAction_ConfigureGINAFIBComponent id="FLX-206" receiver="projectUI" userID="FLX" flexoID="206" />
+            </ControlGraph1_AssignationAction>
+          </ControlGraph2_Sequence>
+          <ControlGraph1_AssignationAction id="FLX-111" assign="formoseVMI" ownerContext="controlGraph1" userID="FLX" flexoID="111">
+            <AssignableAction_AddVirtualModelInstance id="FLX-109" virtualModelInstanceTitle="&quot;Formose VMI&quot;" virtualModelInstanceName="&quot;FormoseVMI&quot;" creationSchemeURI="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml.init" receiver="this" userID="FLX" flexoID="109">
+              <AddFlexoConceptInstanceParameter id="SYL-2793" paramName="projectName" value="parameters.projectName" userID="SYL" flexoID="2793" />
+            </AssignableAction_AddVirtualModelInstance>
+          </ControlGraph1_AssignationAction>
+        </ControlGraph2_Sequence>
+        <ControlGraph1_AssignationAction id="FLX-119" assign="projectDescription" ownerContext="controlGraph1" userID="FLX" flexoID="119">
+          <AssignableAction_ExpressionAction id="FLX-118" expression="parameters.projectDescription" userID="FLX" flexoID="118" />
+        </ControlGraph1_AssignationAction>
+      </ControlGraph2_Sequence>
+      <ControlGraph1_AssignationAction id="FLX-117" assign="projectName" ownerContext="controlGraph1" userID="FLX" flexoID="117">
+        <AssignableAction_ExpressionAction id="FLX-116" expression="parameters.projectName" userID="FLX" flexoID="116" />
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+    <GenericBehaviourParameter id="FLX-133" isRequired="true" widget="TEXT_FIELD" name="projectName" type="java.lang.String" userID="FLX" flexoID="133" />
+    <GenericBehaviourParameter id="FLX-135" widget="TEXT_AREA" name="projectDescription" type="java.lang.String" userID="FLX" flexoID="135" />
+  </CreationScheme>
+  <DeletionScheme id="SYL-2797" name="delete" width="800" label="delete" height="600" userID="SYL" flexoID="2797">
+    <BehaviourControlGraph_Sequence id="SYL-2798" userID="SYL" flexoID="2798">
+      <ControlGraph2_AssignationAction id="SYL-2799" assign="projectDescription" ownerContext="controlGraph2" userID="SYL" flexoID="2799">
+        <AssignableAction_ExpressionAction id="SYL-2800" expression="null" userID="SYL" flexoID="2800" />
+      </ControlGraph2_AssignationAction>
+      <ControlGraph1_AssignationAction id="SYL-2801" assign="projectName" ownerContext="controlGraph1" userID="SYL" flexoID="2801">
+        <AssignableAction_ExpressionAction id="SYL-2802" expression="null" userID="SYL" flexoID="2802" />
+      </ControlGraph1_AssignationAction>
+    </BehaviourControlGraph_Sequence>
+  </DeletionScheme>
+</VirtualModel>

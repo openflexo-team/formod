@@ -1,0 +1,36 @@
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml")
+public class Methodology {
+
+  @PrimitiveRole(cardinality=One,readOnly=false)  
+  public String name;
+  @FlexoConceptInstanceRole(cardinality=ZeroOne,readOnly=false)  
+  public FlexoConceptInstanceType<Element> declaringElement;
+
+  @FlexoConcept  
+  public class Transition {  
+  
+    @PrimitiveRole(cardinality=One,readOnly=false)    
+    public String user;  
+    @PrimitiveRole(cardinality=ZeroOne,readOnly=false)    
+    public String timestamp;  
+    @PrimitiveRole(cardinality=ZeroOne,readOnly=false)    
+    public String comments;  
+  
+    @CreationScheme    
+    Transition:create() {    
+      
+    }    
+  
+    @DeletionScheme    
+    Void delete() {    
+      
+    }    
+  
+  }  
+
+}

@@ -1,0 +1,19 @@
+/* System1
+ * Author: 
+ * Creation date: 17/01/2019
+ */
+SYSTEM
+    System1
+
+ABSTRACT_VARIABLES
+	C1,
+	I0
+INVARIANT
+	(C1 <: C0 & 
+	I0 : C0)
+
+
+INITIALISATION
+    s_st:=working
+
+END

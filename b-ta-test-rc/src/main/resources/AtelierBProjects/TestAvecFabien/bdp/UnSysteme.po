@@ -1,0 +1,35 @@
+THEORY ProofList IS
+_f(1) & _f(2) & _f(8) & ML_Out.2,(_f(12) & _f(3) & _f(6) => _f(14));
+_f(1) & _f(2) & _f(8) & ML_Out.1,(_f(12) & _f(3) & _f(4) => _f(13));
+_f(1) & _f(2) & _f(8) & ML_In.2,(_f(9) & _f(3) & _f(6) => _f(11));
+_f(1) & _f(2) & _f(8) & ML_In.1,(_f(9) & _f(3) & _f(4) => _f(10));
+_f(1) & _f(2) & Initialisation.2,(_f(3) & _f(6) => _f(7));
+_f(1) & _f(2) & Initialisation.1,(_f(3) & _f(4) => _f(5))
+END
+&
+THEORY Formulas IS
+((NAT) = (((0) .. (2147483647)))) & ((INT) = (((-2147483647) .. (2147483647))));
+dd : INTEGER & 0 <= dd & ((dd) : (NATURAL)) & (0 +1 <= dd) & ((nm) = (((dd) |-> (dd))));
+"Invariant is preserved";
+"Check invariant ((nn) : (NATURAL))";
+((0) : (NATURAL));
+"Check invariant (nn <= dd)";
+(0 <= dd);
+nn : INTEGER & 0 <= nn & ((nn) : (NATURAL)) & (nn <= dd);
+(0 +1 <= nn);
+(((nn - 1)) : (NATURAL));
+((nn - 1) <= dd);
+(nn +1 <= dd);
+(((nn + 1)) : (NATURAL));
+((nn + 1) <= dd);
+(0 +1 <= dd);
+dd : INTEGER;
+0 <= dd;
+((dd) : (NATURAL));
+nn : INTEGER;
+0 <= nn;
+((nn) : (NATURAL))
+END
+&
+THEORY EnumerateX
+END

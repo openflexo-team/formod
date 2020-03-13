@@ -1,0 +1,39 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+use org.openflexo.technologyadapter.gina.FIBComponentModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint")
+public class Formose {
+
+  public FormoseCore formoseVMI;
+  public GINAFIBComponent projectUI;
+  public String projectName;
+  public String projectDescription;
+  @GetSetProperty(value="methodologies", access=get)  
+  public List<UndefinedVirtualModelInstanceType> getMethodologies {  
+    List<VirtualModelInstanceType<Methodology>> allMethodologies = this.FML@RT::SelectVirtualModelInstance();    
+    log ("Calcul de toutes les methodologies: " + allMethodologies)    
+    return allMethodologies;  
+  }
+  public DocumentAnnotation-Methodology documentAnnotationMethodology;
+
+  @CreationScheme  
+  Formose:initFormoseView(String projectName, String projectDescription) {  
+    projectName = parameters.projectName;    
+    projectDescription = parameters.projectDescription;    
+    formoseVMI = FormoseCore.init(parameters.projectName);    
+    projectUI = projectUI.ConfigureGINAFIBComponent();    
+    documentAnnotationMethodology = DocumentAnnotation-Methodology.create();  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+    projectName = null;    
+    projectDescription = null;  
+  }  
+
+}

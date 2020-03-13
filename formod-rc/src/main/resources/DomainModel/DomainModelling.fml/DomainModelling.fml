@@ -1,0 +1,27 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml")
+public class DomainModelling {
+
+  public DomainModel rootDomainModel;
+
+  @CreationScheme  
+  DomainModelling:create() {  
+    rootDomainModel = DomainModel.create("Root",null);    
+    DefaultDataType.create("NATURAL",false)    
+    DefaultDataType.create("INTEGER",false)    
+    DefaultDataType.create("FLOAT",false)    
+    DefaultDataType.create("STRING",false)    
+    DefaultDataType.create("BOOL",true)  
+  }  
+
+  @DeletionScheme  
+  Void delete() {  
+  
+  }  
+
+}

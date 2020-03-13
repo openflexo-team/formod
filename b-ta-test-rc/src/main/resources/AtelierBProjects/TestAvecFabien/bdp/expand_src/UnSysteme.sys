@@ -1,0 +1,31 @@
+﻿/* UnSysteme
+ * Author: 
+ * Creation date: 17/01/2019
+ */
+SYSTEM
+    UnSysteme
+
+CONCRETE_CONSTANTS
+    dd , nm
+PROPERTIES
+    dd :  NATURAL &
+    dd > 0 &
+    nm = dd |-> dd
+ABSTRACT_VARIABLES
+    nn
+ INVARIANT
+     nn : NATURAL &
+     nn <= dd
+ INITIALISATION
+     nn := 0
+ OPERATIONS
+     ML_In =
+             SELECT nn > 0
+             THEN        nn := nn - 1
+                 END ;
+    ML_Out =
+               SELECT nn < dd
+              THEN   nn := nn + 1
+               END
+
+END

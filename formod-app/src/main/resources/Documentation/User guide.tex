@@ -1,0 +1,751 @@
+% %
+% LAYOUT_E.TEX - Short description of REFMAN.CLS
+%                                       99-03-20
+%
+%  Updated for REFMAN.CLS (LaTeX2e)
+%
+\documentclass[twoside,a4paper]{refart}
+\usepackage{makeidx}
+\usepackage{ifthen}
+% ifthen wird vom Bild von N.Beebe gebraucht!
+
+\def\bs{\char'134 } % backslash in \tt font.
+\newcommand{\ie}{i.\,e.,}
+\newcommand{\eg}{e.\,g..}
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+
+\title{User Guide PRODAN V1.0}
+\author{Fahad Rafique Golra \\
+LIP6,UPMC, 4 Place Jussieu\\
+fahad-rafique.golra@lip6.fr\\
+Paris, France}
+
+\date{}
+\emergencystretch1em  %
+
+\pagestyle{myfootings}
+\markboth{User Guide PRODAN V1.0}%
+         {User Guide PRODAN V1.0}
+
+\makeindex 
+
+\setcounter{tocdepth}{2}
+
+
+
+\usepackage[T1]{fontenc} 
+
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+\usepackage{hyperref}
+
+\usepackage{color}
+\definecolor{light-gray}{gray}{0.90}
+\newcommand{\hilight}[1]{\colorbox{light-gray}{#1}}
+
+
+%---------------------------------------------------------------
+%
+%	NEW COMMANDS
+%
+%---------------------------------------------------------------
+
+%
+%	TITLE
+%
+\newcommand{\TITLE}{Process Deviation Analyzer (PRODAN)}
+
+%
+%	AUTHOR, GROUP MEMBERS
+%
+\newcommand{\GROUPLEADER}{Reda Benderou}
+\newcommand{\AUTHOR}{Fahad R. Golra}
+
+%
+%	UNIVERSITY
+%
+\newcommand{\LAB}{LIP6 - Laboratoire d'informatique de Paris 6}
+\newcommand{\UNIVERSITY}{Universit\'e Pierre et Marie Curie} 
+\newcommand{\TEAM}{MoVe - Mod\'elisation et V\'erification}
+\newcommand{\LABTEAM}{MoVe - LIP6}
+\newcommand{\PROJECT}{MERgE}
+
+%
+%	FIGURES (PICTURES ...)
+%
+
+\newcommand{\CNRS}{./figures/logos/cnrs.pdf}
+\newcommand{\LIP}{./figures/logos/lip6.png}
+\newcommand{\UPMC}{./figures/logos/upmc.png}
+\newcommand{\MERGE}{./figures/logos/merge.png}
+\newcommand{\ITEA}{./figures/logos/itea2.jpg}
+\newcommand{\SPC}{./figures/logos/image_space}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\include{./report_cover}
+
+\cleardoublepage
+\newpage
+\thispagestyle{empty}
+\mbox{}
+
+\tableofcontents
+
+\newpage
+%\pagenumbering{arabic} \setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Overview}
+
+\subsection{What is PRODAN?}
+PRODAN is a software process enactment tool that allows to enact the process models in an environment where the modeler is guided throughout the execution to avoid process deviations.  Different approaches follow different techniques for handling process deviations.  Some tools restrict users (e.g. project managers) to execute the activities only in the order that they appear in the original process model, while others ignore process deviations completely.  
+
+PRODAN analyses the user's decision for activity execution and detects if it would result in a process deviation.   In case, a deviation may result from the execution of chosen activity, the user is notified of the deviation.  This deviation notification shows the list of constraints that would be violated, if the user wants to continue anyway.  However, the user is not restricted to follow the original process model and may choose to deviate from it.  In all cases, user is supported by the tool to take informed decisions.
+
+\subsection{Who can use PRODAN?}
+PRODAN, as a process enactment tool can be used by project managers to enact process models. This enactment of process models simulates the control flow perspective of the real life processes, carried out in the enterprises.  They help in developing the understanding of the flows of a process, before its actual implementation.  It can also be used by the process modelers to analyze the effect of different deviations that can occur during the enactment of the process.  The control flow behavior of a process deviation can be analyzed by the suggested continuation options offered by tool, after the deviation.  This helps to guide project managers to make informed decisions for the enactment of processes.  
+
+\subsection{How does it work?}
+PRODAN uses the UML designer from Obeo, to edit and visualize UML 2.4 activity diagrams for the specification of process models.  This process model and the current execution sequence is used to generate a process enactment ruleset in Alloy.  Alloy Analyzer, as a constraint solver takes this process enactment ruleset as a constraint satisfaction problem (CSP) and provides a viable solution that does not violate any of the given rules.  Current execution sequence is taken into account, each time a solution is provided by the constraint solver.  It allows the detection of deviations during the enactment of the process model.  The violated constraints are presented to the user to inform him/her of the potential risks that can arise, in case of deviation.
+
+\subsection{License}
+PRODAN is a plug-in developed under the research project, MERGE.  It is open source and is distributed under GNU General Public License GPL v3.0.    
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Plug-in Installation}
+
+A prerequisite for installing PRODAN V1.0 is the installation of Merge platform version 2.x onwards (or Eclipse Indigo onwards).
+Two mechanisms are offered to install the plug-in in the merge platform.  It can be installed either by using the provided update site or by using the plug-in archive provided alongside this user guide.
+
+\attention
+The contents of archive can manually be copied into the Merge platform plugins folder, but we strongly recommend to use one of the suggested approaches for the installation of PRODAN plug-in.
+
+\subsection{Installation - update site}
+
+\begin{enumerate}
+\item Open Merge platform (Eclipse), and go to \texttt{Help} > \texttt{Install New Software}.
+
+\item This shall open an install window as shown in figure \ref{updateSite_fig}. Click the \texttt{Add} button.  This shall open an Add Repository dialog box.  Add the following information and click \texttt{OK}:
+\end{enumerate}
+
+\begin{description}
+\item[Name]
+\hilight{\emph{PRODAN}}
+
+\item[Location]
+\hilight{\emph{http://pagesperso-systeme.lip6.fr/Yoann.Laurent/PRODAN}}\footnote{Update site will soon be moved to http://merge.lip6.fr/PRODAN}
+\end{description}
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/installation/updateSite}
+\caption{Installing the Plug-in - update site}
+\label{updateSite_fig}
+\end{figure}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item Click \texttt{OK} and uncheck the option \texttt{Group items by category}.
+
+\item Select the plug-in \texttt{fr.lip6.move.meta.TracedEnactment} and click \texttt{Next}.  Click \texttt{Next} once again for the installation details. 
+
+\item Accept the license agreement and click \texttt{Finish}.
+\end{enumerate}
+
+\subsection{Installation - Local archive}
+
+\begin{enumerate}
+
+\item This user guide is distributed alongside the plug-in and an example process model.  The plug-in is archived in a file named \texttt{PRODAN v1.0.2}. Locate the plug-in archive file and uncompress it in a desired location.  
+
+\item Open merge platform (eclipse), and go to \texttt{Help} > \texttt{Install New Software}.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.7\textwidth] {./figures/installation/localArchive}
+\caption{Installing the Plug-in - local archive}
+\label{localArchive_fig}
+\end{figure}
+
+\item This shall open up a window for plug-in installation. Click the \texttt{Add} button.  This shall open an Add Repository dialog box, as shown in figure \ref{localArchive_fig}.  Add the name of the plug-in as PRODAN.  
+
+\item Click \texttt{Local} and browse to the uncompressed plug-in folder.
+
+\item Click \texttt{OK} and uncheck the option \texttt{Group items by category}.
+
+\item Select the plug-in \texttt{fr.lip6.move.meta.TracedEnactment} and click \texttt{Next}.  Click \texttt{Next} once again for the installation details. 
+
+\item Accept the license agreement and click \texttt{Finish}.
+\end{enumerate}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tool Layout}
+PRODAN is presented as an eclipse plugin, which alloys to model and enact process models.  The tool is composed of different views.  Each of these views is discussed in detail below.
+
+\subsection{Process Editor}
+Process editor allows the development of process models using UML 2.4 activity diagrams.  The tool relies on the control flow of a process model to detect process deviations.  This editor allows to add activities, actions, initial node, final node, and other control flow nodes like decision, merge, fork and join nodes.  Apart from these nodes, the \texttt{activity tools} toolbox at the right side also allows to add control flows between these nodes.  These control flows link the nodes to get a process graph.  Figure \ref{editorView_fig} shows a testing sub-process that is a part of a complete software development process. It contains four activities: \emph{Prepare release candidate}, \emph{Regression test}, \emph{Ad hoc testing} and \emph{Release for user acceptance test}.  This process occurs in the final stage of testing after integration \& system testing and before the user acceptance testing.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/views/editorView}
+\caption{Process editor view}
+\label{editorView_fig}
+\end{figure}
+
+Activities are added to the process model through the notion of Activity states. Opaque actions are atomic activities of a process model that can not be decomposed any further through activities.  The description of an opaque action describes its inner implementation.  This implementation can be added to the action using its "body" property under the semantics tab of properties view.  Different roles associated with the process model can be modeled using partitions in activity diagram, which is a similar concept as swimlanes in BPMN.  
+
+\subsection{Process Enactment view}
+Process enactment view of the PRODAN tool allows to enact the process model.  Controls for executing and terminating a process are provided by this tool.  Once the execution of the process model is started, this view lists all the activities that can be executed in the process model.  It offers the possibility to start and finish an activity from the process model.  The state of the activity (i.e. currently running or not) is also presented in this view.  Figure \ref{enactment_fig} presents the process enactment view when \emph{Prepare release candidate} activity has already completed its execution.  Process enactment view suggests the user to execute any of the two activities: \emph{Regression testing} or \emph{Ad hoc testing}.  
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/views/enactmentView}
+\caption{Process enactment view}
+\label{enactment_fig}
+\end{figure}
+
+Apart from presenting the list of executable activities and their current state, this view is also important for guiding the user for the next activities to be executed.  Next activities are not calculated on the basis of the overall process automaton, instead they are calculated through the solution provided by the constraint solver.  The constraint solver provides the solution of the constraint solving problem (i.e. process enactment ruleset in our case) using the process execution trace.  Thus it can effectively suggest activities to be performed which were skipped due to certain deviations in the past.  Deviation in process enactment results in the violation of certain constraints.  Some of these constraints still remain satisfiable, if the user chooses to perform these activities at a later stage.  
+
+\subsection{Execution Trace}
+The process execution trace view provides a trace of process enactment.  It lists all the activities that were executed from the process model.  This list of executed activities is presented in temporal order, which can be used to make some key decisions for further enactment of a process model.  Figure \ref{traceView_fig} shows the trace view of our process example, where \emph{Regression testing} activity was executed after the \emph{Prepare release candidate} activity.  \emph{(none)} shows the state of the process enactment, where no activity is executing.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=.6\textwidth] {./figures/views/traceView}
+\caption{Execution trace view}
+\label{traceView_fig}
+\end{figure}
+
+\subsection{Deviations View}
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/views/deviationView}
+\caption{Deviations view}
+\label{deviationView_fig}
+\end{figure} 
+
+The deviation view of the PRODAN tool lists all the constraints associated with the process model.  These constraints are generated from the process model.   This view also presents the state of each constraint, which can be \texttt{Satisfied}, \texttt{Satisfiable} or \texttt{Deviated}, as shown in Figure \ref{deviationView_fig}. 
+
+Further information about a specific constraint of a process model can be obtained by double clicking it in deviations view.  It opens up an information dialog box that gives a description for the constraint, as shown in figure \ref{constraintInfo_fig}.  It also gives the reason behind the implementation of a particular constraint.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.9\textwidth] {./figures/views/constraintInfo}
+\caption{Constraint Information}
+\label{constraintInfo_fig}
+\end{figure} 
+
+%\subsection{Guidance View}
+%Support not added yet
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Getting started by example}
+
+Let us try to execute a simple example of a process already shipped with this tool.  This would help in understanding the process enactment and deviation aspects of the tool.  
+
+\subsection{Setup the environment \& example}
+Following steps  can be used to setup the environment for process enactment.  This will allow us to execute \emph{Finalize Testing} example later on.
+
+\begin{enumerate}
+\item Open Merge platform (or Eclipse) and go to \texttt{File} > \texttt{Import}.  Then select \texttt{General} > \texttt{Existing Projects into Workspace} and click \texttt{Next}.  (Consult figure \ref{example_fig})
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.9\textwidth] {./figures/example/import}
+\caption{Import UML Project}
+\label{example_fig}
+\end{figure}
+
+\item Select \texttt{archive file} option and browse to the example archive file, \emph{Finalize Testing Example.zip}, provided alongside this plugin.  Click \texttt{Finish}.
+
+\item This will import a UML project in your current workspace.  In Model explorer view, open this project.   Double click the \emph{example} diagram to open it in the editor. (Consult figure \ref{exampleDiagram_fig})
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.6\textwidth] {./figures/example/exampleDiagram}
+\caption{Expand Model explorer}
+\label{exampleDiagram_fig}
+\end{figure}
+
+\item This shall open up the graphical model (UML activity diagram) for this example in the editor, as shown in figure \ref{editor_fig}
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/example/editor}
+\caption{Example Process model in editor}
+\label{editor_fig}
+\end{figure}
+
+\item Use \texttt{Window} > \texttt{Show view} > \texttt{Process Guidance} to open up Process Enactment, Trace, Guidance and Deviations views.
+\end{enumerate}
+
+
+\subsection{Execute example process}
+You can follow the following steps to execute the \emph{Finalize Testing} example:
+
+\begin{enumerate}
+\item Select the \emph{Finalize Testing} process in the editor and click \texttt{Start} to initiate the execution of the process.  It takes a little time to load the process model and when its ready, you will see a list of all the activities in the process enactment view.  You will be able to notice that no activity is running at the moment.  Even though the process in initiated at this state, no particular activity started its execution yet. You can see that \emph{Prepare release candidate} is the first activity proposed by the tool.
+
+\item Click on \emph{Prepare release candidate} from the list in enactment view or the  graphical representation of this activity in model editor and click \texttt{start}.  This executes the activity and its status changes in the enactment view.  
+
+\item After it has started, you can \texttt{Finish} it.  Once this activity is finished, you are proposed to go for \emph{regression testing} and \emph{ad hoc testing}, as shown in figure \ref{enactmentMiddle_fig}. This does not mean that you can execute both of them, it simply means to go for one of these options.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/example/enactmentMiddle}
+\caption{Enactment view - Termination of \emph{Prepare release candidate}}
+\label{enactmentMiddle_fig}
+\end{figure}
+
+\item Start and finish \emph{Regression testing}.  Then start \emph{Ad hoc testing}.  When you try to execute \emph{Ad hoc testing}, a message box pops up that shows the violated constraints if you continue with this execution, as depicted in figure \ref{deviationMessage_fig}.  Continue the execution anyway.
+
+\begin{figure}[h!]
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/example/deviationMessage}
+\caption{Warning message - violated constraint}
+\label{deviationMessage_fig}
+\end{figure}
+
+\item You can notice the \texttt{deviations view} of the tool that lists all the constraints of the process, as illustrated in figure \ref{deviations_fig}.  The state of each constraint shows if it is \texttt{satisfied}.  In case the constraint is not satisfied, whether it is \texttt{satisfiable}, during the current execution.  It also shows the \texttt{violated} constraints of the process model.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.9\textwidth] {./figures/example/deviations}
+\caption{Deviation view - Violated constraint}
+\label{deviations_fig}
+\end{figure}
+
+
+\item The \texttt{Trace view} can be consulted to see the order of execution of the activities that were executed till now.  Resulting from our execution scenario, we have \emph{Prepare release candidate}, \emph{Regression testing} and \emph{Ad hoc testing} activities respectively, as shown in figure \ref{traceExample_fig}.  A \emph{(none)} state at sequence 0 specifies that there was no activity running.  Then \emph{prepare release candidate} was executed and then again at sequence 2, we see another \emph{(none)}.  Sequence 2 shows that \emph{prepare release candidate} was finished and thus no activity was executing at that time.  The final sequence is 5, that shows that \emph{Ad hoc test} was executed last.  However, it also shows that this activity was not finished, when the trace was taken.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.7\textwidth] {./figures/example/trace}
+\caption{Deviation view - Violated constraint}
+\label{traceExample_fig}
+\end{figure}
+
+\item You can terminate the process model execution at this time or continue till the \emph{Release for user acceptance test} activity is finished.  
+\end{enumerate}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Process Development}
+
+PRODAN uses Obeo UML Designer for the development of process models.  These process models are then made available to the tool for enactment.  Application of specific profiles developed for the PRODAN process models allows to add specific attributes to them.  
+
+\subsection{Creating a new process model}
+\label{createModel}
+
+\begin{enumerate}
+\item In Merge platform, go to \texttt{File} > \texttt{New} > \texttt{UML Project}.  Then give this project a name as "Sales Example".  This will create a new project in your workspace.  Click \texttt{Finish}. 
+
+\item Use \texttt{Window} > \texttt{Show view} > \texttt{Process Guidance} to open up Process Enactment, Trace, Guidance and Deviations views.
+
+\item This will create a UML project in your current workspace.  In \texttt{Model explorer view}, open the project hierarchy for this project.   Open the hierarchy for \emph{model.uml} and then right click \texttt{NewModel} > \texttt{New Representation} > \texttt{Activity Diagram}. Give it a name like "Sales Activity Diagram". (Consult figure \ref{diagram_fig})
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/development/diagram}
+\caption{Creating an activity diagram}
+\label{diagram_fig}
+\end{figure}
+
+\item Select the NewModel in the process editor and enlarge it so that multiple activities can be placed inside it.   Go to \texttt{properties view} and change its name to \emph{Sales Process}.  
+
+\item Choose \texttt{Partition} from the activity tools at the right side and create two partitions in this model.  Using \texttt{Properties view}, change their names to \emph{Sales department} and \emph{Warehouse}.  Place an Initial Node and an Activity Final Node outside the partitions, as illustrated in figure \ref{partitions_fig}.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/development/partitions}
+\caption{Creating partitions for different roles}
+\label{partitions_fig}
+\end{figure}
+
+\item Now create opaque actions inside the partitions, as shown in the figure \ref{process_fig}.  You can change the name of the activities from \texttt{properties view} > \texttt{General} and remove the body text from \texttt{Properties} > \texttt{Semantic} >  \texttt{Body}.  You can also resize the activities according to your personal liking.
+
+\item From the activity tools, select \texttt{decision node}, \texttt{merge node}, \texttt{fork node} and \texttt{join node} and place them in the process model as shown in figure \ref{process_fig}.  Using the \texttt{control flow} link the \emph{initial node} to \emph{Receive order} activity.  Keep linking the nodes till \emph{activity final node}.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/development/process}
+\caption{Complete Sales Process}
+\label{process_fig}
+\end{figure}
+
+\item We have developed a process in PRODAN tool.  Now save it before its execution.  
+\end{enumerate}
+
+\subsection{Adding guidance to activities}
+
+We will take the process developed in section \ref{createModel} and add guidance to each activity in the process model.  This will complete the development of the process model.  The guidance added for each activity is available to the user, at the time of enactment.
+
+\begin{enumerate}
+\item In \texttt{Model editor view}, click the profiles button to add profiles to the model.  This button is accessible only when no activity or process is currently selected in the editor.  This shall open up the \texttt{Profiles toolbox} at the right. First marking in figure \ref{addProfile_fig} shows the profile button to add \texttt{Profile toolbox}, which is highlighted as second marking.  
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/guidance/addProfile}
+\caption{Applying profile}
+\label{addProfile_fig}
+\end{figure}
+
+\item From the \texttt{Profiles} toolbox, select \texttt{Apply profile} and click on the \emph{Sales Process}.  This opens up a window to select the profile.  Select \emph{SoftwareProcessProfile} and click \texttt{Add} (or double click it).  Click \texttt{Finish}.  This adds our profile to the \emph{Sales Process}.  
+
+\item Now we need to apply stereotype to each activity in the process model. For doing this, select \texttt{Apply stereotype} from the \texttt{Profiles} toolbox and apply it on the chosen activity.  This opens up a window to select the stereotypes to apply.  Choose \emph{SoftwareAction} stereotype by either double clicking or by pressing the \texttt{Add} button.  Finally click \texttt{Finish}.  
+
+\item We can repeat this process for every activity in the process model. We can also choose to attach guidance to only few of the activities, in which case, we add stereotype to the chosen activities only.  
+
+\item Once the stereotypes are applied to the activities, save the project.  Expand the \emph{Sales example} project hierarchy in \texttt{Model Explorer view}. At the end of the hierarchy, we can see a list of \texttt{Software Actions}, as shown in figure \ref{softwareAction_fig}.    
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.5\textwidth] {./figures/guidance/softwareAction}
+\caption{softwareActions in Model Explorer}
+\label{softwareAction_fig}
+\end{figure}
+
+\item Select the first \texttt{SoftwareAction} and open the \texttt{Properties view}. You can see the name of the concerned activity in the properties view.  (These software actions will be named according to the activity names in next version.) You can add guidance for the enactment of each activity in the \texttt{Description} property. 
+
+\item Keep adding the description to each activity, so that they are available as guidance during the enactment.  Figure \ref{process2_fig} shows the \emph{Sales Process} after a guidance is added to all its activities.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/guidance/process}
+\caption{Applying profile}
+\label{process2_fig}
+\end{figure}
+
+\item Finally, save the process before attempting to execute it.
+
+
+\end{enumerate}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Process Enactment}
+The execution of a process model is called its enactment, in the process domain.  We shall execute the process model that we developed in the earlier section, the \emph{Sales Example} process.  
+
+\subsection{Starting \& terminating a process}
+
+\begin{enumerate}
+\item From the \emph{Sales example} UML project, open the \emph{Sales Activity Diagram} in the editor view, if it is not open.
+
+\item Open the \texttt{process enactment view} of the tool.  In the top row of process enactment view, it shall state that process is not selected.  We have to select the \emph{Sales Process} from the \texttt{editor view}, so that it can be loaded in this view.  
+
+\item Once, the process is loaded, we can see two buttons across the process name: \texttt{Start} and \texttt{Terminate}.  \texttt{Start} button shall execute the process and \texttt{Terminate} button shall terminate it.
+
+\attention
+For demonstrating the control flow of the processes and the deviations from the original process model, we focused on the transfer of active execution between the activities.  For this reason, we did not go for a detailed lifecycle for the process and activities.  
+
+\item Once the process is executed, we can see its activities in the table shown in \texttt{process enactment view}.
+
+\item The \texttt{deviation view} lists all the constraints generated from the \emph{Sales Process}.  It also shows the state of each constraint. 
+
+\item Once \texttt{process enactment view} and \texttt{deviations view} is populated with activities and constraints respectively, we can continue the execution of individual activities.
+\end{enumerate}
+
+After the execution of all the activities, one should terminate the execution of the process.  
+
+\subsection{Starting \& completing an activity}
+\label{executeActivity}
+
+\begin{enumerate}
+\item Once the process is started, the user can execute its activities.  Before executing this activity, we can see that \emph{Receive order} activity is the suggested by the tool, as shown in the \texttt{process enactment view}.  We can also see that \emph{initial\_Activities} constraint in the \texttt{Deviations view} is satisfiable.  (Consult figure \ref{processStart_fig})
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/execution/processStart}
+\caption{Enactment view - Start of Sales Process}
+\label{processStart_fig}
+\end{figure}
+
+\item We start with executing the first activity i.e. \emph{Receive order}. This activity can either be selected from the graphical model or from the process enactment view.  Once the activity is selected, the start button on right of the table can be used to start its execution.  During the execution of the activity, we can see that it is running from the \texttt{process enactment view}.  The running state of the activity is enabled in the table.  (Consult figure \ref{activity1start_fig})
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/execution/activity1start}
+\caption{Enactment view - Running \emph{Receive order} activity}
+\label{activity1start_fig}
+\end{figure}
+
+As soon as the execution of the \emph{Receive order} activity started, the state of the \emph{Initial\_Activities} constraint in the \texttt{deviation view} changed from \emph{satisfiable} to \emph{satisfied}.  A user can forcibly start each activity, but this would violate the constraint that the process execution should start with \emph{Receive order} as first activity after the \emph{initial node}.
+
+\item Let us imagine that this activity is performed.  And now we want to finish the execution of this activity.  The \texttt{Finish} button in the process enactment view can be used to stop the execution of this activity.  After the completion of \emph{Receive order} activity, we can see that no activity is running in the \texttt{process enactment view}.  However there are two suggested activities to be executed next: \emph{Reserve order} and \emph{Order stock}. (Consult figure\ref{activity1finish_fig})
+
+\attention
+Suggestion of multiple activities in process enactment view does not mean that all of those activities should be executed.  It suggests to execute of these activities.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/execution/activity1finish}
+\caption{Enactment view - Two suggested activities}
+\label{activity1finish_fig}
+\end{figure}
+
+\item The user can continue the execution of activities by following the suggested activities by the tool.  This would ensure that process does not deviate from the original planning.  Once the final activity is finished, the process can be terminated.
+\end{enumerate}
+
+\attention
+A user has access to the guidance of each activity through the \texttt{Guidance} view.  Figure \ref{guidance_fig} shows the guidance for the \emph{Receive order} activity in \emph{Sales Process}.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.7\textwidth] {./figures/execution/guidance}
+\caption{Activity guidance for \emph{Receive order} activity}
+\label{guidance_fig}
+\end{figure}
+
+\subsection{Understanding process trace}
+Let us follow the steps 1 - 3 of section \ref{executeActivity} (starting and completing an activity), this gives us the state where the process is executing and only \emph{Receive order} activity was executed and finished by the user.  After \emph{Receive order} activity, we can choose any of the two activities \emph{Reserve stock} and \emph{Order stock}.  Let us execute \emph{Order stock} activity and then finish it.  We can continue further to the execution of \emph{Forward to warehouse} activity.  
+
+At this point if we open the \texttt{Trace view} of the PRODAN tool, we can see the execution trace for the process enactment of \emph{Sales Process}, as shown in figure \ref{trace_fig}.  This trace gives us the order in which the activities were executed till the current state.  Thus we can see that the execution started from \emph{Receive order} activity, followed by \emph{Order stock} activity and finally \emph{Forward to warehouse} activity was executed.  The \emph{(none)} value represents the instance when no activity is running in the process.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=0.4\textwidth] {./figures/execution/trace}
+\caption{Process enactment trace}
+\label{trace_fig}
+\end{figure}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Process Deviations}
+
+\subsection{Deviating from a process}
+\label{processDeviation}
+
+\begin{enumerate}
+\item Let us follow the steps 1 - 3 of section \ref{executeActivity} (Starting and completing an activity), this gives us the state where the process is in execution and only \emph{Receive order} activity was executed and finished by the user.  After \emph{Receive order} activity, we can choose only one of the two activities \emph{Reserve stock} and \emph{Order stock}.  
+
+\item Execute \emph{Order stock} activity and then finish it.  At this point, the tool suggests us to execute \emph{Forward to warehouse} activity.  It would be against the original process plan to execute \emph{Reserve stock} activity, as we can not execute both \emph{Order stock} and \emph{Reserve stock} activities.  
+
+\item Try to execute the \emph{Reserve stock} activity at this point, against the original flow of the process model.  This triggers a warning message box that informs the user of the constraints that would be violated by the execution of this activity.  This error box is illustrated in figure \ref{deviationError_fig}. It also gives a little description of the constraint.  The user can choose to cancel the demanded action or continue anyway.
+
+\begin{figure}[h!]
+\smallskip
+\centering
+ 	\includegraphics[width=\textwidth] {./figures/execution/deviationError}
+\caption{Warning message box for deviation}
+\label{deviationError_fig}
+\end{figure}
+
+\item Click \texttt{OK} in the message box, where we would intentionally like to deviate from the process model.  This means that tool informs us about the constraints that are being violated by the execution of an activity that shall deviate from the process model, but it does not restrict us from executing that activity.  
+
+\item We can continue to execute the process till its termination or continue with the next section (Understanding the violated constraints) from the current state.
+\end{enumerate}
+
+\subsection{Understanding the violated constraints}
+
+\begin{enumerate}
+\item Let us follow the steps 1 - 4 of section \ref{processDeviation} (Deviating from a process), this gives us the state where the process is in execution and we executed \emph{Reserve stock} activity after the execution of \emph{Order stock} activity, which caused a deviation.  
+
+\item In the deviations view of the tool, we can see all the constraints related to the \emph{Sales Process}.   There are three types of constraints that are generated from the process model, other than the \emph{initial node} constraint:
+\end{enumerate}
+
+\begin{description}
+\item[Response(a,b)]
+This constraint specifies that activity b must be executed anytime during the execution of the process, once activity a is executed.  This does not constrain the execution of activity b to be executed directly after the execution of a.
+
+\item[Precedence(a,b)]
+This constraint specifies that activity b can be executed only if activity a has already been executed in the process.  Again, this does not constrain activity a to be a direct precedent of activity b.
+
+\item[Existence(a)]
+This constraint specifies that activity a must be executed exactly once during the execution. 
+\end{description}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item We can also notice the states for each constraint shown in the deviation view.  There are three kinds of states possible for a constraint. These are
+\end{enumerate}
+
+\begin{description}
+\item[Satisfied]
+A constraint on a process model is satisfied if there is no action taken that violates the satisfiability of the given condition.
+
+\item[Violated] 
+A constraint is violated if the specified condition was not followed during the execution of the process model.  
+
+\item[Satisfiable]
+A constraint that is not currently satisfied (as a special case of violated constraint) but some future action of user might make it possible to satisfy this condition. 
+\end{description}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Support for Control-flow patterns}
+
+Workflow control flow patterns are offered by the \emph{Workflow Pattern Initiative}\footnote{http://www.workflowpatterns.com/patterns/control/}.  These patterns can be used to analyze the strengths and weaknesses of different process modeling approaches.  We have implemented the first five patterns to show the applicability of this tool.  We have taken some steps ahead to classify different kinds of deviations that may arrive in each pattern.  This section presents the analysis for enactment and deviations of these patterns.
+
+
+%----------- Pattern 1 ----------------------
+\subsection{Pattern 1 - Sequence}
+\label{pattern1}
+A task in a process in enabled after the completion of a preceding task in the same process.  Two tasks can be connected directly, so as to show a sequence of their executions.  They are connected through the control-flow arrow in UML activity diagram.  
+
+\begin{figure}[h]
+\smallskip
+\centering
+ 	\includegraphics[width=.9\textwidth] {./figures/patterns/sequence}
+\caption{Pattern 1 - Sequence controlflow pattern}
+\label{figpattern1}
+\end{figure} 
+
+\noindent\textbf{Enactment Analysis}
+This pattern can be implemented in PRODAN for enactment, as shown in figure \ref{figpattern1}.  Four tasks (A, B, C, D) are modeled in a sequence. Execution of the process starts through the \emph{initial node} and then A is proposed for the execution.  After the execution of each activity, the next activity in sequence is proposed for execution. \\
+
+\noindent\textbf{Deviation Analysis}
+The tool responds to the deviations, depending upon the different type of deviation in the process.
+\begin{enumerate}
+\item \emph{Skip A instead execute B:} the tool issues a warning of deviation where two violated constraints are shown to the user.  c1) A is the initial activity and c2) B should be performed after A.  Proposed activity for further execution A and C.  (why A, to be discussed ?)
+\item \emph{Skip B instead execute C:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) B should be performed before C.  Proposed activity for further execution B and D.  
+\item \emph{Skip D and complete the process:} the tool does not provide a way to do it, except terminating the process (which is different from the completion of a process). 
+\end{enumerate}
+
+
+
+%----------- Pattern 2 ----------------------
+\subsection{Pattern 2: Parallel split}
+\label{pattern2}
+The divergence of a branch into two or more parallel branches each of which execute concurrently. It is captured in UML through a ForkNode. A fork node in UML is a control node that splits the flow into multiple concurrent flows.
+
+\begin{figure}[h]
+\smallskip
+\centering
+ 	\includegraphics[width=.9\textwidth] {./figures/patterns/parallelsplit}
+\caption{Pattern 2 - Parallel Split controlflow pattern}
+\label{figpattern2}
+\end{figure} 
+
+\noindent\textbf{Enactment Analysis}
+This pattern can be implemented in PRODAN for enactment, as shown in figure \ref{figpattern2}.  Five tasks (A, B, C, D, E) are modeled such that B and C are forked after A.  Tasks D and E are modeled to study the post-conditions of B and C. Task F is not part of the pattern and is just modeled for the sound completion of model.  Execution of the process starts through the \emph{initial node} and then A is proposed for the execution. After the execution of A, B and C are proposed for execution. Both these tasks (B \& C) can run concurrently on the tool.  \\
+
+\noindent\textbf{Deviation Analysis}
+The tool responds to the deviations, depending upon the different type of deviation in the process.
+\begin{enumerate}
+\item \emph{Skip A instead execute B:} the tool issues a warning of deviation where two violated constraints are shown to the user.  c1) A must be the initial activity and c2) B should be performed after A.  Proposed activities for further execution A and D. 
+\item \emph{Skip A instead execute B \& C:} the tool issues a warning of deviation where two violated constraints are shown to the user for B (as in previous case) and for C only one constraint is shown c1) C should be performed after A.  Proposed activities for further execution A, D and E. 
+\item \emph{Skip B instead execute D:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) B should be performed before D.  Proposed activity for further execution B and C.  
+\end{enumerate}
+
+
+
+%----------- Pattern 3 ----------------------
+\subsection{Pattern 3: Synchronizaiton}
+\label{pattern3}
+The convergence of two or more branches into a single subsequent branch such that the thread of control is passed to the subsequent branch when all input branches have been enabled. It is captured in UML through a JoinNode.  Multiple control tokens offered on the same incoming edge are combined into one before passing the token to the single subsequent flow (p.394).  This is useful when multiple instances are being dealt.   
+
+\begin{figure}[h]
+\smallskip
+\centering
+ 	\includegraphics[width=.9\textwidth] {./figures/patterns/synchronization}
+\caption{Pattern 3 - Synchronization controlflow pattern}
+\label{figpattern3}
+\end{figure} 
+
+\noindent\textbf{Enactment Analysis}
+This pattern can be implemented in PRODAN for enactment, as shown in figure \ref{figpattern3}.  Five tasks (A, B, C, D, E) are modeled such that B and C are synchronized to D.  Tasks E is modeled to study the post-conditions of D. Task A is not part of the (active) pattern and is just modeled for the sound completion of model.  Execution of the process starts through the \emph{initial node} and then A is proposed for the execution.  After the completion of A, the next proposed tasks are B and C. After the execution of both B \& C, the flow is converged to D and it is proposed for execution. \\
+
+\noindent\textbf{Deviation Analysis}
+The tool responds to the deviations, depending upon the different type of deviation in the process.
+\begin{enumerate}
+\item \emph{Skip B \& C instead execute D:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be executed after B \& C.  Proposed activities for further execution B, C and E. 
+\item \emph{Skip B instead execute D:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be executed after B.  Proposed activity for further execution B and E.  [Same kind of deviation will apply if C is skipped and D is executed.]
+\item \emph{Skip B, C \& D instead execute E:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be performed before E.  [Constraint for the execution of B \& C after A is not displayed]. B and C are still proposed for further execution.
+\item \emph{Skip B \& D instead execute E:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be performed before E.  [Constraint for the execution of B after A is not displayed]. B is proposed for further execution after the execution of E.
+\item \emph{Skip D instead execute E:} the tool issues a warning of deviation where a violated constraint is displayed to the user c1) D should be performed before E.  After the execution of E, the task D is proposed for further execution. 
+\end{enumerate}
+
+
+
+%----------- Pattern 4 ----------------------
+\subsection{Pattern 4: Exclusive Choice}
+\label{pattern4}
+\emph{The divergence of a branch into two or more branches such that when the incoming branch is enabled, the thread of control is immediately passed to precisely one of the outgoing branches based on a mechanism that can select one of the outgoing branches.} In UML a DecisionNode is used to represent this pattern, where it is depicted by a diamond node. It is a control node that choses between the outgoing flows.  When a control token is received by the DecisionNode, it presents it to all the outgoing flows.  The evaluation of the \emph{guards} determine the selected outgoing flow for the DecisionNode.  Only one of the outgoing edges is enabled by the DecisionNode.
+
+\begin{figure}[h]
+\smallskip
+\centering
+ 	\includegraphics[width=.9\textwidth] {./figures/patterns/exclusivechoice}
+\caption{Pattern 4 - Exclusive choice controlflow pattern}
+\label{figpattern4}
+\end{figure} 
+
+\noindent\textbf{Enactment Analysis}
+This pattern can be implemented in PRODAN for enactment, as shown in figure \ref{figpattern4}.  Six tasks (A, B, C, D, E and F) are modeled such that B and C are diverged after A.  Tasks D and E are modeled to study the post-conditions of B and C. Task F is not part of the pattern and is just modeled for the sound completion of model.  Execution of the process starts through the \emph{initial node} and then A is proposed for the execution. After the execution of A, it is the choice of the user to perform  one of the tasks amongst B and C.  The tool does not offer any guard.  After the execution of B or C, its subsequent activity is proposed for execution.\\ 
+
+\noindent\textbf{Deviation Analysis}
+The tool responds to the deviations, depending upon the different type of deviation in the process.
+\begin{enumerate}
+\item \emph{Skip A instead execute B:} the tool issues a warning of deviation where two violated constraints are shown to the user.  c1) A must be the initial activity and c2) B should be performed after A.  Proposed activities for further execution are A \& D. [Same situation arises when C is executed instead of A.]
+\item \emph{Skip A instead execute B \& C:} the tool issues a warning of deviation where two violated constraints are shown to the user for B (as in previous case) and for C only one constraint is shown c1) C should be performed after A.  Proposed activities for further execution A, D and E. 
+\item \emph{After the execution of A \& B, execute C:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) one in B and C should be executed after A.  Proposed activity for further execution are D and E, even though only one of them should be followed according to the original plan. This is the propagation of deviation.    
+\item \emph{Skip B \& C instead execute D:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) B should be performed before D.  Constraint for the execution of B or C after A is not displayed to the user.  Proposed activities for further execution are B, C and F.  A better prediction mechanism can question the execution of C as a proposed task.  
+\end{enumerate}
+
+
+
+%----------- Pattern 5 ----------------------
+\subsection{Pattern 5: Simple Merge}
+\label{pattern5}
+\emph{The convergence of two or more branches into a single subsequent branch such that each enablement of an incoming branch results in the thread of control being passed to the subsequent branch.} In UML this pattern is implemented through the use of MergeNode. It is depicted by a diamond node with multiple incoming edges and a single outgoing edge.  If token is received on any of the incoming branches, it is passed on to the outgoing branch.  If token is received on multiple incoming branches it is passed on to the outgoing edge multiple times.  In simple merge pattern, we do not take into account the situation where tokens can arrive on multiple incoming edges.
+
+\begin{figure}[h]
+\smallskip
+\centering
+ 	\includegraphics[width=.9\textwidth] {./figures/patterns/simplemerge}
+\caption{Pattern 5 - Simple merge controlflow pattern}
+\label{figpattern5}
+\end{figure} 
+
+\noindent\textbf{Enactment Analysis:}
+This pattern can be implemented in PRODAN for enactment, as shown in figure \ref{figpattern5}.  Five tasks (A, B, C, D, E) are modeled such that B and C are converged to D.  Tasks E is modeled to study the post-conditions of D. Task A is not part of the (active) pattern and is just modeled for the sound completion of model.  Execution of the process starts through the \emph{initial node} and then A is proposed for the execution.  After the completion of A, the next proposed tasks are B and C. \\
+
+\noindent\textbf{Deviation Analysis:}
+The tool responds to the deviations, depending upon the different type of deviation in the process.
+\begin{enumerate}
+\item \emph{Skip B \& C instead execute D:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be executed after B \& C.  Proposed activities for further execution B, C and E. 
+\item \emph{Skip B, C \& D instead execute E:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be performed before E.  [Constraint for the execution of B \& C after A is not displayed]. B and C are still proposed for further execution, after the execution of E.
+\item \emph{Execute B, Skip D instead execute E:} the tool issues a warning of deviation where a violated constraint is shown to the user.  c1) D should be performed before E.  D is proposed for further execution after the execution of E.
+\end{enumerate}
+
+
+\printindex
+
+\end{document}

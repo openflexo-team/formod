@@ -1,0 +1,35 @@
+use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+
+/**
+ * 
+ * @version 0.1
+ */
+@VirtualModel(uri="http://formose.lacl.fr/DocumentLibrary.viewpoint")
+public class DocumentLibrary {
+
+  @GetSetProperty(value="documents", access=get)  
+  public List<VirtualModelInstanceType<AbstractDocument>> getDocuments {  
+    return this.FML@RT::SelectVirtualModelInstance();  
+  }
+
+  @CreationScheme  
+  DocumentLibrary:create() {  
+  
+  }  
+
+  @ActionScheme  
+  VirtualModelInstanceType<DocXDocument> importDocXDocument(DocXDocumentResource docXDocumentResource, String documentName, String documentDescription) {  
+    VirtualModelInstanceType<DocXDocument> newDocumentVMI = DocXDocument.create(parameters.documentName,parameters.docXDocumentResource,parameters.documentDescription);    
+    this.firePropertyChange documents    
+    return newDocumentVMI;  
+  }  
+
+  @ActionScheme  
+  VirtualModelInstanceType<DocXDocument> removeDocXDocument(VirtualModelInstanceType<DocXDocument> documentVMI) {  
+    log ("Delete " + parameters.documentVMI)    
+    parameters.documentVMI.delete();    
+    this.firePropertyChange documents    
+    return parameters.documentVMI;  
+  }  
+
+}
