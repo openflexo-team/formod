@@ -79,7 +79,7 @@ public class CreateNewRequirementWizard extends FlexoActionWizard<CreateNewRequi
 
 	@Override
 	public Image getDefaultPageImage() {
-		return IconFactory.getImageIcon(FMSIconLibrary.REQUIREMENT_BIG_ICON, IconLibrary.NEW_32_32).getImage();
+		return IconFactory.getImageIcon(FMSIconLibrary.REQUIREMENT_BIG_ICON, IconLibrary.BIG_NEW_MARKER).getImage();
 	}
 
 	public ConfigureRequirement getConfiguration() {

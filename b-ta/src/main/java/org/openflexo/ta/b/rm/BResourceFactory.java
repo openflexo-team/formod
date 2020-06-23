@@ -88,7 +88,7 @@ public class BResourceFactory extends TechnologySpecificPamelaResourceFactory<BR
 	}
 
 	@Override
-	protected <I> BResource registerResource(BResource resource, FlexoResourceCenter<I> resourceCenter) {
+	public <I> BResource registerResource(BResource resource, FlexoResourceCenter<I> resourceCenter) {
 		super.registerResource(resource, resourceCenter);
 
 		// Register the resource in the repository of supplied resource center

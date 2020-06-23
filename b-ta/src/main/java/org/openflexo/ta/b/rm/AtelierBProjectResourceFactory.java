@@ -106,7 +106,7 @@ public class AtelierBProjectResourceFactory extends
 	}
 
 	@Override
-	protected <I> AtelierBProjectResource registerResource(AtelierBProjectResource resource, FlexoResourceCenter<I> resourceCenter) {
+	public <I> AtelierBProjectResource registerResource(AtelierBProjectResource resource, FlexoResourceCenter<I> resourceCenter) {
 
 		System.out.println("On enregistre: " + resource);
 		System.out.println("artefact:" + resource.getIODelegate().getSerializationArtefact());

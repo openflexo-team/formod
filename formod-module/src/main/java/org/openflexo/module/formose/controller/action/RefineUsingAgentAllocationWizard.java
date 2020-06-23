@@ -82,7 +82,7 @@ public class RefineUsingAgentAllocationWizard extends FlexoActionWizard<RefineUs
 
 	@Override
 	public Image getDefaultPageImage() {
-		return IconFactory.getImageIcon(FMSIconLibrary.SYSML_BIG_ICON, IconLibrary.NEW_32_32).getImage();
+		return IconFactory.getImageIcon(FMSIconLibrary.SYSML_BIG_ICON, IconLibrary.BIG_NEW_MARKER).getImage();
 	}
 
 	public ConfigureAgentAllocationRefinment getConfiguration() {
