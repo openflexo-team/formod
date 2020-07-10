@@ -51,7 +51,7 @@ import org.openflexo.OpenflexoProjectAtRunTimeTestCaseWithGUI;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.VirtualModel;
-import org.openflexo.foundation.fml.rm.VirtualModelResource;
+import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -94,20 +94,20 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testSysMLKaos");
 
-		VirtualModelResource sysmlKaosViewPointResource = serviceManager.getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.SYSML_KAOS_VIEWPOINT_URI);
+		CompilationUnitResource sysmlKaosViewPointResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.SYSML_KAOS_VIEWPOINT_URI);
 		assertNotNull(sysmlKaosViewPointResource);
 
 		VirtualModel sysMLKaosVP;
 
-		assertNotNull(sysMLKaosVP = sysmlKaosViewPointResource.getVirtualModel());
+		assertNotNull(sysMLKaosVP = sysmlKaosViewPointResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(sysMLKaosVP);
-		System.out.println(sysMLKaosVP.getFMLRepresentation());
+		System.out.println(sysMLKaosVP.getFMLPrettyPrint());
 		assertObjectIsValid(sysMLKaosVP);
 
 		for (VirtualModel vm : sysMLKaosVP.getVirtualModels()) {
-			System.out.println(vm.getFMLRepresentation());
+			System.out.println(vm.getFMLPrettyPrint());
 			assertObjectIsValid(vm);
 		}
 
@@ -120,20 +120,20 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testDomainModel");
 
-		VirtualModelResource domainModelViewPointResource = serviceManager.getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.DOMAIN_MODELLING_VIEWPOINT_URI);
+		CompilationUnitResource domainModelViewPointResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.DOMAIN_MODELLING_VIEWPOINT_URI);
 		assertNotNull(domainModelViewPointResource);
 
 		VirtualModel domainModelVP;
 
-		assertNotNull(domainModelVP = domainModelViewPointResource.getVirtualModel());
+		assertNotNull(domainModelVP = domainModelViewPointResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(domainModelVP);
-		System.out.println(domainModelVP.getFMLRepresentation());
+		System.out.println(domainModelVP.getFMLPrettyPrint());
 		assertObjectIsValid(domainModelVP);
 
 		for (VirtualModel vm : domainModelVP.getVirtualModels()) {
-			System.out.println(vm.getFMLRepresentation());
+			System.out.println(vm.getFMLPrettyPrint());
 			assertObjectIsValid(vm);
 		}
 
@@ -180,20 +180,20 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testDocumentLibrary");
 
-		VirtualModelResource dlViewPointResource = serviceManager.getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.DOCUMENT_LIBRARY_VIEWPOINT_URI);
+		CompilationUnitResource dlViewPointResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.DOCUMENT_LIBRARY_VIEWPOINT_URI);
 		assertNotNull(dlViewPointResource);
 
 		VirtualModel documentLibraryVP;
 
-		assertNotNull(documentLibraryVP = dlViewPointResource.getVirtualModel());
+		assertNotNull(documentLibraryVP = dlViewPointResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(documentLibraryVP);
-		System.out.println(documentLibraryVP.getFMLRepresentation());
+		System.out.println(documentLibraryVP.getFMLPrettyPrint());
 		assertObjectIsValid(documentLibraryVP);
 
 		for (VirtualModel vm : documentLibraryVP.getVirtualModels()) {
-			System.out.println(vm.getFMLRepresentation());
+			System.out.println(vm.getFMLPrettyPrint());
 			assertObjectIsValid(vm);
 		}
 
@@ -233,12 +233,13 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testFormoseCore");
 
-		VirtualModelResource fmlResource = serviceManager.getVirtualModelLibrary().getVirtualModelResource(FMSConstants.FORMOSE_CORE_URI);
+		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.FORMOSE_CORE_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
 
-		assertNotNull(virtualModel = fmlResource.getVirtualModel());
+		assertNotNull(virtualModel = fmlResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(virtualModel);
 		assertVirtualModelIsValid(virtualModel);
@@ -252,12 +253,13 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testMethology");
 
-		VirtualModelResource fmlResource = serviceManager.getVirtualModelLibrary().getVirtualModelResource(FMSConstants.METHOLOGY_URI);
+		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.METHOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
 
-		assertNotNull(virtualModel = fmlResource.getVirtualModel());
+		assertNotNull(virtualModel = fmlResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(virtualModel);
 		assertVirtualModelIsValid(virtualModel);
@@ -271,13 +273,13 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testDocumentAnnotationMethology");
 
-		VirtualModelResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.DOCUMENT_ANNOTATION_METHOLOGY_URI);
+		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.DOCUMENT_ANNOTATION_METHOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
 
-		assertNotNull(virtualModel = fmlResource.getVirtualModel());
+		assertNotNull(virtualModel = fmlResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(virtualModel);
 		assertVirtualModelIsValid(virtualModel);
@@ -291,13 +293,13 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testSysMLKaosMethodology");
 
-		VirtualModelResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.SYSML_KAOS_METHOLOGY_URI);
+		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.SYSML_KAOS_METHOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
 
-		assertNotNull(virtualModel = fmlResource.getVirtualModel());
+		assertNotNull(virtualModel = fmlResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(virtualModel);
 		assertVirtualModelIsValid(virtualModel);
@@ -311,13 +313,13 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("testDomainModelMethology");
 
-		VirtualModelResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.DOMAIN_MODEL_METHOLOGY_URI);
+		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.DOMAIN_MODEL_METHOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
 
-		assertNotNull(virtualModel = fmlResource.getVirtualModel());
+		assertNotNull(virtualModel = fmlResource.getCompilationUnit().getVirtualModel());
 
 		assertNotNull(virtualModel);
 		assertVirtualModelIsValid(virtualModel);

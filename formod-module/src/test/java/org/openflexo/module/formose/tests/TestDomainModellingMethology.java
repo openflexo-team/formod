@@ -57,8 +57,9 @@ import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.VirtualModel;
-import org.openflexo.foundation.fml.rm.VirtualModelResource;
+import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -130,15 +131,14 @@ public class TestDomainModellingMethology extends OpenflexoProjectAtRunTimeTestC
 		String viewPointURI = FMSConstants.FORMOSE_VIEWPOINT_URI;
 		log("Testing ViewPoint loading: " + viewPointURI);
 
-		FlexoResource<VirtualModel> vpRes = serviceManager.getResourceManager().getResource(viewPointURI, VirtualModel.class);
+		FlexoResource<FMLCompilationUnit> vpRes = serviceManager.getResourceManager().getResource(viewPointURI, FMLCompilationUnit.class);
 
 		System.out.println("ViewPoint found in : " + vpRes.getIODelegate().getSerializationArtefact());
-		// System.exit(-1);
 
 		assertNotNull(vpRes);
 		assertFalse(vpRes.isLoaded());
 
-		VirtualModel vp = ((VirtualModelResource) vpRes).getVirtualModel();
+		VirtualModel vp = ((CompilationUnitResource) vpRes).getCompilationUnit().getVirtualModel();
 		assertTrue(vpRes.isLoaded());
 		formoseVP = vp;
 

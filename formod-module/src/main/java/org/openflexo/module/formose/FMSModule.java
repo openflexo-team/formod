@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
-import org.openflexo.foundation.fml.rm.VirtualModelResource;
+import org.openflexo.foundation.fml.rm.CompilationUnitResource;
 import org.openflexo.foundation.fml.rt.FMLRTTechnologyAdapter;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
@@ -116,8 +116,8 @@ public class FMSModule extends FlexoModule<FMSModule> {
 	}
 
 	private void initFormoseViewpoint() {
-		VirtualModelResource fmsVirtualModelResource = getApplicationContext().getVirtualModelLibrary()
-				.getVirtualModelResource(FMSConstants.FORMOSE_VIEWPOINT_URI);
+		CompilationUnitResource fmsVirtualModelResource = getApplicationContext().getVirtualModelLibrary()
+				.getCompilationUnitResource(FMSConstants.FORMOSE_VIEWPOINT_URI);
 		if (fmsVirtualModelResource == null) {
 			logger.severe("Cannot find Formose viewpoint !!!!");
 			System.out.println("RCs=" + getApplicationContext().getResourceCenterService().getResourceCenters());

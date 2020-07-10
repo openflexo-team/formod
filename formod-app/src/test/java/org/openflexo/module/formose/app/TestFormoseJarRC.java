@@ -49,6 +49,7 @@ import org.junit.runner.RunWith;
 import org.openflexo.OpenflexoProjectAtRunTimeTestCaseWithGUI;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
+import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.FMLRTTechnologyAdapter;
@@ -70,7 +71,7 @@ public class TestFormoseJarRC extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 	public static FlexoProject<?> project;
 	private static VirtualModel formoseVP;
-	private static FlexoResource<VirtualModel> vpRes;
+	private static FlexoResource<FMLCompilationUnit> vpRes;
 
 	private static FMLTechnologyAdapter fmlAdapter;
 
@@ -100,7 +101,7 @@ public class TestFormoseJarRC extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		String viewPointURI = "http://formose.lacl.fr/Formose.viewpoint";
 		log("Testing ViewPoint loading: " + viewPointURI);
 
-		vpRes = serviceManager.getResourceManager().getResource(viewPointURI, VirtualModel.class);
+		vpRes = serviceManager.getResourceManager().getResource(viewPointURI, FMLCompilationUnit.class);
 		assertNotNull(vpRes);
 		assertFalse(vpRes.isLoaded());
 
