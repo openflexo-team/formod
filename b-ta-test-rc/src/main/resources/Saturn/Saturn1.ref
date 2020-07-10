@@ -1,0 +1,27 @@
+/* Saturn1
+ * Author: Hector Ruiz Barradas
+ * Creation date: 07/11/2018
+ */
+
+REFINEMENT Saturn1
+REFINES Saturn0
+SEES
+    Ctx0
+ABSTRACT_VARIABLES
+    in_l ,
+    in_r ,
+    out
+INVARIANT
+    in_l : T_IN &
+    in_r : T_IN &
+    in_l = in
+INITIALISATION
+    in_l := i0 ||
+    in_r := i0 ||
+    out := o0
+OPERATIONS
+    Get ref_and Saturn = SELECT 0 = 0 THEN in_l : ( in_l = in_r ) END ;
+    Control ref_and Saturn = SELECT 0 = 0 THEN out : ( out = FB ( in_l ) ) END ;
+    Saturn = SELECT 0 = 1 THEN skip END
+
+ END

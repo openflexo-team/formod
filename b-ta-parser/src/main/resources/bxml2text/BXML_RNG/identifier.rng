@@ -1,0 +1,11 @@
+# A RELAX NG compact syntax pattern
+# for an identifer.
+
+Identifier =
+	Attribute?,
+	attribute value { text },
+	attribute suffix { text }?,
+	attribute typref { xsd:integer }?,
+	(attribute instance { text },
+	 attribute component { text })?
+

@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A RELAX NG compact syntax pattern for a bxml document. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:include schemaLocation="substitution.xsd"/>
+  <xs:include schemaLocation="predicate.xsd"/>
+  <xs:include schemaLocation="expression.xsd"/>
+  <xs:include schemaLocation="identifier.xsd"/>
+  <xs:include schemaLocation="attribute.xsd"/>
+  <xs:element name="Machine">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element minOccurs="0" ref="Abstraction"/>
+        <xs:element minOccurs="0" name="Parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="Attr"/>
+              <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="Constraints"/>
+        <xs:element minOccurs="0" ref="Includes"/>
+        <xs:element minOccurs="0" ref="Imports"/>
+        <xs:element minOccurs="0" ref="Sees"/>
+        <xs:element minOccurs="0" ref="Extends"/>
+        <xs:element minOccurs="0" ref="Uses"/>
+        <xs:element minOccurs="0" ref="Promotes"/>
+        <xs:element minOccurs="0" name="Values">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="Attr"/>
+              <xs:element maxOccurs="unbounded" name="Valuation">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" ref="Attr"/>
+                    <xs:group ref="Expression"/>
+                  </xs:sequence>
+                  <xs:attribute name="ident" use="required"/>
+                  <xs:attribute name="typref" use="required" type="xs:integer"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="Sets"/>
+        <xs:element minOccurs="0" ref="Abstract_Constants"/>
+        <xs:element minOccurs="0" ref="Concrete_Constants"/>
+        <xs:element minOccurs="0" ref="Abstract_Variables"/>
+        <xs:element minOccurs="0" ref="Concrete_Variables"/>
+        <xs:element minOccurs="0" ref="Variant"/>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:element minOccurs="0" ref="Invariant"/>
+        <xs:element minOccurs="0" ref="Initialisation"/>
+        <xs:element minOccurs="0" ref="Assertions"/>
+        <xs:element minOccurs="0" ref="Local_Operations"/>
+        <xs:element minOccurs="0" ref="Operations"/>
+        <xs:element ref="TypeInfos"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required"/>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="abstraction"/>
+            <xs:enumeration value="refinement"/>
+            <xs:enumeration value="implementation"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Abstraction">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Constraints">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Predicate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Includes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Referenced_Machine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Imports">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Referenced_Machine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Sees">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Referenced_Machine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Extends">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Referenced_Machine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Uses">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Referenced_Machine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Promotes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Promoted_Operation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Promoted_Operation">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Sets">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" name="Set">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="Attr"/>
+              <xs:element name="Id" type="Identifier"/>
+              <xs:element minOccurs="0" ref="Enumerated_Values"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Enumerated_Values">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Abstract_Constants">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Concrete_Constants">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Abstract_Variables">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Concrete_Variables">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Variant">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Expression"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Properties">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Predicate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Invariant">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Predicate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Initialisation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Substitution"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Assertions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group maxOccurs="unbounded" ref="Predicate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Local_Operations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Operation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Operations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" ref="Operation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TypeInfos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Type"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Type" type="TypeInfo"/>
+  <xs:element name="Referenced_Machine">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element name="Name" type="xs:string"/>
+        <xs:element minOccurs="0" ref="Instance"/>
+        <xs:element minOccurs="0" name="Parameters">
+          <xs:complexType>
+            <xs:group maxOccurs="unbounded" ref="Expression"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Instance" type="xs:string"/>
+  <xs:element name="Operation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element minOccurs="0" ref="Refines"/>
+        <xs:element minOccurs="0" name="Output_Parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="Input_Parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="Precondition"/>
+        <xs:element name="Body">
+          <xs:complexType>
+            <xs:group ref="Substitution"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Refines">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element maxOccurs="unbounded" name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Precondition">
+    <xs:complexType>
+      <xs:group ref="Predicate"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="TypeInfo">
+    <xs:group ref="Type2"/>
+    <xs:attribute name="id" use="required" type="xs:integer"/>
+  </xs:complexType>
+  <xs:group name="Type2">
+    <xs:choice>
+      <xs:element name="Id">
+        <xs:complexType>
+          <xs:attribute name="value" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Unary_Exp" type="Unary_Exp_type2"/>
+      <xs:element name="Binary_Exp" type="Binary_Exp_type2"/>
+      <xs:element ref="Struct"/>
+      <xs:element ref="Generic_Type"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="Generic_Type" type="xs:string"/>
+  <xs:complexType name="Unary_Exp_type2">
+    <xs:group ref="Type2"/>
+    <xs:attribute name="op" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="POW"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Binary_Exp_type2">
+    <xs:sequence>
+      <xs:group ref="Type2" minOccurs="2" maxOccurs="2"/>
+    </xs:sequence>
+    <xs:attribute name="op" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="*"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

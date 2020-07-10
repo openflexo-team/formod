@@ -1,0 +1,9 @@
+/* Ctx4
+ * Author: Hector Ruiz Barradas
+ * Creation date: 12/11/2018
+ */
+SYSTEM
+    Ctx4
+SETS
+    COMMUNICATION_T = { BROADCAST , POINT2POINT }
+END

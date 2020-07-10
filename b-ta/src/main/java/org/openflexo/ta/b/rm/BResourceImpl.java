@@ -52,10 +52,14 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.IOFlexoException;
+import org.openflexo.foundation.InconsistentDataException;
 import org.openflexo.foundation.InnerResourceData;
+import org.openflexo.foundation.InvalidModelDefinitionException;
+import org.openflexo.foundation.InvalidXMLException;
 import org.openflexo.foundation.resource.FileIODelegate;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FileWritingLock;
+import org.openflexo.foundation.resource.FlexoFileNotFoundException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.resource.ResourceData;
@@ -115,56 +119,31 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 		return rawSource;*/
 	}
 
-	private boolean isLoading = false;
-
-	/**
-	 * Load the resource data of this resource.
-	 * 
-	 * @return the resource data.
-	 * @throws IOFlexoException
-	 */
 	@Override
-	public BComponent loadResourceData() throws IOFlexoException {
-
+	protected BComponent performLoad() throws IOException, Exception {
 		if (getFlexoIOStreamDelegate() == null) {
 			throw new IOFlexoException("Cannot load document with this IO/delegate: " + getIODelegate());
 		}
 
-		BComponent resourceData = null;
+		notifyResourceWillLoad();
+
+		BComponent returned = null;
 		try {
-			isLoading = true;
-			resourceData = load(getFlexoIOStreamDelegate());
+			returned = load(getFlexoIOStreamDelegate());
 			getInputStream().close();
 		} catch (IOException e) {
 			throw new IOFlexoException(e);
 		} catch (ParseException e) {
 			throw new IOFlexoException(e.getMessage());
-		} finally {
-			isLoading = false;
 		}
 
-		if (resourceData == null) {
+		notifyResourceLoaded();
+
+		if (returned == null) {
 			logger.warning("canno't retrieve resource data from serialization artifact " + getIODelegate().toString());
 			return null;
 		}
-
-		resourceData.setResource(this);
-		setResourceData(resourceData);
-
-		return resourceData;
-	}
-
-	@Override
-	public boolean isLoading() {
-		return isLoading;
-	}
-
-	/**
-	 * Provides hook when {@link ResourceData} is unloaded
-	 */
-	@Override
-	public void unloadResourceData(boolean deleteResourceData) {
-		super.unloadResourceData(deleteResourceData);
+		return returned;
 	}
 
 	/**
@@ -181,7 +160,7 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 	 * performed
 	 */
 	@Override
-	protected void _saveResourceData(boolean clearIsModified) throws SaveResourceException {
+	protected void performSave(boolean clearIsModified) throws SaveResourceException {
 
 		if (getFlexoIOStreamDelegate() == null) {
 			throw new SaveResourceException(getIODelegate());
@@ -317,6 +296,18 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 				} catch (IOFlexoException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (FlexoFileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidXMLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InconsistentDataException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidModelDefinitionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			return componentName;
@@ -376,42 +367,9 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 	@Override
 	public void updateResourceData() {
 
-		if (resourceData == null) {
-			System.out.println("Do not update BResource since it this not loaded yet");
-			return;
-		}
-
-		System.out.println("Updating from disk version");
 		String oldRawSource = getRawSource();
-		BComponent reloadedResourceData;
-		try {
-
-			System.out.println("On recharge la resource");
-			// Reload resource data
-			reloadedResourceData = load(getFlexoIOStreamDelegate());
-			reloadedResourceData.setResource(this);
-
-			System.out.println("On obtient " + getFactory().stringRepresentation(reloadedResourceData));
-
-			System.out.println("Et ensuite on update");
-
-			// Now perform PAMELA updating with reloaded resource data
-			// Existing model will be updated and notified
-			resourceData.updateWith(reloadedResourceData);
-
-			// TODO: set new pretty-print delegates to old objects
-
-			System.out.println("Hop");
-
-			System.out.println("Apres le updateWith " + getFactory().stringRepresentation(resourceData));
-
-			getPropertyChangeSupport().firePropertyChange(RAW_SOURCE_KEY, oldRawSource, getRawSource());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		super.updateResourceData();
+		getPropertyChangeSupport().firePropertyChange(RAW_SOURCE_KEY, oldRawSource, getRawSource());
 	}
 
 	/**
@@ -425,7 +383,7 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 	 * @return
 	 */
 	@Override
-	public FlexoObject findObject(String objectIdentifier, String userIdentifier, String typeIdentifier) {
+	public FlexoObject findObject(String objectIdentifier, String userIdentifier) {
 		System.out.println("Je dois trouver l'objet avec l'ID " + objectIdentifier);
 		// return getFlexoObject(Long.parseLong(objectIdentifier), userIdentifier);
 		try {
@@ -441,6 +399,21 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * Generic method used to retrieve in this resource an object with supplied objectIdentifier, userIdentifier, and type identifier<br>
+	 * 
+	 * Note that for certain resources, some parameters might not be used (for example userIdentifier or typeIdentifier)
+	 * 
+	 * @param objectIdentifier
+	 * @param userIdentifier
+	 * @param typeIdentifier
+	 * @return
+	 */
+	@Override
+	public FlexoObject findObject(String objectIdentifier, String userIdentifier, String typeIdentifier) {
+		return findObject(objectIdentifier, userIdentifier);
 	}
 
 	/**

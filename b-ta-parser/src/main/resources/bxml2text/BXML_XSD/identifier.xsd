@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!--
+    A RELAX NG compact syntax pattern
+    for an identifer.
+  -->
+  <xs:complexType name="Identifier">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+    </xs:sequence>
+    <xs:attribute name="value" use="required"/>
+    <xs:attribute name="suffix"/>
+    <xs:attribute name="typref" type="xs:integer"/>
+    <xs:attribute name="instance"/>
+    <xs:attribute name="component"/>
+  </xs:complexType>
+</xs:schema>

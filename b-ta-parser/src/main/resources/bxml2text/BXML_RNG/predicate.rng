@@ -1,0 +1,33 @@
+# DISTRIBUTED UNDER LICENCE GPL V3.0
+# A RELAX NG compact syntax pattern
+# for a predicate.
+
+Predicate =
+	element Binary_Pred { 
+		Attribute?,
+		attribute op { "&" | "or" | "=>" | "<=>" | "cand" },
+		Predicate,
+		Predicate
+	}
+ | element Nary_Pred {
+		Attribute?,
+		attribute op { "&" },
+		Predicate*
+	}
+ | element Unary_Pred {
+		Attribute?,
+		attribute op { "not" },
+		Predicate
+	}
+ | element Quantified_Pred {
+		Attribute?,
+		attribute type { "!" | "#" },
+		Variables,
+		element Body { Attribute?, Predicate }
+	}
+ | element Exp_Comparison {
+		Attribute?,
+		attribute op { ":" | "/:" | "<:" | "/<:" | "<<:" | "/<<:" | "=" | "/=" | "<=" | "<" | ">=" | ">" | "rgt" | "rlt" | "rle" | "rge" },
+		Expression,
+		Expression
+	}	

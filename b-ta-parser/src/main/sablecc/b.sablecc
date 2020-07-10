@@ -1,11 +1,7 @@
 Package org.openflexo.ta.b.parser;
 
 /*
- * This grammar is derived from:
- * https://github.com/bendisposto/probparsers/blob/develop/bparser/src/main/resources/grammars/BParser.scc
- * It was published under EPL v1.
- * This derived work is published under EUPL v1.2, which is compatible with EPL v1.
- * Therefore, it can also be published under EPL v1.
+ * This grammar comes from https://github.com/bendisposto/probparsers 
  */
 
 /*******************************************************************
@@ -418,7 +414,6 @@ shebang, shebang_char, shebang_end,
 // Such an error message indicates that a vertical bar '|' is followed by a semicolon ';'.
 
 Productions
-  // Patch FD & SG
 entry_point {-> entry_point} =
     {parse_unit} start_bfile [pu]:parse_unit {-> New entry_point.parse_unit(pu.parse_unit)} |
     {predicate} start_predicate [pred]:predicate_top {-> New entry_point.predicate(pred.predicate)} |
@@ -1119,7 +1114,6 @@ op_pattern_param {-> argpattern} =
 Abstract Syntax Tree
 
 entry_point =
-  // Patch FD & SG
     {parse_unit} parse_unit |
     {predicate} predicate |
     {expression} expression;

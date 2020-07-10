@@ -41,7 +41,7 @@ package org.openflexo.ta.b.rm;
 import java.util.List;
 
 import org.openflexo.foundation.resource.DirectoryContainerResource;
-import org.openflexo.foundation.resource.PamelaResource;
+import org.openflexo.foundation.resource.PamelaXMLSerializableResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
@@ -58,7 +58,7 @@ import org.openflexo.ta.b.model.atelierb.AtelierBProjectFactory;
 @ModelEntity
 @ImplementationClass(AtelierBProjectResourceImpl.class)
 public interface AtelierBProjectResource extends TechnologyAdapterResource<AtelierBProject, BTechnologyAdapter>,
-		PamelaResource<AtelierBProject, AtelierBProjectFactory>, DirectoryContainerResource<AtelierBProject> {
+		PamelaXMLSerializableResource<AtelierBProject, AtelierBProjectFactory>, DirectoryContainerResource<AtelierBProject> {
 
 	/**
 	 * Convenient method to retrieve resource data

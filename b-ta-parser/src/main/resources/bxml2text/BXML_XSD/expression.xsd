@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!--
+    A RELAX NG compact syntax pattern
+    for an expression.
+  -->
+  <xs:group name="Expression">
+    <xs:choice>
+      <xs:element name="Binary_Exp" type="Bynary_Exp_type"/>
+      <xs:element ref="Nary_Exp"/>
+      <xs:element ref="Boolean_Literal"/>
+      <xs:element ref="Boolean_Exp"/>
+      <xs:element ref="EmptySet"/>
+      <xs:element ref="EmptySeq"/>
+      <xs:element name="Id" type="Identifier"/>
+      <xs:element ref="Integer_Literal"/>
+      <xs:element ref="Quantified_Exp"/>
+      <xs:element ref="Quantified_Set"/>
+      <xs:element ref="STRING_Literal"/>
+      <xs:element name="Unary_Exp" type="Unary_Exp_type"/>
+      <xs:element ref="Struct"/>
+      <xs:element ref="Record"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="Nary_Exp" type="Nary_Exp_type"/>
+  <xs:element name="Boolean_Literal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+      <xs:attribute name="typref" type="xs:integer"/>
+      <xs:attribute name="value" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="TRUE"/>
+            <xs:enumeration value="FALSE"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Boolean_Exp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Predicate"/>
+      </xs:sequence>
+      <xs:attribute name="typref" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EmptySet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+      <xs:attribute name="typref" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EmptySeq">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+      <xs:attribute name="typref" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Integer_Literal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+      <xs:attribute name="typref" type="xs:integer"/>
+      <xs:attribute name="value" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Quantified_Exp" type="Quantified_Exp_type"/>
+  <xs:element name="Quantified_Set">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element ref="Variables"/>
+        <xs:element name="Body">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="Attr"/>
+              <xs:group ref="Predicate"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="typref" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="STRING_Literal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+      </xs:sequence>
+      <xs:attribute name="value" use="required"/>
+      <xs:attribute name="typref" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Record" type="Record_type"/>
+  <xs:element name="Struct" type="Struct_type"/>
+  <xs:complexType name="Bynary_Exp_type">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+      <xs:group ref="Expression" minOccurs="2" maxOccurs="2"/>
+    </xs:sequence>
+    <xs:attribute name="typref" type="xs:integer"/>
+    <xs:attribute name="op" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value=","/>
+          <xs:enumeration value="*"/>
+          <xs:enumeration value="**"/>
+          <xs:enumeration value="+"/>
+          <xs:enumeration value="+-&gt;"/>
+          <xs:enumeration value="+-&gt;&gt;"/>
+          <xs:enumeration value="-"/>
+          <xs:enumeration value="--&gt;"/>
+          <xs:enumeration value="--&gt;&gt;"/>
+          <xs:enumeration value="-&gt;"/>
+          <xs:enumeration value=".."/>
+          <xs:enumeration value="/"/>
+          <xs:enumeration value="/\"/>
+          <xs:enumeration value="/|\"/>
+          <xs:enumeration value=";"/>
+          <xs:enumeration value="&lt;+"/>
+          <xs:enumeration value="&lt;-&gt;"/>
+          <xs:enumeration value="&lt;-"/>
+          <xs:enumeration value="&lt;&lt;|"/>
+          <xs:enumeration value="&lt;|"/>
+          <xs:enumeration value="&gt;+&gt;"/>
+          <xs:enumeration value="&gt;-&gt;"/>
+          <xs:enumeration value="&gt;+&gt;&gt;"/>
+          <xs:enumeration value="&gt;-&gt;&gt;"/>
+          <xs:enumeration value="&gt;&lt;"/>
+          <xs:enumeration value="||"/>
+          <xs:enumeration value="\/"/>
+          <xs:enumeration value="\|/"/>
+          <xs:enumeration value="^"/>
+          <xs:enumeration value="mod"/>
+          <xs:enumeration value="|-&gt;"/>
+          <xs:enumeration value="|&gt;"/>
+          <xs:enumeration value="|&gt;&gt;"/>
+          <xs:enumeration value="["/>
+          <xs:enumeration value="("/>
+          <xs:enumeration value="'"/>
+          <xs:enumeration value="&lt;'"/>
+          <xs:enumeration value="rplus"/>
+          <xs:enumeration value="rminus"/>
+          <xs:enumeration value="rmul"/>
+          <xs:enumeration value="rdiv"/>
+          <xs:enumeration value="rpow"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Nary_Exp_type">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+      <xs:group maxOccurs="unbounded" ref="Expression"/>
+    </xs:sequence>
+    <xs:attribute name="typref" type="xs:integer"/>
+    <xs:attribute name="op" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="["/>
+          <xs:enumeration value="{"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Quantified_Exp_type">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+      <xs:element ref="Variables"/>
+      <xs:element ref="Pred"/>
+      <xs:element ref="Body"/>
+    </xs:sequence>
+    <xs:attribute name="typref" type="xs:integer"/>
+    <xs:attribute name="type" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="%"/>
+          <xs:enumeration value="SIGMA"/>
+          <xs:enumeration value="PI"/>
+          <xs:enumeration value="RSIGMA"/>
+          <xs:enumeration value="RPI"/>
+          <xs:enumeration value="INTER"/>
+          <xs:enumeration value="UNION"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="Body">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Expression"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="Unary_Exp_type">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+      <xs:group ref="Expression"/>
+    </xs:sequence>
+    <xs:attribute name="typref" type="xs:integer"/>
+    <xs:attribute name="op" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="max"/>
+          <xs:enumeration value="min"/>
+          <xs:enumeration value="card"/>
+          <xs:enumeration value="dom"/>
+          <xs:enumeration value="ran"/>
+          <xs:enumeration value="POW"/>
+          <xs:enumeration value="POW1"/>
+          <xs:enumeration value="FIN"/>
+          <xs:enumeration value="FIN1"/>
+          <xs:enumeration value="union"/>
+          <xs:enumeration value="inter"/>
+          <xs:enumeration value="seq"/>
+          <xs:enumeration value="seq1"/>
+          <xs:enumeration value="iseq"/>
+          <xs:enumeration value="iseq1"/>
+          <xs:enumeration value="-"/>
+          <xs:enumeration value="~"/>
+          <xs:enumeration value="size"/>
+          <xs:enumeration value="prj1"/>
+          <xs:enumeration value="prj2"/>
+          <xs:enumeration value="perm"/>
+          <xs:enumeration value="first"/>
+          <xs:enumeration value="last"/>
+          <xs:enumeration value="id"/>
+          <xs:enumeration value="iterate"/>
+          <xs:enumeration value="closure"/>
+          <xs:enumeration value="closure1"/>
+          <xs:enumeration value="tail"/>
+          <xs:enumeration value="front"/>
+          <xs:enumeration value="rev"/>
+          <xs:enumeration value="conc"/>
+          <xs:enumeration value="succ"/>
+          <xs:enumeration value="pred"/>
+          <xs:enumeration value="rel"/>
+          <xs:enumeration value="fnc"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Record_type">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+      <xs:element maxOccurs="unbounded" ref="Record_Item"/>
+    </xs:sequence>
+    <xs:attribute name="typref" type="xs:integer"/>
+  </xs:complexType>
+  <xs:element name="Record_Item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Expression"/>
+      </xs:sequence>
+      <xs:attribute name="label" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="Struct_type">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="Attr"/>
+      <xs:element maxOccurs="unbounded" ref="Record_Item"/>
+    </xs:sequence>
+    <xs:attribute name="typref" type="xs:integer"/>
+  </xs:complexType>
+</xs:schema>

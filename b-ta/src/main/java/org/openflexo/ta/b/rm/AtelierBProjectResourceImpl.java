@@ -46,7 +46,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FileIODelegate;
 import org.openflexo.foundation.resource.InJarIODelegate;
-import org.openflexo.foundation.resource.PamelaResourceImpl;
+import org.openflexo.foundation.resource.PamelaXMLSerializableResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.rm.BasicResourceImpl;
 import org.openflexo.rm.ClasspathResourceLocatorImpl;
@@ -58,7 +58,7 @@ import org.openflexo.ta.b.BTechnologyAdapter;
 import org.openflexo.ta.b.model.atelierb.AtelierBProject;
 import org.openflexo.ta.b.model.atelierb.AtelierBProjectFactory;
 
-public abstract class AtelierBProjectResourceImpl extends PamelaResourceImpl<AtelierBProject, AtelierBProjectFactory>
+public abstract class AtelierBProjectResourceImpl extends PamelaXMLSerializableResourceImpl<AtelierBProject, AtelierBProjectFactory>
 		implements AtelierBProjectResource {
 
 	static final Logger logger = Logger.getLogger(AtelierBProjectResourceImpl.class.getPackage().getName());

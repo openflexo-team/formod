@@ -1,0 +1,9 @@
+/* Ctx3
+ * Author: Hector Ruiz Barradas
+ * Creation date: 12/11/2018
+ */
+SYSTEM
+    Ctx3
+SETS
+    IMPLEMENTATION_T = { DISTRIBUTED , CENTRALISED }
+END

@@ -1,5 +1,4 @@
 package org.openflexo.ta.b.model;
-
 /**
  * 
  * Copyright (c) 2018, Openflexo
@@ -50,7 +49,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openflexo.p2pp.P2PPNode;
 import org.openflexo.p2pp.RawSource;
-import org.openflexo.pamela.ModelProperty;
 import org.openflexo.ta.b.AbstractBTest;
 import org.openflexo.ta.b.BTechnologyAdapter;
 import org.openflexo.ta.b.model.expression.BBooleanSetExpression;
@@ -84,13 +82,6 @@ public class TestBPrettyPrint extends AbstractBTest {
 		}
 	}
 
-	private boolean considerPropertyForEquality(ModelProperty<?> property) {
-		if (property.getPropertyIdentifier().contentEquals("prettyPrintDelegate")) {
-			return false;
-		}
-		return true;
-	}
-
 	private void testPrettyPrint(BComponent component) {
 		System.out.println("testPrettyPrint with " + component);
 
@@ -102,8 +93,7 @@ public class TestBPrettyPrint extends AbstractBTest {
 			reparsedComponent.setResource(component.getResource());
 			// System.out.println("component=" + component);
 			System.out.println("reparsedComponent=" + reparsedComponent);
-			assertTrue("Objects are not equals after pretty-print",
-					component.equalsObject(reparsedComponent, (property) -> considerPropertyForEquality(property)));
+			assertTrue("Objects are not equals after pretty-print", component.equalsObject(reparsedComponent));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -120,8 +110,7 @@ public class TestBPrettyPrint extends AbstractBTest {
 			reparsedComponent.setResource(component.getResource());
 			// System.out.println("component=" + component);
 			System.out.println("reparsedComponent=" + reparsedComponent);
-			assertTrue("Objects are not equals after normalized pretty-print",
-					component.equalsObject(reparsedComponent, (property) -> considerPropertyForEquality(property)));
+			assertTrue("Objects are not equals after normalized pretty-print", component.equalsObject(reparsedComponent));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

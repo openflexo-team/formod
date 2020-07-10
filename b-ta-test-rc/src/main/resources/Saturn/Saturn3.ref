@@ -1,0 +1,46 @@
+/* Saturn3
+ * Author: Hector Ruiz Barradas
+ * Creation date: 12/11/2018
+ */
+
+REFINEMENT Saturn3
+REFINES Saturn2_r
+
+SEES
+    Ctx0 ,
+    Ctx2 ,
+    Ctx3
+
+ABSTRACT_VARIABLES
+    s_in_l ,
+    s_in_r ,
+    s_out_l ,
+    s_out_r ,
+    implementation
+
+INVARIANT
+    implementation : IMPLEMENTATION_T
+
+INITIALISATION
+    s_in_l := vec_to_in ~ ( i0 ) ||
+    s_in_r := vec_to_in ~ ( i0 ) ||
+    s_out_l := vec_to_out ~ ( o0 ) ||
+    s_out_r := vec_to_out ~ ( o0 ) ||
+    implementation :: IMPLEMENTATION_T
+
+OPERATIONS
+    Centralised_Get ref_or Get = SELECT implementation = CENTRALISED THEN s_in_l : ( s_in_l = s_in_r ) END ;
+
+    Distributed_Get ref_or Get = SELECT implementation = DISTRIBUTED THEN s_in_l : ( s_in_l = s_in_r ) END ;
+
+    Centralised_Put ref_or Put = SELECT implementation = CENTRALISED THEN s_out_r : ( s_out_r = s_out_l ) END ;
+
+    Distributed_Put ref_or Put = SELECT implementation = DISTRIBUTED THEN s_out_r : ( s_out_r = s_out_l ) END ;
+
+    Computation = SELECT 0 = 0 THEN s_out_l : ( s_out_l = VBF ( s_in_l ) ) END ;
+
+    Get = SELECT 0 = 1 THEN skip END ;
+
+    Put = SELECT 0 = 1 THEN skip END
+
+ END

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!--
+    A RELAX NG compact syntax pattern
+    for a predicate.
+  -->
+  <xs:group name="Predicate">
+    <xs:choice>
+      <xs:choice>
+        <xs:element ref="Binary_Pred"/>
+        <xs:element ref="Nary_Pred"/>
+        <xs:element ref="Unary_Pred"/>
+        <xs:element ref="Quantified_Pred"/>
+        <xs:element ref="Exp_Comparison"/>
+      </xs:choice>
+      <xs:element ref="Set"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="Binary_Pred">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Predicate" minOccurs="2" maxOccurs="2"/>
+      </xs:sequence>
+      <xs:attribute name="op" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="&amp;"/>
+            <xs:enumeration value="or"/>
+            <xs:enumeration value="=&gt;"/>
+            <xs:enumeration value="&lt;=&gt;"/>
+            <xs:enumeration value="cand"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Nary_Pred">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="Predicate"/>
+      </xs:sequence>
+      <xs:attribute name="op" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="&amp;"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Unary_Pred">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Predicate"/>
+      </xs:sequence>
+      <xs:attribute name="op" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="not"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Quantified_Pred">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:element ref="Variables"/>
+        <xs:element name="Body">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="Attr"/>
+              <xs:group ref="Predicate"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="!"/>
+            <xs:enumeration value="#"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Exp_Comparison">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Attr"/>
+        <xs:group ref="Expression" minOccurs="2"  maxOccurs="2" />
+      </xs:sequence>
+      <xs:attribute name="op" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value=":"/>
+            <xs:enumeration value="/:"/>
+            <xs:enumeration value="&lt;:"/>
+            <xs:enumeration value="/&lt;:"/>
+            <xs:enumeration value="&lt;&lt;:"/>
+            <xs:enumeration value="/&lt;&lt;:"/>
+            <xs:enumeration value="="/>
+            <xs:enumeration value="/="/>
+            <xs:enumeration value="&lt;="/>
+            <xs:enumeration value="&lt;"/>
+            <xs:enumeration value="&gt;="/>
+            <xs:enumeration value="&gt;"/>
+            <xs:enumeration value="rgt"/>
+            <xs:enumeration value="rlt"/>
+            <xs:enumeration value="rle"/>
+            <xs:enumeration value="rge"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Set">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Id" type="Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

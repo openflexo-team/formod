@@ -1,0 +1,20 @@
+/* Saturn0
+ * Author: Hector Ruiz Barradas
+ * Creation date: 07/11/2018
+ */
+SYSTEM
+    Saturn0
+SEES
+    Ctx0
+ABSTRACT_VARIABLES
+    in ,
+    out
+INVARIANT
+    in : T_IN &
+    out : T_OUT
+INITIALISATION
+    in := i0 ||
+    out := o0
+OPERATIONS
+    Saturn = SELECT 0 = 0 THEN out : ( out = FB ( in ) ) END
+END

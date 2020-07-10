@@ -1,0 +1,62 @@
+/* Saturn4
+ * Author: Hector Ruiz Barradas
+ * Creation date: 12/11/2018
+ */
+
+REFINEMENT Saturn4
+REFINES Saturn3
+
+SEES
+    Ctx0 ,
+    Ctx2 ,
+    Ctx3 ,
+    Ctx4
+
+ABSTRACT_VARIABLES
+    s_in_l ,
+    s_in_r ,
+    s_out_l ,
+    s_out_r ,
+    implementation ,
+    communication
+
+
+INVARIANT
+    communication : COMMUNICATION_T
+
+INITIALISATION
+    s_in_l := vec_to_in ~ ( i0 ) ||
+    s_in_r := vec_to_in ~ ( i0 ) ||
+    s_out_l := vec_to_out ~ ( o0 ) ||
+    s_out_r := vec_to_out ~ ( o0 ) ||
+    implementation :: IMPLEMENTATION_T ||
+    communication :: COMMUNICATION_T
+
+OPERATIONS
+    BRC_Centralised_Get ref_or Centralised_Get = SELECT implementation = CENTRALISED & communication = BROADCAST THEN s_in_l : ( s_in_l = s_in_r ) END ;
+
+    P2P_Centralised_Get ref_or Centralised_Get = SELECT implementation = CENTRALISED & communication = POINT2POINT THEN s_in_l : ( s_in_l = s_in_r ) END ;
+
+    BRC_Distributed_Get ref_or Distributed_Get = SELECT implementation = DISTRIBUTED & communication = BROADCAST THEN s_in_l : ( s_in_l = s_in_r ) END ;
+
+    P2P_Distributed_Get ref_or Distributed_Get = SELECT implementation = DISTRIBUTED & communication = POINT2POINT THEN s_in_l : ( s_in_l = s_in_r ) END ;
+
+    BRC_Centralised_Put ref_or Centralised_Put = SELECT implementation = CENTRALISED & communication = BROADCAST THEN s_out_r : ( s_out_r = s_out_l ) END ;
+
+    P2P_Centralised_Put ref_or Centralised_Put = SELECT implementation = CENTRALISED & communication = POINT2POINT THEN s_out_r : ( s_out_r = s_out_l ) END ;
+
+    BRC_Distribuited_Put ref_or Distributed_Put = SELECT implementation = DISTRIBUTED & communication = BROADCAST THEN s_out_r : ( s_out_r = s_out_l ) END ;
+
+    P2P_Distribuited_Put ref_or Distributed_Put = SELECT implementation = DISTRIBUTED & communication = POINT2POINT THEN s_out_r : ( s_out_r = s_out_l ) END ;
+
+    Computation = SELECT 0 = 0 THEN s_out_l : ( s_out_l = VBF ( s_in_l ) ) END ;
+
+    Centralised_Get = SELECT 0 = 1 THEN skip END ;
+
+    Distributed_Get = SELECT 0 = 1 THEN skip END ;
+
+    Centralised_Put = SELECT 0 = 1 THEN skip END ;
+
+    Distributed_Put = SELECT 0 = 1 THEN skip END
+
+ END
