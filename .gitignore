@@ -1,0 +1,21 @@
+*.class
+
+# Package Files #
+#*.jar
+*.war
+*.ear
+target/
+build/
+
+# IDE FILES #
+.idea
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings
+/.pmd
+/pom.xml~
+/.gradle/
+**/out/
