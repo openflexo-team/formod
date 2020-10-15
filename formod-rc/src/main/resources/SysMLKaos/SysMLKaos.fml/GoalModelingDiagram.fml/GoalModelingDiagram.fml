@@ -545,7 +545,7 @@ public class GoalModelingDiagram {
   }  
 
   @FlexoConcept  
-  public class EnvironmentalAgentGR {  
+  public class EnvironmentalAgentGR extends AgentGR  {  
   
     public DiagramShape shape;  
     public EnvironmentalAgent agent;  
@@ -567,7 +567,7 @@ public class GoalModelingDiagram {
   }  
 
   @FlexoConcept  
-  public class SoftwareAgentGR {  
+  public class SoftwareAgentGR extends AgentGR  {  
   
     public DiagramShape shape;  
     public SoftwareAgent agent;  

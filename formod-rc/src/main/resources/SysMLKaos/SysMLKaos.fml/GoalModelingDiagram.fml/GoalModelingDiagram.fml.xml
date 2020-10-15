@@ -5,7 +5,7 @@
       <InspectorEntry id="SYL-3100" widget="TEXT_FIELD" data="goal.functionalGoalType" name="Type" label="type" type="java.lang.String" userID="SYL" flexoID="3100" />
     </Inspector>
     <ShapeRole id="FLX-15" exampleLabel="F-Goal" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_19" cloningStrategy="Clone" cardinality="One" name="shape" userID="FLX" flexoID="15">
-      <GRSpec id="STE-9687" featureName="label" value="goal.name" userID="STE" flexoID="9687" />
+      <GRSpec id="SYL-9754" featureName="label" value="goal.name" userID="SYL" flexoID="9754" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="FLX-165" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal" cloningStrategy="Reference" cardinality="One" name="goal" userID="FLX" flexoID="165" />
     <DropScheme id="FLX-52" target="top" skipConfirmationPanel="false" label="create_functional_goal" name="createFunctionalGoal" width="800" height="600" userID="FLX" flexoID="52">
@@ -17,7 +17,7 @@
           <ControlGraph1_LogAction id="FLX-2616" logLevel="INFO" logString="(&quot;On cree un goal name=&quot; + parameters.name)" ownerContext="controlGraph1" userID="FLX" flexoID="2616" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-459" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="459">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-458" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" receiver="model" description="" userID="FLX" flexoID="458">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-458" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal" receiver="model" description="" userID="FLX" flexoID="458">
             <AddFlexoConceptInstanceParameter id="SYL-5882" paramName="name" value="parameters.name" userID="SYL" flexoID="5882" />
             <AddFlexoConceptInstanceParameter id="SYL-5883" paramName="type" value="parameters.type" userID="SYL" flexoID="5883" />
             <AddFlexoConceptInstanceParameter id="SYL-5884" paramName="description" value="parameters.description" userID="SYL" flexoID="5884" />
@@ -49,7 +49,7 @@
               <ControlGraph1_LogAction id="FLX-2718" logLevel="INFO" logString="&quot;On ajoute la shape&quot;" ownerContext="controlGraph1" userID="FLX" flexoID="2718" />
             </ControlGraph2_Sequence>
             <ControlGraph1_AssignationAction id="FLX-2523" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="2523">
-              <AssignableAction_AddFlexoConceptInstance id="FLX-2524" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" receiver="model" description="" userID="FLX" flexoID="2524">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-2524" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal" receiver="model" description="" userID="FLX" flexoID="2524">
                 <AddFlexoConceptInstanceParameter id="SYL-5894" paramName="name" value="parameters.name" userID="SYL" flexoID="5894" />
                 <AddFlexoConceptInstanceParameter id="SYL-5895" paramName="type" value="&quot;&quot;" userID="SYL" flexoID="5895" />
                 <AddFlexoConceptInstanceParameter id="SYL-5896" paramName="description" value="parameters.description" userID="SYL" flexoID="5896" />
@@ -164,7 +164,7 @@
       <InspectorEntry id="SYL-3518" readOnly="true" widget="TEXT_FIELD" data="(refinement.isAnd ? &quot;AND&quot; : (refinement.isOr ? &quot;OR&quot; : (refinement.isMilestone ? &quot;MLS&quot; : (refinement.isData ? &quot;DTA&quot; : &quot;NONE&quot;))))" name="Type" label="type" type="java.lang.String" description="" userID="SYL" flexoID="3518" />
     </Inspector>
     <ShapeRole id="FLX-568" previewY="45.14" previewX="50.14" exampleLabel="" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#FLX_17" cloningStrategy="Clone" cardinality="One" name="shape" description="(refinement.isAnd=true) ?  &quot;And&quot; : ((refinement.isOr=true) ? &quot;Or&quot; : &quot;None&quot;)&#xA;" userID="FLX" flexoID="568">
-      <GRSpec id="STE-9688" featureName="label" readOnly="true" value="(refinement.isAnd ? &quot;AND&quot; : (refinement.isOr ? &quot;OR&quot; : (refinement.isMilestone ? &quot;MLS&quot; : (refinement.isData ? &quot;DTA&quot; : &quot;NONE&quot;))))" userID="STE" flexoID="9688" />
+      <GRSpec id="SYL-9755" featureName="label" readOnly="true" value="(refinement.isAnd ? &quot;AND&quot; : (refinement.isOr ? &quot;OR&quot; : (refinement.isMilestone ? &quot;MLS&quot; : (refinement.isData ? &quot;DTA&quot; : &quot;NONE&quot;))))" userID="SYL" flexoID="9755" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="FLX-1294" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" cloningStrategy="Reference" cardinality="One" name="refinement" userID="FLX" flexoID="1294" />
     <FlexoConceptInstanceRole id="FLX-1364" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR" cloningStrategy="Reference" cardinality="ZeroMany" name="parentRefinementLinkGR" userID="FLX" flexoID="1364" />
@@ -176,13 +176,13 @@
             <ControlGraph2_Sequence id="FLX-1376" ownerContext="controlGraph2" userID="FLX" flexoID="1376">
               <ControlGraph2_Sequence id="SYL-3416" ownerContext="controlGraph2" userID="SYL" flexoID="3416">
                 <ControlGraph2_AddToListAction id="SYL-3413" list="childRefinementsLinksGR" ownerContext="controlGraph2" userID="SYL" flexoID="3413">
-                  <AssignableAction_AddFlexoConceptInstance id="SYL-3410" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR.create(refinementGR,childrenGoalGR)" receiver="container" userID="SYL" flexoID="3410">
+                  <AssignableAction_AddFlexoConceptInstance id="SYL-3410" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR.create(refinementGR,childrenGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR" receiver="container" userID="SYL" flexoID="3410">
                     <AddFlexoConceptInstanceParameter id="SYL-3411" paramName="refinementGR" value="this" userID="SYL" flexoID="3411" />
                     <AddFlexoConceptInstanceParameter id="SYL-3412" paramName="childrenGoalGR" value="fromTarget" userID="SYL" flexoID="3412" />
                   </AssignableAction_AddFlexoConceptInstance>
                 </ControlGraph2_AddToListAction>
                 <ControlGraph1_AddToListAction id="SYL-3408" list="parentRefinementLinkGR" ownerContext="controlGraph1" userID="SYL" flexoID="3408">
-                  <AssignableAction_AddFlexoConceptInstance id="SYL-3405" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR.create(refinementGR,parentGoalGR)" receiver="container" userID="SYL" flexoID="3405">
+                  <AssignableAction_AddFlexoConceptInstance id="SYL-3405" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR.create(refinementGR,parentGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR" receiver="container" userID="SYL" flexoID="3405">
                     <AddFlexoConceptInstanceParameter id="SYL-3406" paramName="refinementGR" value="this" userID="SYL" flexoID="3406" />
                     <AddFlexoConceptInstanceParameter id="SYL-3407" paramName="parentGoalGR" value="toTarget" userID="SYL" flexoID="3407" />
                   </AssignableAction_AddFlexoConceptInstance>
@@ -197,7 +197,7 @@
           </ControlGraph1_AssignationAction>
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-1297" assign="refinement" ownerContext="controlGraph1" userID="FLX" flexoID="1297">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-1296" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.createLinke(parentGoal,childrenGoal)" receiver="model" userID="FLX" flexoID="1296">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-1296" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.createLinke(parentGoal,childrenGoal)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" receiver="model" userID="FLX" flexoID="1296">
             <AddFlexoConceptInstanceParameter id="FLX-942" paramName="parentGoal" value="toTarget.goal" userID="FLX" flexoID="942" />
             <AddFlexoConceptInstanceParameter id="FLX-943" paramName="childrenGoal" value="fromTarget.goal" userID="FLX" flexoID="943" />
           </AssignableAction_AddFlexoConceptInstance>
@@ -213,7 +213,7 @@
           <ControlGraph1_ExpressionAction id="FLX-3136" expression="refinement.setLogicalTypeToAnd()" ownerContext="controlGraph1" userID="FLX" flexoID="3136" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-2122" assign="refinement" ownerContext="controlGraph1" userID="FLX" flexoID="2122">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-2121" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" receiver="model" userID="FLX" flexoID="2121" />
+          <AssignableAction_AddFlexoConceptInstance id="FLX-2121" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" receiver="model" userID="FLX" flexoID="2121" />
         </ControlGraph1_AssignationAction>
       </BehaviourControlGraph_Sequence>
     </DropScheme>
@@ -241,7 +241,7 @@
           <ControlGraph1_ExpressionAction id="FLX-3144" expression="refinement.setLogicalTypeToOr()" ownerContext="controlGraph1" userID="FLX" flexoID="3144" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-3147" assign="refinement" ownerContext="controlGraph1" userID="FLX" flexoID="3147">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-3146" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" receiver="model" userID="FLX" flexoID="3146" />
+          <AssignableAction_AddFlexoConceptInstance id="FLX-3146" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" receiver="model" userID="FLX" flexoID="3146" />
         </ControlGraph1_AssignationAction>
       </BehaviourControlGraph_Sequence>
     </DropScheme>
@@ -258,7 +258,7 @@
                       <ControlGraph_Sequence id="SYL-7574" ownerContext="controlGraph" userID="SYL" flexoID="7574">
                         <ControlGraph2_ConditionalAction id="SYL-7569" condition="(childRefinmentLink = null)" ownerContext="controlGraph2" userID="SYL" flexoID="7569">
                           <ThenControlGraph_DeclarationAction id="SYL-7568" variable="variable" ownerContext="thenControlGraph" userID="SYL" flexoID="7568">
-                            <AssignableAction_AddFlexoConceptInstance id="SYL-7567" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR.create(refinementGR,childrenGoalGR)" receiver="container" userID="SYL" flexoID="7567">
+                            <AssignableAction_AddFlexoConceptInstance id="SYL-7567" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR.create(refinementGR,childrenGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR" receiver="container" userID="SYL" flexoID="7567">
                               <AddFlexoConceptInstanceParameter id="SYL-7575" paramName="refinementGR" value="this" userID="SYL" flexoID="7575" />
                               <AddFlexoConceptInstanceParameter id="SYL-7576" paramName="childrenGoalGR" value="childGoalGR" userID="SYL" flexoID="7576" />
                             </AssignableAction_AddFlexoConceptInstance>
@@ -277,7 +277,7 @@
                       <ControlGraph_Sequence id="SYL-7562" ownerContext="controlGraph" userID="SYL" flexoID="7562">
                         <ControlGraph2_ConditionalAction id="SYL-7555" condition="(parentRefinmentLink = null)" ownerContext="controlGraph2" userID="SYL" flexoID="7555">
                           <ThenControlGraph_DeclarationAction id="SYL-7560" variable="variable" ownerContext="thenControlGraph" userID="SYL" flexoID="7560">
-                            <AssignableAction_AddFlexoConceptInstance id="SYL-7557" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR.create(refinementGR,parentGoalGR)" receiver="container" userID="SYL" flexoID="7557">
+                            <AssignableAction_AddFlexoConceptInstance id="SYL-7557" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR.create(refinementGR,parentGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR" receiver="container" userID="SYL" flexoID="7557">
                               <AddFlexoConceptInstanceParameter id="SYL-7558" paramName="refinementGR" value="this" userID="SYL" flexoID="7558" />
                               <AddFlexoConceptInstanceParameter id="SYL-7559" paramName="parentGoalGR" value="parentGoalGR" userID="SYL" flexoID="7559" />
                             </AssignableAction_AddFlexoConceptInstance>
@@ -340,7 +340,7 @@
               <ThenControlGraph_Sequence id="SYL-7781" ownerContext="thenControlGraph" userID="SYL" flexoID="7781">
                 <ControlGraph2_ConditionalAction id="SYL-7776" condition="(childLinkGR = null)" ownerContext="controlGraph2" userID="SYL" flexoID="7776">
                   <ThenControlGraph_AssignationAction id="SYL-7775" assign="childLinkGR" ownerContext="thenControlGraph" userID="SYL" flexoID="7775">
-                    <AssignableAction_AddFlexoConceptInstance id="SYL-7774" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR.create(refinementGR,childrenGoalGR)" receiver="container" userID="SYL" flexoID="7774">
+                    <AssignableAction_AddFlexoConceptInstance id="SYL-7774" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR.create(refinementGR,childrenGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ChildRefinmentLinkGR" receiver="container" userID="SYL" flexoID="7774">
                       <AddFlexoConceptInstanceParameter id="SYL-7791" paramName="refinementGR" value="this" userID="SYL" flexoID="7791" />
                       <AddFlexoConceptInstanceParameter id="SYL-7792" paramName="childrenGoalGR" value="childGoalGR" userID="SYL" flexoID="7792" />
                     </AssignableAction_AddFlexoConceptInstance>
@@ -368,7 +368,7 @@
               <ThenControlGraph_Sequence id="SYL-7724" ownerContext="thenControlGraph" userID="SYL" flexoID="7724">
                 <ControlGraph2_ConditionalAction id="SYL-7718" condition="(parentLinkGR = null)" ownerContext="controlGraph2" userID="SYL" flexoID="7718">
                   <ThenControlGraph_AssignationAction id="SYL-7723" assign="parentLinkGR" ownerContext="thenControlGraph" userID="SYL" flexoID="7723">
-                    <AssignableAction_AddFlexoConceptInstance id="SYL-7720" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR.create(refinementGR,parentGoalGR)" receiver="container" userID="SYL" flexoID="7720">
+                    <AssignableAction_AddFlexoConceptInstance id="SYL-7720" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR.create(refinementGR,parentGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ParentRefinementLinkGR" receiver="container" userID="SYL" flexoID="7720">
                       <AddFlexoConceptInstanceParameter id="SYL-7721" paramName="refinementGR" value="this" userID="SYL" flexoID="7721" />
                       <AddFlexoConceptInstanceParameter id="SYL-7722" paramName="parentGoalGR" value="parentGoalGR" userID="SYL" flexoID="7722" />
                     </AssignableAction_AddFlexoConceptInstance>
@@ -400,7 +400,7 @@
           <ControlGraph1_ExpressionAction id="FLX-8852" expression="refinement.setLogicalTypeToMilestone()" ownerContext="controlGraph1" userID="FLX" flexoID="8852" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-8855" assign="refinement" ownerContext="controlGraph1" userID="FLX" flexoID="8855">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-8854" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" receiver="model" userID="FLX" flexoID="8854" />
+          <AssignableAction_AddFlexoConceptInstance id="FLX-8854" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" receiver="model" userID="FLX" flexoID="8854" />
         </ControlGraph1_AssignationAction>
       </BehaviourControlGraph_Sequence>
     </DropScheme>
@@ -413,7 +413,7 @@
           <ControlGraph1_ExpressionAction id="FLX-8862" expression="refinement.setLogicalTypeToData()" ownerContext="controlGraph1" userID="FLX" flexoID="8862" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-8865" assign="refinement" ownerContext="controlGraph1" userID="FLX" flexoID="8865">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-8864" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" receiver="model" userID="FLX" flexoID="8864" />
+          <AssignableAction_AddFlexoConceptInstance id="FLX-8864" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" receiver="model" userID="FLX" flexoID="8864" />
         </ControlGraph1_AssignationAction>
       </BehaviourControlGraph_Sequence>
     </DropScheme>
@@ -430,7 +430,7 @@
       <InspectorEntry id="SYL-3132" widget="TEXT_FIELD" data="goal.topic" name="Topic" label="topic" type="java.lang.String" userID="SYL" flexoID="3132" />
     </Inspector>
     <ShapeRole id="FLX-1040" exampleLabel="NF-Goal" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#FLX_14" cloningStrategy="Clone" cardinality="One" name="shape" userID="FLX" flexoID="1040">
-      <GRSpec id="STE-9689" featureName="label" value="goal.name" userID="STE" flexoID="9689" />
+      <GRSpec id="SYL-9756" featureName="label" value="goal.name" userID="SYL" flexoID="9756" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="FLX-1159" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NonFunctionalGoal" cloningStrategy="Reference" cardinality="One" name="goal" userID="FLX" flexoID="1159" />
     <DropScheme id="FLX-1162" target="top" label="create_non_functional_goal" name="createNonFunctionalGoal" width="800" height="600" userID="FLX" flexoID="1162">
@@ -442,7 +442,7 @@
           <ControlGraph1_LogAction id="SYL-3134" logLevel="INFO" logString="(((&quot;Je viens de creer le goal &quot; + goal) + &quot; name=&quot;) + goal.name)" ownerContext="controlGraph1" userID="SYL" flexoID="3134" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-1166" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="1166">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-1165" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NonFunctionalGoal.create(name,type,description)" receiver="model" userID="FLX" flexoID="1165">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-1165" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NonFunctionalGoal.create(name,type,description)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NonFunctionalGoal" receiver="model" userID="FLX" flexoID="1165">
             <AddFlexoConceptInstanceParameter id="FLX-406" paramName="name" value="parameters.name" userID="FLX" flexoID="406" />
             <AddFlexoConceptInstanceParameter id="FLX-407" paramName="type" value="parameters.type" userID="FLX" flexoID="407" />
             <AddFlexoConceptInstanceParameter id="SYL-1377" paramName="description" value="parameters.description" userID="SYL" flexoID="1377" />
@@ -520,10 +520,10 @@
       </BehaviourControlGraph_Sequence>
     </EventListener>
   </FlexoConcept>
-  <FlexoConcept id="FLX-1102" bigIconResource="../../Icons/EnvAgent.png" name="EnvironmentalAgentGR" userID="FLX" flexoID="1102">
+  <FlexoConcept id="FLX-1102" bigIconResource="../../Icons/EnvAgent.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#AgentGR" name="EnvironmentalAgentGR" userID="FLX" flexoID="1102">
     <Inspector id="FLX-1099" renderer="agent.name" inspectorTitle="EnvironmentalAgent" userID="FLX" flexoID="1099" />
     <ShapeRole id="FLX-1105" exampleLabel="Env. Agent" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#FLX_12" cloningStrategy="Clone" cardinality="ZeroOne" name="shape" userID="FLX" flexoID="1105">
-      <GRSpec id="STE-9690" featureName="label" value="agent.name" userID="STE" flexoID="9690" />
+      <GRSpec id="SYL-9757" featureName="label" value="agent.name" userID="SYL" flexoID="9757" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="FLX-1117" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#EnvironmentalAgent" cloningStrategy="Reference" cardinality="ZeroOne" name="agent" userID="FLX" flexoID="1117" />
     <DropScheme id="FLX-1118" target="top" label="create_environmental_agent" name="createEnvironmentalAgent" width="800" height="600" userID="FLX" flexoID="1118">
@@ -532,7 +532,7 @@
           <AssignableAction_AddShape id="FLX-1124" container="topLevel" receiver="kaosGoalDiagram" userID="FLX" flexoID="1124" />
         </ControlGraph2_AssignationAction>
         <ControlGraph1_AssignationAction id="FLX-1122" assign="agent" ownerContext="controlGraph1" userID="FLX" flexoID="1122">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-1121" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#EnvironmentalAgent.createEnvironmentalAgent(name,description)" receiver="model" userID="FLX" flexoID="1121">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-1121" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#EnvironmentalAgent.createEnvironmentalAgent(name,description)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#EnvironmentalAgent" receiver="model" userID="FLX" flexoID="1121">
             <AddFlexoConceptInstanceParameter id="FLX-386" paramName="name" value="parameters.name" userID="FLX" flexoID="386" />
             <AddFlexoConceptInstanceParameter id="FLX-387" paramName="description" value="parameters.description" userID="FLX" flexoID="387" />
           </AssignableAction_AddFlexoConceptInstance>
@@ -559,10 +559,10 @@
       <GenericBehaviourParameter id="SYL-4431" isRequired="true" widget="CUSTOM_WIDGET" name="agent" type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#EnvironmentalAgent&gt;" userID="SYL" flexoID="4431" />
     </DropScheme>
   </FlexoConcept>
-  <FlexoConcept id="FLX-1203" bigIconResource="../../Icons/SoftAgent.png" name="SoftwareAgentGR" userID="FLX" flexoID="1203">
+  <FlexoConcept id="FLX-1203" bigIconResource="../../Icons/SoftAgent.png" parentFlexoConceptsList="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#AgentGR" name="SoftwareAgentGR" userID="FLX" flexoID="1203">
     <Inspector id="FLX-1200" renderer="agent.name" inspectorTitle="SoftwareAgent" userID="FLX" flexoID="1200" />
     <ShapeRole id="FLX-1204" exampleLabel="Soft. Agent" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#FLX_15" cloningStrategy="Clone" cardinality="ZeroOne" name="shape" userID="FLX" flexoID="1204">
-      <GRSpec id="STE-9691" featureName="label" value="agent.name" userID="STE" flexoID="9691" />
+      <GRSpec id="SYL-9758" featureName="label" value="agent.name" userID="SYL" flexoID="9758" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="FLX-1216" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#SoftwareAgent" cloningStrategy="Reference" cardinality="ZeroOne" name="agent" userID="FLX" flexoID="1216" />
     <DropScheme id="FLX-1241" target="top" label="create_software_agent" name="createSoftwareAgent" width="800" height="600" userID="FLX" flexoID="1241">
@@ -571,7 +571,7 @@
           <AssignableAction_AddShape id="FLX-1245" container="topLevel" receiver="kaosGoalDiagram" userID="FLX" flexoID="1245" />
         </ControlGraph2_AssignationAction>
         <ControlGraph1_AssignationAction id="FLX-1242" assign="agent" ownerContext="controlGraph1" userID="FLX" flexoID="1242">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-1243" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#SoftwareAgent.createSoftwareAgent(name,description)" receiver="model" userID="FLX" flexoID="1243">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-1243" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#SoftwareAgent.createSoftwareAgent(name,description)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#SoftwareAgent" receiver="model" userID="FLX" flexoID="1243">
             <AddFlexoConceptInstanceParameter id="FLX-426" paramName="name" value="parameters.name" userID="FLX" flexoID="426" />
             <AddFlexoConceptInstanceParameter id="FLX-427" paramName="description" value="parameters.description" userID="FLX" flexoID="427" />
           </AssignableAction_AddFlexoConceptInstance>
@@ -743,7 +743,7 @@
               <AssignableAction_AddConnector id="FLX-1474" fromShape="fromTarget.shape" toShape="toTarget.shape" receiver="topLevel" userID="FLX" flexoID="1474" />
             </ControlGraph2_AssignationAction>
             <ControlGraph1_AssignationAction id="SYL-4058" assign="agentAssignment" ownerContext="controlGraph1" userID="SYL" flexoID="4058">
-              <AssignableAction_AddFlexoConceptInstance id="SYL-4055" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#AgentAssignment.create(anAgent,aGoal)" receiver="model" userID="SYL" flexoID="4055">
+              <AssignableAction_AddFlexoConceptInstance id="SYL-4055" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#AgentAssignment.create(anAgent,aGoal)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#AgentAssignment" receiver="model" userID="SYL" flexoID="4055">
                 <AddFlexoConceptInstanceParameter id="SYL-4056" paramName="anAgent" value="fromTarget.agent" userID="SYL" flexoID="4056" />
                 <AddFlexoConceptInstanceParameter id="SYL-4057" paramName="aGoal" value="toTarget.goal" userID="SYL" flexoID="4057" />
               </AssignableAction_AddFlexoConceptInstance>
@@ -803,7 +803,7 @@
     <ConnectorRole id="FLX-2577" exampleLabel="+" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_44" cloningStrategy="Clone" cardinality="One" name="connector1" userID="FLX" flexoID="2577" />
     <FlexoConceptInstanceRole id="FLX-2647" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution" cloningStrategy="Reference" cardinality="ZeroOne" name="contribution" userID="FLX" flexoID="2647" />
     <ShapeRole id="SYL-5408" previewHeight="21.0" previewY="89.5" previewX="114.5" previewWidth="21.0" exampleLabel="+" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_43" container="kaosGoalDiagram" cloningStrategy="Clone" cardinality="ZeroOne" name="node" userID="SYL" flexoID="5408">
-      <GRSpec id="STE-9692" featureName="label" readOnly="true" value="(contribution.isPositive ? &quot;+&quot; : &quot;-&quot;)" userID="STE" flexoID="9692" />
+      <GRSpec id="SYL-9759" featureName="label" readOnly="true" value="(contribution.isPositive ? &quot;+&quot; : &quot;-&quot;)" userID="SYL" flexoID="9759" />
     </ShapeRole>
     <ConnectorRole id="FLX-5409" exampleLabel="+" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_45" cloningStrategy="Clone" cardinality="One" name="connector2" userID="FLX" flexoID="5409" />
     <LinkScheme id="FLX-2586" northDirectionSupported="true" eastDirectionSupported="true" fromTarget="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ContributionGoalGR" toTarget="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#NonFunctionalGoalGR" westDirectionSupported="true" isAvailableWithFloatingPalette="true" southDirectionSupported="true" label="new_positive_contribution" name="newPositiveContribution" width="800" height="600" userID="FLX" flexoID="2586">
@@ -830,7 +830,7 @@
               </ControlGraph1_AssignationAction>
             </ControlGraph2_Sequence>
             <ControlGraph1_AssignationAction id="FLX-2646" assign="contribution" ownerContext="controlGraph1" userID="FLX" flexoID="2646">
-              <AssignableAction_AddFlexoConceptInstance id="FLX-2599" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution.create(contributionGoal,nonFunctionalGoal,isPositive)" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="2599">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-2599" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution.create(contributionGoal,nonFunctionalGoal,isPositive)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="2599">
                 <AddFlexoConceptInstanceParameter id="FLX-1313" paramName="contributionGoal" value="contributionGoalGR.goal" userID="FLX" flexoID="1313" />
                 <AddFlexoConceptInstanceParameter id="FLX-1314" paramName="nonFunctionalGoal" value="nonFunctionalGoalGR.goal" userID="FLX" flexoID="1314" />
                 <AddFlexoConceptInstanceParameter id="FLX-1315" paramName="isPositive" value="true" userID="FLX" flexoID="1315" />
@@ -882,7 +882,7 @@
               </ControlGraph1_AssignationAction>
             </ControlGraph2_Sequence>
             <ControlGraph1_AssignationAction id="FLX-5554" assign="contribution" ownerContext="controlGraph1" userID="FLX" flexoID="5554">
-              <AssignableAction_AddFlexoConceptInstance id="FLX-5553" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution.create(contributionGoal,nonFunctionalGoal,isPositive)" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="5553">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-5553" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution.create(contributionGoal,nonFunctionalGoal,isPositive)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Contribution" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="5553">
                 <AddFlexoConceptInstanceParameter id="FLX-5538" paramName="contributionGoal" value="contributionGoalGR.goal" userID="FLX" flexoID="5538" />
                 <AddFlexoConceptInstanceParameter id="FLX-5539" paramName="nonFunctionalGoal" value="nonFunctionalGoalGR.goal" userID="FLX" flexoID="5539" />
                 <AddFlexoConceptInstanceParameter id="FLX-5537" paramName="isPositive" value="false" userID="FLX" flexoID="5537" />
@@ -961,7 +961,7 @@
       <InspectorEntry id="SYL-4474" widget="TEXT_FIELD" data="goal.contributionGoalType" name="type" label="type" type="java.lang.String" userID="SYL" flexoID="4474" />
     </Inspector>
     <ShapeRole id="SYL-4267" previewHeight="45.0" previewY="77.5" previewX="75.0" previewWidth="100.0" exampleLabel="C-Goal" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_41" cloningStrategy="Clone" cardinality="ZeroOne" name="shape" userID="SYL" flexoID="4267">
-      <GRSpec id="STE-9693" featureName="label" value="goal.name" userID="STE" flexoID="9693" />
+      <GRSpec id="SYL-9760" featureName="label" value="goal.name" userID="SYL" flexoID="9760" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="FLX-4285" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal" cloningStrategy="Reference" cardinality="One" name="goal" userID="FLX" flexoID="4285" />
     <DropScheme id="FLX-4271" target="top" label="create_contribution_goal" name="createContributionGoal" width="800" height="600" userID="FLX" flexoID="4271">
@@ -973,7 +973,7 @@
           <ControlGraph1_LogAction id="SYL-4274" logLevel="INFO" logString="(((&quot;Je viens de creer le goal &quot; + goal) + &quot; name=&quot;) + goal.name)" ownerContext="controlGraph1" userID="SYL" flexoID="4274" />
         </ControlGraph2_Sequence>
         <ControlGraph1_AssignationAction id="FLX-4280" assign="goal" ownerContext="controlGraph1" userID="FLX" flexoID="4280">
-          <AssignableAction_AddFlexoConceptInstance id="FLX-4279" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal.create(name,type,description)" receiver="model" userID="FLX" flexoID="4279">
+          <AssignableAction_AddFlexoConceptInstance id="FLX-4279" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal.create(name,type,description)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#ContributionGoal" receiver="model" userID="FLX" flexoID="4279">
             <AddFlexoConceptInstanceParameter id="SYL-4343" paramName="name" value="parameters.name" userID="SYL" flexoID="4343" />
             <AddFlexoConceptInstanceParameter id="SYL-4344" paramName="type" value="parameters.type" userID="SYL" flexoID="4344" />
             <AddFlexoConceptInstanceParameter id="SYL-4345" paramName="description" value="parameters.description" userID="SYL" flexoID="4345" />
@@ -1012,7 +1012,7 @@
     <FlexoConceptInstanceRole id="FLX-5224" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ContributionGoalGR" cloningStrategy="Reference" cardinality="One" name="contributionGoalGR" userID="FLX" flexoID="5224" />
     <FlexoConceptInstanceRole id="FLX-5223" virtualModelInstance="container" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#FunctionalGoalGR" cloningStrategy="Reference" cardinality="ZeroOne" name="functionalGoalGR" userID="FLX" flexoID="5223" />
     <ConnectorRole id="FLX-5231" exampleLabel="+" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_40" cloningStrategy="Clone" cardinality="One" name="connector" userID="FLX" flexoID="5231">
-      <GRSpec id="STE-9694" featureName="label" readOnly="true" value="(impact.isPositive ? &quot;+&quot; : &quot;-&quot;)" userID="STE" flexoID="9694" />
+      <GRSpec id="SYL-9761" featureName="label" readOnly="true" value="(impact.isPositive ? &quot;+&quot; : &quot;-&quot;)" userID="SYL" flexoID="9761" />
     </ConnectorRole>
     <FlexoConceptInstanceRole id="FLX-5232" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact" cloningStrategy="Reference" cardinality="ZeroOne" name="impact" userID="FLX" flexoID="5232" />
     <LinkScheme id="FLX-5220" northDirectionSupported="true" eastDirectionSupported="true" fromTarget="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ContributionGoalGR" toTarget="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#FunctionalGoalGR" westDirectionSupported="true" isAvailableWithFloatingPalette="true" southDirectionSupported="true" label="new_positive_impact" name="newPositiveImpact" width="800" height="600" userID="FLX" flexoID="5220">
@@ -1023,7 +1023,7 @@
               <AssignableAction_AddConnector id="FLX-5259" fromShape="fromTarget.shape" toShape="toTarget.shape" receiver="kaosGoalDiagram" userID="FLX" flexoID="5259" />
             </ControlGraph2_AssignationAction>
             <ControlGraph1_AssignationAction id="FLX-5235" assign="impact" ownerContext="controlGraph1" userID="FLX" flexoID="5235">
-              <AssignableAction_AddFlexoConceptInstance id="FLX-5252" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact.create(contributionGoal,functionalGoal,isPositive)" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="5252">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-5252" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact.create(contributionGoal,functionalGoal,isPositive)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="5252">
                 <AddFlexoConceptInstanceParameter id="SYL-5256" paramName="contributionGoal" value="fromTarget.goal" userID="SYL" flexoID="5256" />
                 <AddFlexoConceptInstanceParameter id="SYL-5257" paramName="functionalGoal" value="toTarget.goal" userID="SYL" flexoID="5257" />
                 <AddFlexoConceptInstanceParameter id="SYL-5258" paramName="isPositive" value="true" userID="SYL" flexoID="5258" />
@@ -1053,7 +1053,7 @@
               <AssignableAction_AddConnector id="FLX-5267" fromShape="fromTarget.shape" toShape="toTarget.shape" receiver="kaosGoalDiagram" userID="FLX" flexoID="5267" />
             </ControlGraph2_AssignationAction>
             <ControlGraph1_AssignationAction id="FLX-5270" assign="impact" ownerContext="controlGraph1" userID="FLX" flexoID="5270">
-              <AssignableAction_AddFlexoConceptInstance id="FLX-5269" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact.create(contributionGoal,functionalGoal,isPositive)" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="5269">
+              <AssignableAction_AddFlexoConceptInstance id="FLX-5269" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact.create(contributionGoal,functionalGoal,isPositive)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Impact" receiver="model" ownerContext="controlGraph1" userID="FLX" flexoID="5269">
                 <AddFlexoConceptInstanceParameter id="SYL-5263" paramName="contributionGoal" value="fromTarget.goal" userID="SYL" flexoID="5263" />
                 <AddFlexoConceptInstanceParameter id="SYL-5264" paramName="functionalGoal" value="toTarget.goal" userID="SYL" flexoID="5264" />
                 <AddFlexoConceptInstanceParameter id="SYL-5265" paramName="isPositive" value="false" userID="SYL" flexoID="5265" />
@@ -1102,7 +1102,7 @@
       <InspectorEntry id="SYL-8402" widget="CHECKBOX_LIST" data="goalGroup.goals" name="goals" label="goals" type="java.util.List&lt;org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;&gt;" list="model.goals" userID="SYL" flexoID="8402" />
     </Inspector>
     <ShapeRole id="SYL-8313" previewHeight="102.14285714285715" previewY="48.92857142857142" previewX="19.52615408887027" previewWidth="219.47384591112973" exampleLabel="Group title" metamodelElementReference="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram#SYL_47" cloningStrategy="Clone" cardinality="ZeroOne" name="shape" userID="SYL" flexoID="8313">
-      <GRSpec id="STE-9695" featureName="label" value="goalGroup.title" userID="STE" flexoID="9695" />
+      <GRSpec id="SYL-9762" featureName="label" value="goalGroup.title" userID="SYL" flexoID="9762" />
     </ShapeRole>
     <FlexoConceptInstanceRole id="SYL-8385" virtualModelInstance="model" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup" cloningStrategy="Reference" cardinality="ZeroOne" name="goalGroup" userID="SYL" flexoID="8385" />
     <DeletionScheme id="SYL-8172" label="delete" name="delete" width="800" height="600" userID="SYL" flexoID="8172">
@@ -1130,7 +1130,7 @@
                         </ControlGraph1_IterationAction>
                       </ControlGraph2_Sequence>
                       <ControlGraph1_AssignationAction id="SYL-8403" assign="goalGroup" ownerContext="controlGraph1" userID="SYL" flexoID="8403">
-                        <AssignableAction_AddFlexoConceptInstance id="SYL-8387" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup.create(title,goals)" receiver="model" ownerContext="controlGraph2" userID="SYL" flexoID="8387">
+                        <AssignableAction_AddFlexoConceptInstance id="SYL-8387" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup.create(title,goals)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#GoalGroup" receiver="model" ownerContext="controlGraph2" userID="SYL" flexoID="8387">
                           <AddFlexoConceptInstanceParameter id="SYL-8388" paramName="title" value="parameters.title" userID="SYL" flexoID="8388" />
                           <AddFlexoConceptInstanceParameter id="SYL-8389" paramName="goals" value="goalList" userID="SYL" flexoID="8389" />
                         </AssignableAction_AddFlexoConceptInstance>
@@ -1303,7 +1303,7 @@
     <BehaviourControlGraph_EmptyControlGraph id="FLX-2308" userID="FLX" flexoID="2308" />
   </DeletionScheme>
   <ActionScheme id="SYL-3667" visibility="Public" label="update_requirements" name="updateRequirements" width="800" height="600" userID="SYL" flexoID="3667">
-    <BehaviourControlGraph_FireEventAction id="SYL-3670" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#UpdateDiagram.create()" receiver="this" userID="SYL" flexoID="3670" />
+    <BehaviourControlGraph_FireEventAction id="SYL-3670" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#UpdateDiagram.create()" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#UpdateDiagram" receiver="this" userID="SYL" flexoID="3670" />
   </ActionScheme>
   <CreationScheme id="SYL-3937" label="create" name="create" width="800" height="600" userID="SYL" flexoID="3937">
     <BehaviourControlGraph_EmptyControlGraph id="SYL-3946" userID="SYL" flexoID="3946" />
@@ -1347,7 +1347,7 @@
                 <ControlGraph2_Sequence id="SYL-6312" ownerContext="controlGraph2" userID="SYL" flexoID="6312">
                   <ControlGraph2_ConditionalAction id="SYL-6264" condition="(impactGR = null)" ownerContext="controlGraph2" userID="SYL" flexoID="6264">
                     <ThenControlGraph_AssignationAction id="SYL-6267" assign="impactGR" ownerContext="thenControlGraph" userID="SYL" flexoID="6267">
-                      <AssignableAction_AddFlexoConceptInstance id="SYL-6266" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ImpactGR.representImpact(impact,contributionGoalGR,functionalGoalGR)" receiver="this" userID="SYL" flexoID="6266">
+                      <AssignableAction_AddFlexoConceptInstance id="SYL-6266" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ImpactGR.representImpact(impact,contributionGoalGR,functionalGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ImpactGR" receiver="this" userID="SYL" flexoID="6266">
                         <AddFlexoConceptInstanceParameter id="SYL-6292" paramName="impact" value="impact" userID="SYL" flexoID="6292" />
                         <AddFlexoConceptInstanceParameter id="SYL-6293" paramName="contributionGoalGR" value="contributionGoalGR" userID="SYL" flexoID="6293" />
                         <AddFlexoConceptInstanceParameter id="SYL-6294" paramName="functionalGoalGR" value="functionalGoalGR" userID="SYL" flexoID="6294" />
@@ -1403,7 +1403,7 @@
                 <ControlGraph2_Sequence id="SYL-6830" ownerContext="controlGraph2" userID="SYL" flexoID="6830">
                   <ControlGraph2_ConditionalAction id="SYL-6826" condition="(agentAssignmentGR = null)" ownerContext="controlGraph2" userID="SYL" flexoID="6826">
                     <ThenControlGraph_AssignationAction id="SYL-6825" assign="agentAssignmentGR" ownerContext="thenControlGraph" userID="SYL" flexoID="6825">
-                      <AssignableAction_AddFlexoConceptInstance id="SYL-6824" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#AgentAssignmentGR.representAgentAssignment(agentAssignment,agentlGR,goalGR)" receiver="this" userID="SYL" flexoID="6824">
+                      <AssignableAction_AddFlexoConceptInstance id="SYL-6824" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#AgentAssignmentGR.representAgentAssignment(agentAssignment,agentlGR,goalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#AgentAssignmentGR" receiver="this" userID="SYL" flexoID="6824">
                         <AddFlexoConceptInstanceParameter id="SYL-6859" paramName="agentAssignment" value="agentAssignment" userID="SYL" flexoID="6859" />
                         <AddFlexoConceptInstanceParameter id="SYL-6860" paramName="agentlGR" value="agentGR" userID="SYL" flexoID="6860" />
                         <AddFlexoConceptInstanceParameter id="SYL-6861" paramName="goalGR" value="goalGR" userID="SYL" flexoID="6861" />
@@ -1452,7 +1452,7 @@
               <ControlGraph2_Sequence id="SYL-6992" ownerContext="controlGraph2" userID="SYL" flexoID="6992">
                 <ControlGraph2_ConditionalAction id="SYL-6989" condition="(contributionGR = null)" ownerContext="controlGraph2" userID="SYL" flexoID="6989">
                   <ThenControlGraph_AssignationAction id="SYL-6988" assign="contributionGR" ownerContext="thenControlGraph" userID="SYL" flexoID="6988">
-                    <AssignableAction_AddFlexoConceptInstance id="SYL-6987" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ContributionGR.representContribution(contribution,contributionGoalGR,nonFunctionalGoalGR)" receiver="this" userID="SYL" flexoID="6987">
+                    <AssignableAction_AddFlexoConceptInstance id="SYL-6987" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ContributionGR.representContribution(contribution,contributionGoalGR,nonFunctionalGoalGR)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#ContributionGR" receiver="this" userID="SYL" flexoID="6987">
                       <AddFlexoConceptInstanceParameter id="SYL-7008" paramName="contribution" value="contribution" userID="SYL" flexoID="7008" />
                       <AddFlexoConceptInstanceParameter id="SYL-7009" paramName="contributionGoalGR" value="contributionGoalGR" userID="SYL" flexoID="7009" />
                       <AddFlexoConceptInstanceParameter id="SYL-7010" paramName="nonFunctionalGoalGR" value="nonFunctionalGoalGR" userID="SYL" flexoID="7010" />
@@ -1512,7 +1512,7 @@
                   <ControlGraph2_ConditionalAction id="SYL-7668" condition="(refinmentGR = null)" ownerContext="controlGraph2" userID="SYL" flexoID="7668">
                     <ElseControlGraph_ExpressionAction id="SYL-7802" expression="refinmentGR.updateRequiredLinks()" ownerContext="elseControlGraph" userID="SYL" flexoID="7802" />
                     <ThenControlGraph_AssignationAction id="SYL-7674" assign="refinmentGR" ownerContext="thenControlGraph" userID="SYL" flexoID="7674">
-                      <AssignableAction_AddFlexoConceptInstance id="SYL-7670" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#RefinementGR.representRefinment(refinment,parentGoalGRs,childGoalsGRs)" receiver="this" userID="SYL" flexoID="7670">
+                      <AssignableAction_AddFlexoConceptInstance id="SYL-7670" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#RefinementGR.representRefinment(refinment,parentGoalGRs,childGoalsGRs)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml#RefinementGR" receiver="this" userID="SYL" flexoID="7670">
                         <AddFlexoConceptInstanceParameter id="SYL-7671" paramName="refinment" value="parameters.refinment" userID="SYL" flexoID="7671" />
                         <AddFlexoConceptInstanceParameter id="SYL-7672" paramName="parentGoalGRs" value="parentGoals" userID="SYL" flexoID="7672" />
                         <AddFlexoConceptInstanceParameter id="SYL-7673" paramName="childGoalsGRs" value="childGoals" userID="SYL" flexoID="7673" />

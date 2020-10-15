@@ -14,7 +14,7 @@
             <ControlGraph2_NotifyPropertyChangedAction id="SYL-1704" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1704" />
             <ControlGraph1_ConditionalAction id="SYL-2238" condition="parameters.notify" ownerContext="controlGraph1" userID="SYL" flexoID="2238">
               <ThenControlGraph_Sequence id="SYL-2243" ownerContext="thenControlGraph" userID="SYL" flexoID="2243">
-                <ControlGraph2_FireEventAction id="SYL-1517" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" receiver="container" ownerContext="controlGraph2" userID="SYL" flexoID="1517">
+                <ControlGraph2_FireEventAction id="SYL-1517" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal" receiver="container" ownerContext="controlGraph2" userID="SYL" flexoID="1517">
                   <AddFlexoConceptInstanceParameter id="SYL-1518" paramName="aGoal" value="this" userID="SYL" flexoID="1518" />
                 </ControlGraph2_FireEventAction>
                 <ControlGraph1_LogAction id="SYL-2241" logLevel="INFO" logString="&quot;Notify new event&quot;" ownerContext="controlGraph1" userID="SYL" flexoID="2241" />
@@ -60,7 +60,7 @@
               <ControlGraph2_Sequence id="SYL-2390" ownerContext="controlGraph2" userID="SYL" flexoID="2390">
                 <ControlGraph2_Sequence id="SYL-2388" ownerContext="controlGraph2" userID="SYL" flexoID="2388">
                   <ControlGraph2_NotifyPropertyChangedAction id="SYL-2385" propertyName="agents" object="containerModel" ownerContext="controlGraph2" userID="SYL" flexoID="2385" />
-                  <ControlGraph1_FireEventAction id="SYL-2387" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedAgent.create(anAgent)" receiver="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="2387">
+                  <ControlGraph1_FireEventAction id="SYL-2387" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedAgent.create(anAgent)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedAgent" receiver="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="2387">
                     <AddFlexoConceptInstanceParameter id="SYL-2427" paramName="anAgent" value="this" userID="SYL" flexoID="2427" />
                   </ControlGraph1_FireEventAction>
                 </ControlGraph2_Sequence>
@@ -349,7 +349,7 @@
                   <ControlGraph2_Sequence id="SYL-2001" ownerContext="controlGraph2" userID="SYL" flexoID="2001">
                     <ControlGraph2_Sequence id="SYL-1956" ownerContext="controlGraph2" userID="SYL" flexoID="1956">
                       <ControlGraph2_NotifyPropertyChangedAction id="SYL-1953" propertyName="goals" object="containerModel" ownerContext="controlGraph2" userID="SYL" flexoID="1953" />
-                      <ControlGraph1_FireEventAction id="SYL-1951" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedGoal.create(aGoal)" receiver="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="1951">
+                      <ControlGraph1_FireEventAction id="SYL-1951" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedGoal.create(aGoal)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#DeletedGoal" receiver="containerModel" ownerContext="controlGraph1" userID="SYL" flexoID="1951">
                         <AddFlexoConceptInstanceParameter id="SYL-1952" paramName="aGoal" value="this" userID="SYL" flexoID="1952" />
                       </ControlGraph1_FireEventAction>
                     </ControlGraph2_Sequence>
@@ -403,7 +403,7 @@
           <ControlGraph2_Sequence id="SYL-1528" ownerContext="controlGraph2" userID="SYL" flexoID="1528">
             <ControlGraph2_Sequence id="SYL-1707" ownerContext="controlGraph2" userID="SYL" flexoID="1707">
               <ControlGraph2_NotifyPropertyChangedAction id="SYL-1705" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1705" />
-              <ControlGraph1_FireEventAction id="SYL-1515" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="1515">
+              <ControlGraph1_FireEventAction id="SYL-1515" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="1515">
                 <AddFlexoConceptInstanceParameter id="SYL-1516" paramName="aGoal" value="this" userID="SYL" flexoID="1516" />
               </ControlGraph1_FireEventAction>
             </ControlGraph2_Sequence>
@@ -552,7 +552,7 @@
           <ControlGraph2_Sequence id="SYL-1808" ownerContext="controlGraph2" userID="SYL" flexoID="1808">
             <ControlGraph2_Sequence id="SYL-1805" ownerContext="controlGraph2" userID="SYL" flexoID="1805">
               <ControlGraph2_NotifyPropertyChangedAction id="SYL-1803" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="1803" />
-              <ControlGraph1_FireEventAction id="SYL-1804" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="1804">
+              <ControlGraph1_FireEventAction id="SYL-1804" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal.create(aGoal)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoal" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="1804">
                 <AddFlexoConceptInstanceParameter id="SYL-1801" paramName="aGoal" value="this" userID="SYL" flexoID="1801" />
               </ControlGraph1_FireEventAction>
             </ControlGraph2_Sequence>
@@ -657,7 +657,7 @@
               <ControlGraph2_NotifyPropertyChangedAction id="SYL-2700" propertyName="ungroupedGoals" object="container" ownerContext="controlGraph2" userID="SYL" flexoID="2700" />
               <ControlGraph1_NotifyPropertyChangedAction id="SYL-2699" propertyName="groups" object="container" ownerContext="controlGraph1" userID="SYL" flexoID="2699" />
             </ControlGraph2_Sequence>
-            <ControlGraph1_FireEventAction id="SYL-2719" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoalGroup.create(aGroup)" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="2719">
+            <ControlGraph1_FireEventAction id="SYL-2719" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoalGroup.create(aGroup)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#NewGoalGroup" receiver="container" ownerContext="controlGraph1" userID="SYL" flexoID="2719">
               <AddFlexoConceptInstanceParameter id="SYL-2721" paramName="aGroup" value="this" userID="SYL" flexoID="2721" />
             </ControlGraph1_FireEventAction>
           </ControlGraph2_Sequence>
@@ -759,7 +759,7 @@
     <GenericBehaviourParameter id="SYL-1447" widget="CUSTOM_WIDGET" name="parentModel" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml&gt;" userID="SYL" flexoID="1447" />
   </CreationScheme>
   <ActionScheme id="FLX-1199" label="addFunctionalGoal" name="addFunctionalGoal" width="800" height="600" userID="FLX" flexoID="1199">
-    <BehaviourControlGraph_AddFlexoConceptInstance id="FLX-1245" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" receiver="rootModel" userID="FLX" flexoID="1245">
+    <BehaviourControlGraph_AddFlexoConceptInstance id="FLX-1245" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal.create(name,type,description,notify)" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#FunctionalGoal" receiver="rootModel" userID="FLX" flexoID="1245">
       <AddFlexoConceptInstanceParameter id="FLX-1246" paramName="name" value="parameters.name" userID="FLX" flexoID="1246" />
       <AddFlexoConceptInstanceParameter id="FLX-1247" paramName="type" value="parameters.type" userID="FLX" flexoID="1247" />
       <AddFlexoConceptInstanceParameter id="FLX-1248" paramName="description" value="parameters.description" userID="FLX" flexoID="1248" />
@@ -770,7 +770,7 @@
     <GenericBehaviourParameter id="FLX-1208" widget="TEXT_FIELD" name="description" type="java.lang.String" userID="FLX" flexoID="1208" />
   </ActionScheme>
   <ActionScheme id="FLX-1249" label="addRefinement" name="addRefinement" width="800" height="600" userID="FLX" flexoID="1249">
-    <BehaviourControlGraph_AddFlexoConceptInstance id="FLX-1252" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" receiver="rootModel" userID="FLX" flexoID="1252" />
+    <BehaviourControlGraph_AddFlexoConceptInstance id="FLX-1252" creationSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.create()" flexoConceptTypeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement" receiver="rootModel" userID="FLX" flexoID="1252" />
   </ActionScheme>
   <ActionScheme id="FLX-1253" label="removeRefinement" name="removeRefinement" width="800" height="600" userID="FLX" flexoID="1253">
     <BehaviourControlGraph_DeleteFlexoConceptInstance id="FLX-1258" deletionSchemeURI="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Refinement.delete()" object="parameters.refinement" userID="FLX" flexoID="1258" />
