@@ -10,7 +10,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
   public DocumentLibrary documentLibrary;
   public Unclassified unclassified;
   @GetSetProperty(value="elementReferences", access=get)  
-  public List<FlexoConceptInstanceType<ElementReference>> getElementReferences {  
+  public List<ElementReference> getElementReferences {  
     return this.SelectFlexoConceptInstance(type=ElementReference);  
   }
 
@@ -22,8 +22,8 @@ public class DocumentAnnotation-Methodology extends Methodology  {
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<ElementReference> getElementReference(FlexoConceptInstanceType<Element> element) {  
-    List<FlexoConceptInstanceType<ElementReference>> list = this.SelectFlexoConceptInstance(type=ElementReference,where=where=(selected.element = parameters.element));    
+  ElementReference getElementReference(Element element) {  
+    List<ElementReference> list = this.SelectFlexoConceptInstance(type=ElementReference,where=where=(selected.element = parameters.element));    
     if (list.size > 0) {    
       return list.get(0);    
     } else {    
@@ -32,10 +32,10 @@ public class DocumentAnnotation-Methodology extends Methodology  {
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<RequirementReference> getRequirementReference(FlexoConceptInstanceType<Requirement> requirement) {  
-    FlexoConceptInstanceType<Element> containerElement = parameters.requirement.container;    
-    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(containerElement);    
-    List<FlexoConceptInstanceType<RequirementReference>> list = this.SelectFlexoConceptInstance(type=RequirementReference,where=where=(selected.requirement = parameters.requirement));    
+  RequirementReference getRequirementReference(Requirement requirement) {  
+    Element containerElement = parameters.requirement.container;    
+    ElementReference elementReference = this.getElementReference(containerElement);    
+    List<RequirementReference> list = this.SelectFlexoConceptInstance(type=RequirementReference,where=where=(selected.requirement = parameters.requirement));    
     if (list.size > 0) {    
       return list.get(0);    
     } else {    
@@ -44,39 +44,39 @@ public class DocumentAnnotation-Methodology extends Methodology  {
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<ElementReference> identifyElement(String elementName, String elementDescription, FlexoConceptInstanceType<Element> parentElement, FlexoConceptInstanceType<Reference> reference) {  
-    FlexoConceptInstanceType<Element> newElement = parameters.parentElement.createChildrenElement(parameters.elementName,parameters.elementDescription);    
+  ElementReference identifyElement(String elementName, String elementDescription, Element parentElement, Reference reference) {  
+    Element newElement = parameters.parentElement.createChildrenElement(parameters.elementName,parameters.elementDescription);    
     log ("Called IdentifyElement with " + parameters.reference)    
-    FlexoConceptInstanceType<ElementReference> newElementReference = this.getElementReference(newElement);    
+    ElementReference newElementReference = this.getElementReference(newElement);    
     newElementReference.references.add(parameters.reference)    
     return newElementReference;  
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<ElementReference> annotateElement(FlexoConceptInstanceType<Element> element, FlexoConceptInstanceType<Reference> reference) {  
-    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(parameters.element);    
+  ElementReference annotateElement(Element element, Reference reference) {  
+    ElementReference elementReference = this.getElementReference(parameters.element);    
     elementReference.references.add(parameters.reference)    
     return elementReference;  
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<RequirementReference> identifyRequirement(String requirementName, String requirementDescription, FlexoConceptInstanceType<Element> parentElement, FlexoConceptInstanceType<Reference> reference) {  
-    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(parameters.parentElement);    
-    FlexoConceptInstanceType<Requirement> newRequirement = parameters.parentElement.createRequirement(parameters.requirementName,parameters.requirementDescription);    
-    FlexoConceptInstanceType<RequirementReference> newRequirementReference = this.getRequirementReference(newRequirement);    
+  RequirementReference identifyRequirement(String requirementName, String requirementDescription, Element parentElement, Reference reference) {  
+    ElementReference elementReference = this.getElementReference(parameters.parentElement);    
+    Requirement newRequirement = parameters.parentElement.createRequirement(parameters.requirementName,parameters.requirementDescription);    
+    RequirementReference newRequirementReference = this.getRequirementReference(newRequirement);    
     newRequirementReference.references.add(parameters.reference)    
     return newRequirementReference;  
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<Reference> addUnclassifiedReference(FlexoConceptInstanceType<Reference> reference) {  
+  Reference addUnclassifiedReference(Reference reference) {  
     unclassified.addToUnclassifiedReferences(parameters.reference)    
     return parameters.reference;  
   }  
 
   @ActionScheme  
-  FlexoConceptInstanceType<RequirementReference> makeRequirementReference(FlexoConceptInstanceType<Requirement> requirement) {  
-    FlexoConceptInstanceType<ElementReference> elementReference = this.getElementReference(parameters.requirement.container);    
+  RequirementReference makeRequirementReference(Requirement requirement) {  
+    ElementReference elementReference = this.getElementReference(parameters.requirement.container);    
     if (elementReference = null) {    
       elementReference = ElementReference.createNewEmptyElementReference(parameters.requirement.container);    
     }    
@@ -94,7 +94,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
   
     public Element element;  
     @GetSetProperty(value="requirementReferences", access=get)    
-    public List<FlexoConceptInstanceType<RequirementReference>> getRequirementReferences {    
+    public List<RequirementReference> getRequirementReferences {    
       return container.SelectFlexoConceptInstance(type=RequirementReference);    
     }  
   
@@ -104,7 +104,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
     }    
   
     @CreationScheme    
-    ElementReference:createNewEmptyElementReference(FlexoConceptInstanceType<Element> anElement) {    
+    ElementReference:createNewEmptyElementReference(Element anElement) {    
       element = parameters.anElement;      
       log "*** Fire getElementReference(Element)"      
       container.firePropertyChange getElementReference(Element)    
@@ -122,7 +122,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
       }      
       
       @CreationScheme      
-      RequirementReference:createEmpty(FlexoConceptInstanceType<Requirement> aRequirement) {      
+      RequirementReference:createEmpty(Requirement aRequirement) {      
         requirement = parameters.aRequirement;      
       }      
       
@@ -155,7 +155,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
     }    
   
     @ActionScheme    
-    FlexoConceptInstanceType<Reference> addReference(FlexoConceptInstanceType<Reference> aReference) {    
+    Reference addReference(Reference aReference) {    
       if (parameters.aReference != null) {      
         references.add(parameters.aReference)        
         this.firePropertyChange references      
@@ -164,7 +164,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
     }    
   
     @ActionScheme    
-    Void moveReference(FlexoConceptInstanceType<Reference> aReference, FlexoConceptInstanceType<NamedReference> namedReference) {    
+    Void moveReference(Reference aReference, NamedReference namedReference) {    
       log ((("Moving reference " + parameters.aReference) + " to ") + parameters.namedReference)      
       references.remove(parameters.aReference);      
       parameters.namedReference.references.add(parameters.aReference)      
@@ -185,7 +185,7 @@ public class DocumentAnnotation-Methodology extends Methodology  {
     }    
   
     @CreationScheme    
-    RequirementReference:createEmpty(FlexoConceptInstanceType<Requirement> aRequirement) {    
+    RequirementReference:createEmpty(Requirement aRequirement) {    
       requirement = parameters.aRequirement;    
     }    
   
@@ -207,13 +207,13 @@ public class DocumentAnnotation-Methodology extends Methodology  {
     }    
   
     @ActionScheme    
-    Void addToUnclassifiedReferences(FlexoConceptInstanceType<Reference> reference) {    
+    Void addToUnclassifiedReferences(Reference reference) {    
       unclassifiedReferences.add(parameters.reference)      
       this.firePropertyChange unclassifiedReferences    
     }    
   
     @ActionScheme    
-    Void moveReference(FlexoConceptInstanceType<Reference> aReference, FlexoConceptInstanceType<NamedReference> namedReference) {    
+    Void moveReference(Reference aReference, NamedReference namedReference) {    
       log ((("Moving reference " + parameters.aReference) + " to ") + parameters.namedReference)      
       unclassifiedReferences.remove(parameters.aReference);      
       parameters.namedReference.references.add(parameters.aReference)      
