@@ -353,7 +353,7 @@
       </BehaviourControlGraph_ReturnStatement>
     </ActionScheme>
     <Constraint id="STE-193" constraint="(this.individualOf.concept.name = &quot;Association&quot;)" userID="STE" flexoID="193" />
-    <Constraint id="STE-269" constraint="((this.antecedent = (null | this.antecedent.individualOf)) = this.individualOf.domain)" userID="STE" flexoID="269" />
+    <Constraint id="STE-269" constraint="((this.antecedent = null) | (this.antecedent.individualOf = this.individualOf.domain))" userID="STE" flexoID="269" />
   </FlexoConcept>
   <FlexoConcept id="STE-147" name="LogicalFormula" userID="STE" flexoID="147">
     <Inspector id="STE-148" renderer="this.assertion" inspectorTitle="LogicalFormula" userID="STE" flexoID="148" />
