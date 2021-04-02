@@ -9,7 +9,7 @@ use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
 public class FormoseCore {
 
   @GetSetProperty(value="allElements", access=get)  
-  public List<FlexoConceptInstanceType<Element>> getAllElements {  
+  public List<Element> getAllElements {  
     return this.SelectFlexoConceptInstance(type=Element);  
   }
   public Element projectElement;
@@ -25,7 +25,7 @@ public class FormoseCore {
   }  
 
   @ActionScheme  
-  Void removeElement(FlexoConceptInstanceType<Element> element) {  
+  Void removeElement(Element element) {  
     parameters.element.delete();  
   }  
 
@@ -45,12 +45,12 @@ public class FormoseCore {
     public Element parent;  
     public GINAFIBComponent ui;  
     @GetSetProperty(value="requirements", access=get)    
-    public List<FlexoConceptInstanceType<Requirement>> getRequirements {    
+    public List<Requirement> getRequirements {    
       return container.SelectFlexoConceptInstance(type=Requirement);    
     }  
     @GetSetProperty(value="applicableSysMLKaosMethodology", access=get)    
-    public VirtualModelInstanceType<SysMLKaos-Methodology> getApplicableSysMLKaosMethodology {    
-      VirtualModelInstanceType<SysMLKaos-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
+    public SysMLKaos-Methodology getApplicableSysMLKaosMethodology {    
+      SysMLKaos-Methodology returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
       if (returned != null) {      
         return returned;      
       }      
@@ -60,8 +60,8 @@ public class FormoseCore {
       return null;    
     }  
     @GetSetProperty(value="applicableDomainModelMethodology", access=get)    
-    public VirtualModelInstanceType<DomainModel-Methodology> getApplicableDomainModelMethodology {    
-      VirtualModelInstanceType<DomainModel-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
+    public DomainModel-Methodology getApplicableDomainModelMethodology {    
+      DomainModel-Methodology returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
       if (returned != null) {      
         return returned;      
       }      
@@ -71,8 +71,8 @@ public class FormoseCore {
       return null;    
     }  
     @GetSetProperty(value="applicableBMethodology", access=get)    
-    public VirtualModelInstanceType<B-Methodology> getApplicableBMethodology {    
-      VirtualModelInstanceType<B-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
+    public B-Methodology getApplicableBMethodology {    
+      B-Methodology returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
       if (returned != null) {      
         return returned;      
       }      
@@ -89,8 +89,8 @@ public class FormoseCore {
     }    
   
     @ActionScheme    
-    VirtualModelInstanceType<SysMLKaos-Methodology> createSysMLKaosMethodology() {    
-      VirtualModelInstanceType<SysMLKaos-Methodology> methodology = SysMLKaos-Methodology.create((identifier + "-SysMLKaos"),this);      
+    SysMLKaos-Methodology createSysMLKaosMethodology() {    
+      SysMLKaos-Methodology methodology = SysMLKaos-Methodology.create((identifier + "-SysMLKaos"),this);      
       this.firePropertyChange applicableSysMLKaosMethodology      
       return methodology;    
     }    
@@ -101,22 +101,22 @@ public class FormoseCore {
     }    
   
     @ActionScheme    
-    FlexoConceptInstanceType<Element> createChildrenElement(String elementIdentifier, String elementDescription) {    
+    Element createChildrenElement(String elementIdentifier, String elementDescription) {    
       log ("Creating new element " + parameters.elementIdentifier)      
-      FlexoConceptInstanceType<Element> newElement = Element.createElement(parameters.elementIdentifier);      
+      Element newElement = Element.createElement(parameters.elementIdentifier);      
       newElement.description = parameters.elementDescription;      
       newElement.parent = this;      
       childrenElements.add(newElement)      
-      FlexoConceptInstanceType<NewElement> event = fireEvent NewElement;      
+      NewElement event = fireEvent NewElement;      
       log ((("Firing event " + event) + " from ") + container)      
       return newElement;    
     }    
   
     @ActionScheme    
-    FlexoConceptInstanceType<Requirement> createRequirement(String name, String description) {    
+    Requirement createRequirement(String name, String description) {    
       log ("Creating new requirement " + parameters.name)      
       log ("Description for new requirement " + parameters.description)      
-      FlexoConceptInstanceType<Requirement> newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
+      Requirement newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
       this.firePropertyChange requirements      
       log ((("On declenche NewRequirement " + newRequirement) + " dans ") + newRequirement.container)      
       fireEvent NewRequirement      
@@ -124,23 +124,23 @@ public class FormoseCore {
     }    
   
     @ActionScheme    
-    FlexoConceptInstanceType<Requirement> createRequirementNoNotification(String name, String description) {    
-      FlexoConceptInstanceType<Requirement> newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
+    Requirement createRequirementNoNotification(String name, String description) {    
+      Requirement newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
       this.firePropertyChange requirements      
       return newRequirement;    
     }    
   
     @ActionScheme    
-    VirtualModelInstanceType<DomainModel-Methodology> createDomainModelMethodology() {    
+    DomainModel-Methodology createDomainModelMethodology() {    
       log ("applicableSysMLKaosMethodology:" + applicableSysMLKaosMethodology)      
-      VirtualModelInstanceType<DomainModel-Methodology> methodology = DomainModel-Methodology.create(applicableSysMLKaosMethodology);      
+      DomainModel-Methodology methodology = DomainModel-Methodology.create(applicableSysMLKaosMethodology);      
       this.firePropertyChange applicableDomainModelMethodology      
       return methodology;    
     }    
   
     @ActionScheme    
-    VirtualModelInstanceType<B-Methodology> createBMethodology(AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject) {    
-      VirtualModelInstanceType<B-Methodology> methodology = B-Methodology.create(applicableDomainModelMethodology,parameters.sourceProject,parameters.generatedProject);      
+    B-Methodology createBMethodology(FlexoResource sourceProject, FlexoResource generatedProject) {    
+      B-Methodology methodology = B-Methodology.create(applicableDomainModelMethodology,parameters.sourceProject,parameters.generatedProject);      
       this.firePropertyChange applicableBMethodology      
       return methodology;    
     }    
@@ -198,7 +198,7 @@ public class FormoseCore {
     public Requirement requirement;  
   
     @CreationScheme    
-    NewRequirement:create(FlexoConceptInstanceType<Requirement> aRequirement) {    
+    NewRequirement:create(Requirement aRequirement) {    
       requirement = parameters.aRequirement;    
     }    
   
@@ -215,7 +215,7 @@ public class FormoseCore {
     public Element element;  
   
     @CreationScheme    
-    NewElement:create(FlexoConceptInstanceType<Element> anElement) {    
+    NewElement:create(Element anElement) {    
       element = parameters.anElement;    
     }    
   
