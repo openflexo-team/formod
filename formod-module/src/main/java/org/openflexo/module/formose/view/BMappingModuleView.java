@@ -167,7 +167,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 			// B Context
 			BComponent context = bMapping.execute("context.componentResource.resourceData");
 			if (context != null) {
-				centerPanel.add(new BComponentView(context, perspective.getController()), LayoutPosition.BOTTOM_LEFT.name());
+				centerPanel.add(new BComponentView(context, perspective.getController()), LayoutPosition.BOTTOM_RIGHT.name());
 			}
 			else {
 				centerPanel.add(new JLabel("Missing B component"), LayoutPosition.BOTTOM_RIGHT.name());
@@ -176,7 +176,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 			// B Machine
 			BComponent machine = bMapping.execute("machine.componentResource.resourceData");
 			if (machine != null) {
-				centerPanel.add(new BComponentView(machine, perspective.getController()), LayoutPosition.BOTTOM_RIGHT.name());
+				centerPanel.add(new BComponentView(machine, perspective.getController()), LayoutPosition.BOTTOM_LEFT.name());
 			}
 			else {
 				centerPanel.add(new JLabel("Missing B component"), LayoutPosition.BOTTOM_LEFT.name());
