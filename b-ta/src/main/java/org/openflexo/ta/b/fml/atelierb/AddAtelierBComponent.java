@@ -79,7 +79,8 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	@PropertyIdentifier(type = DataBinding.class)
 	public static final String REFINES_KEY = "refines";
 	@PropertyIdentifier(type = DataBinding.class)
-	public static final String EXTENDS_KEY = "extends";
+	// Not "extends", which is a reserved keyword of FML and of Connie bindings
+	public static final String EXTENDS_COMPONENT_KEY = "extendsComponent";
 	@PropertyIdentifier(type = DataBinding.class)
 	public static final String SEES_KEY = "sees";
 
@@ -106,12 +107,12 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	@Setter(REFINES_KEY)
 	public void setRefines(DataBinding<AtelierBComponent> component);
 
-	@Getter(value = EXTENDS_KEY)
+	@Getter(value = EXTENDS_COMPONENT_KEY)
 	@XMLAttribute
-	public DataBinding<AtelierBComponent> getExtends();
+	public DataBinding<AtelierBComponent> getExtendsComponent();
 
-	@Setter(EXTENDS_KEY)
-	public void setExtends(DataBinding<AtelierBComponent> component);
+	@Setter(EXTENDS_COMPONENT_KEY)
+	public void setExtendsComponent(DataBinding<AtelierBComponent> component);
 
 	@Getter(value = SEES_KEY)
 	@XMLAttribute
@@ -190,8 +191,8 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 								}
 							}
 
-							if (getExtends().isSet() && getExtends().isValid()) {
-								AtelierBComponent extendsC = getExtends().getBindingValue(evaluationContext);
+							if (getExtendsComponent().isSet() && getExtendsComponent().isValid()) {
+								AtelierBComponent extendsC = getExtendsComponent().getBindingValue(evaluationContext);
 								if (extendsC != null) {
 									newComponent.getComponentResource().getBComponent()
 											.addToExtendsClauses(bModelFactory.makeExtendsClause(extendsC.getComponentResource()));
@@ -285,21 +286,21 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 		}
 
 		@Override
-		public DataBinding<AtelierBComponent> getExtends() {
+		public DataBinding<AtelierBComponent> getExtendsComponent() {
 			if (extendsB == null) {
 				extendsB = new DataBinding<>(this, AtelierBComponent.class, DataBinding.BindingDefinitionType.GET);
-				extendsB.setBindingName("extends");
+				extendsB.setBindingName("extendsComponent");
 			}
 			return extendsB;
 		}
 
 		@Override
-		public void setExtends(DataBinding<AtelierBComponent> extendsB) {
+		public void setExtendsComponent(DataBinding<AtelierBComponent> extendsB) {
 			if (extendsB != null) {
 				extendsB.setOwner(this);
 				extendsB.setDeclaredType(AtelierBComponent.class);
 				extendsB.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
-				extendsB.setBindingName("extends");
+				extendsB.setBindingName("extendsComponent");
 			}
 			this.extendsB = extendsB;
 		}

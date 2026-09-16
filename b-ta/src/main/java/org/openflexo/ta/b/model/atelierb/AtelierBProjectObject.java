@@ -72,6 +72,13 @@ public interface AtelierBProjectObject extends FlexoObject, InnerResourceData<At
 	public AtelierBProject getAtelierBProject();
 
 	/**
+	 * Return the name of this object: its own name when it has one (project, component), the name of its project otherwise
+	 * 
+	 * @return
+	 */
+	public String getName();
+
+	/**
 	 * Default base implementation for {@link AtelierBProjectObject}
 	 * 
 	 * @author sylvain

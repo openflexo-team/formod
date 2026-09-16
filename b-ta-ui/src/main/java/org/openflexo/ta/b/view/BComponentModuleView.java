@@ -56,7 +56,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.SelectionListener;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.ta.b.model.BComponent;
+import org.openflexo.ta.b.model.BObject;
 import org.openflexo.ta.b.model.parser.ParseException;
 import org.openflexo.ta.b.rm.BResource;
 import org.openflexo.view.SelectionSynchronizedModuleView;
@@ -214,6 +216,62 @@ public class BComponentModuleView extends JPanel implements SelectionSynchronize
 	@Override
 	public void fireEndMultipleSelection() {
 
+	}
+
+	@Override
+	public SelectionManager getSelectionManager() {
+		if (getFlexoController() != null) {
+			return getFlexoController().getSelectionManager();
+		}
+		return null;
+	}
+
+	@Override
+	public Vector<FlexoObject> getSelection() {
+		return getSelectionManager().getSelection();
+	}
+
+	@Override
+	public void resetSelection() {
+		getSelectionManager().resetSelection();
+	}
+
+	@Override
+	public void addToSelected(FlexoObject object) {
+		getSelectionManager().addToSelected(object);
+	}
+
+	@Override
+	public void removeFromSelected(FlexoObject object) {
+		getSelectionManager().removeFromSelected(object);
+	}
+
+	@Override
+	public void addToSelected(Vector<? extends FlexoObject> objects) {
+		getSelectionManager().addToSelected(objects);
+	}
+
+	@Override
+	public void removeFromSelected(Vector<? extends FlexoObject> objects) {
+		getSelectionManager().removeFromSelected(objects);
+	}
+
+	@Override
+	public void setSelectedObjects(Vector<? extends FlexoObject> objects) {
+		getSelectionManager().setSelectedObjects(objects);
+	}
+
+	@Override
+	public FlexoObject getFocusedObject() {
+		return getSelectionManager().getFocusedObject();
+	}
+
+	/**
+	 * The objects this view may represent are the B objects of the component it shows
+	 */
+	@Override
+	public boolean mayRepresents(FlexoObject anObject) {
+		return anObject instanceof BObject && ((BObject) anObject).getComponent() == getRepresentedObject();
 	}
 
 }

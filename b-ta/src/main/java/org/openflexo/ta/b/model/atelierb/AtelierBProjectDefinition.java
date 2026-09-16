@@ -104,6 +104,14 @@ public interface AtelierBProjectDefinition extends AtelierBProjectObject {
 	@Setter(ATELIER_B_PROJECT_KEY)
 	public void setAtelierBProject(AtelierBProject project);
 
+	/**
+	 * A project definition has no name of its own: it is named after its project
+	 */
+	@Override
+	public default String getName() {
+		return getAtelierBProject() != null ? getAtelierBProject().getName() : null;
+	}
+
 	@Getter(value = COMPONENTS_KEY, cardinality = Cardinality.LIST)
 	@XMLElement
 	public List<AtelierBComponent> getComponents();
