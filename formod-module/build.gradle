@@ -1,38 +1,38 @@
 dependencies {
 
-  compile project(':formod-rc')
+  implementation project(':formod-rc')
  
-  compile project(':b-ta')
-  compile project(':b-ta-ui')
+  implementation project(':b-ta')
+  implementation project(':b-ta-ui')
  
  
   // openflexo dep
-  compile flexoFoundation()
-  compile flexoUi()
-  compile flexoUtils()
-  compile flexoGraphicUtils()
-  compile diagramConnector()
-  compile diagramConnectorUi()
-  compile docxConnector()
-  compile docxConnectorUi()
-  compile excelConnector()
-  compile excelConnectorUi()
-  compile ginaConnector()
-  compile ginaConnectorUi()
-  compile owlConnector()
-  compile owlConnectorUi()
+  implementation flexoFoundation()
+  implementation flexoUi()
+  implementation flexoUtils()
+  implementation flexoGraphicUtils()
+  implementation diagramConnector()
+  implementation diagramConnectorUi()
+  implementation docxConnector()
+  implementation docxConnectorUi()
+  implementation excelConnector()
+  implementation excelConnectorUi()
+  implementation ginaConnector()
+  implementation ginaConnectorUi()
+  implementation owlConnector()
+  implementation owlConnectorUi()
   
-  runtime flexoGraphicUtils()
+  runtimeOnly flexoGraphicUtils()
   
   
   // external dep
   
   // testing dep
-  testCompile testUtils()
-  testCompile ginaTest()
-  testCompile ginaSwingEditorTest()
-  testCompile flexoFoundationTest()
-  testCompile flexoUiTest()
-  testRuntime flexoTestResources()
+  testImplementation testUtils()
+  testImplementation ginaTest()
+  testImplementation ginaSwingEditorTest()
+  testImplementation flexoFoundationTest()
+  testImplementation flexoUiTest()
+  testRuntimeOnly flexoTestResources()
    
 }

@@ -1,16 +1,15 @@
 dependencies {
-  compile project(":b-ta")
+  implementation project(":b-ta")
 
   // openflexo dep
-  compile flexoUi()
+  implementation flexoUi()
 
-  runtime fmlTechnologyAdapterUi()
+  runtimeOnly fmlTechnologyAdapterUi()
 
   // external dep
   // testing dep
-  testCompile flexoUiTest()
+  testImplementation flexoUiTest()
 
   // Test resource center, if required
- // testRuntime project(':dsl-ta-test-rc')
+ // testRuntimeOnly project(':b-ta-test-rc')
 }
-

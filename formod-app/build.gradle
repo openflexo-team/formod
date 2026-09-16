@@ -1,18 +1,19 @@
 dependencies {
 
-  compile project(':formod-module')
-  compile project(':formod-rc')
+  implementation project(':formod-module')
+  implementation project(':formod-rc')
 
-  testCompile flexoFoundationTest()
-  testCompile flexoUiTest()
+  testImplementation flexoFoundationTest()
+  testImplementation flexoUiTest()
 
   if (JavaVersion.current().isJava9Compatible()) {
-	runtime group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
-	runtime group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.4.0-b180830.0438'
-	runtime group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
+	runtimeOnly group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+	runtimeOnly group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.4.0-b180830.0438'
+	runtimeOnly group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
   }
 }
 
 apply plugin: 'application'
-mainClassName = "org.openflexo.Flexo"
-
+application {
+  mainClass = "org.openflexo.Flexo"
+}

@@ -1,21 +1,21 @@
 dependencies {
   // openflexo dep
-  compile project(':b-ta-parser')
-  compile flexoFoundation()
-  //compile flexoOntology()
+  implementation project(':b-ta-parser')
+  implementation flexoFoundation()
+  //implementation flexoOntology()
   // external dep
   // Define here your dependancies
-  //compile 'my.library:artefact-name:1.0.0'
+  //implementation 'my.library:artefact-name:1.0.0'
 
   // testing dep
-  testCompile testUtils()
-  testCompile flexoFoundationTest()
+  testImplementation testUtils()
+  testImplementation flexoFoundationTest()
 
   // A particular resource center can be defined here
   // If it always required to be present at run-time
-  //runtime project(‘:b-ta-rc')
+  //runtimeOnly project(':b-ta-rc')
 
   // Test resource center, if required
-  // testRuntime project(‘:b-ta-test-rc')
+  // testRuntimeOnly project(':b-ta-test-rc')
 
 }
