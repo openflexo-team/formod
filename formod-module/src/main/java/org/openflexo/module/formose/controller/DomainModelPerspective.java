@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.controller;
 
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
 
@@ -96,7 +95,7 @@ public class DomainModelPerspective extends FormosePerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoObject object) {
+	public ModuleView<?> createModuleViewForMasterObject(FlexoObject object) {
 
 		if (object instanceof FormoseProjectNature) {
 			return new DomainModellingModuleView((FormoseProjectNature) object, getController(), this);
@@ -120,7 +119,7 @@ public class DomainModelPerspective extends FormosePerspective {
 				} catch (NullReferenceException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (InvocationTargetException e) {
+				} catch (ReflectiveOperationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvalidBindingException e) {
@@ -138,12 +137,12 @@ public class DomainModelPerspective extends FormosePerspective {
 		}
 
 		// In all other cases...
-		return super.createModuleViewForObject(object);
+		return super.createModuleViewForMasterObject(object);
 
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean isRepresentableInModuleView(FlexoObject object) {
 
 		if (object instanceof FormoseProjectNature) {
 			return true;
@@ -168,7 +167,7 @@ public class DomainModelPerspective extends FormosePerspective {
 				return true;
 			}
 		}
-		return super.hasModuleViewForObject(object);
+		return super.isRepresentableInModuleView(object);
 	}
 
 	@Override

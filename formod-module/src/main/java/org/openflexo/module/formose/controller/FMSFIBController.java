@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.controller;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -222,7 +221,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -285,7 +284,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -314,7 +313,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -343,7 +342,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -379,7 +378,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -408,7 +407,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -437,7 +436,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -473,7 +472,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -502,7 +501,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {
@@ -531,7 +530,7 @@ public class FMSFIBController extends FMLControlledFIBController {
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {

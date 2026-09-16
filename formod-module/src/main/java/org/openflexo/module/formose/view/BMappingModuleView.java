@@ -46,7 +46,6 @@ import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import javax.swing.JLabel;
@@ -187,7 +186,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 		} catch (NullReferenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidBindingException e) {

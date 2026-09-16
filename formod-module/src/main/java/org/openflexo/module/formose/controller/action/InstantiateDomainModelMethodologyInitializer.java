@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.controller.action;
 
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
 
@@ -106,7 +105,7 @@ public class InstantiateDomainModelMethodologyInitializer
 						.execute("getDomainModelElementMapping({$element}).topLevelDomainModelMappings.get(0)", action.getElement());
 				getController().selectAndFocusObject(domainModelMapping);
 				getController().getSelectionManager().setSelectedObject(domainModelMapping);
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException | InvalidBindingException e1) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException | InvalidBindingException e1) {
 				e1.printStackTrace();
 			}
 

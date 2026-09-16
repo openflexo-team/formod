@@ -40,7 +40,6 @@ package org.openflexo.module.formose.model.action;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 
 import org.openflexo.ApplicationContext;
@@ -187,7 +186,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
 			throw new FlexoException(e);
-		} catch (InvocationTargetException e) {
+		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 			throw new FlexoException(e);
 		} catch (InvalidBindingException e) {
@@ -215,7 +214,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 			} catch (NullReferenceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (InvocationTargetException e) {
+			} catch (ReflectiveOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvalidBindingException e) {

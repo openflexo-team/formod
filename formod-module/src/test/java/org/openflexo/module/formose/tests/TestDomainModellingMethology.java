@@ -45,7 +45,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -169,7 +168,7 @@ public class TestDomainModellingMethology extends OpenflexoProjectAtRunTimeTestC
 	@TestOrder(15)
 	@Category(UITest.class)
 	public void givesProjectFormoseNature() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("givesProjectFormoseNature");
 
@@ -216,7 +215,7 @@ public class TestDomainModellingMethology extends OpenflexoProjectAtRunTimeTestC
 	@TestOrder(16)
 	@Category(UITest.class)
 	public void instantiateSysMLKaosMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("instantiateSysMLKaosMethodology");
 
@@ -245,7 +244,7 @@ public class TestDomainModellingMethology extends OpenflexoProjectAtRunTimeTestC
 	@TestOrder(17)
 	@Category(UITest.class)
 	public void instantiateDomainModelMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("instantiateDomainModelMethodology");
 

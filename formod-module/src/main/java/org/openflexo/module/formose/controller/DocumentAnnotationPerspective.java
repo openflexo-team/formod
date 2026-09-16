@@ -115,7 +115,7 @@ public class DocumentAnnotationPerspective extends FormosePerspective {
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoObject object) {
+	public ModuleView<?> createModuleViewForMasterObject(FlexoObject object) {
 
 		if (object instanceof FormoseProjectNature) {
 			return new DocumentAnnotationModuleView((FormoseProjectNature) object, getController(), this);
@@ -165,12 +165,12 @@ public class DocumentAnnotationPerspective extends FormosePerspective {
 		}
 
 		// In all other cases...
-		return super.createModuleViewForObject(object);
+		return super.createModuleViewForMasterObject(object);
 
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean isRepresentableInModuleView(FlexoObject object) {
 		if (object instanceof FormoseProjectNature) {
 			return true;
 		}
@@ -189,7 +189,7 @@ public class DocumentAnnotationPerspective extends FormosePerspective {
 				return true;
 			}
 		}
-		return super.hasModuleViewForObject(object);
+		return super.isRepresentableInModuleView(object);
 	}
 
 	@Override

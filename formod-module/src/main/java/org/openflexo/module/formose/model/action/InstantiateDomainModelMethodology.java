@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.model.action;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 
 import org.openflexo.ApplicationContext;
@@ -150,7 +149,7 @@ public class InstantiateDomainModelMethodology extends FMSAction<InstantiateDoma
 			} catch (NullReferenceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (InvocationTargetException e) {
+			} catch (ReflectiveOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvalidBindingException e) {

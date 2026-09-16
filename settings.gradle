@@ -1,6 +1,7 @@
 include 'formod-app',
         'formod-module',
         'formod-rc',
+        'formod-test',
         'b-ta',
         'b-ta-parser',
         'b-ta-ui',

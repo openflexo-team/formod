@@ -48,7 +48,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -191,7 +190,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@TestOrder(15)
 	@Category(UITest.class)
 	public void givesProjectFormoseNature() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("givesProjectFormoseNature");
 
@@ -238,7 +237,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@TestOrder(16)
 	@Category(UITest.class)
 	public void instantiateSysMLKaosMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("instantiateSysMLKaosMethodology");
 
@@ -302,7 +301,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	}
 
 	private FlexoConceptInstance dropFunctionalGoal(String name, double x, double y) throws SaveResourceException, TypeMismatchException,
-			NullReferenceException, InvocationTargetException, InvalidBindingException {
+			NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 
 		FlexoConcept functionalGoalGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("FunctionalGoalGR");
 		assertNotNull(functionalGoalGR);
@@ -327,7 +326,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	}
 
 	private FlexoConceptInstance refinesGoal(FlexoConceptInstance childConcept, FlexoConceptInstance parentConcept)
-			throws SaveResourceException, TypeMismatchException, NullReferenceException, InvocationTargetException,
+			throws SaveResourceException, TypeMismatchException, NullReferenceException, ReflectiveOperationException,
 			InvalidBindingException {
 
 		FlexoConcept refinementGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("RefinementGR");
@@ -346,7 +345,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	}
 
 	private FlexoConceptInstance refines(FlexoConceptInstance childConcept, FlexoConceptInstance refinement) throws SaveResourceException,
-			TypeMismatchException, NullReferenceException, InvocationTargetException, InvalidBindingException {
+			TypeMismatchException, NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 
 		FlexoConcept refinementGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("ChildRefinmentLinkGR");
 		assertNotNull(refinementGR);
@@ -364,7 +363,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	}
 
 	private FlexoConceptInstance drawGoalGroup(String title, double x1, double y1, double x2, double y2, FlexoConceptInstance... instances)
-			throws SaveResourceException, TypeMismatchException, NullReferenceException, InvocationTargetException,
+			throws SaveResourceException, TypeMismatchException, NullReferenceException, ReflectiveOperationException,
 			InvalidBindingException {
 
 		FlexoConcept goalGroupGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("GoalGroupGR");
@@ -393,7 +392,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@TestOrder(17)
 	@Category(UITest.class)
 	public void instantiateDomainModelMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("instantiateDomainModelMethodology");
 
@@ -425,7 +424,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	}
 
 	private FlexoConceptInstance createDomainModelConcept(String conceptName, FMLRTVirtualModelInstance diagram)
-			throws TypeMismatchException, NullReferenceException, InvocationTargetException, InvalidBindingException {
+			throws TypeMismatchException, NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 		FlexoConcept conceptGR = diagram.getVirtualModel().getFlexoConcept("ConceptGR");
 		assertNotNull(conceptGR);
 		DropScheme dropScheme = (DropScheme) conceptGR.getFlexoBehaviour("dropConceptGRAtTopLevel");
@@ -449,7 +448,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 	private void declareParentConcept(FlexoConceptInstance childConcept, FlexoConceptInstance parentConcept,
 			FMLRTVirtualModelInstance diagram) throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		System.out.println("childConcept=" + childConcept);
 		System.out.println("parentConcept=" + parentConcept);
@@ -492,7 +491,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@TestOrder(19)
 	@Category(UITest.class)
 	public void instantiateBMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("instantiateBMethodology");
 
@@ -557,7 +556,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	 * @throws ResourceLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws InvalidBindingException
-	 * @throws InvocationTargetException
+	 * @throws ReflectiveOperationException
 	 * @throws NullReferenceException
 	 * @throws TypeMismatchException
 	 */
@@ -565,7 +564,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@TestOrder(100)
 	@Category(UITest.class)
 	public void testReloadProject() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, TypeMismatchException,
-			NullReferenceException, InvocationTargetException, InvalidBindingException {
+			NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 
 		log("testReloadProject");
 

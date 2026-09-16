@@ -67,14 +67,21 @@ import org.openflexo.view.controller.model.NaturePerspective;
  */
 public abstract class FormosePerspective extends NaturePerspective<FormoseProjectNature> {
 
+	private final String name;
 	private AbstractFormoseProjectBrowser projectBrowser;
 	private GenericProjectBrowser genericBrowser;
 
 	public FormosePerspective(String name, final FlexoController controller) {
-		super(name, controller);
+		super(controller);
+		this.name = name;
 		if (controller.getProject() != null) {
 			setProject(controller.getProject());
 		}
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override
@@ -159,7 +166,7 @@ public abstract class FormosePerspective extends NaturePerspective<FormoseProjec
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(FlexoObject object) {
+	public ModuleView<?> createModuleViewForMasterObject(FlexoObject object) {
 
 		if (object instanceof WelcomePanel) {
 			return new FormoseWelcomePanelModuleView((WelcomePanel<FMSModule>) object, getController(), this);
@@ -188,12 +195,12 @@ public abstract class FormosePerspective extends NaturePerspective<FormoseProjec
 		}
 
 		// In all other cases...
-		return super.createModuleViewForObject(object);
+		return super.createModuleViewForMasterObject(object);
 
 	}
 
 	@Override
-	public boolean hasModuleViewForObject(FlexoObject object) {
+	public boolean isRepresentableInModuleView(FlexoObject object) {
 		if (object instanceof WelcomePanel) {
 			return true;
 		}
@@ -215,7 +222,16 @@ public abstract class FormosePerspective extends NaturePerspective<FormoseProjec
 				return true;
 			}
 		}
-		return super.hasModuleViewForObject(object);
+		return super.isRepresentableInModuleView(object);
+	}
+
+	// In Formose perspectives, each representable object is the master object of its own view
+	@Override
+	public FlexoObject getRepresentableMasterObject(FlexoObject object) {
+		if (isRepresentableInModuleView(object)) {
+			return object;
+		}
+		return super.getRepresentableMasterObject(object);
 	}
 
 	@Override
@@ -224,7 +240,7 @@ public abstract class FormosePerspective extends NaturePerspective<FormoseProjec
 			return ((FlexoProject<?>) proposedObject).getNature(FormoseProjectNature.class);
 		}
 
-		if (hasModuleViewForObject(proposedObject)) {
+		if (isRepresentableInModuleView(proposedObject)) {
 			return proposedObject;
 		}
 

@@ -209,7 +209,7 @@ public class DocumentAnnotationModuleView extends FIBModuleView<FormoseProjectNa
 		}
 
 		public void openReference(FlexoConceptInstance reference) {
-			getFlexoController().setCurrentEditedObjectAsModuleView(reference.getVirtualModelInstance(),
+			getFlexoController().setCurrentEditedObject(reference.getVirtualModelInstance(),
 					getFlexoController().getDocumentAnnotationPerspective());
 
 			SwingUtilities.invokeLater(new Runnable() {

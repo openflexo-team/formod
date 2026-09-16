@@ -136,7 +136,7 @@ public class ReferencesBrowser extends AbstractFormoseProjectBrowser {
 					}
 					else {
 						// System.out.println("Zut pas le bon document");
-						getFlexoController().setCurrentEditedObjectAsModuleView(abstractDocVMI,
+						getFlexoController().setCurrentEditedObject(abstractDocVMI,
 								getFlexoController().getDocumentAnnotationPerspective());
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override

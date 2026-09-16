@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.model.action;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 
 import org.openflexo.ApplicationContext;
@@ -174,7 +173,7 @@ public class RefineUsingAgentAllocation extends FMSAction<RefineUsingAgentAlloca
 		if (getElementMapping() != null) {
 			try {
 				return getElementMapping().execute("element");
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException | InvalidBindingException e) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException | InvalidBindingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

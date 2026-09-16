@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.controller.action;
 
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
 
@@ -106,7 +105,7 @@ public class InstantiateSysMLKaosMethodologyInitializer
 						.execute("getElementMapping({$element}).mainFunctionalGoalDiagram", action.getElement());
 				getController().selectAndFocusObject(diagramMapping);
 				getController().getSelectionManager().setSelectedObject(diagramMapping);
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException | InvalidBindingException e1) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException | InvalidBindingException e1) {
 				e1.printStackTrace();
 			}
 

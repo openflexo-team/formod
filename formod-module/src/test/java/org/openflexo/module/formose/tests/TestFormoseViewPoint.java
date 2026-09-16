@@ -52,7 +52,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
-import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
+import org.openflexo.foundation.fml.rt.FMLRTModelSlot;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.module.formose.FMSConstants;
@@ -157,7 +157,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		assertNotNull(formoseViewpoint);
 		System.out.println("Found virtual model: " + formoseViewpoint);
 
-		FMLRTVirtualModelInstanceModelSlot formoseVMIModelSlot = (FMLRTVirtualModelInstanceModelSlot) formoseViewpoint
+		FMLRTModelSlot formoseVMIModelSlot = (FMLRTModelSlot) formoseViewpoint
 				.getAccessibleProperty("formoseVMI");
 		assertNotNull(formoseVMIModelSlot);
 		System.out.println("Found " + formoseVMIModelSlot);

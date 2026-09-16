@@ -3,6 +3,8 @@ dependencies {
   implementation project(':formod-module')
   implementation project(':formod-rc')
 
+  testImplementation flexoFoundation()
+  testImplementation flexoUi()
   testImplementation flexoFoundationTest()
   testImplementation flexoUiTest()
 

@@ -1,0 +1,24 @@
+// formod-test - automated tests of the Formose resource center (formod-rc).
+//
+// Two surfaces, both required while formod-rc is migrated off the deprecated .fml.xml serialization:
+// - FormodValidationTest checks that every VirtualModel of formod-rc parses and raises no FML
+//   validation error;
+// - FormodAutomatedTests runs the .fmlscript scenarios of src/test/resources/FormodAutomatedTests,
+//   which assert business values.
+//
+// The technology adapters are those mounted by formod-rc VirtualModels: diagram, docx, excel and B.
+
+dependencies {
+    testImplementation project(':b-ta')
+    testImplementation testUtils()
+    testImplementation flexoFoundation()
+    testImplementation flexoFoundationTest()
+    testImplementation fmlCli()
+    testImplementation fmlCliTest()
+    testImplementation diagramConnector()
+    testImplementation docxConnector()
+    testImplementation excelConnector()
+
+    // The resource center under test
+    testRuntimeOnly project(':formod-rc')
+}

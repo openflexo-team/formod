@@ -1,0 +1,14 @@
+// T0 - the Formose resource center is wired, and its root VirtualModels load under their 2.99 URIs
+// (resource center base URI + relative path).
+// Smoke test of the migration off the .fml.xml serialization: red until phases 1 and 2 are done.
+
+methodology = load -r ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
+assert methodology != null;
+assert methodology.name == "Methodology";
+
+formoseCore = load -r ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
+assert formoseCore != null;
+assert formoseCore.getFlexoConcept("Element") != null;
+assert formoseCore.getFlexoConcept("Requirement") != null;
+
+log "Test PASSED: T0 - Formose resource center wired";

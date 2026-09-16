@@ -45,7 +45,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.junit.Test;
@@ -170,7 +169,7 @@ public class TestSysMLKaosMethology extends OpenflexoProjectAtRunTimeTestCaseWit
 	@TestOrder(15)
 	@Category(UITest.class)
 	public void givesProjectFormoseNature() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("givesProjectFormoseNature");
 
@@ -217,7 +216,7 @@ public class TestSysMLKaosMethology extends OpenflexoProjectAtRunTimeTestCaseWit
 	@TestOrder(16)
 	@Category(UITest.class)
 	public void instantiateSysMLKaosMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("instantiateSysMLKaosMethodology");
 
@@ -256,7 +255,7 @@ public class TestSysMLKaosMethology extends OpenflexoProjectAtRunTimeTestCaseWit
 	@Test
 	@TestOrder(17)
 	@Category(UITest.class)
-	public void dropFunctionalGoal() throws SaveResourceException, TypeMismatchException, NullReferenceException, InvocationTargetException,
+	public void dropFunctionalGoal() throws SaveResourceException, TypeMismatchException, NullReferenceException, ReflectiveOperationException,
 			InvalidBindingException {
 
 		FlexoConcept functionalGoalGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("FunctionalGoalGR");
@@ -282,7 +281,7 @@ public class TestSysMLKaosMethology extends OpenflexoProjectAtRunTimeTestCaseWit
 	@Test
 	@TestOrder(18)
 	@Category(UITest.class)
-	public void dropAgent() throws SaveResourceException, TypeMismatchException, NullReferenceException, InvocationTargetException,
+	public void dropAgent() throws SaveResourceException, TypeMismatchException, NullReferenceException, ReflectiveOperationException,
 			InvalidBindingException {
 
 		FlexoConcept agentGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("SoftwareAgentGR");
@@ -307,7 +306,7 @@ public class TestSysMLKaosMethology extends OpenflexoProjectAtRunTimeTestCaseWit
 	@Test
 	@TestOrder(19)
 	@Category(UITest.class)
-	public void assignAgent() throws SaveResourceException, TypeMismatchException, NullReferenceException, InvocationTargetException,
+	public void assignAgent() throws SaveResourceException, TypeMismatchException, NullReferenceException, ReflectiveOperationException,
 			InvalidBindingException {
 
 		FlexoConcept agentAssignmentGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("AgentAssignmentGR");
@@ -338,7 +337,7 @@ public class TestSysMLKaosMethology extends OpenflexoProjectAtRunTimeTestCaseWit
 	@TestOrder(20)
 	@Category(UITest.class)
 	public void refineUsingAgentAllocation() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			InvocationTargetException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException {
 
 		log("refineUsingAgentAllocation");
 

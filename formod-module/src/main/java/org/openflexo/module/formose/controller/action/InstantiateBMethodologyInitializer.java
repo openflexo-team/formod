@@ -38,7 +38,6 @@
 
 package org.openflexo.module.formose.controller.action;
 
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
 
@@ -105,7 +104,7 @@ public class InstantiateBMethodologyInitializer extends ActionInitializer<Instan
 						.execute("getBElementMapping({$element}).topLevelBMappings.get(0)", action.getElement());
 				getController().selectAndFocusObject(topLevelMapping);
 				getController().getSelectionManager().setSelectedObject(topLevelMapping);
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException | InvalidBindingException e1) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException | InvalidBindingException e1) {
 				e1.printStackTrace();
 			}
 
