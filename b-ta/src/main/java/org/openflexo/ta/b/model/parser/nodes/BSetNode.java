@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.model.parser.nodes;
 
+import org.openflexo.p2pp.PrettyPrintContext.Indentation;
 import org.openflexo.p2pp.RawSource.RawSourceFragment;
 import org.openflexo.ta.b.model.BSet;
 import org.openflexo.ta.b.model.BSetValue;
@@ -92,9 +93,9 @@ public class BSetNode extends BObjectNode<PSet, BSet> {
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendDynamicContents(() -> getModelObject().getName(), getSetNameFragment());
+		append(dynamicContents(() -> getModelObject().getName()), getSetNameFragment());
 
-		appendToChildrenPrettyPrintContents(" = {", ", ", () -> getModelObject().getEnumeratedValues(), "", "}", BSetValue.class);
+		append(childrenContents(" = {", ", ", () -> getModelObject().getEnumeratedValues(), "", "}", Indentation.DoNotIndent, BSetValue.class));
 
 	}
 

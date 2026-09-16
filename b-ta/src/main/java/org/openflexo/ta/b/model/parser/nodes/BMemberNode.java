@@ -68,7 +68,7 @@ public abstract class BMemberNode<N extends Node, T extends BMember> extends BOb
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendDynamicContents(() -> getModelObject().getName(), getMemberNameFragment());
+		append(dynamicContents(() -> getModelObject().getName()), getMemberNameFragment());
 	}
 
 	protected abstract RawSourceFragment getMemberNameFragment();

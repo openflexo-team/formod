@@ -72,9 +72,10 @@ public abstract class BBinaryPredicatePredicateNode<N extends Node, T extends BB
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getLeft(), "", Indentation.DoNotIndent);
-		appendStaticContents(" ", getOperator() + " ", null);// TODO: match fragment
-		appendToChildPrettyPrintContents(LINE_SEPARATOR, () -> getModelObject().getRight(), ")", Indentation.DoNotIndent);
+		append(childContents("(", () -> getModelObject().getLeft(), "", Indentation.DoNotIndent));
+		append(staticContents(" ", getOperator(), " "), operatorFragment(getOperator(), getModelObject().getLeft(), getModelObject().getRight()),
+				"Operator");
+		append(childContents(LINE_SEPARATOR, () -> getModelObject().getRight(), ")", Indentation.DoNotIndent));
 	}
 
 	public abstract String getOperator();

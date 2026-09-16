@@ -72,8 +72,14 @@ public class BPowSubsetExpressionNode extends BExpressionNode<APowSubsetExpressi
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("POW", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent);
+		append(staticContents("POW"), leadingKeywordFragment("POW"), "Keyword");
+		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
+	}
+
+	// The B grammar drops the closing ")" token
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { ")" };
 	}
 
 }

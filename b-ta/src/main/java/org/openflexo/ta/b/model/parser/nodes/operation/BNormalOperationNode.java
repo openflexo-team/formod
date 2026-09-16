@@ -87,10 +87,10 @@ public class BNormalOperationNode extends BOperationNode<AOperation, BNormalOper
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("", ",", () -> getModelObject().getReturnValues(), "", " <-- ", BExpression.class);
-		appendDynamicContents(() -> getModelObject().getName(), getOperationNameFragment());
-		appendToChildrenPrettyPrintContents("(", ", ", () -> getModelObject().getParameters(), "", ")", BExpression.class);
-		appendToChildPrettyPrintContents(" = ", () -> getModelObject().getOperationBody(), "", Indentation.DoNotIndent);
+		append(childrenContents("", ",", () -> getModelObject().getReturnValues(), "", " <-- ", Indentation.DoNotIndent, BExpression.class));
+		append(dynamicContents(() -> getModelObject().getName()), getOperationNameFragment());
+		append(childrenContents("(", ", ", () -> getModelObject().getParameters(), "", ")", Indentation.DoNotIndent, BExpression.class));
+		append(childContents(" = ", () -> getModelObject().getOperationBody(), "", Indentation.DoNotIndent));
 	}
 
 	protected RawSourceFragment getOperationNameFragment() {

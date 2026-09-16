@@ -72,7 +72,7 @@ public class BIdentifierExpressionNode extends BExpressionNode<AIdentifierExpres
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendDynamicContents(() -> getModelObject().getIdentifier(), getIdentifierFragment());
+		append(dynamicContents(() -> getModelObject().getIdentifier()), getIdentifierFragment());
 	}
 
 	protected RawSourceFragment getIdentifierFragment() {

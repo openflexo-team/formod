@@ -81,7 +81,7 @@ public class BBecomeElementOfSubstitutionNode extends BSubstitutionNode<ABecomes
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("", ",", () -> getModelObject().getIdentifiers(), "", " :: ", BExpression.class);
-		appendToChildPrettyPrintContents("", () -> getModelObject().getSet(), "", Indentation.DoNotIndent);
+		append(childrenContents("", ",", () -> getModelObject().getIdentifiers(), "", " :: ", Indentation.DoNotIndent, BExpression.class));
+		append(childContents("", () -> getModelObject().getSet(), "", Indentation.DoNotIndent));
 	}
 }

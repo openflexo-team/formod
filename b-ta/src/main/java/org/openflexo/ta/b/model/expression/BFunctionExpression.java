@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
@@ -104,5 +105,8 @@ public interface BFunctionExpression extends BExpression {
 
 	@Remover(PARAMETERS_KEY)
 	public void removeFromParameters(BExpression anExpression);
+
+	@Reindexer(PARAMETERS_KEY)
+	public void moveParameterToIndex(BExpression aParameter, int index);
 
 }

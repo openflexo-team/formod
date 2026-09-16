@@ -72,8 +72,8 @@ public class BReverseExpressionNode extends BExpressionNode<AReverseExpression, 
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent);
-		appendStaticContents("~", null);// TODO: match fragment
+		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
+		append(staticContents("~"), trailingKeywordFragment("~"), "Reverse");
 	}
 
 }

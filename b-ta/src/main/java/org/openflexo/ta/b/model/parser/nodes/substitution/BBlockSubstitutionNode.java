@@ -73,8 +73,8 @@ public class BBlockSubstitutionNode extends BSubstitutionNode<ABlockSubstitution
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendStaticContents(LINE_SEPARATOR, "BEGIN", LINE_SEPARATOR, null);// TODO: match fragment
-		appendToChildPrettyPrintContents("", () -> getModelObject().getSubstitution(), LINE_SEPARATOR, Indentation.Indent);
-		appendStaticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR, null);// TODO: match fragment
+		append(staticContents(LINE_SEPARATOR, "BEGIN", LINE_SEPARATOR), leadingKeywordFragment("BEGIN"), "Begin");
+		append(childContents("", () -> getModelObject().getSubstitution(), LINE_SEPARATOR, Indentation.Indent));
+		append(staticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR), trailingKeywordFragment("END"), "End");
 	}
 }

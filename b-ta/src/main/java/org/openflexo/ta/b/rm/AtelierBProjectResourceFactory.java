@@ -407,10 +407,11 @@ public class AtelierBProjectResourceFactory extends
 		System.out.println("Generating blank AtelierB project in : " + targetDirectory);
 		Resource blankBProject = ResourceLocator.locateResource("AtelierB/BlankAtelierBProject");
 
-		FileUtils.copyResourceToDir(blankBProject, targetDirectory.getParentFile(), CopyStrategy.REPLACE);
+		// copyResourceToDir() copies the CONTENTS of the resource into the destination directory
+		targetDirectory.mkdirs();
+		FileUtils.copyResourceToDir(blankBProject, targetDirectory, CopyStrategy.REPLACE);
 
 		String name = targetDirectory.getName();
-		FileUtils.rename(new File(targetDirectory.getParentFile(), "BlankAtelierBProject"), targetDirectory);
 		File bdpDir = new File(targetDirectory, "bdp");
 		FileUtils.rename(new File(bdpDir, "BlankAtelierBProject.dot"), new File(bdpDir, name + ".dot"));
 		FileUtils.rename(new File(bdpDir, "BlankAtelierBProject.db"), new File(bdpDir, name + ".db"));

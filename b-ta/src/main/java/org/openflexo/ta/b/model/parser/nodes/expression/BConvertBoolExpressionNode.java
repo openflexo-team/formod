@@ -73,8 +73,19 @@ public class BConvertBoolExpressionNode extends BExpressionNode<AConvertBoolExpr
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("bool", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getPredicate(), ")", Indentation.DoNotIndent);
+		append(staticContents("bool"), leadingKeywordFragment("bool"), "Keyword");
+		append(childContents("(", () -> getModelObject().getPredicate(), ")", Indentation.DoNotIndent));
+	}
+
+	// The B grammar drops the "bool(" and ")" tokens
+	@Override
+	protected String[] getLeadingTextsOutOfAST() {
+		return new String[] { "bool", "(" };
+	}
+
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { ")" };
 	}
 
 }

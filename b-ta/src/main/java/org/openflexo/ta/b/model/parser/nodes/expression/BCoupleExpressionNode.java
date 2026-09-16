@@ -77,9 +77,10 @@ public class BCoupleExpressionNode extends BExpressionNode<ACoupleExpression, BC
 		super.preparePrettyPrint(hasParsedVersion);
 
 		// TODO: what for expression cardinality different from 2 ????
-		appendToChildPrettyPrintContents("", () -> getModelObject().getExpressions().get(0), "", Indentation.DoNotIndent);
-		appendStaticContents(" ", "|->" + " ", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("", () -> getModelObject().getExpressions().get(1), "", Indentation.DoNotIndent);
+		append(childContents("", () -> getModelObject().getExpressions().get(0), "", Indentation.DoNotIndent));
+		append(staticContents(" ", "|->", " "),
+				operatorFragment("|->", getModelObject().getExpressions().get(0), getModelObject().getExpressions().get(1)), "Operator");
+		append(childContents("", () -> getModelObject().getExpressions().get(1), "", Indentation.DoNotIndent));
 	}
 
 }

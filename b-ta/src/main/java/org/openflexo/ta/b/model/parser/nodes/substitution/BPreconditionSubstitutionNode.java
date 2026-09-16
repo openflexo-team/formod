@@ -79,9 +79,16 @@ public class BPreconditionSubstitutionNode extends BSubstitutionNode<APreconditi
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "PRE" + " ", () -> getModelObject().getPredicate(), "", Indentation.DoNotIndent);
+		append(childContents(LINE_SEPARATOR + "PRE" + " ", () -> getModelObject().getPredicate(), "", Indentation.DoNotIndent));
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "THEN" + " ", () -> getModelObject().getSubstitution(), "",
-				Indentation.DoNotIndent);
+		append(childContents(LINE_SEPARATOR + "THEN" + " ", () -> getModelObject().getSubstitution(), "", Indentation.DoNotIndent));
+
+		append(staticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR), trailingKeywordFragment("END"), "End");
+	}
+
+	// The B grammar drops the END token of a PRE substitution
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { "END" };
 	}
 }

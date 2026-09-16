@@ -51,6 +51,7 @@ import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
@@ -113,6 +114,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	@Remover(EXTENDS_CLAUSES_KEY)
 	public void removeFromExtendsClauses(BExtendsClause aVisibilityClause);
 
+	@Reindexer(EXTENDS_CLAUSES_KEY)
+	public void moveExtendsClauseToIndex(BExtendsClause aExtendsClause, int index);
+
 	@Getter(value = IMPORTS_CLAUSES_KEY, cardinality = Cardinality.LIST, inverse = BVisibilityClause.COMPONENT_KEY)
 	@XMLElement
 	public List<BImportsClause> getImportsClauses();
@@ -123,6 +127,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 	@Remover(IMPORTS_CLAUSES_KEY)
 	public void removeFromImportsClauses(BImportsClause aVisibilityClause);
+
+	@Reindexer(IMPORTS_CLAUSES_KEY)
+	public void moveImportsClauseToIndex(BImportsClause aImportsClause, int index);
 
 	@Getter(value = INCLUDES_CLAUSES_KEY, cardinality = Cardinality.LIST, inverse = BVisibilityClause.COMPONENT_KEY)
 	@XMLElement
@@ -135,6 +142,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	@Remover(INCLUDES_CLAUSES_KEY)
 	public void removeFromIncludesClauses(BIncludesClause aVisibilityClause);
 
+	@Reindexer(INCLUDES_CLAUSES_KEY)
+	public void moveIncludesClauseToIndex(BIncludesClause aIncludesClause, int index);
+
 	@Getter(value = SEES_CLAUSES_KEY, cardinality = Cardinality.LIST, inverse = BVisibilityClause.COMPONENT_KEY)
 	@XMLElement
 	public List<BSeesClause> getSeesClauses();
@@ -145,6 +155,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 	@Remover(SEES_CLAUSES_KEY)
 	public void removeFromSeesClauses(BSeesClause aVisibilityClause);
+
+	@Reindexer(SEES_CLAUSES_KEY)
+	public void moveSeesClauseToIndex(BSeesClause aSeesClause, int index);
 
 	@Getter(value = USES_CLAUSES_KEY, cardinality = Cardinality.LIST, inverse = BVisibilityClause.COMPONENT_KEY)
 	@XMLElement
@@ -157,6 +170,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	@Remover(USES_CLAUSES_KEY)
 	public void removeFromUsesClauses(BUsesClause aVisibilityClause);
 
+	@Reindexer(USES_CLAUSES_KEY)
+	public void moveUsesClauseToIndex(BUsesClause aUsesClause, int index);
+
 	@Getter(value = SETS_KEY, cardinality = Cardinality.LIST, inverse = BSet.COMPONENT_KEY)
 	@XMLElement
 	public List<BSet> getSets();
@@ -167,6 +183,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 	@Remover(SETS_KEY)
 	public void removeFromSets(BSet aSet);
+
+	@Reindexer(SETS_KEY)
+	public void moveSetToIndex(BSet aSet, int index);
 
 	@Getter(value = ABSTRACT_CONSTANTS_KEY, cardinality = Cardinality.LIST, inverse = BAbstractConstant.COMPONENT_KEY)
 	@XMLElement
@@ -179,6 +198,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	@Remover(ABSTRACT_CONSTANTS_KEY)
 	public void removeFromAbstractConstants(BAbstractConstant aConstant);
 
+	@Reindexer(ABSTRACT_CONSTANTS_KEY)
+	public void moveAbstractConstantToIndex(BAbstractConstant aAbstractConstant, int index);
+
 	@Getter(value = CONCRETE_CONSTANTS_KEY, cardinality = Cardinality.LIST, inverse = BConcreteConstant.COMPONENT_KEY)
 	@XMLElement
 	public List<BConcreteConstant> getConcreteConstants();
@@ -189,6 +211,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 	@Remover(CONCRETE_CONSTANTS_KEY)
 	public void removeFromConcreteConstants(BConcreteConstant aConstant);
+
+	@Reindexer(CONCRETE_CONSTANTS_KEY)
+	public void moveConcreteConstantToIndex(BConcreteConstant aConcreteConstant, int index);
 
 	@Getter(value = ABSTRACT_VARIABLES_KEY, cardinality = Cardinality.LIST, inverse = BAbstractVariable.COMPONENT_KEY)
 	@XMLElement
@@ -201,6 +226,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	@Remover(ABSTRACT_VARIABLES_KEY)
 	public void removeFromAbstractVariables(BAbstractVariable aVariable);
 
+	@Reindexer(ABSTRACT_VARIABLES_KEY)
+	public void moveAbstractVariableToIndex(BAbstractVariable aAbstractVariable, int index);
+
 	@Getter(value = CONCRETE_VARIABLES_KEY, cardinality = Cardinality.LIST, inverse = BConcreteVariable.COMPONENT_KEY)
 	@XMLElement
 	public List<BConcreteVariable> getConcreteVariables();
@@ -211,6 +239,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 	@Remover(CONCRETE_VARIABLES_KEY)
 	public void removeFromConcreteVariables(BConcreteVariable aVariable);
+
+	@Reindexer(CONCRETE_VARIABLES_KEY)
+	public void moveConcreteVariableToIndex(BConcreteVariable aConcreteVariable, int index);
 
 	/**
 	 * Return predicate contained in PROPERTIES
@@ -272,6 +303,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	@Remover(ASSERTIONS_KEY)
 	public void removeFromAssertions(BPredicate aPredicate);
 
+	@Reindexer(ASSERTIONS_KEY)
+	public void moveAssertionToIndex(BPredicate aAssertion, int index);
+
 	@Getter(value = OPERATIONS_KEY, cardinality = Cardinality.LIST, inverse = BSet.COMPONENT_KEY)
 	@XMLElement
 	public List<BOperation> getOperations();
@@ -282,6 +316,9 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 	@Remover(OPERATIONS_KEY)
 	public void removeFromOperations(BOperation anOperation);
+
+	@Reindexer(OPERATIONS_KEY)
+	public void moveOperationToIndex(BOperation aOperation, int index);
 
 	@Override
 	public BResource getResource();

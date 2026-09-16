@@ -72,8 +72,19 @@ public class BDomainExpressionNode extends BExpressionNode<ADomainExpression, BD
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("dom", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent);
+		append(staticContents("dom"), leadingKeywordFragment("dom"), "Keyword");
+		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
+	}
+
+	// The B grammar drops the "dom(" and ")" tokens
+	@Override
+	protected String[] getLeadingTextsOutOfAST() {
+		return new String[] { "dom", "(" };
+	}
+
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { ")" };
 	}
 
 }

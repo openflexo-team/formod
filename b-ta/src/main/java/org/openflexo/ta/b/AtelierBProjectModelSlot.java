@@ -55,6 +55,7 @@ import org.openflexo.ta.b.fml.atelierb.AddAtelierBComponent;
 import org.openflexo.ta.b.fml.atelierb.AtelierBComponentActorReference;
 import org.openflexo.ta.b.fml.atelierb.AtelierBComponentRole;
 import org.openflexo.ta.b.model.atelierb.AtelierBProject;
+import org.openflexo.ta.b.rm.AtelierBProjectResource;
 
 /**
  * Implementation of the {@link ModelSlot} class referencing a AtelierB project
@@ -70,9 +71,9 @@ import org.openflexo.ta.b.model.atelierb.AtelierBProject;
 @ImplementationClass(AtelierBProjectModelSlot.AtelierBProjectModelSlotImpl.class)
 @XMLElement
 @FML("AtelierBProjectModelSlot")
-public interface AtelierBProjectModelSlot extends FreeModelSlot<AtelierBProject> {
+public interface AtelierBProjectModelSlot extends FreeModelSlot<AtelierBProject, AtelierBProjectResource> {
 
-	public static abstract class AtelierBProjectModelSlotImpl extends FreeModelSlotImpl<AtelierBProject>
+	public static abstract class AtelierBProjectModelSlotImpl extends FreeModelSlotImpl<AtelierBProject, AtelierBProjectResource>
 			implements AtelierBProjectModelSlot {
 
 		private static final Logger logger = Logger.getLogger(AtelierBProjectModelSlot.class.getPackage().getName());

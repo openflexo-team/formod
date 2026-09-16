@@ -71,7 +71,7 @@ public interface BObjectRole<T extends BObject> extends FlexoRole<T> {
 		@Override
 		public ActorReference<T> makeActorReference(T object, FlexoConceptInstance fci) {
 			// We use here the generic ModelObjectActorReference scheme (see implementation of serialization identifier in BResource)
-			AbstractVirtualModelInstanceModelFactory<?> factory = fci.getFactory();
+			AbstractVirtualModelInstanceModelFactory factory = fci.getFactory();
 			ActorReference<T> returned = factory.newInstance(ModelObjectActorReference.class);
 			returned.setFlexoRole(this);
 			returned.setFlexoConceptInstance(fci);

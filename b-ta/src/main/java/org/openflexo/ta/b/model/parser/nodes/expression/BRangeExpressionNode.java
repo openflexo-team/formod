@@ -72,8 +72,14 @@ public class BRangeExpressionNode extends BExpressionNode<ARangeExpression, BRan
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("ran", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent);
+		append(staticContents("ran"), leadingKeywordFragment("ran"), "Keyword");
+		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
+	}
+
+	// The B grammar drops the closing ")" token
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { ")" };
 	}
 
 }

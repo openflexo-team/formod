@@ -87,7 +87,7 @@ public interface AtelierBComponentRole extends FlexoRole<AtelierBComponent> {
 
 		@Override
 		public ActorReference<? extends AtelierBComponent> makeActorReference(AtelierBComponent object, FlexoConceptInstance fci) {
-			AbstractVirtualModelInstanceModelFactory<?> factory = fci.getFactory();
+			AbstractVirtualModelInstanceModelFactory factory = fci.getFactory();
 			AtelierBComponentActorReference returned = factory.newInstance(AtelierBComponentActorReference.class);
 			returned.setFlexoRole(this);
 			returned.setFlexoConceptInstance(fci);

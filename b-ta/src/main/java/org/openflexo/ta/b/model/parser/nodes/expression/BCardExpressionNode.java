@@ -72,8 +72,19 @@ public class BCardExpressionNode extends BExpressionNode<ACardExpression, BCardE
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("card", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent);
+		append(staticContents("card"), leadingKeywordFragment("card"), "Keyword");
+		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
+	}
+
+	// The B grammar drops the "card(" and ")" tokens
+	@Override
+	protected String[] getLeadingTextsOutOfAST() {
+		return new String[] { "card", "(" };
+	}
+
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { ")" };
 	}
 
 }

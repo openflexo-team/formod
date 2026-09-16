@@ -70,10 +70,9 @@ public class BImplementationNode extends BComponentNode<AImplementationMachinePa
 
 	@Override
 	protected void performPrettyPrintHeader(boolean hasParsedVersion) {
-		appendStaticContents("", getKeyword(), LINE_SEPARATOR, null);// TODO: match fragment
-		appendDynamicContents(INDENTATION, () -> getModelObject().getName(), getComponentNameFragment());
-		appendStaticContents(LINE_SEPARATOR, "REFINES", null);// TODO: match fragment
-		appendDynamicContents(" ", () -> getModelObject().getRefinesComponentName(), getRefinesComponentNameFragment());
+		super.performPrettyPrintHeader(hasParsedVersion);
+		append(staticContents(LINE_SEPARATOR, "REFINES", ""), getRefinesKeywordFragment(), "Refines");
+		append(dynamicContents(" ", () -> getModelObject().getRefinesComponentName()), getRefinesComponentNameFragment(), "RefinesName");
 	}
 
 	@Override
@@ -85,6 +84,14 @@ public class BImplementationNode extends BComponentNode<AImplementationMachinePa
 	protected RawSourceFragment getComponentNameFragment() {
 		if (getASTNode() != null) {
 			return getFragment(((AMachineHeader) getASTNode().getHeader()).getName());
+		}
+		return null;
+	}
+
+	protected RawSourceFragment getRefinesKeywordFragment() {
+		if (getComponentNameFragment() != null && getRefinesComponentNameFragment() != null) {
+			return findFragmentForward("REFINES", getComponentNameFragment().getEndPosition(),
+					getRefinesComponentNameFragment().getStartPosition());
 		}
 		return null;
 	}

@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.model.parser.nodes.substitution;
 
+import org.openflexo.p2pp.PrettyPrintContext.Indentation;
 import org.openflexo.ta.b.model.BExpression;
 import org.openflexo.ta.b.model.parser.BSemanticsAnalyzer;
 import org.openflexo.ta.b.model.parser.nodes.BExpressionNode;
@@ -81,8 +82,8 @@ public class BAssignSubstitutionNode extends BSubstitutionNode<AAssignSubstituti
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("", ",", () -> getModelObject().getLeftExpressions(), "", " := ", BExpression.class);
-		appendToChildrenPrettyPrintContents("", ",", () -> getModelObject().getRightExpressions(), "", "", BExpression.class);
+		append(childrenContents("", ",", () -> getModelObject().getLeftExpressions(), "", " := ", Indentation.DoNotIndent, BExpression.class));
+		append(childrenContents("", ",", () -> getModelObject().getRightExpressions(), "", "", Indentation.DoNotIndent, BExpression.class));
 	}
 
 }

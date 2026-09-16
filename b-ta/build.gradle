@@ -1,6 +1,6 @@
 dependencies {
   // openflexo dep
-  implementation project(':b-ta-parser')
+  api project(':b-ta-parser') // parser types (Node, EntryPointKind) are part of b-ta's API
   implementation flexoFoundation()
   //implementation flexoOntology()
   // external dep

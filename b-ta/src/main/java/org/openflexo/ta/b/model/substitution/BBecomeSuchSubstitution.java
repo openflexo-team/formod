@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
@@ -85,6 +86,9 @@ public interface BBecomeSuchSubstitution extends BSubstitution {
 
 	@Remover(IDENTIFIERS_KEY)
 	public void removeFromIdentifiers(BExpression anExpression);
+
+	@Reindexer(IDENTIFIERS_KEY)
+	public void moveIdentifierToIndex(BExpression aIdentifier, int index);
 
 	/**
 	 * Return predicate

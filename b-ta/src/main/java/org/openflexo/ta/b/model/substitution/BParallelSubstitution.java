@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.model.BSubstitution;
@@ -75,5 +76,8 @@ public interface BParallelSubstitution extends BSubstitution {
 
 	@Remover(SUBSTITUTIONS_KEY)
 	public void removeFromSubstitutions(BSubstitution aSubstitution);
+
+	@Reindexer(SUBSTITUTIONS_KEY)
+	public void moveSubstitutionToIndex(BSubstitution aSubstitution, int index);
 
 }

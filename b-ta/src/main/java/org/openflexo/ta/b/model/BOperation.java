@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
@@ -86,6 +87,9 @@ public interface BOperation extends BNamedObject, InnerBComponent {
 	@Remover(PARAMETERS_KEY)
 	public void removeFromParameters(BExpression anExpression);
 
+	@Reindexer(PARAMETERS_KEY)
+	public void moveParameterToIndex(BExpression aParameter, int index);
+
 	/**
 	 * Return return values
 	 * 
@@ -101,6 +105,9 @@ public interface BOperation extends BNamedObject, InnerBComponent {
 
 	@Remover(RETURN_VALUES_KEY)
 	public void removeFromReturnValues(BExpression anExpression);
+
+	@Reindexer(RETURN_VALUES_KEY)
+	public void moveReturnValueToIndex(BExpression aReturnValue, int index);
 
 	@PropertyIdentifier(type = String.class)
 	public static final String NAME_KEY = "name";

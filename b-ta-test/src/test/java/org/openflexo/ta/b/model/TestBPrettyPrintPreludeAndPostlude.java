@@ -79,7 +79,7 @@ public class TestBPrettyPrintPreludeAndPostlude extends AbstractBTest {
 			reparsedComponent.setResource(component.getResource());
 			// System.out.println("component=" + component);
 			System.out.println("reparsedComponent=" + reparsedComponent);
-			assertTrue(component.equalsObject(reparsedComponent));
+			assertTrue(equalsIgnoringPrettyPrintDelegate(component, reparsedComponent));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -96,7 +96,7 @@ public class TestBPrettyPrintPreludeAndPostlude extends AbstractBTest {
 			reparsedComponent.setResource(component.getResource());
 			// System.out.println("component=" + component);
 			System.out.println("reparsedComponent=" + reparsedComponent);
-			assertTrue(component.equalsObject(reparsedComponent));
+			assertTrue(equalsIgnoringPrettyPrintDelegate(component, reparsedComponent));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -153,9 +153,10 @@ public class TestBPrettyPrintPreludeAndPostlude extends AbstractBTest {
 
 		assertEquals(rawSource.makeFragment(1, 0, 17, 3), rootNode.getLastParsedFragment());
 
+		// The prelude of a first clause is its indentation only: the section keyword (INCLUDES...) is a static contents of its own
 		BIncludesClauseNode includes1 = (BIncludesClauseNode) rootNode.getChildren().get(0);
 		assertEquals(rawSource.makeFragment(7, 1, 7, 10), includes1.getLastParsedFragment());
-		assertEquals(rawSource.makeFragment(5, 11, 7, 1), includes1.getPrelude());
+		assertEquals(rawSource.makeFragment(7, 0, 7, 1), includes1.getPrelude());
 		assertEquals(null, includes1.getPostlude());
 
 		BIncludesClauseNode includes2 = (BIncludesClauseNode) rootNode.getChildren().get(1);
@@ -165,7 +166,7 @@ public class TestBPrettyPrintPreludeAndPostlude extends AbstractBTest {
 
 		BSeesClauseNode sees1 = (BSeesClauseNode) rootNode.getChildren().get(2);
 		assertEquals(rawSource.makeFragment(9, 1, 9, 8), sees1.getLastParsedFragment());
-		assertEquals(rawSource.makeFragment(7, 34, 9, 1), sees1.getPrelude());
+		assertEquals(rawSource.makeFragment(9, 0, 9, 1), sees1.getPrelude());
 		assertEquals(null, sees1.getPostlude());
 
 		BSeesClauseNode sees2 = (BSeesClauseNode) rootNode.getChildren().get(3);
@@ -175,17 +176,17 @@ public class TestBPrettyPrintPreludeAndPostlude extends AbstractBTest {
 
 		BImportsClauseNode import1 = (BImportsClauseNode) rootNode.getChildren().get(4);
 		assertEquals(rawSource.makeFragment(11, 1, 11, 8), import1.getLastParsedFragment());
-		assertEquals(rawSource.makeFragment(9, 18, 11, 1), import1.getPrelude());
+		assertEquals(rawSource.makeFragment(11, 0, 11, 1), import1.getPrelude());
 		assertEquals(null, import1.getPostlude());
 
 		BExtendsClauseNode extends1 = (BExtendsClauseNode) rootNode.getChildren().get(5);
 		assertEquals(rawSource.makeFragment(13, 1, 13, 8), extends1.getLastParsedFragment());
-		assertEquals(rawSource.makeFragment(11, 8, 13, 1), extends1.getPrelude());
+		assertEquals(rawSource.makeFragment(13, 0, 13, 1), extends1.getPrelude());
 		assertEquals(null, extends1.getPostlude());
 
 		BUsesClauseNode uses1 = (BUsesClauseNode) rootNode.getChildren().get(6);
 		assertEquals(rawSource.makeFragment(15, 1, 15, 8), uses1.getLastParsedFragment());
-		assertEquals(rawSource.makeFragment(13, 8, 15, 1), uses1.getPrelude());
+		assertEquals(rawSource.makeFragment(15, 0, 15, 1), uses1.getPrelude());
 		assertEquals(null, uses1.getPostlude());
 
 		BUsesClauseNode uses2 = (BUsesClauseNode) rootNode.getChildren().get(7);

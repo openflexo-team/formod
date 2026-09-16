@@ -39,16 +39,16 @@
 package org.openflexo.ta.b.fml.atelierb;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
+import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.pamela.annotations.DefineValidationRule;
 import org.openflexo.pamela.annotations.Getter;
@@ -148,7 +148,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 		}
 
 		@Override
-		public AtelierBComponent execute(RunTimeEvaluationContext evaluationContext) throws FlexoException {
+		public AtelierBComponent execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			AtelierBComponent newComponent = null;
 
@@ -210,13 +210,13 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 						} catch (SaveResourceException e) {
 							e.printStackTrace();
-							throw new FlexoException(e);
+							throw new FMLExecutionException(e);
 						} catch (ModelDefinitionException e) {
 							e.printStackTrace();
-							throw new FlexoException(e);
+							throw new FMLExecutionException(e);
 						} catch (IOException e) {
 							e.printStackTrace();
-							throw new FlexoException(e);
+							throw new FMLExecutionException(e);
 						}
 
 						resourceData.getAtelierBProjectDefinition().addToComponents(newComponent);
@@ -236,7 +236,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
-			} catch (InvocationTargetException e) {
+			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 			}
 

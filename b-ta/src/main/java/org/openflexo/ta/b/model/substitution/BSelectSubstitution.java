@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
@@ -122,6 +123,9 @@ public interface BSelectSubstitution extends BSubstitution {
 
 	@Remover(WHEN_SUBSTITUTIONS_KEY)
 	public void removeFromWhenSubstitutions(BSubstitution aSubstitution);
+
+	@Reindexer(WHEN_SUBSTITUTIONS_KEY)
+	public void moveWhenSubstitutionToIndex(BSubstitution aWhenSubstitution, int index);
 
 	/**
 	 * Return else substitution

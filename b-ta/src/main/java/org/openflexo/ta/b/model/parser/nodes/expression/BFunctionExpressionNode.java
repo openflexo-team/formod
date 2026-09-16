@@ -79,9 +79,9 @@ public class BFunctionExpressionNode extends BExpressionNode<AFunctionExpression
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildPrettyPrintContents("", () -> getModelObject().getIdentifier(), "", Indentation.DoNotIndent);
+		append(childContents("", () -> getModelObject().getIdentifier(), "", Indentation.DoNotIndent));
 
-		appendToChildrenPrettyPrintContents("(", ", ", () -> getModelObject().getParameters(), "", ")", BExpression.class);
+		append(childrenContents("(", ", ", () -> getModelObject().getParameters(), "", ")", Indentation.DoNotIndent, BExpression.class));
 	}
 
 }

@@ -89,12 +89,12 @@ public class BRefinedOperationNode extends BOperationNode<ARefinedOperation, BRe
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("", ",", () -> getModelObject().getReturnValues(), "", " <-- ", BExpression.class);
-		appendDynamicContents(() -> getModelObject().getName(), getOperationNameFragment());
-		appendDynamicContents(" ", () -> getModelObject().getRefinementKeyword(), getRefinedKeywordFragment());
-		appendDynamicContents(" ", () -> getModelObject().getRefinedOperationName(), getRefinedOperationNameFragment());
-		appendToChildrenPrettyPrintContents("(", ", ", () -> getModelObject().getParameters(), "", ")", BExpression.class);
-		appendToChildPrettyPrintContents(" = ", () -> getModelObject().getOperationBody(), "", Indentation.DoNotIndent);
+		append(childrenContents("", ",", () -> getModelObject().getReturnValues(), "", " <-- ", Indentation.DoNotIndent, BExpression.class));
+		append(dynamicContents(() -> getModelObject().getName()), getOperationNameFragment());
+		append(dynamicContents(" ", () -> getModelObject().getRefinementKeyword()), getRefinedKeywordFragment());
+		append(dynamicContents(" ", () -> getModelObject().getRefinedOperationName()), getRefinedOperationNameFragment());
+		append(childrenContents("(", ", ", () -> getModelObject().getParameters(), "", ")", Indentation.DoNotIndent, BExpression.class));
+		append(childContents(" = ", () -> getModelObject().getOperationBody(), "", Indentation.DoNotIndent));
 	}
 
 	protected RawSourceFragment getOperationNameFragment() {

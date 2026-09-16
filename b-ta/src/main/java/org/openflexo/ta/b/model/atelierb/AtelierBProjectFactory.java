@@ -43,7 +43,7 @@ import java.io.IOException;
 import org.openflexo.foundation.DefaultPamelaResourceModelFactory;
 import org.openflexo.foundation.resource.DirectoryBasedIODelegate;
 import org.openflexo.foundation.resource.SaveResourceException;
-import org.openflexo.pamela.ModelContextLibrary;
+import org.openflexo.pamela.PamelaMetaModelLibrary;
 import org.openflexo.pamela.converter.RelativePathResourceConverter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
@@ -63,7 +63,7 @@ public class AtelierBProjectFactory extends DefaultPamelaResourceModelFactory<At
 	private RelativePathResourceConverter relativePathResourceConverter;
 
 	public AtelierBProjectFactory(AtelierBProjectResource resource, EditingContext editingContext) throws ModelDefinitionException {
-		super(resource, ModelContextLibrary.getModelContext(AtelierBProject.class));
+		super(resource, PamelaMetaModelLibrary.retrieveMetaModel(AtelierBProject.class));
 		setEditingContext(editingContext);
 		addConverter(relativePathResourceConverter = new RelativePathResourceConverter(null));
 		if (resource != null && resource.getIODelegate() != null && resource.getIODelegate().getSerializationArtefactAsResource() != null) {

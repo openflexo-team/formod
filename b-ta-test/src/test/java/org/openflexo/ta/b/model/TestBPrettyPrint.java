@@ -93,7 +93,7 @@ public class TestBPrettyPrint extends AbstractBTest {
 			reparsedComponent.setResource(component.getResource());
 			// System.out.println("component=" + component);
 			System.out.println("reparsedComponent=" + reparsedComponent);
-			assertTrue("Objects are not equals after pretty-print", component.equalsObject(reparsedComponent));
+			assertTrue("Objects are not equals after pretty-print", equalsIgnoringPrettyPrintDelegate(component, reparsedComponent));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -110,7 +110,7 @@ public class TestBPrettyPrint extends AbstractBTest {
 			reparsedComponent.setResource(component.getResource());
 			// System.out.println("component=" + component);
 			System.out.println("reparsedComponent=" + reparsedComponent);
-			assertTrue("Objects are not equals after normalized pretty-print", component.equalsObject(reparsedComponent));
+			assertTrue("Objects are not equals after normalized pretty-print", equalsIgnoringPrettyPrintDelegate(component, reparsedComponent));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

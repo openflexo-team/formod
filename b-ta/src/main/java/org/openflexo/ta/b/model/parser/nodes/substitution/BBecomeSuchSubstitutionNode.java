@@ -81,7 +81,7 @@ public class BBecomeSuchSubstitutionNode extends BSubstitutionNode<ABecomesSuchS
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("", ",", () -> getModelObject().getIdentifiers(), "", " : ", BExpression.class);
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getPredicate(), ")", Indentation.DoNotIndent);
+		append(childrenContents("", ",", () -> getModelObject().getIdentifiers(), "", " : ", Indentation.DoNotIndent, BExpression.class));
+		append(childContents("(", () -> getModelObject().getPredicate(), ")", Indentation.DoNotIndent));
 	}
 }

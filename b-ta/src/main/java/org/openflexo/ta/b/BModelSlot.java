@@ -82,6 +82,7 @@ import org.openflexo.ta.b.fml.editionaction.CreateBSubstitution;
 import org.openflexo.ta.b.fml.editionaction.RemoveBPredicateInBPredicate;
 import org.openflexo.ta.b.fml.editionaction.String2Int;
 import org.openflexo.ta.b.model.BComponent;
+import org.openflexo.ta.b.rm.BResource;
 
 /**
  * Implementation of the {@link ModelSlot} class for the B technology adapter
@@ -103,9 +104,9 @@ import org.openflexo.ta.b.model.BComponent;
 @ImplementationClass(BModelSlot.BModelSlotImpl.class)
 @XMLElement
 @FML("BModelSlot")
-public interface BModelSlot extends FreeModelSlot<BComponent> {
+public interface BModelSlot extends FreeModelSlot<BComponent, BResource> {
 
-	public static abstract class BModelSlotImpl extends FreeModelSlotImpl<BComponent> implements BModelSlot {
+	public static abstract class BModelSlotImpl extends FreeModelSlotImpl<BComponent, BResource> implements BModelSlot {
 
 		private static final Logger logger = Logger.getLogger(BModelSlot.class.getPackage().getName());
 

@@ -42,7 +42,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResourceRepository;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.b.BTechnologyAdapter;
 import org.openflexo.ta.b.model.BComponent;
 
@@ -59,9 +59,9 @@ public interface BResourceRepository<I> extends TechnologyAdapterResourceReposit
 
 	public static <I> BResourceRepository<I> instanciateNewRepository(BTechnologyAdapter technologyAdapter,
 			FlexoResourceCenter<I> resourceCenter) {
-		ModelFactory factory;
+		PamelaModelFactory factory;
 		try {
-			factory = new ModelFactory(BResourceRepository.class);
+			factory = new PamelaModelFactory(BResourceRepository.class);
 			BResourceRepository<I> newRepository = factory.newInstance(BResourceRepository.class);
 			newRepository.setTechnologyAdapter(technologyAdapter);
 			newRepository.setResourceCenter(resourceCenter);

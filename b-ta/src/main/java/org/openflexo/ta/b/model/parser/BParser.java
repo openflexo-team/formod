@@ -183,7 +183,9 @@ public class BParser {
 			}
 
 			// Create a Parser instance.
-			Parser p = new Parser(new CustomLexer(new PushbackReader(reader), entryPointKind));
+			// The lexer may push back several chars when a multi-char operator does not
+			// match (e.g. "X>-3" vs ">->"): the default one-char buffer overflows
+			Parser p = new Parser(new CustomLexer(new PushbackReader(reader, 1024), entryPointKind));
 
 			// Parse the input.
 			Start tree;

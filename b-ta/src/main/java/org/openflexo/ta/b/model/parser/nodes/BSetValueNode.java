@@ -78,7 +78,7 @@ public class BSetValueNode extends BObjectNode<PExpression, BSetValue> {
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendDynamicContents(() -> getModelObject().getName(), getSetValueNameFragment());
+		append(dynamicContents(() -> getModelObject().getName()), getSetValueNameFragment());
 	}
 
 	protected RawSourceFragment getSetValueNameFragment() {

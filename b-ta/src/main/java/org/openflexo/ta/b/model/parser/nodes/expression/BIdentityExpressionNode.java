@@ -72,8 +72,19 @@ public class BIdentityExpressionNode extends BExpressionNode<AIdentityExpression
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("id", null);// TODO: match fragment
-		appendToChildPrettyPrintContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent);
+		append(staticContents("id"), leadingKeywordFragment("id"), "Keyword");
+		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
+	}
+
+	// The B grammar drops the "id(" and ")" tokens
+	@Override
+	protected String[] getLeadingTextsOutOfAST() {
+		return new String[] { "id", "(" };
+	}
+
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { ")" };
 	}
 
 }

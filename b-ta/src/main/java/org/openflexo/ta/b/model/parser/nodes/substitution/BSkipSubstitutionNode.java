@@ -69,6 +69,6 @@ public class BSkipSubstitutionNode extends BSubstitutionNode<ASkipSubstitution, 
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents("skip", null);// TODO: match fragment
+		append(staticContents("skip"), leadingKeywordFragment("skip"), "Skip");
 	}
 }

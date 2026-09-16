@@ -85,17 +85,14 @@ public class BSelectSubstitutionNode extends BSubstitutionNode<ASelectSubstituti
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "SELECT" + " ", () -> getModelObject().getCondition(), LINE_SEPARATOR,
-				Indentation.Indent);
+		append(childContents(LINE_SEPARATOR + "SELECT" + " ", () -> getModelObject().getCondition(), LINE_SEPARATOR, Indentation.Indent));
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "THEN" + " ", () -> getModelObject().getThen(), LINE_SEPARATOR,
-				Indentation.Indent);
+		append(childContents(LINE_SEPARATOR + "THEN" + " ", () -> getModelObject().getThen(), LINE_SEPARATOR, Indentation.Indent));
 
 		// TODO: WHENS
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "ELSE" + " ", () -> getModelObject().getElse(), LINE_SEPARATOR,
-				Indentation.Indent);
+		append(childContents(LINE_SEPARATOR + "ELSE" + " ", () -> getModelObject().getElse(), LINE_SEPARATOR, Indentation.Indent));
 
-		appendStaticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR, null);// TODO: match fragment
+		append(staticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR), trailingKeywordFragment("END"), "End");
 	}
 }

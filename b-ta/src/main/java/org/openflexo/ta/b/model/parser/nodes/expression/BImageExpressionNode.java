@@ -75,9 +75,9 @@ public class BImageExpressionNode extends BExpressionNode<AImageExpression, BIma
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildPrettyPrintContents("", () -> getModelObject().getIdentifier(), "[", Indentation.DoNotIndent);
+		append(childContents("", () -> getModelObject().getIdentifier(), "[", Indentation.DoNotIndent));
 
-		appendToChildPrettyPrintContents("", () -> getModelObject().getParameter(), "]", Indentation.DoNotIndent);
+		append(childContents("", () -> getModelObject().getParameter(), "]", Indentation.DoNotIndent));
 
 	}
 

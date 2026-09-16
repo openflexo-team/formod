@@ -80,9 +80,9 @@ public class BForAllPredicateNode extends BPredicateNode<AForallPredicate, BForA
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("! ", ",", () -> getModelObject().getExpressions(), "", "", BExpression.class);
+		append(childrenContents("! ", ",", () -> getModelObject().getExpressions(), "", "", Indentation.DoNotIndent, BExpression.class));
 
-		appendToChildPrettyPrintContents(" . (", () -> getModelObject().getImplication(), " )", Indentation.DoNotIndent);
+		append(childContents(" . (", () -> getModelObject().getImplication(), " )", Indentation.DoNotIndent));
 
 	}
 }

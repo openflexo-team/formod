@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
@@ -88,6 +89,9 @@ public interface BForAllPredicate extends BPredicate {
 
 	@Remover(EXPRESSIONS_KEY)
 	public void removeFromExpressions(BExpression anExpression);
+
+	@Reindexer(EXPRESSIONS_KEY)
+	public void moveExpressionToIndex(BExpression aExpression, int index);
 
 	/**
 	 * Return implication

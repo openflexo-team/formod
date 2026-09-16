@@ -47,6 +47,7 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PastingPoint;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
+import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.model.BExpression;
@@ -84,6 +85,9 @@ public interface BAssignSubstitution extends BSubstitution {
 	@Remover(LEFT_EXPRESSIONS_KEY)
 	public void removeFromLeftExpressions(BExpression anExpression);
 
+	@Reindexer(LEFT_EXPRESSIONS_KEY)
+	public void moveLeftExpressionToIndex(BExpression aLeftExpression, int index);
+
 	/**
 	 * Return right expressions
 	 * 
@@ -99,5 +103,8 @@ public interface BAssignSubstitution extends BSubstitution {
 
 	@Remover(RIGHT_EXPRESSIONS_KEY)
 	public void removeFromRightExpressions(BExpression anExpression);
+
+	@Reindexer(RIGHT_EXPRESSIONS_KEY)
+	public void moveRightExpressionToIndex(BExpression aRightExpression, int index);
 
 }

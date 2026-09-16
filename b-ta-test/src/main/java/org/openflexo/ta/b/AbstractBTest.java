@@ -49,6 +49,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.test.OpenflexoProjectAtRunTimeTestCase;
 import org.openflexo.ta.b.model.BComponent;
+import org.openflexo.ta.b.model.BObject;
 import org.openflexo.ta.b.rm.BResource;
 
 public abstract class AbstractBTest extends OpenflexoProjectAtRunTimeTestCase {
@@ -99,6 +100,16 @@ public abstract class AbstractBTest extends OpenflexoProjectAtRunTimeTestCase {
 		assertNotNull(component);
 
 		return component;
+	}
+
+	/**
+	 * Semantic equality of two B objects, typically a component and its re-parsed pretty-print.
+	 * 
+	 * The pretty-print delegate (the P2PP node) is excluded: PAMELA compares every non-derived property, and each parse builds its own
+	 * node. It is not flagged ignoreForEquality in {@link BObject}, as for FML, so that updateWith() still transfers it.
+	 */
+	protected static boolean equalsIgnoringPrettyPrintDelegate(BObject object, BObject other) {
+		return object.equalsObject(other, property -> !BObject.PRETTY_PRINT_DELEGATE_KEY.equals(property.getPropertyIdentifier()));
 	}
 
 }

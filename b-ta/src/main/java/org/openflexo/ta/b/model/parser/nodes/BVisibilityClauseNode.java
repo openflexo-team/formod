@@ -68,7 +68,7 @@ public abstract class BVisibilityClauseNode<N extends Node, T extends BVisibilit
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendDynamicContents(() -> getModelObject().getReferencedComponentName(), getComponentNameFragment());
+		append(dynamicContents(() -> getModelObject().getReferencedComponentName()), getComponentNameFragment());
 	}
 
 	protected abstract RawSourceFragment getComponentNameFragment();

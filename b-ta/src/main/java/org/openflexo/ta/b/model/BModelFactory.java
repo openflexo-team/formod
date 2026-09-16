@@ -44,10 +44,10 @@ import org.openflexo.foundation.PamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
 import org.openflexo.foundation.resource.ResourceRepository;
-import org.openflexo.pamela.ModelContextLibrary;
+import org.openflexo.pamela.PamelaMetaModelLibrary;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.ta.b.model.BComponent.BComponentType;
 import org.openflexo.ta.b.model.operation.BNormalOperation;
 import org.openflexo.ta.b.model.operation.BRefinedOperation;
@@ -59,13 +59,13 @@ import org.openflexo.ta.b.model.parser.nodes.BSystemNode;
 import org.openflexo.ta.b.rm.BResource;
 
 /**
- * A {@link ModelFactory} used to manage a {@link BComponent}<br>
+ * A {@link PamelaModelFactory} used to manage a {@link BComponent}<br>
  * One instance of this class should be used for each {@link BResource}
  * 
  * @author sylvain
  * 
  */
-public class BModelFactory extends ModelFactory implements PamelaResourceModelFactory<BResource> {
+public class BModelFactory extends PamelaModelFactory implements PamelaResourceModelFactory<BResource> {
 
 	private static final Logger logger = Logger.getLogger(BModelFactory.class.getPackage().getName());
 
@@ -76,7 +76,7 @@ public class BModelFactory extends ModelFactory implements PamelaResourceModelFa
 	// private RelativePathResourceConverter relativePathResourceConverter;
 
 	public BModelFactory(BResource resource, EditingContext editingContext) throws ModelDefinitionException {
-		super(ModelContextLibrary.getCompoundModelContext(BComponent.class));
+		super(PamelaMetaModelLibrary.retrieveMetaModel(BComponent.class));
 		this.resource = resource;
 		setEditingContext(editingContext);
 		/*addConverter(relativePathResourceConverter = new RelativePathResourceConverter(null));
@@ -93,6 +93,15 @@ public class BModelFactory extends ModelFactory implements PamelaResourceModelFa
 
 	public BResource getResourceWithName(String resourceName) {
 		ResourceRepository<BResource, ?> repository = resource.getTechnologyAdapter().getBResourceRepository(resource.getResourceCenter());
+		// A B component is stored in a file named after it (R2 in R2.mch): look for it first without loading anything.
+		// Asking each resource its component name loads it, and a resource being loaded does not know its name yet, so that a
+		// component refining another one being loaded could not be found (loading R2 looks for R1, which loads R3, which looks for R2)
+		for (BResource r : repository.getAllResources()) {
+			String fileName = r.getName();
+			if (fileName != null && fileName.contains(".") && fileName.substring(0, fileName.lastIndexOf('.')).equals(resourceName)) {
+				return r;
+			}
+		}
 		for (BResource r : repository.getAllResources()) {
 			if (r.getComponentName() != null && r.getComponentName().equals(resourceName)) {
 				// System.out.println("Found resource " + resourceName + " : " + r);

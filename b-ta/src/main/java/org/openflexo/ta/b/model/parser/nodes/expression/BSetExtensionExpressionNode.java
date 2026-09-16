@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.model.parser.nodes.expression;
 
+import org.openflexo.p2pp.PrettyPrintContext.Indentation;
 import org.openflexo.ta.b.model.BExpression;
 import org.openflexo.ta.b.model.expression.BSetExtensionExpression;
 import org.openflexo.ta.b.model.parser.BSemanticsAnalyzer;
@@ -76,7 +77,7 @@ public class BSetExtensionExpressionNode extends BExpressionNode<ASetExtensionEx
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents("{", ", ", () -> getModelObject().getExpressions(), "", "}", BExpression.class);
+		append(childrenContents("{", ", ", () -> getModelObject().getExpressions(), "", "}", Indentation.DoNotIndent, BExpression.class));
 	}
 
 }

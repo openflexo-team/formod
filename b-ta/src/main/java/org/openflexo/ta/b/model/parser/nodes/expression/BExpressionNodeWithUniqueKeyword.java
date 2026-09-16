@@ -69,7 +69,7 @@ public abstract class BExpressionNodeWithUniqueKeyword<N extends Node, T extends
 	public final void preparePrettyPrint(boolean hasParsedVersion) {
 
 		super.preparePrettyPrint(hasParsedVersion);
-		appendStaticContents(getKeyword(), null);// TODO: match fragment
+		append(staticContents(getKeyword()), leadingKeywordFragment(getKeyword()), "Keyword");
 	}
 
 	public abstract Class<T> getExpressionClass();

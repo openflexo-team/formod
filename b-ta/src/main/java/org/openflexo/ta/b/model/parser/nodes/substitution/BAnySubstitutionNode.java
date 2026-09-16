@@ -85,15 +85,18 @@ public class BAnySubstitutionNode extends BSubstitutionNode<AAnySubstitution, BA
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "ANY" + " ", ",", () -> getModelObject().getIdentifiers(), "", "",
-				BExpression.class);
+		append(childrenContents(LINE_SEPARATOR + "ANY" + " ", ",", () -> getModelObject().getIdentifiers(), "", "", Indentation.DoNotIndent, BExpression.class));
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "WHERE" + " ", () -> getModelObject().getWhere(), LINE_SEPARATOR,
-				Indentation.Indent);
+		append(childContents(LINE_SEPARATOR + "WHERE" + " ", () -> getModelObject().getWhere(), LINE_SEPARATOR, Indentation.Indent));
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "THEN" + " ", () -> getModelObject().getThen(), LINE_SEPARATOR,
-				Indentation.Indent);
+		append(childContents(LINE_SEPARATOR + "THEN" + " ", () -> getModelObject().getThen(), LINE_SEPARATOR, Indentation.Indent));
 
-		appendStaticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR, null);// TODO: match fragment
+		append(staticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR), trailingKeywordFragment("END"), "End");
+	}
+
+	// The B grammar drops the END token of an ANY substitution
+	@Override
+	protected String[] getTrailingTextsOutOfAST() {
+		return new String[] { "END" };
 	}
 }

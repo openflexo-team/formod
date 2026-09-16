@@ -218,7 +218,16 @@ public class BSemanticsAnalyzer extends DepthFirstAdapter {
 
 	protected final void finalizeDeserialization() {
 		finalizeDeserialization(rootNode);
+		completeParsedFragments(rootNode);
 		rootNode.initializePrettyPrint(rootNode, rootNode.makePrettyPrintContext());
+	}
+
+	// Children first, so that a node covers the completed fragments of its children
+	private void completeParsedFragments(BObjectNode<?, ?> node) {
+		for (P2PPNode<?, ?> child : node.getChildren()) {
+			completeParsedFragments((BObjectNode<?, ?>) child);
+		}
+		node.completeParsedFragment();
 	}
 
 	protected final void finalizeDeserialization(BObjectNode<?, ?> node) {

@@ -38,6 +38,9 @@
 
 package org.openflexo.ta.b.model.parser.nodes;
 
+import java.util.List;
+import java.util.function.Supplier;
+
 import org.openflexo.p2pp.PrettyPrintContext.Indentation;
 import org.openflexo.p2pp.RawSource.RawSourceFragment;
 import org.openflexo.p2pp.RawSource.RawSourcePosition;
@@ -105,46 +108,62 @@ public abstract class BComponentNode<N extends Node, T extends BComponent> exten
 
 		performPrettyPrintHeader(hasParsedVersion);
 
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "INCLUDES" + LINE_SEPARATOR + INDENTATION, ",",
-				() -> getModelObject().getIncludesClauses(), "", "", Indentation.DoNotIndent, BIncludesClause.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "SEES" + LINE_SEPARATOR + INDENTATION, ",",
-				() -> getModelObject().getSeesClauses(), "", "", Indentation.DoNotIndent, BSeesClause.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "IMPORTS" + LINE_SEPARATOR + INDENTATION, ",",
-				() -> getModelObject().getImportsClauses(), "", "", Indentation.DoNotIndent, BImportsClause.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "EXTENDS" + LINE_SEPARATOR + INDENTATION, ",",
-				() -> getModelObject().getExtendsClauses(), "", "", Indentation.DoNotIndent, BExtendsClause.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "USES" + LINE_SEPARATOR + INDENTATION, ",",
-				() -> getModelObject().getUsesClauses(), "", "", Indentation.DoNotIndent, BUsesClause.class);
+		appendClauses("INCLUDES", () -> getModelObject().getIncludesClauses(), BIncludesClause.class);
+		appendClauses("SEES", () -> getModelObject().getSeesClauses(), BSeesClause.class);
+		appendClauses("IMPORTS", () -> getModelObject().getImportsClauses(), BImportsClause.class);
+		appendClauses("EXTENDS", () -> getModelObject().getExtendsClauses(), BExtendsClause.class);
+		appendClauses("USES", () -> getModelObject().getUsesClauses(), BUsesClause.class);
 
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "SETS" + LINE_SEPARATOR, ";" + LINE_SEPARATOR,
-				() -> getModelObject().getSets(), "", "", Indentation.Indent, BSet.class);
+		appendSection(new String[] { "SETS" }, () -> getModelObject().getSets(), ";" + LINE_SEPARATOR, BSet.class);
 
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "ABSTRACT_CONSTANTS" + LINE_SEPARATOR, "," + LINE_SEPARATOR,
-				() -> getModelObject().getAbstractConstants(), "", "", Indentation.Indent, BAbstractConstant.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "CONCRETE_CONSTANTS" + LINE_SEPARATOR, "," + LINE_SEPARATOR,
-				() -> getModelObject().getConcreteConstants(), "", "", Indentation.Indent, BConcreteConstant.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "ABSTRACT_VARIABLES" + LINE_SEPARATOR, "," + LINE_SEPARATOR,
-				() -> getModelObject().getAbstractVariables(), "", "", Indentation.Indent, BAbstractVariable.class);
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "CONCRETE_VARIABLES" + LINE_SEPARATOR, "," + LINE_SEPARATOR,
-				() -> getModelObject().getConcreteVariables(), "", "", Indentation.Indent, BConcreteVariable.class);
+		appendSection(new String[] { "ABSTRACT_CONSTANTS" }, () -> getModelObject().getAbstractConstants(), "," + LINE_SEPARATOR, BAbstractConstant.class);
+		appendSection(new String[] { "CONCRETE_CONSTANTS", "CONSTANTS" }, () -> getModelObject().getConcreteConstants(), "," + LINE_SEPARATOR, BConcreteConstant.class);
+		appendSection(new String[] { "ABSTRACT_VARIABLES", "VARIABLES" }, () -> getModelObject().getAbstractVariables(), "," + LINE_SEPARATOR, BAbstractVariable.class);
+		appendSection(new String[] { "CONCRETE_VARIABLES" }, () -> getModelObject().getConcreteVariables(), "," + LINE_SEPARATOR, BConcreteVariable.class);
 
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "PROPERTIES" + LINE_SEPARATOR, () -> getModelObject().getProperties(),
-				LINE_SEPARATOR, Indentation.Indent);
-		appendToChildPrettyPrintContents(LINE_SEPARATOR + "INVARIANT" + LINE_SEPARATOR, () -> getModelObject().getInvariant(),
-				LINE_SEPARATOR, Indentation.Indent);
+		appendSection(new String[] { "PROPERTIES" }, () -> getModelObject().getProperties());
+		appendSection(new String[] { "INVARIANT" }, () -> getModelObject().getInvariant());
 
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "ASSERTIONS" + LINE_SEPARATOR, ";" + LINE_SEPARATOR,
-				() -> getModelObject().getAssertions(), "", "", Indentation.Indent, BPredicate.class);
+		appendSection(new String[] { "ASSERTIONS" }, () -> getModelObject().getAssertions(), ";" + LINE_SEPARATOR, BPredicate.class);
 
-		appendToChildrenPrettyPrintContents(LINE_SEPARATOR + "EVENTS" + LINE_SEPARATOR, ";" + LINE_SEPARATOR,
-				() -> getModelObject().getOperations(), "", "", Indentation.Indent, BOperation.class);
+		appendSection(new String[] { "EVENTS", "OPERATIONS" }, () -> getModelObject().getOperations(), ";" + LINE_SEPARATOR, BOperation.class);
 
-		appendStaticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR, null); // TODO: match END fragment
+		append(staticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR), findFragmentBackward("END", null, null), "END");
 	}
 
 	protected void performPrettyPrintHeader(boolean hasParsedVersion) {
-		appendStaticContents("", getKeyword(), LINE_SEPARATOR, null);// TODO: match fragment
-		appendDynamicContents(INDENTATION, () -> getModelObject().getName(), getComponentNameFragment());
+		append(staticContents("", getKeyword(), LINE_SEPARATOR), getKeywordFragment(), "Keyword");
+		append(dynamicContents(INDENTATION, () -> getModelObject().getName()), getComponentNameFragment(), "Name");
+	}
+
+	/**
+	 * Visibility clauses (INCLUDES, SEES...) are listed on a single line
+	 */
+	private <C> void appendClauses(String keyword, Supplier<List<? extends C>> clauses, Class<C> clauseType) {
+		RawSourceFragment keywordFragment = findKeywordFragment(null, null, keyword);
+		when(() -> !clauses.get().isEmpty(), keyword).thenAppend(staticContents(LINE_SEPARATOR, keyword, LINE_SEPARATOR), keywordFragment);
+		append(childrenContents(INDENTATION, ",", clauses, "", "", Indentation.DoNotIndent, clauseType), keyword + "Clauses");
+	}
+
+	/**
+	 * A section introduced by a keyword, the first spelling being the canonical one
+	 */
+	private <C> void appendSection(String[] spellings, Supplier<List<? extends C>> items, String separator, Class<C> itemType) {
+		RawSourceFragment keywordFragment = findKeywordFragment(null, null, spellings);
+		when(() -> !items.get().isEmpty(), spellings[0]).thenAppend(
+				staticContents(LINE_SEPARATOR, keywordText(keywordFragment, spellings[0]), LINE_SEPARATOR), keywordFragment);
+		append(childrenContents("", "", items, separator, "", Indentation.Indent, itemType), spellings[0] + "Items");
+	}
+
+	private void appendSection(String[] spellings, Supplier<BPredicate> predicate) {
+		RawSourceFragment keywordFragment = findKeywordFragment(null, null, spellings);
+		when(() -> predicate.get() != null, spellings[0]).thenAppend(
+				staticContents(LINE_SEPARATOR, keywordText(keywordFragment, spellings[0]), LINE_SEPARATOR), keywordFragment);
+		append(childContents("", predicate, LINE_SEPARATOR, Indentation.Indent), spellings[0] + "Predicate");
+	}
+
+	protected RawSourceFragment getKeywordFragment() {
+		return findFragmentForward(getKeyword(), null, getComponentNameFragment() != null ? getComponentNameFragment().getStartPosition() : null);
 	}
 
 	protected String getComponentName(PMachineHeader node) {

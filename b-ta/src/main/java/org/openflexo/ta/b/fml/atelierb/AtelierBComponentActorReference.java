@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.ActorReference;
-import org.openflexo.foundation.fml.rt.ModelSlotInstance;
+import org.openflexo.foundation.fml.rt.FreeModelSlotInstance;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.pamela.annotations.Getter;
@@ -104,7 +104,7 @@ public interface AtelierBComponentActorReference extends ActorReference<AtelierB
 		}
 
 		public AtelierBProjectResource getAtelierBProjectResource() {
-			ModelSlotInstance<?, ?> msInstance = getModelSlotInstance();
+			FreeModelSlotInstance<?, ?, ?> msInstance = (FreeModelSlotInstance<?, ?, ?>) getModelSlotInstance();
 			if (msInstance != null && msInstance.getResource() instanceof AtelierBProjectResource) {
 				return (AtelierBProjectResource) msInstance.getResource();
 			}

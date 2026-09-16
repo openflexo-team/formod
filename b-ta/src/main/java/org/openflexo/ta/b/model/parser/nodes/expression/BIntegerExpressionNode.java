@@ -72,7 +72,7 @@ public class BIntegerExpressionNode extends BExpressionNode<AIntegerExpression, 
 
 		super.preparePrettyPrint(hasParsedVersion);
 
-		appendDynamicContents(() -> getModelObject().getValue().toString(), getValueFragment());
+		append(dynamicContents(() -> getModelObject().getValue().toString()), getValueFragment());
 	}
 
 	protected RawSourceFragment getValueFragment() {
