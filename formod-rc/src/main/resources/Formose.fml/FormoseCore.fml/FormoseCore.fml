@@ -103,6 +103,9 @@ public model FormoseCore {
 			/** Proved correct, not correct / Not proved / Not to prove / To prove / Represented or not */
 			String[1,1] status;
 
+			/** The element declaring this requirement (its container) */
+			Element element values container;
+
 			create::createRequirement(String name, String description) {
 				name = parameters.name;
 				description = parameters.description;

@@ -19,8 +19,8 @@ assert core.projectElement != null;
 assert core.projectElement.identifier == "Project";
 assert core.allElements().size == 1;
 
-// No methodology yet: they come with the later phases of the migration
-assert project.methodologies().size == 0;
+// The document annotation methodology is instantiated by the constructor; the others come with the later migration phases
+assert project.methodologies().size == 1;
 
 // An element of the tree, and the parent/children relation it maintains
 gear = core.projectElement.createChildrenElement("LandingGear", "The landing gear itself");

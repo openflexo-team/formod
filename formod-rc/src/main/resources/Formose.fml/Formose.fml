@@ -5,9 +5,8 @@
  * + relative path), so this model is http://formose.lacl.fr/Formose.fml and the VirtualModels it contains are
  * http://formose.lacl.fr/Formose.fml/<Name>.fml.
  *
- * Not migrated yet, and deliberately absent until then:
- * - projectUI, the gina-ta driven user interface (Fib/ProjectUI.fib), which moves to the container-based user interface;
- * - documentAnnotationMethodology, which comes with DocumentAnnotation-Methodology.
+ * Not migrated yet, and deliberately absent until then: projectUI, the gina-ta driven user interface (Fib/ProjectUI.fib), which
+ * moves to the container-based user interface.
  *
  * @version 0.1
  */
@@ -15,6 +14,7 @@
 use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
 import java.util.List;
+import ["http://formose.lacl.fr/Formose.fml/DocumentAnnotationMethodology.fml"];
 import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
 import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
 
@@ -27,6 +27,9 @@ public model Formose {
 
 	FormoseCore formoseVMI with ModelInstance(isRequired=true);
 
+	/** The unique document annotation methodology instantiated in the scope of this Formose project */
+	DocumentAnnotationMethodology documentAnnotationMethodology with ModelInstance();
+
 	/** All methodologies involved in this Formose project */
 	public List<Methodology> methodologies() {
 		return select Methodology from this;
@@ -37,6 +40,7 @@ public model Formose {
 		projectName = parameters.projectName;
 		projectDescription = parameters.projectDescription;
 		formoseVMI = new FormoseCore::init(parameters.projectName) with (name="FormoseVMI");
+		documentAnnotationMethodology = new DocumentAnnotationMethodology() with (name="DocumentAnnotationMethodology");
 	}
 
 	delete() {

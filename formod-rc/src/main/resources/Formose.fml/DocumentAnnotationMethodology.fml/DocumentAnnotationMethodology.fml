@@ -1,0 +1,192 @@
+/**
+ * Methodology annotating the elements and requirements of a Formose project with references to the documents of its library.
+ *
+ * An ElementReference gathers, for one element of the core model, the document portions that describe it; a RequirementReference
+ * does the same for one requirement. References nobody has classified yet are held by the single Unclassified instance.
+ *
+ * Migrated from the legacy DocumentAnnotation-Methodology.fml.xml serialization (formod 2.1), and renamed: a hyphen is not allowed
+ * in an FML identifier.
+ *
+ * Deliberate divergences from the legacy model, all of them repairs:
+ * - the legacy model carried one nameless, empty FlexoConcept, dropped;
+ * - createNewEmptyElementReference notified a property named "getElementReference(Element)", which is a behaviour signature and no
+ *   property at all: dropped;
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
+ * @version 0.1
+ */
+
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+
+import java.util.List;
+import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
+import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
+import ["http://formose.lacl.fr/DocumentLibrary.fml"];
+import ["http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml"];
+
+@URI("http://formose.lacl.fr/Formose.fml/DocumentAnnotationMethodology.fml")
+@Version("0.1")
+public model DocumentAnnotationMethodology extends Methodology {
+
+	DocumentLibrary documentLibrary with ModelInstance(isRequired=true);
+
+	/** Unclassified references in this methodology */
+	Unclassified unclassified with ConceptInstance();
+
+	public List<ElementReference> elementReferences() {
+		return select ElementReference from this;
+	}
+
+	create() {
+		unclassified = new Unclassified();
+		declaringElement = container.formoseVMI.projectElement;
+		documentLibrary = new DocumentLibrary() with (name="DocumentLibrary");
+	}
+
+	delete() {
+	}
+
+	/** The reference of supplied element, created empty if this element has none yet */
+	public ElementReference getElementReference(Element element) {
+		List<ElementReference> references = select ElementReference from this where (selected.element == parameters.element);
+		if (references.size > 0) {
+			return references.get(0);
+		}
+		return new ElementReference::createNewEmptyElementReference(parameters.element);
+	}
+
+	/** The reference of supplied requirement, created empty if this requirement has none yet */
+	public RequirementReference getRequirementReference(Requirement requirement) {
+		Element containerElement = parameters.requirement.element;
+		ElementReference elementReference = this.getElementReference(containerElement);
+		List<RequirementReference> references = select RequirementReference from elementReference
+				where (selected.requirement == parameters.requirement);
+		if (references.size > 0) {
+			return references.get(0);
+		}
+		return elementReference.new RequirementReference::createEmpty(parameters.requirement);
+	}
+
+	/** Identify a new element from supplied document reference, as a child of supplied element */
+	public ElementReference identifyElement(String elementName, String elementDescription, Element parentElement,
+			Reference reference) {
+		Element newElement = parameters.parentElement.createChildrenElement(parameters.elementName, parameters.elementDescription);
+		log "Called identifyElement with " + parameters.reference;
+		ElementReference newElementReference = this.getElementReference(newElement);
+		newElementReference.references.add(parameters.reference);
+		return newElementReference;
+	}
+
+	/** Annotate an existing element with supplied document reference */
+	public ElementReference annotateElement(Element element, Reference reference) {
+		ElementReference elementReference = this.getElementReference(parameters.element);
+		elementReference.references.add(parameters.reference);
+		return elementReference;
+	}
+
+	/** Identify a new requirement of supplied element from supplied document reference */
+	public RequirementReference identifyRequirement(String requirementName, String requirementDescription,
+			Element parentElement, Reference reference) {
+		ElementReference elementReference = this.getElementReference(parameters.parentElement);
+		Requirement newRequirement = parameters.parentElement.createRequirement(parameters.requirementName,
+				parameters.requirementDescription);
+		RequirementReference newRequirementReference = this.getRequirementReference(newRequirement);
+		newRequirementReference.references.add(parameters.reference);
+		return newRequirementReference;
+	}
+
+	public Reference addUnclassifiedReference(Reference reference) {
+		unclassified.addToUnclassifiedReferences(parameters.reference);
+		return parameters.reference;
+	}
+
+	/**
+	 * A named reference: a name, a description, some keywords, and the document references it points at anywhere in the library
+	 */
+	public abstract concept NamedReference extends Transition {
+
+		String name;
+		String description;
+		String keywords;
+
+		Reference[0,*] references with ConceptInstance(virtualModelInstance=container.documentLibrary);
+
+		create(String aName, String aDescription) {
+			name = parameters.aName;
+			description = parameters.aDescription;
+		}
+
+		delete() {
+		}
+
+		public Reference addReference(Reference aReference) {
+			if (parameters.aReference != null) {
+				references.add(parameters.aReference);
+				notify "references" in this;
+			}
+			return parameters.aReference;
+		}
+
+		public moveReference(Reference aReference, NamedReference namedReference) {
+			log "Moving reference " + parameters.aReference + " to " + parameters.namedReference;
+			references.remove(parameters.aReference);
+			parameters.namedReference.references.add(parameters.aReference);
+			notify "references" in this;
+			notify "references" in parameters.namedReference;
+		}
+	}
+
+	@Renderer("element.identifier")
+	public concept ElementReference extends NamedReference {
+
+		Element element with ConceptInstance(virtualModelInstance=container.formoseVMI);
+
+		public List<RequirementReference> requirementReferences() {
+			return select RequirementReference from this;
+		}
+
+		create::createNewEmptyElementReference(Element anElement) {
+			element = parameters.anElement;
+		}
+
+		delete() {
+		}
+
+		public concept RequirementReference extends NamedReference {
+
+			Requirement requirement with ConceptInstance(virtualModelInstance=container.container.formoseVMI);
+
+			create::createEmpty(Requirement aRequirement) {
+				requirement = parameters.aRequirement;
+			}
+
+			delete() {
+			}
+		}
+	}
+
+	/** Holds the references of the library nobody classified yet */
+	public concept Unclassified {
+
+		Reference[0,*] unclassifiedReferences with ConceptInstance(virtualModelInstance=container.documentLibrary);
+
+		create() {
+		}
+
+		delete() {
+		}
+
+		public addToUnclassifiedReferences(Reference reference) {
+			unclassifiedReferences.add(parameters.reference);
+			notify "unclassifiedReferences" in this;
+		}
+
+		public moveReference(Reference aReference, NamedReference namedReference) {
+			log "Moving reference " + parameters.aReference + " to " + parameters.namedReference;
+			unclassifiedReferences.remove(parameters.aReference);
+			parameters.namedReference.references.add(parameters.aReference);
+			notify "unclassifiedReferences" in this;
+			notify "references" in parameters.namedReference;
+		}
+	}
+}

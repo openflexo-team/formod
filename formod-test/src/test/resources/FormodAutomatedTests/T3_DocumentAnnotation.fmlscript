@@ -1,0 +1,45 @@
+// T3 - the document annotation methodology references the elements and requirements of the core model.
+// Exercises DocumentAnnotationMethodology.create, getElementReference and getRequirementReference.
+
+service ResourceCenterService add_temp_rc;
+
+formose = load -r ["http://formose.lacl.fr/Formose.fml"];
+assert formose != null;
+
+project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
+core = project.formoseVMI;
+
+// The methodology is instantiated by the Formose constructor, with its own document library
+annotation = project.documentAnnotationMethodology;
+assert annotation != null;
+assert annotation.documentLibrary != null;
+assert annotation.unclassified != null;
+// It is declared on the project element, and is the only methodology of the project so far
+assert annotation.declaringElement == core.projectElement;
+assert project.methodologies().size == 1;
+assert annotation.elementReferences().size == 0;
+
+gear = core.projectElement.createChildrenElement("LandingGear", "The landing gear itself");
+
+// An element reference is created on demand, and reused on the next call
+gearReference = annotation.getElementReference(gear);
+assert gearReference != null;
+assert gearReference.element == gear;
+assert annotation.elementReferences().size == 1;
+assert annotation.getElementReference(gear) == gearReference;
+assert annotation.elementReferences().size == 1;
+
+// Same contract for a requirement, whose reference is held by the reference of its element
+rqt = gear.createRequirement("RQ1", "The gear shall extend in less than 15 seconds");
+rqtReference = annotation.getRequirementReference(rqt);
+assert rqtReference != null;
+assert rqtReference.requirement == rqt;
+assert gearReference.requirementReferences().size == 1;
+assert annotation.getRequirementReference(rqt) == rqtReference;
+assert gearReference.requirementReferences().size == 1;
+
+// No document reference attached yet
+assert gearReference.references.size == 0;
+assert annotation.unclassified.unclassifiedReferences.size == 0;
+
+log "Test PASSED: T3 - document annotation methodology referencing elements and requirements";
