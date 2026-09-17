@@ -1,35 +1,43 @@
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-
 /**
- * 
+ * Library of the documents federated by a Formose project: it holds one VirtualModel instance per document.
+ *
+ * Migrated from the legacy DocumentLibrary.fml.xml serialization (formod 2.1). Its URI follows the 2.99 convention (resource center
+ * base URI + relative path) and is therefore http://formose.lacl.fr/DocumentLibrary.fml, no longer ".../DocumentLibrary.viewpoint".
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/DocumentLibrary.viewpoint")
-public class DocumentLibrary {
 
-  @GetSetProperty(value="documents", access=get)  
-  public List<VirtualModelInstanceType<AbstractDocument>> getDocuments {  
-    return this.FML@RT::SelectVirtualModelInstance();  
-  }
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
-  @CreationScheme  
-  DocumentLibrary:create() {  
-  
-  }  
+import java.util.List;
+import org.openflexo.technologyadapter.docx.model.DocXDocument;
+import ["http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml"];
+import ["http://formose.lacl.fr/DocumentLibrary.fml/WordDocument.fml"];
 
-  @ActionScheme  
-  VirtualModelInstanceType<DocXDocument> importDocXDocument(DocXDocumentResource docXDocumentResource, String documentName, String documentDescription) {  
-    VirtualModelInstanceType<DocXDocument> newDocumentVMI = DocXDocument.create(parameters.documentName,parameters.docXDocumentResource,parameters.documentDescription);    
-    this.firePropertyChange documents    
-    return newDocumentVMI;  
-  }  
+@URI("http://formose.lacl.fr/DocumentLibrary.fml")
+@Version("0.1")
+public model DocumentLibrary {
 
-  @ActionScheme  
-  VirtualModelInstanceType<DocXDocument> removeDocXDocument(VirtualModelInstanceType<DocXDocument> documentVMI) {  
-    log ("Delete " + parameters.documentVMI)    
-    parameters.documentVMI.delete();    
-    this.firePropertyChange documents    
-    return parameters.documentVMI;  
-  }  
+	/** Every document of this library, whatever its format */
+	public List<AbstractDocument> documents() {
+		return select AbstractDocument from this;
+	}
 
+	create() {
+	}
+
+	/** Import supplied .docx resource as a new document of this library */
+	public WordDocument importDocXDocument(Resource<DocXDocument> docXDocumentResource, String documentName, String documentDescription) {
+		WordDocument newDocument = new WordDocument(parameters.documentName, parameters.docXDocumentResource,
+				parameters.documentDescription) with (name=parameters.documentName);
+		notify "documents" in this;
+		return newDocument;
+	}
+
+	public WordDocument removeDocXDocument(WordDocument documentVMI) {
+		log "Delete " + parameters.documentVMI;
+		delete parameters.documentVMI;
+		notify "documents" in this;
+		return parameters.documentVMI;
+	}
 }

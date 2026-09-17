@@ -1,25 +1,23 @@
-
 /**
- * 
+ * A document federated by a Formose project, whatever its format: it is named, described, and portions of it may be referenced.
+ *
+ * Migrated from the legacy AbstractDocument.fml.xml serialization (formod 2.1). Inspectors are gone: FlexoConceptInspector is
+ * deprecated in 2.99.
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument.fml")
-public class AbstractDocument {
 
-  public String documentName;
-  public String documentDescription;
+@URI("http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml")
+@Version("0.1")
+public abstract model AbstractDocument {
 
-  /**  
-   * We define reference as a portion of a document (which can be of various formats)  
-   *   
-   */  
-  @FlexoConcept  
-  public class Reference {  
-  
-      
-    abstract String rawText;  
-      
-    abstract String preview;  
-  }  
+	String documentName;
+	String documentDescription;
 
+	/** A reference is a portion of a document (which can be of various formats) */
+	public abstract concept Reference {
+
+		abstract String rawText;
+		abstract String preview;
+	}
 }

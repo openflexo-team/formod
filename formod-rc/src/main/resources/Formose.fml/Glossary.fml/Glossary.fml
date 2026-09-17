@@ -1,24 +1,20 @@
-
 /**
- * 
+ * Glossary of a Formose project: the terms of its domain.
+ *
+ * Migrated from the legacy Glossary.fml.xml serialization (formod 2.1).
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/Glossary.fml")
-public class Glossary {
+@URI("http://formose.lacl.fr/Formose.fml/Glossary.fml")
+@Version("0.1")
+public model Glossary {
 
-  @FlexoConcept  
-  public class Term {  
-  
-    @CreationScheme    
-    Term:create() {    
-      
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-  }  
+	public concept Term {
 
+		create() {
+		}
+
+		delete() {
+		}
+	}
 }

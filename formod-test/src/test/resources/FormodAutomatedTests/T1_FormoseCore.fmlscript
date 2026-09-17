@@ -1,0 +1,42 @@
+// T1 - a Formose project is created with its core model, and elements/requirements can be added to it.
+// Exercises Formose.initFormoseView, FormoseCore.init and the Element / Requirement concepts.
+
+service ResourceCenterService add_temp_rc;
+
+formose = load -r ["http://formose.lacl.fr/Formose.fml"];
+assert formose != null;
+assert formose.name == "Formose";
+
+project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
+assert project != null;
+assert project.projectName == "LandingGear";
+assert project.projectDescription == "Landing gear system";
+
+// The core model is created by the constructor, together with its project element
+core = project.formoseVMI;
+assert core != null;
+assert core.projectElement != null;
+assert core.projectElement.identifier == "Project";
+assert core.allElements().size == 1;
+
+// No methodology yet: they come with the later phases of the migration
+assert project.methodologies().size == 0;
+
+// An element of the tree, and the parent/children relation it maintains
+gear = core.projectElement.createChildrenElement("LandingGear", "The landing gear itself");
+assert gear != null;
+assert gear.identifier == "LandingGear";
+assert gear.description == "The landing gear itself";
+assert gear.parent == core.projectElement;
+assert core.projectElement.childrenElements.size == 1;
+assert core.allElements().size == 2;
+
+// Requirements are held by the element that declares them
+rqt = gear.createRequirement("RQ1", "The gear shall extend in less than 15 seconds");
+assert rqt != null;
+assert rqt.name == "RQ1";
+assert rqt.description == "The gear shall extend in less than 15 seconds";
+assert gear.requirements().size == 1;
+assert core.projectElement.requirements().size == 0;
+
+log "Test PASSED: T1 - Formose project, element tree and requirements";

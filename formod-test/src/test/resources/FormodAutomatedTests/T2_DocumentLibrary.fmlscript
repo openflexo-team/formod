@@ -1,0 +1,24 @@
+// T2 - the document library federates a .docx document of the resource center.
+// Exercises DocumentLibrary.importDocXDocument and the WordDocument model slot.
+
+service ResourceCenterService add_temp_rc;
+
+documentLibrary = load -r ["http://formose.lacl.fr/DocumentLibrary.fml"];
+assert documentLibrary != null;
+assert documentLibrary.name == "DocumentLibrary";
+
+requirementsDoc = load -r ["http://formose.lacl.fr/Data/LandingGearSystemRqt.docx"];
+assert requirementsDoc != null;
+
+library = new DocumentLibrary() with (name="TestDocumentLibrary");
+assert library != null;
+assert library.documents().size == 0;
+
+document = library.importDocXDocument(requirementsDoc.resource, "LandingGearSystemRqt", "Requirements of the landing gear system");
+assert document != null;
+assert document.documentName == "LandingGearSystemRqt";
+assert document.documentDescription == "Requirements of the landing gear system";
+assert document.docXDocument != null;
+assert library.documents().size == 1;
+
+log "Test PASSED: T2 - document library federating a .docx document";

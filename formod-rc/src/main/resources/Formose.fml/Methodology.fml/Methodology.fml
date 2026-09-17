@@ -1,36 +1,37 @@
-
 /**
- * 
+ * Base of every Formose methodology (SysML/KAOS, domain model, B, document annotation): a methodology is declared on an element of
+ * the Formose core model, and applies to this element and to its descendants.
+ *
+ * Migrated from the legacy Methodology.fml.xml serialization (formod 2.1).
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/Methodology.fml")
-public class Methodology {
 
-  @PrimitiveRole(cardinality=One,readOnly=false)  
-  public String name;
-  @FlexoConceptInstanceRole(cardinality=ZeroOne,readOnly=false)  
-  public FlexoConceptInstanceType<Element> declaringElement;
+import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
 
-  @FlexoConcept  
-  public class Transition {  
-  
-    @PrimitiveRole(cardinality=One,readOnly=false)    
-    public String user;  
-    @PrimitiveRole(cardinality=ZeroOne,readOnly=false)    
-    public String timestamp;  
-    @PrimitiveRole(cardinality=ZeroOne,readOnly=false)    
-    public String comments;  
-  
-    @CreationScheme    
-    Transition:create() {    
-      
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-  }  
+@URI("http://formose.lacl.fr/Formose.fml/Methodology.fml")
+@Version("0.1")
+public abstract model Methodology {
 
+	String[1,1] name;
+
+	/** Element in which this methodology has been declared */
+	Element declaringElement with ConceptInstance(virtualModelInstance=container.formoseVMI);
+
+	public abstract concept Transition {
+
+		String[1,1] user;
+
+		/** Date when the transition was initiated by a user */
+		String timestamp;
+
+		/** Justification of the transition */
+		String comments;
+
+		create() {
+		}
+
+		delete() {
+		}
+	}
 }

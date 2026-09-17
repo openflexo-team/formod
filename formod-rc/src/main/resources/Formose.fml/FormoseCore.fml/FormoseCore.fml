@@ -1,229 +1,131 @@
-use org.openflexo.technologyadapter.gina.FIBComponentModelSlot;
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-
 /**
- * 
+ * Core model of a Formose project: a tree of elements, each of which holds requirements.
+ *
+ * Migrated from the legacy FormoseCore.fml.xml serialization (formod 2.1).
+ *
+ * Deliberate divergences from the legacy model, all of them repairs:
+ * - Element.parent was declared with cardinality One while the project element has none (and the legacy creation scheme never set
+ *   it), so it is optional here;
+ * - the legacy model carried one nameless, empty FlexoConcept, dropped;
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
+ * Not migrated yet, and deliberately absent until the VirtualModel they need exists:
+ * - ui, the gina-ta driven user interface of Element (Fib/ElementUI.fib), which moves to the container-based user interface;
+ * - applicableSysMLKaosMethodology / createSysMLKaosMethodology (SysML/KAOS phase);
+ * - applicableDomainModelMethodology / createDomainModelMethodology (domain model phase);
+ * - applicableBMethodology / createBMethodology (B phase).
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml")
-public class FormoseCore {
 
-  @GetSetProperty(value="allElements", access=get)  
-  public List<FlexoConceptInstanceType<Element>> getAllElements {  
-    return this.SelectFlexoConceptInstance(type=Element);  
-  }
-  public Element projectElement;
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
-  @ActionScheme  
-  Void addElement() {  
-    Element.createElement("elementTODO")  
-  }  
+import java.util.List;
 
-  @DeletionScheme  
-  Void delete() {  
-  
-  }  
+@URI("http://formose.lacl.fr/Formose.fml/FormoseCore.fml")
+@Version("0.1")
+public model FormoseCore {
 
-  @ActionScheme  
-  Void removeElement(FlexoConceptInstanceType<Element> element) {  
-    parameters.element.delete();  
-  }  
+	/** The element representing the project itself, root of the element tree */
+	Element projectElement with ConceptInstance();
 
-  @CreationScheme  
-  FormoseCore:init(String projectName) {  
-    projectElement = Element.createElement("Project");    
-    this.firePropertyChange projectElement  
-  }  
+	public List<Element> allElements() {
+		return select Element from this;
+	}
 
+	create::init(String projectName) {
+		projectElement = new Element::createElement("Project");
+		notify "projectElement" in this;
+	}
 
-  @FlexoConcept  
-  public class Element {  
-  
-    public String identifier;  
-    public List childrenElements;  
-    public String description;  
-    public Element parent;  
-    public GINAFIBComponent ui;  
-    @GetSetProperty(value="requirements", access=get)    
-    public List<FlexoConceptInstanceType<Requirement>> getRequirements {    
-      return container.SelectFlexoConceptInstance(type=Requirement);    
-    }  
-    @GetSetProperty(value="applicableSysMLKaosMethodology", access=get)    
-    public VirtualModelInstanceType<SysMLKaos-Methodology> getApplicableSysMLKaosMethodology {    
-      VirtualModelInstanceType<SysMLKaos-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
-      if (returned != null) {      
-        return returned;      
-      }      
-      if (parent != null) {      
-        return parent.applicableSysMLKaosMethodology;      
-      }      
-      return null;    
-    }  
-    @GetSetProperty(value="applicableDomainModelMethodology", access=get)    
-    public VirtualModelInstanceType<DomainModel-Methodology> getApplicableDomainModelMethodology {    
-      VirtualModelInstanceType<DomainModel-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
-      if (returned != null) {      
-        return returned;      
-      }      
-      if (parent != null) {      
-        return parent.applicableDomainModelMethodology;      
-      }      
-      return null;    
-    }  
-    @GetSetProperty(value="applicableBMethodology", access=get)    
-    public VirtualModelInstanceType<B-Methodology> getApplicableBMethodology {    
-      VirtualModelInstanceType<B-Methodology> returned = container.container.FML@RT::SelectUniqueVirtualModelInstance where=(selected.declaringElement = this);      
-      if (returned != null) {      
-        return returned;      
-      }      
-      if (parent != null) {      
-        return parent.applicableBMethodology;      
-      }      
-      return null;    
-    }  
-  
-    @CreationScheme    
-    Element:createElement(String elementIdentifier) {    
-      identifier = parameters.elementIdentifier;      
-      ui = ui.ConfigureGINAFIBComponent();    
-    }    
-  
-    @ActionScheme    
-    VirtualModelInstanceType<SysMLKaos-Methodology> createSysMLKaosMethodology() {    
-      VirtualModelInstanceType<SysMLKaos-Methodology> methodology = SysMLKaos-Methodology.create((identifier + "-SysMLKaos"),this);      
-      this.firePropertyChange applicableSysMLKaosMethodology      
-      return methodology;    
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-    @ActionScheme    
-    FlexoConceptInstanceType<Element> createChildrenElement(String elementIdentifier, String elementDescription) {    
-      log ("Creating new element " + parameters.elementIdentifier)      
-      FlexoConceptInstanceType<Element> newElement = Element.createElement(parameters.elementIdentifier);      
-      newElement.description = parameters.elementDescription;      
-      newElement.parent = this;      
-      childrenElements.add(newElement)      
-      FlexoConceptInstanceType<NewElement> event = fireEvent NewElement;      
-      log ((("Firing event " + event) + " from ") + container)      
-      return newElement;    
-    }    
-  
-    @ActionScheme    
-    FlexoConceptInstanceType<Requirement> createRequirement(String name, String description) {    
-      log ("Creating new requirement " + parameters.name)      
-      log ("Description for new requirement " + parameters.description)      
-      FlexoConceptInstanceType<Requirement> newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
-      this.firePropertyChange requirements      
-      log ((("On declenche NewRequirement " + newRequirement) + " dans ") + newRequirement.container)      
-      fireEvent NewRequirement      
-      return newRequirement;    
-    }    
-  
-    @ActionScheme    
-    FlexoConceptInstanceType<Requirement> createRequirementNoNotification(String name, String description) {    
-      FlexoConceptInstanceType<Requirement> newRequirement = Requirement.createRequirement(parameters.name,parameters.description);      
-      this.firePropertyChange requirements      
-      return newRequirement;    
-    }    
-  
-    @ActionScheme    
-    VirtualModelInstanceType<DomainModel-Methodology> createDomainModelMethodology() {    
-      log ("applicableSysMLKaosMethodology:" + applicableSysMLKaosMethodology)      
-      VirtualModelInstanceType<DomainModel-Methodology> methodology = DomainModel-Methodology.create(applicableSysMLKaosMethodology);      
-      this.firePropertyChange applicableDomainModelMethodology      
-      return methodology;    
-    }    
-  
-    @ActionScheme    
-    VirtualModelInstanceType<B-Methodology> createBMethodology(AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject) {    
-      VirtualModelInstanceType<B-Methodology> methodology = B-Methodology.create(applicableDomainModelMethodology,parameters.sourceProject,parameters.generatedProject);      
-      this.firePropertyChange applicableBMethodology      
-      return methodology;    
-    }    
-  
-  
-    @FlexoConcept    
-    public class Requirement {    
-      
-      public String name;    
-      public String description;    
-      public String status;    
-      
-      @CreationScheme      
-      Requirement:createRequirement(String name, String description) {      
-        log ("*********** Create new requirement " + parameters.name)        
-        name = parameters.name;        
-        description = parameters.description;        
-        container.firePropertyChange requirements      
-      }      
-      
-      @DeletionScheme      
-      public Void delete() {      
-        container.firePropertyChange requirements      
-      }      
-      
-    }    
-  
-  }  
+	delete() {
+	}
 
-  @FlexoConcept  
-  public class Requirement {  
-  
-    public String name;  
-    public String description;  
-    public String status;  
-  
-    @CreationScheme    
-    Requirement:createRequirement(String name, String description) {    
-      log ("*********** Create new requirement " + parameters.name)      
-      name = parameters.name;      
-      description = parameters.description;      
-      container.firePropertyChange requirements    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      container.firePropertyChange requirements    
-    }    
-  
-  }  
+	public Element addElement() {
+		return new Element::createElement("elementTODO");
+	}
 
-  @FlexoConcept  
-  public class NewRequirement {  
-  
-    public Requirement requirement;  
-  
-    @CreationScheme    
-    NewRequirement:create(FlexoConceptInstanceType<Requirement> aRequirement) {    
-      requirement = parameters.aRequirement;    
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-  }  
+	public removeElement(Element element) {
+		delete parameters.element;
+	}
 
-  @FlexoConcept  
-  public class NewElement {  
-  
-    public Element element;  
-  
-    @CreationScheme    
-    NewElement:create(FlexoConceptInstanceType<Element> anElement) {    
-      element = parameters.anElement;    
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-  }  
+	@Renderer("identifier")
+	public concept Element {
 
+		String[1,1] identifier;
+		String description;
+
+		/** Parent element in the element tree, null for the project element */
+		Element parent with ConceptInstance(virtualModelInstance=container);
+
+		Element[0,*] childrenElements with ConceptInstance(virtualModelInstance=container);
+
+		public List<Requirement> requirements() {
+			return select Requirement from this;
+		}
+
+		create::createElement(String elementIdentifier) {
+			identifier = parameters.elementIdentifier;
+		}
+
+		delete() {
+		}
+
+		public Element createChildrenElement(String elementIdentifier, String elementDescription) {
+			log "Creating new element " + parameters.elementIdentifier;
+			Element newElement = container.new Element::createElement(parameters.elementIdentifier);
+			newElement.description = parameters.elementDescription;
+			newElement.parent = this;
+			childrenElements.add(newElement);
+			fire new NewElement(newElement);
+			return newElement;
+		}
+
+		public Requirement createRequirement(String name, String description) {
+			log "Creating new requirement " + parameters.name;
+			Requirement newRequirement = new Requirement::createRequirement(parameters.name, parameters.description);
+			notify "requirements" in this;
+			fire new NewRequirement(newRequirement);
+			return newRequirement;
+		}
+
+		public Requirement createRequirementNoNotification(String name, String description) {
+			Requirement newRequirement = new Requirement::createRequirement(parameters.name, parameters.description);
+			notify "requirements" in this;
+			return newRequirement;
+		}
+
+		public concept Requirement {
+
+			String[1,1] name;
+			String description;
+
+			/** Proved correct, not correct / Not proved / Not to prove / To prove / Represented or not */
+			String[1,1] status;
+
+			create::createRequirement(String name, String description) {
+				name = parameters.name;
+				description = parameters.description;
+				notify "requirements" in container;
+			}
+
+			delete() {
+				notify "requirements" in container;
+			}
+		}
+	}
+
+	event NewElement {
+		Element element with ConceptInstance(virtualModelInstance=container);
+		create(Element anElement) {
+			element = parameters.anElement;
+		}
+	}
+
+	event NewRequirement {
+		Requirement requirement;
+		create(Requirement aRequirement) {
+			requirement = parameters.aRequirement;
+		}
+	}
 }

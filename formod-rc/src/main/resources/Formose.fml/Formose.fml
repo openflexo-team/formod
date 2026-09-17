@@ -1,39 +1,46 @@
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-use org.openflexo.technologyadapter.gina.FIBComponentModelSlot;
-
 /**
- * 
+ * Root VirtualModel of a Formose project: it holds the core model of the project (FormoseCore) and the methodologies applied to it.
+ *
+ * Migrated from the legacy Formose.fml.xml serialization (formod 2.1). URIs now follow the 2.99 convention (resource center base URI
+ * + relative path), so this model is http://formose.lacl.fr/Formose.fml and the VirtualModels it contains are
+ * http://formose.lacl.fr/Formose.fml/<Name>.fml.
+ *
+ * Not migrated yet, and deliberately absent until then:
+ * - projectUI, the gina-ta driven user interface (Fib/ProjectUI.fib), which moves to the container-based user interface;
+ * - documentAnnotationMethodology, which comes with DocumentAnnotation-Methodology.
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/Formose.viewpoint")
-public class Formose {
 
-  public FormoseCore formoseVMI;
-  public GINAFIBComponent projectUI;
-  public String projectName;
-  public String projectDescription;
-  @GetSetProperty(value="methodologies", access=get)  
-  public List<UndefinedVirtualModelInstanceType> getMethodologies {  
-    List<VirtualModelInstanceType<Methodology>> allMethodologies = this.FML@RT::SelectVirtualModelInstance();    
-    log ("Calcul de toutes les methodologies: " + allMethodologies)    
-    return allMethodologies;  
-  }
-  public DocumentAnnotation-Methodology documentAnnotationMethodology;
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
-  @CreationScheme  
-  Formose:initFormoseView(String projectName, String projectDescription) {  
-    projectName = parameters.projectName;    
-    projectDescription = parameters.projectDescription;    
-    formoseVMI = FormoseCore.init(parameters.projectName);    
-    projectUI = projectUI.ConfigureGINAFIBComponent();    
-    documentAnnotationMethodology = DocumentAnnotation-Methodology.create();  
-  }  
+import java.util.List;
+import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
+import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
 
-  @DeletionScheme  
-  Void delete() {  
-    projectName = null;    
-    projectDescription = null;  
-  }  
+@URI("http://formose.lacl.fr/Formose.fml")
+@Version("0.1")
+public model Formose {
 
+	String projectName;
+	String projectDescription;
+
+	FormoseCore formoseVMI with ModelInstance(isRequired=true);
+
+	/** All methodologies involved in this Formose project */
+	public List<Methodology> methodologies() {
+		return select Methodology from this;
+	}
+
+	/** Initialize a new Formose project, together with its core model */
+	create::initFormoseView(String projectName, String projectDescription) {
+		projectName = parameters.projectName;
+		projectDescription = parameters.projectDescription;
+		formoseVMI = new FormoseCore::init(parameters.projectName) with (name="FormoseVMI");
+	}
+
+	delete() {
+		projectName = null;
+		projectDescription = null;
+	}
 }

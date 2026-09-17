@@ -1,0 +1,55 @@
+/**
+ * A .docx document federated by a Formose project: a reference to it is a text selection of the underlying document.
+ *
+ * Migrated from the legacy DocXDocument.fml.xml serialization (formod 2.1), and renamed: a VirtualModel named DocXDocument is
+ * shadowed by the docx technology adapter's Java interface of the same name, which Connie resolves first, so
+ * "new DocXDocument(...)" could never reach this model.
+ *
+ * @version 0.1
+ */
+
+use org.openflexo.technologyadapter.docx.DocXModelSlot as DOCX;
+
+import org.openflexo.foundation.doc.TextSelection;
+import org.openflexo.technologyadapter.docx.model.DocXDocument;
+import ["http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml"];
+
+@URI("http://formose.lacl.fr/DocumentLibrary.fml/WordDocument.fml")
+@Version("0.1")
+public model WordDocument extends AbstractDocument {
+
+	// idStrategy (ParaId in the legacy model) is not an FML attribute of DocXModelSlot, and ParaId is its default anyway
+	DocXDocument docXDocument with DocXModelSlot(isRequired=true);
+
+	create(String documentName, Resource<DocXDocument> documentResource, String documentDescription) {
+		docXDocument = (DocXDocument) parameters.documentResource.getResourceData();
+		documentName = parameters.documentName;
+		documentDescription = parameters.documentDescription;
+	}
+
+	delete() {
+	}
+
+	public concept WordReference extends Reference {
+
+		DocXTextSelection textSelection with DocXTextSelectionRole(container=docXDocument);
+
+		String rawText values textSelection.rawText;
+
+		String preview {
+			String get() {
+				if (rawText.length < 30) {
+					return rawText;
+				}
+				return rawText.substring(0,30) + "...";
+			}
+		};
+
+		create(TextSelection textSelection) {
+			textSelection = parameters.textSelection;
+		}
+
+		delete() {
+		}
+	}
+}
