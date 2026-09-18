@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Diagram id="0" diagramSpecificationURI="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification" title="Goal Diagram" uri="http://formose.lacl.fr/diagrams/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram" name="GoalDiagram.diagram" userID="FLX" flexoID="2">
+<Diagram id="0" diagramSpecificationURI="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification" title="Goal Diagram" uri="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram" name="GoalDiagram.diagram" userID="FLX" flexoID="2">
   <Connector id="1" name="Connector" userID="SYL" flexoID="21">
     <ConnectorGraphicalRepresentation id="2" identifier="2ce65f0a" layer="64">
       <LineConnectorSpecification id="3" lineConnectorType="MINIMAL_LENGTH" startSymbol="NONE" middleSymbol="NONE" endSymbol="FILLED_ARROW" />

@@ -1,0 +1,354 @@
+/**
+ * Methodology mapping the elements and requirements of a Formose project onto SysML/KAOS goal models.
+ *
+ * One SysMLKaosElementMapping per element of the core model holds the goal model of that element, the diagrams presenting it, and
+ * one GoalRequirementMapping per requirement paired with the goal standing for it. The mapping works both ways: a new requirement
+ * of the element becomes a functional goal, and a goal created in a diagram becomes a requirement. Refining by agent allocation
+ * turns each software agent of a goal model into a child element with its own goal model, and reports the goals assigned to that
+ * agent as the top goals of the child.
+ *
+ * Migrated from the legacy SysMLKaos-Methodology.fml.xml serialization (formod 2.1), and renamed: a hyphen is not allowed in an FML
+ * identifier. Its URI is therefore http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml.
+ *
+ * Deliberate divergences from the legacy model:
+ * - the GINA slot "ui" (Fib/SysMLKaosElementMapping.fib) and the ConfigureGINAFIBComponent action that filled it in createNewMapping
+ *   are absent until the user interface moves to the container-based one, as for projectUI in Formose.fml;
+ * - event listeners have no name in 2.99, so newElementCreated, newRequirement, newGoalCreated, listenGoalDeletion and
+ *   requirementsShouldBeUpdated lost theirs; the two that declared a return type (newElementCreated, newGoalCreated) no longer
+ *   return anything, which changes nothing: a listener is called by the event bus, never by FML code;
+ * - the legacy matching in updateMapping declared eleven empty matching criteria on unrelated roles (element, agent, sysMLKaos,
+ *   declaringElement...) next to the only meaningful one (requirement): only the latter is kept;
+ * - bindings that the legacy resolved loosely against the containing instance are now written explicitly: DiagramMapping reads
+ *   container.element and container.goalModel, GoalRequirementMapping reads container.goalModel;
+ * - the created instances no longer carry a title: virtualModelInstanceTitle is deprecated in 2.99, only name is set;
+ * - the debug logs of the legacy, all in French ("Hop on arrive ici avec", "Jusqu'ici tout va bien"), are dropped or rewritten in
+ *   English, and the ones that only traced the control flow are gone;
+ * - "element.requirements" became element.requirements(): the legacy get/set property is a behaviour in FormoseCore;
+ * - representTopGoalRequirements casts the mapped goal to FunctionalGoal: GoalRequirementMapping declares its goal as a Goal, and
+ *   FunctionalGoalGR.representTopFunctionalGoal takes a FunctionalGoal, a mismatch the legacy left unchecked;
+ * - createNewMapping creates the goal model in two branches, depending on whether the mapped element has a mapped parent: the
+ *   legacy read parentDiagramElementMapping.goalModel unconditionally, which cannot be evaluated when there is no parent and
+ *   left the goal model unset without a word;
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
+ * @version 0.1
+ */
+
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+
+import java.util.List;
+import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
+import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml"];
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml"];
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml"];
+
+@URI("http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml")
+@Version("0.1")
+public model SysMLKaosMethodology extends Methodology {
+
+	/** The SysML/KAOS goal models this methodology declares, one per mapped element */
+	SysMLKaos sysMLKaos with ModelInstance(isRequired=true);
+
+	/** All mappings between an element and its SysML/KAOS goal model */
+	public List<SysMLKaosElementMapping> elementMappings() {
+		return select SysMLKaosElementMapping from this;
+	}
+
+	create(String sysMLKaosViewName, Element element) {
+		sysMLKaos = container.new SysMLKaos::init(parameters.sysMLKaosViewName, parameters.sysMLKaosViewName, "")
+				with (name=parameters.sysMLKaosViewName);
+		declaringElement = parameters.element;
+		new SysMLKaosElementMapping::createNewMapping(parameters.element);
+	}
+
+	delete() {
+	}
+
+	/** The mapping of supplied element, null when this element has none */
+	public SysMLKaosElementMapping getElementMapping(Element element) {
+		List<SysMLKaosElementMapping> mappings = select SysMLKaosElementMapping from this
+				where (selected.element == parameters.element);
+		if (mappings.size > 0) {
+			return mappings.get(0);
+		}
+		return null;
+	}
+
+	/** The mapping of supplied element, created if this element has none yet */
+	public SysMLKaosElementMapping retrieveDiagramElementMapping(Element element) {
+		SysMLKaosElementMapping returned = this.getElementMapping(parameters.element);
+		if (returned == null) {
+			log "No mapping for " + parameters.element + ", creating one";
+			returned = new SysMLKaosElementMapping::createNewMapping(parameters.element);
+		}
+		return returned;
+	}
+
+	/** A new element of the core model gets its own mapping, under the mapping of its parent */
+	listen NewElement from container.formoseVMI {
+		log "New element created: " + evt.element;
+		SysMLKaosElementMapping parentElementMapping = this.getElementMapping(evt.element.parent);
+		SysMLKaosElementMapping newElementMapping = new SysMLKaosElementMapping::createNewMapping(evt.element);
+		newElementMapping.parentDiagramElementMapping = parentElementMapping;
+	}
+
+	/** Maps one element of the core model onto its goal model and the diagrams presenting it */
+	public concept SysMLKaosElementMapping {
+
+		Element element with ConceptInstance(virtualModelInstance=container.formoseVMI);
+		DiagramMapping mainFunctionalGoalDiagram with ConceptInstance(virtualModelInstance=container);
+		SysMLKaosElementMapping parentDiagramElementMapping with ConceptInstance(virtualModelInstance=container);
+		SysMLKaosModel goalModel with ConceptInstance(virtualModelInstance=container.sysMLKaos);
+
+		/** The software agent this mapping was allocated to, null for a mapping the user created */
+		Agent agent with ConceptInstance(virtualModelInstance=parentDiagramElementMapping.goalModel);
+
+		/** All mappings between the element and a SysML/KAOS diagram */
+		public List<DiagramMapping> goalDiagrams() {
+			return select DiagramMapping from this;
+		}
+
+		public List<SysMLKaosElementMapping> childrenDiagramElementMapping() {
+			return select SysMLKaosElementMapping from container where (selected.parentDiagramElementMapping == this);
+		}
+
+		create::createNewMapping(Element anElement) {
+			element = parameters.anElement;
+			if (parameters.anElement.parent != null) {
+				parentDiagramElementMapping = container.getElementMapping(parameters.anElement.parent);
+			}
+			// The legacy passed parentDiagramElementMapping.goalModel unconditionally; when the element has no mapped parent
+			// that binding cannot be evaluated, and the whole goal model creation is silently skipped
+			if (parentDiagramElementMapping != null) {
+				goalModel = container.sysMLKaos.new SysMLKaosModel::init(parameters.anElement.identifier + "-GoalModel",
+						"GoalModel for " + parameters.anElement.identifier, "", parentDiagramElementMapping.goalModel)
+						with (name=parameters.anElement.identifier + "-GoalModel");
+			}
+			else {
+				goalModel = container.sysMLKaos.new SysMLKaosModel::init(parameters.anElement.identifier + "-GoalModel",
+						"GoalModel for " + parameters.anElement.identifier, "", null)
+						with (name=parameters.anElement.identifier + "-GoalModel");
+			}
+			mainFunctionalGoalDiagram = new DiagramMapping::createMainFunctionalGoalDiagram();
+			this.updateMapping();
+			if (parentDiagramElementMapping != null) {
+				notify "childrenDiagramElementMapping" in parentDiagramElementMapping;
+			}
+		}
+
+		delete() {
+		}
+
+		/**
+		 * Allocate every software agent of the goal model to a child element of the mapped element, and report on each of them the
+		 * goals that agent is assigned to
+		 */
+		public refineUsingAgentAllocation() {
+			log "Refining using agent allocation";
+			for (SoftwareAgent softwareAgent : select SoftwareAgent from goalModel) {
+				SysMLKaosElementMapping agentMapping = select unique SysMLKaosElementMapping from container
+						where (selected.agent == softwareAgent);
+				if (agentMapping == null) {
+					agentMapping = this.allocateAgent(softwareAgent);
+				}
+				this.updateTopGoals(agentMapping);
+				agentMapping.mainFunctionalGoalDiagram.representTopGoalRequirements();
+			}
+		}
+
+		/** Make sure every requirement of the mapped element has its goal, and drop the mappings whose requirement is gone */
+		public updateMapping() {
+			log "Updating SysMLKaosElementMapping";
+			MatchingSet<GoalRequirementMapping> matchingSet = begin match GoalRequirementMapping from this;
+			for (Requirement aRequirement : element.requirements()) {
+				match GoalRequirementMapping in matchingSet from this where (requirement=aRequirement)
+						unmatched: new GoalRequirementMapping::createNewGoal(aRequirement);
+			}
+			end match GoalRequirementMapping in matchingSet unmatched: delete();
+		}
+
+		/** A new requirement of the mapped element becomes a new functional goal of its goal model */
+		listen NewRequirement from element.container {
+			if (evt.requirement.element == element) {
+				log "New requirement of the mapped element: " + evt.requirement;
+				this.ensureGoalRequirementMappingExists(evt.requirement);
+			}
+		}
+
+		/** The mapping of supplied requirement, created with a new goal if this requirement has none yet */
+		public GoalRequirementMapping ensureGoalRequirementMappingExists(Requirement requirement) {
+			List<GoalRequirementMapping> mappings = select GoalRequirementMapping from this
+					where (selected.requirement == parameters.requirement);
+			if (mappings.size > 0) {
+				return mappings.get(0);
+			}
+			return new GoalRequirementMapping::createNewGoal(parameters.requirement);
+		}
+
+		private SysMLKaosElementMapping allocateAgent(SoftwareAgent agent) {
+			log "Allocating agent " + parameters.agent;
+			Element newElement = element.createChildrenElement(parameters.agent.name, parameters.agent.description);
+			SysMLKaosElementMapping newElementMapping = container.getElementMapping(newElement);
+			newElementMapping.agent = parameters.agent;
+			newElementMapping.goalModel.parentModel = goalModel;
+			notify "childrenDiagramElementMapping" in this;
+			return newElementMapping;
+		}
+
+		private GoalRequirementMapping getGoalRequirementMapping(Goal goal) {
+			List<GoalRequirementMapping> mappings = select GoalRequirementMapping from this
+					where (selected.goal == parameters.goal);
+			if (mappings.size > 0) {
+				return mappings.get(0);
+			}
+			return null;
+		}
+
+		/** A goal created in a diagram becomes a requirement of the mapped element */
+		listen NewGoal from goalModel {
+			List<GoalRequirementMapping> matchingMappings = select GoalRequirementMapping from this
+					where (selected.goal == evt.goal);
+			if (matchingMappings.size == 0) {
+				log "New goal " + evt.goal.name + ": mapping it onto a new requirement";
+				Requirement newRequirement = element.createRequirementNoNotification(evt.goal.name, evt.goal.description);
+				new GoalRequirementMapping(newRequirement, evt.goal);
+			}
+		}
+
+		public DiagramMapping createNewGoalDiagram(String diagramTitle, String diagramDescription) {
+			DiagramMapping newDiagramMapping = new DiagramMapping::createGoalDiagram(parameters.diagramTitle,
+					parameters.diagramDescription);
+			notify "goalDiagrams" in this;
+			return newDiagramMapping;
+		}
+
+		/** Report on supplied mapping, as top goal requirements, the goals its agent is assigned to */
+		private SysMLKaosElementMapping updateTopGoals(SysMLKaosElementMapping newElementMapping) {
+			for (AgentAssignment assignment : select AgentAssignment from goalModel
+					where (selected.agent == parameters.newElementMapping.agent)) {
+				GoalRequirementMapping parentMapping = this.getGoalRequirementMapping(assignment.goal);
+				TopGoalRequirementMapping topGoalRequirement = select unique TopGoalRequirementMapping
+						from parameters.newElementMapping where (selected.parentGoalRequirementMapping == parentMapping);
+				if (topGoalRequirement == null) {
+					log "Missing top goal requirement for " + assignment.goal;
+					Requirement newRequirement = parameters.newElementMapping.element.createRequirement(assignment.goal.name,
+							assignment.goal.description);
+					GoalRequirementMapping newMapping = parameters.newElementMapping
+							.ensureGoalRequirementMappingExists(newRequirement);
+					topGoalRequirement = parameters.newElementMapping.new TopGoalRequirementMapping(parentMapping, newMapping);
+				}
+			}
+			return parameters.newElementMapping;
+		}
+
+		/** Pairs one requirement of the mapped element with the goal standing for it */
+		public concept GoalRequirementMapping {
+
+			Requirement requirement with ConceptInstance(virtualModelInstance=container.container.formoseVMI);
+			Goal goal with ConceptInstance(virtualModelInstance=container.goalModel);
+
+			create(Requirement aRequirement, Goal aGoal) {
+				requirement = parameters.aRequirement;
+				goal = parameters.aGoal;
+			}
+
+			delete() {
+				log "Deleting " + this;
+				delete requirement;
+				notify "requirements" in container.element;
+			}
+
+			/** The goal this mapping stands for was deleted: the mapping goes with it */
+			listen DeletedGoal from container.goalModel {
+				if (evt.goal == goal) {
+					log "The goal this mapping stands for was deleted: " + goal;
+					delete this;
+				}
+			}
+
+			/** Maps an existing requirement onto a new functional goal */
+			create::createNewGoal(Requirement requirement) {
+				requirement = parameters.requirement;
+				goal = container.goalModel.new FunctionalGoal(parameters.requirement.name, "",
+						parameters.requirement.description, false);
+			}
+
+			/** Maps an existing goal onto a new requirement of the mapped element */
+			create::createNewRequirement(Goal goal) {
+				goal = parameters.goal;
+				requirement = container.element.new Requirement::createRequirement(parameters.goal.name,
+						parameters.goal.description);
+			}
+		}
+
+		/**
+		 * A goal requirement of a child mapping that reports a goal of the parent mapping: the parent goal was assigned to the agent
+		 * the child mapping stands for
+		 */
+		public concept TopGoalRequirementMapping {
+
+			GoalRequirementMapping parentGoalRequirementMapping with ConceptInstance(virtualModelInstance=container.container);
+			GoalRequirementMapping goalRequirementMapping with ConceptInstance(virtualModelInstance=container.container);
+
+			create(GoalRequirementMapping parentMapping, GoalRequirementMapping mapping) {
+				parentGoalRequirementMapping = parameters.parentMapping;
+				goalRequirementMapping = parameters.mapping;
+			}
+
+			delete() {
+			}
+		}
+
+		/** Maps the element onto one diagram presenting its goal model */
+		public concept DiagramMapping {
+
+			GoalModelingDiagram goalModelingDiagram with ConceptInstance(virtualModelInstance=container.container.sysMLKaos);
+
+			/** Title of the diagram this mapping presents */
+			String diagramTitle {
+				String get() {
+					return goalModelingDiagram.diagramTitle;
+				}
+			};
+
+			create::createMainFunctionalGoalDiagram() {
+				goalModelingDiagram = container.container.sysMLKaos.new GoalModelingDiagram::init(
+						container.element.identifier + "-MainFunctionalGoalModelingDiagram", "Functional Goal Diagram",
+						container.goalModel)
+						with (name=container.element.identifier + "-MainFunctionalGoalModelingDiagram");
+				notify "diagramTitle" in this;
+			}
+
+			create::createGoalDiagram(String diagramTitle, String diagramDescription) {
+				goalModelingDiagram = container.container.sysMLKaos.new GoalModelingDiagram::init(
+						container.element.identifier + "-" + parameters.diagramTitle, parameters.diagramTitle,
+						container.goalModel)
+						with (name=container.element.identifier + "-" + parameters.diagramTitle);
+				notify "diagramTitle" in this;
+			}
+
+			delete() {
+			}
+
+			listen UpdateDiagram from goalModelingDiagram {
+				log "The diagram must be updated";
+			}
+
+			/** Draw on the diagram the top goals this mapping does not show yet */
+			public representTopGoalRequirements() {
+				int index = 0;
+				log "Representing the top goals of " + diagramTitle;
+				for (TopGoalRequirementMapping topGoalRequirementMapping : select TopGoalRequirementMapping from container.container) {
+					FunctionalGoalGR goalGR = select unique FunctionalGoalGR from goalModelingDiagram
+							where (selected.goal == topGoalRequirementMapping.goalRequirementMapping.goal);
+					if (goalGR == null) {
+						goalGR = goalModelingDiagram.new FunctionalGoalGR::representTopFunctionalGoal(
+								(FunctionalGoal) topGoalRequirementMapping.goalRequirementMapping.goal, index);
+					}
+					index = index + 1;
+				}
+			}
+		}
+	}
+}

@@ -1,951 +1,871 @@
-use org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot;
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-use org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
-
 /**
- * 
+ * Diagrammatic editor of a SysML/KAOS goal model: every GR concept ("graphical representation") pairs one diagram element with the
+ * SysMLKaosModel object it stands for, so the diagram is a view and never the source of truth. Dropping a shape creates the model
+ * object, drawing a connector wires the model, and representRequiredRelationships() re-projects what the model holds.
+ *
+ * It also serializes the goal model into a workbook sheet ("Goal Model"), one row per goal, through the EventSerialization rule.
+ *
+ * Migrated from the legacy GoalModelingDiagram.fml.xml serialization (formod 2.1).
+ *
+ * Renamed, because the legacy names are now grammar keywords or were plainly wrong:
+ * - the FMLRT slot "model" became kaosModel ("model" is a keyword in 2.99);
+ * - the parameter "notify" of SysMLKaosModel.FunctionalGoal.create became shouldNotify, for the same reason.
+ * The legacy misspellings kept on purpose, because the Java module and the .fib components call them by name: the concept
+ * ChildRefinmentLinkGR, and the "refinment" parameters and behaviours.
+ *
+ * Deliberate divergences from the legacy model:
+ * - the abstract concepts GoalGR and AgentGR declared a ShapeRole with no diagram element, which 2.99 rejects (metamodelElement is
+ *   required): they now declare an abstract shape property, and each subclass declares the role with its own element;
+ * - EventSerialization declared two deletion schemes (delete, deleteWithItem); it now declares only one, whose body is the former
+ *   deleteWithItem, because "end match ... unmatched: delete()" runs the concept's FIRST deletion scheme (see CORE-D-2);
+ * - the serialization matching declared nine empty matching criteria on unrelated roles (diagramName, rootModel, kaosGoalDiagram...)
+ *   next to the only meaningful one (goal): only the latter is kept;
+ * - the legacy used "|" (bitwise) where it meant a boolean or, and "&" for and: written || and && here (which, per Connie, do not
+ *   short-circuit — no operand of these ones has a side effect);
+ * - GoalGroupGR's DrawRectangleScheme, named "create" in the legacy, is named drawGoalGroup here, because create() is reserved for
+ *   creation schemes; it logged the drawn rectangle (from, to, selection), and "from" is a keyword, so those debug logs are dropped.
+ *   Its children/selectObjects attributes had no FML form at all: they are now the FML attributes childrenType and selectObjects of
+ *   DrawRectangleScheme, added to the diagram technology adapter for this migration (target/targetType likewise, unused here since
+ *   this scheme targets the top level);
+ * - the parameter "model" of init became goalModel, again because "model" is a keyword;
+ * - init's CreateDiagram no longer names the diagram specification: the action reads it from the TypedDiagram slot it is assigned
+ *   to, so the legacy diagramSpecificationURI would be redundant (and diagramName is deprecated in favour of resourceName);
+ * - the palette binding of FunctionalGoalGR passes its drop scheme arguments ("Goal", "", "") where the eight others pass none: a
+ *   parameterless call resolves only for a concept declaring no creation scheme, which FunctionalGoalGR does (see CORE-D-11);
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99; the icons they declared follow in the user interface step.
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/GoalModelingDiagram.fml")
-public class GoalModelingDiagram {
 
-  public Diagram kaosGoalDiagram;
-  public SysMLKaosModel model;
-  public String diagramName;
-  public String diagramTitle;
-  public String diagramDescription;
+namespace "http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification" as GOAL_DIAGRAM_SPECIFICATION;
 
-  @CreationScheme  
-  GoalModelingDiagram:init(String diagramName, String diagramTitle, SysMLKaosModel model) {  
-    log "Initializing diagram"    
-    diagramName = parameters.diagramName;    
-    diagramTitle = parameters.diagramTitle;    
-    model = parameters.model;    
-    kaosGoalDiagram = CreateDiagram();    
-    log ("Initialize diagram VMI kaosGoalDiagram=" + kaosGoalDiagram)  
-  }  
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+use org.openflexo.technologyadapter.diagram.TypedDiagramModelSlot as DIAGRAM;
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot as XLS;
 
-  @DeletionScheme  
-  Void delete() {  
-  
-  }  
+import java.util.List;
+import java.util.ArrayList;
+import org.openflexo.technologyadapter.diagram.model.Diagram;
+import org.openflexo.technologyadapter.diagram.model.DiagramShape;
+import org.openflexo.technologyadapter.diagram.model.DiagramConnector;
+import org.openflexo.technologyadapter.diagram.metamodel.DiagramSpecification;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
 
-  @ActionScheme  
-  public Void updateRequirements() {  
-    fireEvent UpdateDiagram  
-  }  
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml"];
+import DiagramSpecification GOAL_DIAGRAM from [GOAL_DIAGRAM_SPECIFICATION];
+import Diagram EXAMPLE_DIAGRAM from [GOAL_DIAGRAM_SPECIFICATION + "/GoalDiagram.diagram"];
+import DiagramShape FUNCTIONAL_GOAL_SHAPE from [EXAMPLE_DIAGRAM:"SYL-19"];
+import DiagramShape NON_FUNCTIONAL_GOAL_SHAPE from [EXAMPLE_DIAGRAM:"FLX-14"];
+import DiagramShape CONTRIBUTION_GOAL_SHAPE from [EXAMPLE_DIAGRAM:"SYL-41"];
+import DiagramShape REFINEMENT_SHAPE from [EXAMPLE_DIAGRAM:"FLX-17"];
+import DiagramShape ENVIRONMENTAL_AGENT_SHAPE from [EXAMPLE_DIAGRAM:"FLX-12"];
+import DiagramShape SOFTWARE_AGENT_SHAPE from [EXAMPLE_DIAGRAM:"FLX-15"];
+import DiagramShape CONTRIBUTION_NODE_SHAPE from [EXAMPLE_DIAGRAM:"SYL-43"];
+import DiagramShape GOAL_GROUP_SHAPE from [EXAMPLE_DIAGRAM:"SYL-47"];
+import DiagramConnector PARENT_REFINEMENT_CONNECTOR from [EXAMPLE_DIAGRAM:"SYL-35"];
+import DiagramConnector CHILD_REFINEMENT_CONNECTOR from [EXAMPLE_DIAGRAM:"SYL-36"];
+import DiagramConnector AGENT_ASSIGNMENT_CONNECTOR from [EXAMPLE_DIAGRAM:"SYL-39"];
+import DiagramConnector IMPACT_CONNECTOR from [EXAMPLE_DIAGRAM:"SYL-40"];
+import DiagramConnector CONTRIBUTION_CONNECTOR_1 from [EXAMPLE_DIAGRAM:"SYL-44"];
+import DiagramConnector CONTRIBUTION_CONNECTOR_2 from [EXAMPLE_DIAGRAM:"SYL-45"];
 
-  @CreationScheme  
-  GoalModelingDiagram:create() {  
-  
-  }  
+@URI("http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml")
+@Version("0.1")
+public model GoalModelingDiagram {
 
-  @ActionScheme  
-  public Void representRequiredRelationships() {  
-    this.representRequiredImpacts()    
-    this.removeExtraImpacts()    
-    this.representRequiredAgentAssignments()    
-    this.removeExtraAgentAssignments()    
-    this.representRequiredContributions()    
-    this.removeExtraContributions()    
-    this.representRequiredRefinments()    
-    this.removeExtraRefinments()  
-  }  
+	String diagramName;
+	String diagramTitle;
+	String diagramDescription;
 
-  @ActionScheme  
-  Void representRequiredImpacts() {  
-    for (contributionGoalGR : this.SelectFlexoConceptInstance(type=ContributionGoalGR)) {    
-      for (impact : model.SelectFlexoConceptInstance(type=Impact,where=where=(selected.contributionGoal = contributionGoalGR.goal))) {      
-        log (("Est ce qu'on doit representer l'impact " + impact) + " ?")        
-        FunctionalGoalGR functionalGoalGR = this.SelectUniqueFlexoConceptInstance(type=FunctionalGoalGR,where=where=(selected.goal = impact.functionalGoal));        
-        if (functionalGoalGR != null) {        
-          log "Oui on doit le representer"          
-          ImpactGR impactGR = this.SelectUniqueFlexoConceptInstance(type=ImpactGR,where=where=(selected.impact = impact));          
-          if (impactGR = null) {          
-            impactGR = ImpactGR.representImpact(impact,contributionGoalGR,functionalGoalGR);          
-          }        
-        } else {        
-          log "On s'en fout, l'autre goal n'est pas present"        
-        }      
-      }    
-    }  
-  }  
+	/** The goal model this diagram represents */
+	SysMLKaosModel kaosModel with ModelInstance();
 
-  @ActionScheme  
-  Void removeExtraImpacts() {  
-    for (impactGR : this.SelectFlexoConceptInstance(type=ImpactGR)) {    
-      log ((("C-GoalGR=" + impactGR.contributionGoalGR) + " deleted:") + impactGR.contributionGoalGR.isDeleted)      
-      if (impactGR.contributionGoalGR.isDeleted | impactGR.functionalGoalGR.isDeleted) {      
-        log "Je dois supprimer cet impactGR"        
-        impactGR.removeFromDiagram();      
-      }    
-    }  
-  }  
+	Diagram kaosGoalDiagram with TypedDiagram(
+			diagramSpecification=GOAL_DIAGRAM,
+			paletteElementBindings={
+					PaletteElementBinding:(call=new FunctionalGoalGR::createFunctionalGoal("Goal", "", ""),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#F-Goal"),
+					PaletteElementBinding:(call=new NonFunctionalGoalGR::createNonFunctionalGoal(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#NF-Goal"),
+					PaletteElementBinding:(call=new ContributionGoalGR::createContributionGoal(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#C-Goal"),
+					PaletteElementBinding:(call=new EnvironmentalAgentGR::createEnvironmentalAgent(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#Env. Agent"),
+					PaletteElementBinding:(call=new SoftwareAgentGR::createSoftwareAgent(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#Soft. Agent"),
+					PaletteElementBinding:(call=new RefinementGR::dropAndRequirement(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#AND"),
+					PaletteElementBinding:(call=new RefinementGR::dropOrRequirement(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#OR"),
+					PaletteElementBinding:(call=new RefinementGR::dropMilestoneRefinement(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#MilestoneRefinementGR"),
+					PaletteElementBinding:(call=new RefinementGR::dropDataRefinement(),
+							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#DataRefinementGR")});
 
-  @ActionScheme  
-  Void representRequiredAgentAssignments() {  
-    for (agentGR : this.SelectFlexoConceptInstance(type=AgentGR)) {    
-      for (agentAssignment : model.SelectFlexoConceptInstance(type=AgentAssignment,where=where=(selected.agent = agentGR.agent))) {      
-        log (("Est ce qu'on doit representer l'assign " + agentAssignment) + " ?")        
-        GoalGR goalGR = this.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = agentAssignment.goal));        
-        if (goalGR != null) {        
-          log "Oui on doit le representer"          
-          AgentAssignmentGR agentAssignmentGR = this.SelectUniqueFlexoConceptInstance(type=AgentAssignmentGR,where=where=(selected.agentAssignment = agentAssignment));          
-          if (agentAssignmentGR = null) {          
-            agentAssignmentGR = AgentAssignmentGR.representAgentAssignment(agentAssignment,agentGR,goalGR);          
-          }        
-        } else {        
-          log "On s'en fout, l'autre goal n'est pas present"        
-        }      
-      }    
-    }  
-  }  
+	create::init(String diagramName, String diagramTitle, SysMLKaosModel goalModel) {
+		log "Initializing diagram";
+		diagramName = parameters.diagramName;
+		diagramTitle = parameters.diagramTitle;
+		kaosModel = parameters.goalModel;
+		kaosGoalDiagram = DIAGRAM::CreateDiagram(resourceName=parameters.diagramName, resourceCenter=container.resourceCenter,
+				relativePath="/Diagrams");
+	}
 
-  @ActionScheme  
-  Void removeExtraAgentAssignments() {  
-    for (agentAssignmentGR : this.SelectFlexoConceptInstance(type=AgentAssignmentGR)) {    
-      if (agentAssignmentGR.agentGR.isDeleted | agentAssignmentGR.goalGR.isDeleted) {      
-        agentAssignmentGR.removeFromDiagram();      
-      }    
-    }  
-  }  
+	create() {
+	}
 
-  @ActionScheme  
-  Void representRequiredContributions() {  
-    for (contributionGoalGR : this.SelectFlexoConceptInstance(type=ContributionGoalGR)) {    
-      for (contribution : model.SelectFlexoConceptInstance(type=Contribution,where=where=(selected.contributionGoal = contributionGoalGR.goal))) {      
-        NonFunctionalGoalGR nonFunctionalGoalGR = this.SelectUniqueFlexoConceptInstance(type=NonFunctionalGoalGR,where=where=(selected.goal = contribution.nonFunctionalGoal));        
-        if (nonFunctionalGoalGR != null) {        
-          log "Oui on doit le representer"          
-          ContributionGR contributionGR = this.SelectUniqueFlexoConceptInstance(type=ContributionGR,where=where=(selected.contribution = contribution));          
-          if (contributionGR = null) {          
-            contributionGR = ContributionGR.representContribution(contribution,contributionGoalGR,nonFunctionalGoalGR);          
-          }        
-        } else {        
-              
-        }      
-      }    
-    }  
-  }  
+	delete() {
+	}
 
-  @ActionScheme  
-  Void removeExtraContributions() {  
-    for (contributionGR : this.SelectFlexoConceptInstance(type=ContributionGR)) {    
-      if (contributionGR.contributionGoalGR.isDeleted | contributionGR.nonFunctionalGoalGR.isDeleted) {      
-        contributionGR.removeFromDiagram();      
-      }    
-    }  
-  }  
+	public updateRequirements() {
+		fire new UpdateDiagram();
+	}
 
-  @ActionScheme  
-  Void representRequiredRefinments() {  
-    log "Represent required refinments"    
-    for (goalGR : this.SelectFlexoConceptInstance(type=GoalGR)) {    
-      for (refinement : model.SelectFlexoConceptInstance(type=Refinement,where=where=selected.parentGoal.contains(goalGR.goal))) {      
-        if this.atLeastOneChild(refinement) {        
-          this.representRequiredRefinment(refinement)        
-        }      
-      }    
-    }  
-  }  
+	/** Re-project onto the diagram every relationship the model holds, and remove the graphics whose object is gone */
+	public representRequiredRelationships() {
+		this.representRequiredImpacts();
+		this.removeExtraImpacts();
+		this.representRequiredAgentAssignments();
+		this.removeExtraAgentAssignments();
+		this.representRequiredContributions();
+		this.removeExtraContributions();
+		this.representRequiredRefinments();
+		this.removeExtraRefinments();
+	}
 
-  @ActionScheme  
-  Void representRequiredRefinment(Refinement refinment) {  
-    log ("Represent refinment " + parameters.refinment)    
-    log ("child goals: " + this.getChildGoalGRs(parameters.refinment))    
-    log ("parent goals: " + this.getParentGoalGRs(parameters.refinment))    
-    ArrayList<GoalGR> parentGoals = this.getParentGoalGRs(parameters.refinment);    
-    ArrayList<GoalGR> childGoals = this.getChildGoalGRs(parameters.refinment);    
-    if ((childGoals.size() > 0) & (parentGoals.size > 0)) {    
-      RefinementGR refinmentGR = this.SelectUniqueFlexoConceptInstance(type=RefinementGR,where=where=(selected.refinement = parameters.refinment));      
-      if (refinmentGR = null) {      
-        refinmentGR = RefinementGR.representRefinment(parameters.refinment,parentGoals,childGoals);      
-      } else {      
-        refinmentGR.updateRequiredLinks()      
-      }    
-    }  
-  }  
+	public representRequiredImpacts() {
+		for (ContributionGoalGR contributionGoalGR : select ContributionGoalGR from this) {
+			for (Impact impact : select Impact from kaosModel where (selected.contributionGoal == contributionGoalGR.goal)) {
+				FunctionalGoalGR functionalGoalGR = select unique FunctionalGoalGR from this
+						where (selected.goal == impact.functionalGoal);
+				if (functionalGoalGR != null) {
+					ImpactGR impactGR = select unique ImpactGR from this where (selected.impact == impact);
+					if (impactGR == null) {
+						impactGR = new ImpactGR::representImpact(impact, contributionGoalGR, functionalGoalGR);
+					}
+				}
+			}
+		}
+	}
 
-  @ActionScheme  
-  private Boolean atLeastOneChild(Refinement refinment) {  
-    for (child : parameters.refinment.childGoals) {    
-      GoalGR childGoalGR = this.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = child));      
-      if (childGoalGR != null) {      
-        return true;      
-      }    
-    }    
-    return false;  
-  }  
+	public removeExtraImpacts() {
+		for (ImpactGR impactGR : select ImpactGR from this) {
+			if (impactGR.contributionGoalGR.isDeleted || impactGR.functionalGoalGR.isDeleted) {
+				impactGR.removeFromDiagram();
+			}
+		}
+	}
 
-  @ActionScheme  
-  private Boolean atLeastOneParent(Refinement refinment) {  
-    for (parent : parameters.refinment.parentGoal) {    
-      GoalGR parentGoalGR = this.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = parent));      
-      if (parentGoalGR != null) {      
-        return true;      
-      }    
-    }  
-  }  
+	public representRequiredAgentAssignments() {
+		for (AgentGR agentGR : select AgentGR from this) {
+			for (AgentAssignment agentAssignment : select AgentAssignment from kaosModel
+					where (selected.agent == agentGR.agent)) {
+				GoalGR goalGR = select unique GoalGR from this where (selected.goal == agentAssignment.goal);
+				if (goalGR != null) {
+					AgentAssignmentGR agentAssignmentGR = select unique AgentAssignmentGR from this
+							where (selected.agentAssignment == agentAssignment);
+					if (agentAssignmentGR == null) {
+						agentAssignmentGR = new AgentAssignmentGR::representAgentAssignment(agentAssignment, agentGR, goalGR);
+					}
+				}
+			}
+		}
+	}
 
-  @ActionScheme  
-  private ArrayList<GoalGR> getChildGoalGRs(Refinement refinment) {  
-    ArrayList<GoalGR> returned = new ArrayList<GoalGR>();    
-    for (child : parameters.refinment.childGoals) {    
-      GoalGR childGoalGR = this.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = child));      
-      if (childGoalGR != null) {      
-        returned.add(childGoalGR)      
-      }    
-    }    
-    return returned;  
-  }  
+	public removeExtraAgentAssignments() {
+		for (AgentAssignmentGR agentAssignmentGR : select AgentAssignmentGR from this) {
+			if (agentAssignmentGR.agentGR.isDeleted || agentAssignmentGR.goalGR.isDeleted) {
+				agentAssignmentGR.removeFromDiagram();
+			}
+		}
+	}
 
-  @ActionScheme  
-  private ArrayList<GoalGR> getParentGoalGRs(Refinement refinment) {  
-    ArrayList<GoalGR> returned = new ArrayList<GoalGR>();    
-    for (parent : parameters.refinment.parentGoal) {    
-      GoalGR parentGoalGR = this.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = parent));      
-      if (parentGoalGR != null) {      
-        returned.add(parentGoalGR)      
-      }    
-    }    
-    return returned;  
-  }  
+	public representRequiredContributions() {
+		for (ContributionGoalGR contributionGoalGR : select ContributionGoalGR from this) {
+			for (Contribution contribution : select Contribution from kaosModel
+					where (selected.contributionGoal == contributionGoalGR.goal)) {
+				NonFunctionalGoalGR nonFunctionalGoalGR = select unique NonFunctionalGoalGR from this
+						where (selected.goal == contribution.nonFunctionalGoal);
+				if (nonFunctionalGoalGR != null) {
+					ContributionGR contributionGR = select unique ContributionGR from this
+							where (selected.contribution == contribution);
+					if (contributionGR == null) {
+						contributionGR = new ContributionGR::representContribution(contribution, contributionGoalGR,
+								nonFunctionalGoalGR);
+					}
+				}
+			}
+		}
+	}
 
-  @ActionScheme  
-  Void removeExtraRefinments() {  
-    for (linkGR : this.SelectFlexoConceptInstance(type=ParentRefinementLinkGR)) {    
-      if (linkGR.refinementGR.isDeleted | linkGR.parentGoalGR.isDeleted) {      
-        linkGR.removeFromDiagram();      
-      }    
-    }    
-    for (linkGR : this.SelectFlexoConceptInstance(type=ChildRefinmentLinkGR)) {    
-      if (linkGR.refinementGR.isDeleted | linkGR.childrenGoalGR.isDeleted) {      
-        linkGR.removeFromDiagram();      
-      }    
-    }    
-    for (refinmentGR : this.SelectFlexoConceptInstance(type=RefinementGR)) {    
-      if (!((this.atLeastOneChild(refinmentGR.refinement) & this.atLeastOneParent(refinmentGR.refinement)))) {      
-        refinmentGR.removeFromDiagram();      
-      }    
-    }  
-  }  
+	public removeExtraContributions() {
+		for (ContributionGR contributionGR : select ContributionGR from this) {
+			if (contributionGR.contributionGoalGR.isDeleted || contributionGR.nonFunctionalGoalGR.isDeleted) {
+				contributionGR.removeFromDiagram();
+			}
+		}
+	}
 
-  @ActionScheme  
-  public Void serializeGoalModel(ExcelWorkbookResource excelWorkBook) {  
-    log "Goal model serialization"    
-    ExcelWorkbook excelFile = parameters.excelWorkBook.excelWorkbook;    
-    if (excelFile.getExcelSheetByName("Goal Model") = null) {    
-      excelFile.AddExcelSheet()      
-      ExcelRow rootRow = excelFile.AddExcelRow();      
-      excelFile.AddExcelCell()      
-      excelFile.AddExcelCell()      
-      excelFile.AddExcelCell()      
-      excelFile.AddExcelRow()    
-    }    
-    MatchingSet matchingSet = this.initiateMatching(SerializingRule);    
-    for (goal : model.SelectFlexoConceptInstance(type=Goal)) {    
-      log ("serializing goal " + goal.name)      
-      FML@RT::MatchFlexoConceptInstance as EventSerialization match=(goal=goal) using EventSerialization:create(goal,parameters.excelWorkBook)    
-    }    
-    matchingSet.finalizeMatching()  
-  }  
+	public representRequiredRefinments() {
+		log "Represent required refinments";
+		for (GoalGR goalGR : select GoalGR from this) {
+			for (Refinement refinement : select Refinement from kaosModel where (selected.parentGoal.contains(goalGR.goal))) {
+				if (this.atLeastOneChild(refinement)) {
+					this.representRequiredRefinment(refinement);
+				}
+			}
+		}
+	}
 
+	public representRequiredRefinment(Refinement refinment) {
+		log "Represent refinment " + parameters.refinment;
+		List<GoalGR> parentGoals = this.getParentGoalGRs(parameters.refinment);
+		List<GoalGR> childGoals = this.getChildGoalGRs(parameters.refinment);
+		if (childGoals.size > 0 && parentGoals.size > 0) {
+			RefinementGR refinmentGR = select unique RefinementGR from this where (selected.refinement == parameters.refinment);
+			if (refinmentGR == null) {
+				refinmentGR = new RefinementGR::representRefinment(parameters.refinment, parentGoals, childGoals);
+			}
+			else {
+				refinmentGR.updateRequiredLinks();
+			}
+		}
+	}
 
-  @FlexoConcept  
-  public class FunctionalGoalGR extends GoalGR  {  
-  
-    public DiagramShape shape;  
-    public FunctionalGoal goal;  
-  
-    @DropScheme    
-    FunctionalGoalGR:createFunctionalGoal(String name, String type, String description) {    
-      goal = FunctionalGoal.create(parameters.name,parameters.type,parameters.description,true);      
-      log ("On cree un goal name=" + parameters.name)      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @CreationScheme    
-    FunctionalGoalGR:createTopFunctionalGoal(String name, String description, Integer index) {    
-      log ("Create top goal " + parameters.name)      
-      log ("Index=" + parameters.index)      
-      goal = FunctionalGoal.create(parameters.name,"",parameters.description,true);      
-      log "On ajoute la shape"      
-      shape = kaosGoalDiagram.AddShape();      
-      shape.x=(20 + (parameters.index * 10))      
-      shape.y=(20 + (parameters.index * 10))      
-      kaosGoalDiagram.firePropertyChange invalidate    
-    }    
-  
-    @DropScheme    
-    FunctionalGoalGR:representFunctionalGoal(FunctionalGoal goal) {    
-      log ("On represente le goal " + parameters.goal)      
-      goal = parameters.goal;      
-      shape = kaosGoalDiagram.AddShape();      
-      container.representRequiredRelationships()    
-    }    
-  
-    @CreationScheme    
-    FunctionalGoalGR:representTopFunctionalGoal(FunctionalGoal goal, Integer index) {    
-      goal = parameters.goal;      
-      shape = kaosGoalDiagram.AddShape();      
-      shape.x=(20 + (parameters.index * 10))      
-      shape.y=(20 + (parameters.index * 10))      
-      kaosGoalDiagram.firePropertyChange invalidate    
-    }    
-  
-  }  
+	private boolean atLeastOneChild(Refinement refinment) {
+		for (Goal child : parameters.refinment.childGoals) {
+			GoalGR childGoalGR = select unique GoalGR from this where (selected.goal == child);
+			if (childGoalGR != null) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-  /**  
-   * Abstract representation concept for Goal  
-   *   
-   */  
-  @FlexoConcept  
-  public class GoalGR {  
-  
-    public DiagramShape shape;  
-      
-    abstract Goal goal;  
-  
-    @DeletionScheme    
-    public Void delete() {    
-      log ("Deleting goal " + goal)      
-      delete goal;      
-      delete shape;    
-    }    
-  
-    @DeletionScheme    
-    public Void removeFromDiagram() {    
-      log ("Remove goal from diagram " + goal)      
-      delete shape;      
-      log ("Avant, deleted=" + this.isDeleted)      
-      GoalModelingDiagram goalModelingDiagram = container;      
-      delete this;      
-      log ("Apres, deleted=" + this.isDeleted)      
-      goalModelingDiagram.representRequiredRelationships()    
-    }    
-  
-    @EventListener    
-    Void goalDeleted() {    
-      log ("Received GoalDeleted for " + event.goal)      
-      log ("mon goal: " + goal)      
-      if (event.goal = goal) {      
-        log ("C'est mon goal qui est delete: " + this)        
-        this.removeFromDiagram();      
-      } else {      
-        log "Ca ne me concerne pas"      
-      }    
-    }    
-  
-  }  
+	private boolean atLeastOneParent(Refinement refinment) {
+		for (Goal parent : parameters.refinment.parentGoal) {
+			GoalGR parentGoalGR = select unique GoalGR from this where (selected.goal == parent);
+			if (parentGoalGR != null) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-  /**  
-   * Contraintes:  
-  
-  (!((parentRefinementLinkGR.isEmpty & childRefinementsLinksGR.isEmpty)))  
-  
-  (parentRefinementLinkGR.size <= 1)  
-   *   
-   */  
-  @FlexoConcept  
-  public class RefinementGR {  
-  
-    public DiagramShape shape;  
-    public Refinement refinement;  
-    public List parentRefinementLinkGR;  
-    public List childRefinementsLinksGR;  
-  
-    @LinkScheme    
-    RefinementGR:createRefinement() {    
-      refinement = Refinement.createLinke(toTarget.goal,fromTarget.goal);      
-      shape = kaosGoalDiagram.AddShape();      
-      shape.x=(((((fromTarget.shape.graphicalRepresentation.x + (fromTarget.shape.graphicalRepresentation.width / 2)) + toTarget.shape.graphicalRepresentation.x) + (toTarget.shape.graphicalRepresentation.width / 2)) / 2) - (shape.graphicalRepresentation.width / 2))      
-      shape.y=(((((fromTarget.shape.graphicalRepresentation.y + (fromTarget.shape.graphicalRepresentation.height / 2)) + toTarget.shape.graphicalRepresentation.y) + (toTarget.shape.graphicalRepresentation.height / 2)) / 2) - (shape.graphicalRepresentation.height / 2))      
-      parentRefinementLinkGR.add(ParentRefinementLinkGR.create(this,toTarget))      
-      childRefinementsLinksGR.add(ChildRefinmentLinkGR.create(this,fromTarget))    
-    }    
-  
-    @DropScheme    
-    RefinementGR:dropAndRequirement() {    
-      refinement = Refinement.create();      
-      refinement.setLogicalTypeToAnd()      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @ActionScheme    
-    public Void setLogicalTypeToAnd() {    
-      refinement.setLogicalTypeToAnd()    
-    }    
-  
-    @ActionScheme    
-    public Void setLogicalTypeToOr() {    
-      refinement.setLogicalTypeToOr()    
-    }    
-  
-    @ActionScheme    
-    public Void setLogicalTypeToNone() {    
-      refinement.setLogicalTypeToNone()    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      refinement.delete();      
-      delete shape;    
-    }    
-  
-    @DropScheme    
-    RefinementGR:dropOrRequirement() {    
-      refinement = Refinement.create();      
-      refinement.setLogicalTypeToOr()      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @CreationScheme    
-    RefinementGR:representRefinment(Refinement refinment, List<GoalGR> parentGoalGRs, List<GoalGR> childGoalsGRs) {    
-      refinement = parameters.refinment;      
-      GoalGR mainParentGR = parameters.parentGoalGRs.get(0);      
-      GoalGR mainChildGR = parameters.childGoalsGRs.get(0);      
-      shape = kaosGoalDiagram.AddShape();      
-      shape.x=(((((mainParentGR.shape.graphicalRepresentation.x + (mainParentGR.shape.graphicalRepresentation.width / 2)) + mainChildGR.shape.graphicalRepresentation.x) + (mainChildGR.shape.graphicalRepresentation.width / 2)) / 2) - (shape.graphicalRepresentation.width / 2))      
-      shape.y=(((((mainParentGR.shape.graphicalRepresentation.y + (mainParentGR.shape.graphicalRepresentation.height / 2)) + mainChildGR.shape.graphicalRepresentation.y) + (mainChildGR.shape.graphicalRepresentation.height / 2)) / 2) - (shape.graphicalRepresentation.height / 2))      
-      for (parentGoalGR : parameters.parentGoalGRs) {      
-        ParentRefinementLinkGR parentRefinmentLink = container.SelectUniqueFlexoConceptInstance(type=ParentRefinementLinkGR,where=where=((selected.refinementGR = this)(selected.parentGoalGR = parentGoalGR)));        
-        if (parentRefinmentLink = null) {        
-          ParentRefinementLinkGR variable = ParentRefinementLinkGR.create(this,parentGoalGR);        
-        }      
-      }      
-      for (childGoalGR : parameters.childGoalsGRs) {      
-        ChildRefinmentLinkGR childRefinmentLink = container.SelectUniqueFlexoConceptInstance(type=ChildRefinmentLinkGR,where=where=((selected.refinementGR = this)(selected.childrenGoalGR = childGoalGR)));        
-        if (childRefinmentLink = null) {        
-          ChildRefinmentLinkGR variable = ChildRefinmentLinkGR.create(this,childGoalGR);        
-        }      
-      }    
-    }    
-  
-    @DeletionScheme    
-    Void removeFromDiagram() {    
-      for (parentLinkGR : parentRefinementLinkGR) {      
-        parentLinkGR.delete();      
-      }      
-      for (childLinkGR : childRefinementsLinksGR) {      
-        childLinkGR.removeFromDiagram();      
-      }      
-      delete shape;    
-    }    
-  
-    @ActionScheme    
-    Void updateRequiredLinks() {    
-      for (parentGoal : refinement.parentGoal) {      
-        GoalGR parentGoalGR = container.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = parentGoal));        
-        if (parentGoalGR != null) {        
-          ParentRefinementLinkGR parentLinkGR = container.SelectUniqueFlexoConceptInstance(type=ParentRefinementLinkGR,where=where=((selected.refinementGR = this)(selected.parentGoalGR = parentGoalGR)));          
-          if (parentLinkGR = null) {          
-            parentLinkGR = ParentRefinementLinkGR.create(this,parentGoalGR);          
-          }        
-        }      
-      }      
-      for (childGoal : refinement.childGoals) {      
-        GoalGR childGoalGR = container.SelectUniqueFlexoConceptInstance(type=GoalGR,where=where=(selected.goal = childGoal));        
-        if (childGoalGR != null) {        
-          ChildRefinmentLinkGR childLinkGR = container.SelectUniqueFlexoConceptInstance(type=ChildRefinmentLinkGR,where=where=((selected.refinementGR = this)(selected.childrenGoalGR = childGoalGR)));          
-          if (childLinkGR = null) {          
-            childLinkGR = ChildRefinmentLinkGR.create(this,childGoalGR);          
-          }        
-        }      
-      }    
-    }    
-  
-    @DropScheme    
-    RefinementGR:dropMilestoneRefinement() {    
-      refinement = Refinement.create();      
-      refinement.setLogicalTypeToMilestone()      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @DropScheme    
-    RefinementGR:dropDataRefinement() {    
-      refinement = Refinement.create();      
-      refinement.setLogicalTypeToData()      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @ActionScheme    
-    public Void setLogicalTypeToMilestone() {    
-      refinement.setLogicalTypeToMilestone()    
-    }    
-  
-    @ActionScheme    
-    public Void setLogicalTypeToData() {    
-      refinement.setLogicalTypeToData()    
-    }    
-  
-  }  
+	private List<GoalGR> getChildGoalGRs(Refinement refinment) {
+		List<GoalGR> returned = new ArrayList();
+		for (Goal child : parameters.refinment.childGoals) {
+			GoalGR childGoalGR = select unique GoalGR from this where (selected.goal == child);
+			if (childGoalGR != null) {
+				returned.add(childGoalGR);
+			}
+		}
+		return returned;
+	}
 
-  @FlexoConcept  
-  public class NonFunctionalGoalGR extends GoalGR  {  
-  
-    public DiagramShape shape;  
-    public NonFunctionalGoal goal;  
-  
-    @DropScheme    
-    NonFunctionalGoalGR:createNonFunctionalGoal(String name, String type, String description) {    
-      goal = NonFunctionalGoal.create(parameters.name,parameters.type,parameters.description);      
-      log ((("Je viens de creer le goal " + goal) + " name=") + goal.name)      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      NonFunctionalGoal deletedGoal = goal;      
-      delete goal;      
-      delete shape;    
-    }    
-  
-    @DropScheme    
-    NonFunctionalGoalGR:representNonFunctionalGoal(NonFunctionalGoal goal) {    
-      log ("On represente le goal " + parameters.goal)      
-      goal = parameters.goal;      
-      shape = kaosGoalDiagram.AddShape();      
-      container.representRequiredRelationships()    
-    }    
-  
-  }  
+	private List<GoalGR> getParentGoalGRs(Refinement refinment) {
+		List<GoalGR> returned = new ArrayList();
+		for (Goal parent : parameters.refinment.parentGoal) {
+			GoalGR parentGoalGR = select unique GoalGR from this where (selected.goal == parent);
+			if (parentGoalGR != null) {
+				returned.add(parentGoalGR);
+			}
+		}
+		return returned;
+	}
 
-  @FlexoConcept  
-  public class AgentGR {  
-  
-    public DiagramShape shape;  
-      
-    abstract Agent agent;  
-  
-    @DeletionScheme    
-    public Void removeFromDiagram() {    
-      log ("Remove agent from diagram " + agent)      
-      delete shape;      
-      container.representRequiredRelationships()    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      log ("Deleting agent " + agent)      
-      delete agent;      
-      delete shape;    
-    }    
-  
-    @EventListener    
-    Void agentDeleted() {    
-      log ("Received AgentDeleted for " + event.agent)      
-      if (event.agent = agent) {      
-        log ("C'est mon agent qui est delete: " + this)        
-        this.removeFromDiagram();      
-      } else {      
-        log "Ca ne me concerne pas"      
-      }    
-    }    
-  
-  }  
+	public removeExtraRefinments() {
+		for (ParentRefinementLinkGR linkGR : select ParentRefinementLinkGR from this) {
+			if (linkGR.refinementGR.isDeleted || linkGR.parentGoalGR.isDeleted) {
+				linkGR.removeFromDiagram();
+			}
+		}
+		for (ChildRefinmentLinkGR linkGR : select ChildRefinmentLinkGR from this) {
+			if (linkGR.refinementGR.isDeleted || linkGR.childrenGoalGR.isDeleted) {
+				linkGR.removeFromDiagram();
+			}
+		}
+		for (RefinementGR refinmentGR : select RefinementGR from this) {
+			if (!(this.atLeastOneChild(refinmentGR.refinement) && this.atLeastOneParent(refinmentGR.refinement))) {
+				refinmentGR.removeFromDiagram();
+			}
+		}
+	}
 
-  @FlexoConcept  
-  public class EnvironmentalAgentGR {  
-  
-    public DiagramShape shape;  
-    public EnvironmentalAgent agent;  
-  
-    @DropScheme    
-    EnvironmentalAgentGR:createEnvironmentalAgent(String name, String description) {    
-      agent = EnvironmentalAgent.createEnvironmentalAgent(parameters.name,parameters.description);      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @DropScheme    
-    EnvironmentalAgentGR:representEnvironmentalAgent(EnvironmentalAgent agent) {    
-      log ("On represente l'agent " + parameters.agent)      
-      agent = parameters.agent;      
-      shape = kaosGoalDiagram.AddShape();      
-      container.representRequiredRelationships()    
-    }    
-  
-  }  
+	/** Serialize every goal of the model as a row of the "Goal Model" sheet of supplied workbook */
+	public serializeGoalModel(Resource<ExcelWorkbook> excelWorkBook) {
+		log "Goal model serialization";
+		ExcelWorkbook excelFile = parameters.excelWorkBook.excelWorkbook;
+		if (excelFile.getExcelSheetByName("Goal Model") == null) {
+			XLS::AddExcelSheet(sheetName="Goal Model", override=true) in (excelFile);
+			ExcelRow rootRow = XLS::AddExcelRow(rowIndex=0, excelSheet=excelFile.getExcelSheetByName("Goal Model")) in (excelFile);
+			XLS::AddExcelCell(row=rootRow, columnIndex=0, value="Parent Goal", cellType=$String) in (excelFile);
+			XLS::AddExcelCell(row=rootRow, columnIndex=1, value="Goal Name", cellType=$String) in (excelFile);
+			XLS::AddExcelCell(row=rootRow, columnIndex=2, value="Goal Description", cellType=$String) in (excelFile);
+			XLS::AddExcelRow(rowIndex=1, excelSheet=excelFile.getExcelSheetByName("Goal Model")) in (excelFile);
+		}
+		MatchingSet<EventSerialization> serializations = begin match EventSerialization from this;
+		for (Goal aGoal : select Goal from kaosModel) {
+			log "serializing goal " + aGoal.name;
+			match EventSerialization in serializations from this where (goal=aGoal)
+					unmatched: new EventSerialization(aGoal, parameters.excelWorkBook);
+		}
+		end match EventSerialization in serializations unmatched: delete();
+	}
 
-  @FlexoConcept  
-  public class SoftwareAgentGR {  
-  
-    public DiagramShape shape;  
-    public SoftwareAgent agent;  
-  
-    @DropScheme    
-    SoftwareAgentGR:createSoftwareAgent(String name, String description) {    
-      agent = SoftwareAgent.createSoftwareAgent(parameters.name,parameters.description);      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @DropScheme    
-    SoftwareAgentGR:representSoftwareAgent(SoftwareAgent agent) {    
-      log ("On represente l'agent " + parameters.agent)      
-      agent = parameters.agent;      
-      shape = kaosGoalDiagram.AddShape();      
-      container.representRequiredRelationships()    
-    }    
-  
-  }  
+	/** Graphical representation of a goal, whatever its kind */
+	public abstract concept GoalGR {
 
-  @FlexoConcept  
-  public class ParentRefinementLinkGR {  
-  
-    public RefinementGR refinementGR;  
-    public GoalGR parentGoalGR;  
-    public DiagramConnector connector;  
-  
-    @LinkScheme    
-    ParentRefinementLinkGR:linkParentRefinment() {    
-      refinementGR = fromTarget;      
-      parentGoalGR = toTarget;      
-      refinementGR.refinement.addLinkToAParentGoal(parentGoalGR.goal)      
-      connector = kaosGoalDiagram.AddConnector();      
-      refinementGR.parentRefinementLinkGR.add(this)    
-    }    
-  
-    @CreationScheme    
-    ParentRefinementLinkGR:create(UndefinedFlexoConceptInstanceType<null> refinementGR, UndefinedFlexoConceptInstanceType<null> parentGoalGR) {    
-      refinementGR = parameters.refinementGR;      
-      parentGoalGR = parameters.parentGoalGR;      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      refinementGR.refinement.removeLinkToAParentGoal(parentGoalGR.goal)      
-      refinementGR.parentRefinementLinkGR.remove(this);      
-      delete connector;    
-    }    
-  
-    @DeletionScheme    
-    Void removeFromDiagram() {    
-      delete connector;    
-    }    
-  
-  }  
+		abstract DiagramShape shape;
+		abstract Goal goal;
 
-  @FlexoConcept  
-  public class ChildRefinmentLinkGR {  
-  
-    public RefinementGR refinementGR;  
-    public GoalGR childrenGoalGR;  
-    public DiagramConnector connector;  
-  
-    @LinkScheme    
-    ChildRefinmentLinkGR:linkChildRefinement() {    
-      refinementGR = toTarget;      
-      childrenGoalGR = fromTarget;      
-      refinementGR.childRefinementsLinksGR.add(this)      
-      log "42-defore call"      
-      refinementGR.refinement.addLinkToAChildrenGoal(childrenGoalGR.goal)      
-      log "42-after call"      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @CreationScheme    
-    ChildRefinmentLinkGR:create(RefinementGR refinementGR, GoalGR childrenGoalGR) {    
-      refinementGR = parameters.refinementGR;      
-      childrenGoalGR = parameters.childrenGoalGR;      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      refinementGR.refinement.removeLinkToAChildrenGoal(childrenGoalGR.goal)      
-      refinementGR.childRefinementsLinksGR.remove(this);      
-      delete connector;    
-    }    
-  
-    @DeletionScheme    
-    Void removeFromDiagram() {    
-      delete connector;    
-    }    
-  
-  }  
+		public delete() {
+			log "Deleting goal " + goal;
+			delete goal;
+			delete shape;
+		}
 
-  /**  
-   * Allocation -> Assegnimint  
-   *   
-   */  
-  @FlexoConcept  
-  public class AgentAssignmentGR {  
-  
-    public AgentGR agentGR;  
-    public GoalGR goalGR;  
-    public DiagramConnector connector;  
-    public AgentAssignment agentAssignment;  
-  
-    @LinkScheme    
-    AgentAssignmentGR:linkAgentToGoal() {    
-      agentGR = fromTarget;      
-      goalGR = toTarget;      
-      agentAssignment = AgentAssignment.create(fromTarget.agent,toTarget.goal);      
-      connector = topLevel.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      agentAssignment.delete();      
-      delete connector;    
-    }    
-  
-    @CreationScheme    
-    AgentAssignmentGR:representAgentAssignment(AgentAssignment agentAssignment, AgentGR agentlGR, GoalGR goalGR) {    
-      agentGR = parameters.agentlGR;      
-      goalGR = parameters.goalGR;      
-      agentAssignment = parameters.agentAssignment;      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    Void removeFromDiagram() {    
-      delete connector;    
-    }    
-  
-  }  
+		public removeFromDiagram() {
+			log "Remove goal from diagram " + goal;
+			delete shape;
+			GoalModelingDiagram goalModelingDiagram = container;
+			delete this;
+			goalModelingDiagram.representRequiredRelationships();
+		}
 
-  /**  
-   * Allocation -> Assegnimint  
-   *   
-   */  
-  @FlexoConcept  
-  public class ContributionGR {  
-  
-    public ContributionGoalGR contributionGoalGR;  
-    public NonFunctionalGoalGR nonFunctionalGoalGR;  
-    public DiagramConnector connector1;  
-    public Contribution contribution;  
-    public DiagramShape node;  
-    public DiagramConnector connector2;  
-  
-    @LinkScheme    
-    ContributionGR:newPositiveContribution() {    
-      contributionGoalGR = fromTarget;      
-      nonFunctionalGoalGR = toTarget;      
-      contribution = Contribution.create(contributionGoalGR.goal,nonFunctionalGoalGR.goal,true);      
-      node = kaosGoalDiagram.AddShape();      
-      node.x=(((((fromTarget.shape.graphicalRepresentation.x + (fromTarget.shape.graphicalRepresentation.width / 2)) + toTarget.shape.graphicalRepresentation.x) + (toTarget.shape.graphicalRepresentation.width / 2)) / 2) - (node.graphicalRepresentation.width / 2))      
-      node.y=(((((fromTarget.shape.graphicalRepresentation.y + (fromTarget.shape.graphicalRepresentation.height / 2)) + toTarget.shape.graphicalRepresentation.y) + (toTarget.shape.graphicalRepresentation.height / 2)) / 2) - (node.graphicalRepresentation.height / 2))      
-      connector1 = kaosGoalDiagram.AddConnector();      
-      connector2 = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      delete connector2;      
-      delete connector1;      
-      delete node;      
-      contribution.delete();    
-    }    
-  
-    @LinkScheme    
-    ContributionGR:newNegativeContribution() {    
-      contributionGoalGR = fromTarget;      
-      nonFunctionalGoalGR = toTarget;      
-      contribution = Contribution.create(contributionGoalGR.goal,nonFunctionalGoalGR.goal,false);      
-      node = kaosGoalDiagram.AddShape();      
-      node.x=(((((fromTarget.shape.graphicalRepresentation.x + (fromTarget.shape.graphicalRepresentation.width / 2)) + toTarget.shape.graphicalRepresentation.x) + (toTarget.shape.graphicalRepresentation.width / 2)) / 2) - (node.graphicalRepresentation.width / 2))      
-      node.y=(((((fromTarget.shape.graphicalRepresentation.y + (fromTarget.shape.graphicalRepresentation.height / 2)) + toTarget.shape.graphicalRepresentation.y) + (toTarget.shape.graphicalRepresentation.height / 2)) / 2) - (node.graphicalRepresentation.height / 2))      
-      connector1 = kaosGoalDiagram.AddConnector();      
-      connector2 = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @CreationScheme    
-    ContributionGR:representContribution(Contribution contribution, ContributionGoalGR contributionGoalGR, NonFunctionalGoalGR nonFunctionalGoalGR) {    
-      contributionGoalGR = parameters.contributionGoalGR;      
-      nonFunctionalGoalGR = parameters.nonFunctionalGoalGR;      
-      contribution = parameters.contribution;      
-      node = kaosGoalDiagram.AddShape();      
-      node.x=(((((contributionGoalGR.shape.graphicalRepresentation.x + (contributionGoalGR.shape.graphicalRepresentation.width / 2)) + nonFunctionalGoalGR.shape.graphicalRepresentation.x) + (nonFunctionalGoalGR.shape.graphicalRepresentation.width / 2)) / 2) - (node.graphicalRepresentation.width / 2))      
-      node.y=(((((contributionGoalGR.shape.graphicalRepresentation.y + (contributionGoalGR.shape.graphicalRepresentation.height / 2)) + nonFunctionalGoalGR.shape.graphicalRepresentation.y) + (nonFunctionalGoalGR.shape.graphicalRepresentation.height / 2)) / 2) - (node.graphicalRepresentation.height / 2))      
-      connector1 = kaosGoalDiagram.AddConnector();      
-      connector2 = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    Void removeFromDiagram() {    
-      delete connector2;      
-      delete connector1;      
-      delete node;    
-    }    
-  
-  }  
+		listen DeletedGoal from kaosModel {
+			if (evt.goal == goal) {
+				log "The goal this representation stands for was deleted: " + this;
+				this.removeFromDiagram();
+			}
+		}
+	}
 
-  @FlexoConcept  
-  public class UpdateDiagram {  
-  
-    @CreationScheme    
-    UpdateDiagram:create() {    
-      
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-  }  
+	public concept FunctionalGoalGR extends GoalGR {
 
-  @FlexoConcept  
-  public class ContributionGoalGR extends GoalGR  {  
-  
-    public DiagramShape shape;  
-    public ContributionGoal goal;  
-  
-    @DropScheme    
-    ContributionGoalGR:createContributionGoal(String name, String type, String description) {    
-      goal = ContributionGoal.create(parameters.name,parameters.type,parameters.description);      
-      log ((("Je viens de creer le goal " + goal) + " name=") + goal.name)      
-      shape = kaosGoalDiagram.AddShape();    
-    }    
-  
-    @DropScheme    
-    ContributionGoalGR:representContributionGoal(ContributionGoal goal) {    
-      log ("On represente le goal " + parameters.goal)      
-      goal = parameters.goal;      
-      shape = kaosGoalDiagram.AddShape();      
-      container.representRequiredRelationships()    
-    }    
-  
-  }  
+		DiagramShape shape with ShapeRole(metamodelElement=FUNCTIONAL_GOAL_SHAPE, exampleLabel="F-Goal");
+		FunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
-  /**  
-   * Allocation -> Assegnimint  
-   *   
-   */  
-  @FlexoConcept  
-  public class ImpactGR {  
-  
-    public ContributionGoalGR contributionGoalGR;  
-    public FunctionalGoalGR functionalGoalGR;  
-    public DiagramConnector connector;  
-    public Impact impact;  
-  
-    @LinkScheme    
-    ImpactGR:newPositiveImpact() {    
-      contributionGoalGR = fromTarget;      
-      functionalGoalGR = toTarget;      
-      impact = Impact.create(fromTarget.goal,toTarget.goal,true);      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    public Void delete() {    
-      delete connector;      
-      impact.delete();    
-    }    
-  
-    @LinkScheme    
-    ImpactGR:newNegativeImpact() {    
-      contributionGoalGR = fromTarget;      
-      functionalGoalGR = toTarget;      
-      impact = Impact.create(fromTarget.goal,toTarget.goal,false);      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @CreationScheme    
-    ImpactGR:representImpact(Impact impact, ContributionGoalGR contributionGoalGR, FunctionalGoalGR functionalGoalGR) {    
-      contributionGoalGR = parameters.contributionGoalGR;      
-      functionalGoalGR = parameters.functionalGoalGR;      
-      impact = parameters.impact;      
-      connector = kaosGoalDiagram.AddConnector();    
-    }    
-  
-    @DeletionScheme    
-    Void removeFromDiagram() {    
-      delete connector;    
-    }    
-  
-  }  
+		createFunctionalGoal(String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
+			goal = container.kaosModel.new FunctionalGoal(parameters.name, parameters.type, parameters.description, true);
+			log "Creating goal " + parameters.name;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
 
-  @FlexoConcept  
-  public class GoalGroupGR {  
-  
-    public DiagramShape shape;  
-    public GoalGroup goalGroup;  
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-    @DrawRectangleScheme    
-    GoalGroupGR:create(String title) {    
-      log "Creating group of events"      
-      log ("from: " + from)      
-      log ("to: " + to)      
-      log ("selection: " + selection)      
-      shape = kaosGoalDiagram.AddShape();      
-      ArrayList<FlexoConceptInstance> goalList = new ArrayList<FlexoConceptInstance>();      
-      for (goalGR : selection) {      
-        goalList.add(goalGR.goal)        
-        log ("trouve: " + goalGR)      
-      }      
-      goalGroup = GoalGroup.create(parameters.title,goalList);      
-      for (goalGR : selection) {      
-        log ("trouve: " + goalGR)        
-        goalGR.goal.goalGroup = goalGroup;      
-      }      
-      model.firePropertyChange ungroupedGoals    
-    }    
-  
-  }  
+		create::createTopFunctionalGoal(String name, String description, int index) {
+			log "Create top goal " + parameters.name;
+			goal = container.kaosModel.new FunctionalGoal(parameters.name, "", parameters.description, true);
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x", value=20 + parameters.index * 10)
+					in (container.kaosGoalDiagram);
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="y", value=20 + parameters.index * 10)
+					in (container.kaosGoalDiagram);
+		}
 
-  @FlexoConcept  
-  public class SerializingRule {  
-  
-    @CreationScheme    
-    SerializingRule:create() {    
-      
-    }    
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-    @DeletionScheme    
-    Void deleteWithItem() {    
-      
-    }    
-  
-  }  
+		representFunctionalGoal(FunctionalGoal goal) with DropScheme(targetType=GoalModelingDiagram) {
+			log "Representing goal " + parameters.goal;
+			goal = parameters.goal;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			container.representRequiredRelationships();
+		}
 
-  @FlexoConcept  
-  public class EventSerialization extends SerializingRule  {  
-  
-    public Goal goal;  
-    public ExcelRow row;  
-  
-    @DeletionScheme    
-    Void delete() {    
-      
-    }    
-  
-    @CreationScheme    
-    EventSerialization:create(Goal aGoal, ExcelWorkbookResource workBook) {    
-      goal = parameters.aGoal;      
-      log ((("Serializing goal " + goal) + " parentGoal=") + goal.parentGoal)      
-      row = parameters.workBook.excelWorkbook.AddExcelRow();      
-      if (goal.parentGoal != null) {      
-        log "Concrete goal serialization"        
-        parameters.workBook.excelWorkbook.AddExcelCell()      
-      } else {      
-          
-      }      
-      parameters.workBook.excelWorkbook.AddExcelCell()      
-      parameters.workBook.excelWorkbook.AddExcelCell()    
-    }    
-  
-    @DeletionScheme    
-    Void deleteWithItem() {    
-      for (cell : row.excelCells) {      
-        delete cell;      
-      }      
-      delete row;    
-    }    
-  
-  }  
+		create::representTopFunctionalGoal(FunctionalGoal goal, int index) {
+			goal = parameters.goal;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x", value=20 + parameters.index * 10)
+					in (container.kaosGoalDiagram);
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="y", value=20 + parameters.index * 10)
+					in (container.kaosGoalDiagram);
+		}
+	}
 
+	public abstract concept NonFunctionalGoalGR extends GoalGR {
+
+		DiagramShape shape with ShapeRole(metamodelElement=NON_FUNCTIONAL_GOAL_SHAPE, exampleLabel="NF-Goal");
+		NonFunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
+
+		createNonFunctionalGoal(String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
+			goal = container.kaosModel.new NonFunctionalGoal(parameters.name, parameters.type, parameters.description);
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		public delete() {
+			delete goal;
+			delete shape;
+		}
+
+		representNonFunctionalGoal(NonFunctionalGoal goal) with DropScheme(targetType=GoalModelingDiagram) {
+			log "Representing goal " + parameters.goal;
+			goal = parameters.goal;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			container.representRequiredRelationships();
+		}
+	}
+
+	public concept ContributionGoalGR extends GoalGR {
+
+		DiagramShape shape with ShapeRole(metamodelElement=CONTRIBUTION_GOAL_SHAPE, exampleLabel="C-Goal");
+		ContributionGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
+
+		createContributionGoal(String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
+			goal = container.kaosModel.new ContributionGoal(parameters.name, parameters.type, parameters.description);
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		representContributionGoal(ContributionGoal goal) with DropScheme(targetType=GoalModelingDiagram) {
+			log "Representing goal " + parameters.goal;
+			goal = parameters.goal;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			container.representRequiredRelationships();
+		}
+	}
+
+	/** Graphical representation of a refinement: one shape, linked to the goals it refines and to those that define it */
+	public concept RefinementGR {
+
+		DiagramShape shape with ShapeRole(metamodelElement=REFINEMENT_SHAPE);
+		Refinement refinement with ConceptInstance(virtualModelInstance=container.kaosModel);
+		ParentRefinementLinkGR[0,*] parentRefinementLinkGR with ConceptInstance(virtualModelInstance=container);
+		ChildRefinmentLinkGR[0,*] childRefinementsLinksGR with ConceptInstance(virtualModelInstance=container);
+
+		createRefinement() with LinkScheme(fromType=GoalGR, toType=GoalGR) {
+			refinement = container.kaosModel.new Refinement::createLink(toTarget.goal, fromTarget.goal);
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			parentRefinementLinkGR.add(container.new ParentRefinementLinkGR(this, toTarget));
+			childRefinementsLinksGR.add(container.new ChildRefinmentLinkGR(this, fromTarget));
+		}
+
+		dropAndRequirement() with DropScheme(targetType=GoalModelingDiagram) {
+			refinement = container.kaosModel.new Refinement();
+			refinement.setLogicalTypeToAnd();
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		dropOrRequirement() with DropScheme(targetType=GoalModelingDiagram) {
+			refinement = container.kaosModel.new Refinement();
+			refinement.setLogicalTypeToOr();
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		dropMilestoneRefinement() with DropScheme(targetType=GoalModelingDiagram) {
+			refinement = container.kaosModel.new Refinement();
+			refinement.setLogicalTypeToMilestone();
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		dropDataRefinement() with DropScheme(targetType=GoalModelingDiagram) {
+			refinement = container.kaosModel.new Refinement();
+			refinement.setLogicalTypeToData();
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		create::representRefinment(Refinement refinment, List<GoalGR> parentGoalGRs, List<GoalGR> childGoalsGRs) {
+			refinement = parameters.refinment;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			for (GoalGR parentGoalGR : parameters.parentGoalGRs) {
+				ParentRefinementLinkGR parentRefinmentLink = select unique ParentRefinementLinkGR from container
+						where (selected.refinementGR == this, selected.parentGoalGR == parentGoalGR);
+				if (parentRefinmentLink == null) {
+					parentRefinementLinkGR.add(container.new ParentRefinementLinkGR(this, parentGoalGR));
+				}
+			}
+			for (GoalGR childGoalGR : parameters.childGoalsGRs) {
+				ChildRefinmentLinkGR childRefinmentLink = select unique ChildRefinmentLinkGR from container
+						where (selected.refinementGR == this, selected.childrenGoalGR == childGoalGR);
+				if (childRefinmentLink == null) {
+					childRefinementsLinksGR.add(container.new ChildRefinmentLinkGR(this, childGoalGR));
+				}
+			}
+		}
+
+		public delete() {
+			delete refinement;
+			delete shape;
+		}
+
+		public removeFromDiagram() {
+			for (ParentRefinementLinkGR parentLinkGR : parentRefinementLinkGR) {
+				delete parentLinkGR;
+			}
+			for (ChildRefinmentLinkGR childLinkGR : childRefinementsLinksGR) {
+				childLinkGR.removeFromDiagram();
+			}
+			delete shape;
+		}
+
+		/** Create the link representations the refinement requires and this representation does not have yet */
+		public updateRequiredLinks() {
+			for (Goal parentGoal : refinement.parentGoal) {
+				GoalGR parentGoalGR = select unique GoalGR from container where (selected.goal == parentGoal);
+				if (parentGoalGR != null) {
+					ParentRefinementLinkGR parentLinkGR = select unique ParentRefinementLinkGR from container
+							where (selected.refinementGR == this, selected.parentGoalGR == parentGoalGR);
+					if (parentLinkGR == null) {
+						parentLinkGR = container.new ParentRefinementLinkGR(this, parentGoalGR);
+					}
+				}
+			}
+			for (Goal childGoal : refinement.childGoals) {
+				GoalGR childGoalGR = select unique GoalGR from container where (selected.goal == childGoal);
+				if (childGoalGR != null) {
+					ChildRefinmentLinkGR childLinkGR = select unique ChildRefinmentLinkGR from container
+							where (selected.refinementGR == this, selected.childrenGoalGR == childGoalGR);
+					if (childLinkGR == null) {
+						childLinkGR = container.new ChildRefinmentLinkGR(this, childGoalGR);
+					}
+				}
+			}
+		}
+
+		public setLogicalTypeToAnd() {
+			refinement.setLogicalTypeToAnd();
+		}
+
+		public setLogicalTypeToOr() {
+			refinement.setLogicalTypeToOr();
+		}
+
+		public setLogicalTypeToNone() {
+			refinement.setLogicalTypeToNone();
+		}
+
+		public setLogicalTypeToMilestone() {
+			refinement.setLogicalTypeToMilestone();
+		}
+
+		public setLogicalTypeToData() {
+			refinement.setLogicalTypeToData();
+		}
+	}
+
+	/** Graphical representation of an agent, whatever its kind */
+	public abstract concept AgentGR {
+
+		abstract DiagramShape shape;
+		abstract Agent agent;
+
+		public removeFromDiagram() {
+			log "Remove agent from diagram " + agent;
+			delete shape;
+			container.representRequiredRelationships();
+		}
+
+		public delete() {
+			log "Deleting agent " + agent;
+			delete agent;
+			delete shape;
+		}
+
+		listen DeletedAgent from kaosModel {
+			if (evt.agent == agent) {
+				log "The agent this representation stands for was deleted: " + this;
+				this.removeFromDiagram();
+			}
+		}
+	}
+
+	public concept EnvironmentalAgentGR extends AgentGR {
+
+		DiagramShape shape with ShapeRole(metamodelElement=ENVIRONMENTAL_AGENT_SHAPE, exampleLabel="Env. Agent");
+		EnvironmentalAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
+
+		createEnvironmentalAgent(String name, String description) with DropScheme(targetType=GoalModelingDiagram) {
+			agent = container.kaosModel.new EnvironmentalAgent::createEnvironmentalAgent(parameters.name, parameters.description);
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		representEnvironmentalAgent(EnvironmentalAgent agent) with DropScheme(targetType=GoalModelingDiagram) {
+			log "Representing agent " + parameters.agent;
+			agent = parameters.agent;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			container.representRequiredRelationships();
+		}
+	}
+
+	public concept SoftwareAgentGR extends AgentGR {
+
+		DiagramShape shape with ShapeRole(metamodelElement=SOFTWARE_AGENT_SHAPE, exampleLabel="Soft. Agent");
+		SoftwareAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
+
+		createSoftwareAgent(String name, String description) with DropScheme(targetType=GoalModelingDiagram) {
+			agent = container.kaosModel.new SoftwareAgent::createSoftwareAgent(parameters.name, parameters.description);
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+		}
+
+		representSoftwareAgent(SoftwareAgent agent) with DropScheme(targetType=GoalModelingDiagram) {
+			log "Representing agent " + parameters.agent;
+			agent = parameters.agent;
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			container.representRequiredRelationships();
+		}
+	}
+
+	/** The connector from a refinement to one of the goals it refines */
+	public concept ParentRefinementLinkGR {
+
+		RefinementGR refinementGR with ConceptInstance(virtualModelInstance=container);
+		GoalGR parentGoalGR with ConceptInstance(virtualModelInstance=container);
+		DiagramConnector connector with ConnectorRole(metamodelElement=PARENT_REFINEMENT_CONNECTOR);
+
+		linkParentRefinment() with LinkScheme(fromType=RefinementGR, toType=GoalGR) {
+			refinementGR = fromTarget;
+			parentGoalGR = toTarget;
+			refinementGR.refinement.addLinkToAParentGoal(parentGoalGR.goal);
+			connector = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=toTarget.shape)
+					in (container.kaosGoalDiagram);
+			refinementGR.parentRefinementLinkGR.add(this);
+		}
+
+		create(RefinementGR refinementGR, GoalGR parentGoalGR) {
+			refinementGR = parameters.refinementGR;
+			parentGoalGR = parameters.parentGoalGR;
+			connector = DIAGRAM::AddConnector(fromShape=refinementGR.shape, toShape=parentGoalGR.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		public delete() {
+			refinementGR.refinement.removeLinkToAParentGoal(parentGoalGR.goal);
+			refinementGR.parentRefinementLinkGR.remove(this);
+			delete connector;
+		}
+
+		public removeFromDiagram() {
+			delete connector;
+		}
+	}
+
+	/** The connector from one of the goals defining a refinement to that refinement */
+	public concept ChildRefinmentLinkGR {
+
+		RefinementGR refinementGR with ConceptInstance(virtualModelInstance=container);
+		GoalGR childrenGoalGR with ConceptInstance(virtualModelInstance=container);
+		DiagramConnector connector with ConnectorRole(metamodelElement=CHILD_REFINEMENT_CONNECTOR);
+
+		linkChildRefinement() with LinkScheme(fromType=GoalGR, toType=RefinementGR) {
+			refinementGR = toTarget;
+			childrenGoalGR = fromTarget;
+			refinementGR.childRefinementsLinksGR.add(this);
+			refinementGR.refinement.addLinkToAChildrenGoal(childrenGoalGR.goal);
+			connector = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=toTarget.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		create(RefinementGR refinementGR, GoalGR childrenGoalGR) {
+			refinementGR = parameters.refinementGR;
+			childrenGoalGR = parameters.childrenGoalGR;
+			connector = DIAGRAM::AddConnector(fromShape=parameters.childrenGoalGR.shape, toShape=parameters.refinementGR.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		public delete() {
+			refinementGR.refinement.removeLinkToAChildrenGoal(childrenGoalGR.goal);
+			refinementGR.childRefinementsLinksGR.remove(this);
+			delete connector;
+		}
+
+		public removeFromDiagram() {
+			delete connector;
+		}
+	}
+
+	/** The connector from an agent to the goal it is assigned to */
+	public concept AgentAssignmentGR {
+
+		AgentGR agentGR with ConceptInstance(virtualModelInstance=container);
+		GoalGR goalGR with ConceptInstance(virtualModelInstance=container);
+		AgentAssignment agentAssignment with ConceptInstance(virtualModelInstance=container.kaosModel);
+		DiagramConnector connector with ConnectorRole(metamodelElement=AGENT_ASSIGNMENT_CONNECTOR, exampleLabel="label");
+
+		linkAgentToGoal() with LinkScheme(fromType=AgentGR, toType=GoalGR) {
+			agentGR = fromTarget;
+			goalGR = toTarget;
+			agentAssignment = container.kaosModel.new AgentAssignment(fromTarget.agent, toTarget.goal);
+			connector = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=toTarget.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		create::representAgentAssignment(AgentAssignment agentAssignment, AgentGR agentlGR, GoalGR goalGR) {
+			agentGR = parameters.agentlGR;
+			goalGR = parameters.goalGR;
+			agentAssignment = parameters.agentAssignment;
+			connector = DIAGRAM::AddConnector(fromShape=agentGR.shape, toShape=goalGR.shape) in (container.kaosGoalDiagram);
+		}
+
+		public delete() {
+			delete agentAssignment;
+			delete connector;
+		}
+
+		public removeFromDiagram() {
+			delete connector;
+		}
+	}
+
+	/** The two connectors and the node representing the contribution of a contribution goal to a non functional goal */
+	public concept ContributionGR {
+
+		ContributionGoalGR contributionGoalGR with ConceptInstance(virtualModelInstance=container);
+		NonFunctionalGoalGR nonFunctionalGoalGR with ConceptInstance(virtualModelInstance=container);
+		Contribution contribution with ConceptInstance(virtualModelInstance=container.kaosModel);
+		DiagramShape node with ShapeRole(metamodelElement=CONTRIBUTION_NODE_SHAPE, exampleLabel="+");
+		DiagramConnector connector1 with ConnectorRole(metamodelElement=CONTRIBUTION_CONNECTOR_1, exampleLabel="+");
+		DiagramConnector connector2 with ConnectorRole(metamodelElement=CONTRIBUTION_CONNECTOR_2, exampleLabel="+");
+
+		newPositiveContribution() with LinkScheme(fromType=ContributionGoalGR, toType=NonFunctionalGoalGR) {
+			contributionGoalGR = fromTarget;
+			nonFunctionalGoalGR = toTarget;
+			contribution = container.kaosModel.new Contribution(contributionGoalGR.goal, nonFunctionalGoalGR.goal, true);
+			node = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			connector1 = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=node) in (container.kaosGoalDiagram);
+			connector2 = DIAGRAM::AddConnector(fromShape=node, toShape=toTarget.shape) in (container.kaosGoalDiagram);
+		}
+
+		newNegativeContribution() with LinkScheme(fromType=ContributionGoalGR, toType=NonFunctionalGoalGR) {
+			contributionGoalGR = fromTarget;
+			nonFunctionalGoalGR = toTarget;
+			contribution = container.kaosModel.new Contribution(contributionGoalGR.goal, nonFunctionalGoalGR.goal, false);
+			node = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			connector1 = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=node) in (container.kaosGoalDiagram);
+			connector2 = DIAGRAM::AddConnector(fromShape=node, toShape=toTarget.shape) in (container.kaosGoalDiagram);
+		}
+
+		create::representContribution(Contribution contribution, ContributionGoalGR contributionGoalGR,
+				NonFunctionalGoalGR nonFunctionalGoalGR) {
+			contributionGoalGR = parameters.contributionGoalGR;
+			nonFunctionalGoalGR = parameters.nonFunctionalGoalGR;
+			contribution = parameters.contribution;
+			node = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			connector1 = DIAGRAM::AddConnector(fromShape=contributionGoalGR.shape, toShape=node)
+					in (container.kaosGoalDiagram);
+			connector2 = DIAGRAM::AddConnector(fromShape=node, toShape=nonFunctionalGoalGR.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		public delete() {
+			delete connector2;
+			delete connector1;
+			delete node;
+			delete contribution;
+		}
+
+		public removeFromDiagram() {
+			delete connector2;
+			delete connector1;
+			delete node;
+		}
+	}
+
+	/** The connector representing the impact of a contribution goal on a functional goal */
+	public concept ImpactGR {
+
+		ContributionGoalGR contributionGoalGR with ConceptInstance(virtualModelInstance=container);
+		FunctionalGoalGR functionalGoalGR with ConceptInstance(virtualModelInstance=container);
+		Impact impact with ConceptInstance(virtualModelInstance=container.kaosModel);
+		DiagramConnector connector with ConnectorRole(metamodelElement=IMPACT_CONNECTOR, exampleLabel="+");
+
+		newPositiveImpact() with LinkScheme(fromType=ContributionGoalGR, toType=FunctionalGoalGR) {
+			contributionGoalGR = fromTarget;
+			functionalGoalGR = toTarget;
+			impact = container.kaosModel.new Impact(fromTarget.goal, toTarget.goal, true);
+			connector = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=toTarget.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		newNegativeImpact() with LinkScheme(fromType=ContributionGoalGR, toType=FunctionalGoalGR) {
+			contributionGoalGR = fromTarget;
+			functionalGoalGR = toTarget;
+			impact = container.kaosModel.new Impact(fromTarget.goal, toTarget.goal, false);
+			connector = DIAGRAM::AddConnector(fromShape=fromTarget.shape, toShape=toTarget.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		create::representImpact(Impact impact, ContributionGoalGR contributionGoalGR, FunctionalGoalGR functionalGoalGR) {
+			contributionGoalGR = parameters.contributionGoalGR;
+			functionalGoalGR = parameters.functionalGoalGR;
+			impact = parameters.impact;
+			connector = DIAGRAM::AddConnector(fromShape=contributionGoalGR.shape, toShape=functionalGoalGR.shape)
+					in (container.kaosGoalDiagram);
+		}
+
+		public delete() {
+			delete connector;
+			delete impact;
+		}
+
+		public removeFromDiagram() {
+			delete connector;
+		}
+	}
+
+	/** Graphical representation of a group of goals, drawn as a rectangle around them */
+	public concept GoalGroupGR {
+
+		DiagramShape shape with ShapeRole(metamodelElement=GOAL_GROUP_SHAPE, exampleLabel="Group title");
+		GoalGroup goalGroup with ConceptInstance(virtualModelInstance=container.kaosModel);
+
+		drawGoalGroup(String title) with DrawRectangleScheme(childrenType=GoalGR, selectObjects=true) {
+			log "Creating group of goals";
+			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
+			List<Goal> goalList = new ArrayList();
+			for (GoalGR goalGR : selection) {
+				goalList.add(goalGR.goal);
+			}
+			goalGroup = container.kaosModel.new GoalGroup(parameters.title, goalList);
+			for (GoalGR goalGR : selection) {
+				goalGR.goal.goalGroup = goalGroup;
+			}
+			notify "ungroupedGoals" in container.kaosModel;
+		}
+
+		delete() {
+		}
+	}
+
+	/** Base of the rules serializing the goal model into a workbook */
+	public concept SerializingRule {
+
+		create() {
+		}
+
+		delete() {
+		}
+	}
+
+	/** Serializes one goal as one row of the "Goal Model" sheet */
+	public concept EventSerialization extends SerializingRule {
+
+		Goal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
+		ExcelRow row with ExcelRowRole(container=container.container.serializingDocument);
+
+		create(Goal aGoal, Resource<ExcelWorkbook> workBook) {
+			goal = parameters.aGoal;
+			log "Serializing goal " + goal + " parentGoal=" + goal.parentGoal;
+			row = XLS::AddExcelRow(
+					excelSheet=parameters.workBook.excelWorkbook.getExcelSheetByName("Goal Model"),
+					rowIndex=parameters.workBook.excelWorkbook.getExcelSheetByName("Goal Model").excelRows.size)
+					in (parameters.workBook.excelWorkbook);
+			if (goal.parentGoal != null) {
+				XLS::AddExcelCell(row=row, columnIndex=0, cellType=$String,
+						value=goal.refines.refinementType + "-refines " + goal.parentGoal.name)
+						in (parameters.workBook.excelWorkbook);
+			}
+			XLS::AddExcelCell(row=row, columnIndex=1, cellType=$String, value=goal.name) in (parameters.workBook.excelWorkbook);
+			XLS::AddExcelCell(row=row, columnIndex=2, cellType=$String, value=goal.description)
+					in (parameters.workBook.excelWorkbook);
+		}
+
+		/** The only deletion scheme, so that "end match ... unmatched: delete()" runs this one: it drops the row it wrote */
+		delete() {
+			for (ExcelCell cell : row.excelCells) {
+				delete cell;
+			}
+			delete row;
+		}
+	}
+
+	event UpdateDiagram {
+		create() {
+		}
+	}
 }

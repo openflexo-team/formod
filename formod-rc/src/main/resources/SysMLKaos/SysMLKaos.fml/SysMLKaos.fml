@@ -1,23 +1,42 @@
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-use org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
-
 /**
- * 
+ * SysML/KAOS goal modelling: the root model of a goal hierarchy, and its serialization into a workbook.
+ *
+ * Migrated from the legacy SysMLKaos.fml.xml serialization (formod 2.1). Its URI follows the 2.99 convention (resource center base
+ * URI + relative path) and is therefore http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml, no longer ".../SysMLKaos.viewpoint".
+ *
+ * Deliberate divergences from the legacy model:
+ * - the Excel slot declared templateWorkbookURI=".../Data/SysMLKAOS_models_serialization_template.xlsx", which is not an FML
+ *   attribute of BasicExcelModelSlot, and pointed at a path the resource center does not have (the template sits at its root);
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint")
-public class SysMLKaos {
 
-  public SysMLKaosModel rootModel;
-  public ExcelWorkbook serializingDocument;
-  @GetSetProperty(value="getGoalModelSheet", access=get)  
-  public ExcelSheet getGetGoalModelSheet {  
-    return serializingDocument.getExcelSheetByName("Goal Model");  
-  }
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot as XLS;
 
-  @CreationScheme  
-  SysMLKaos:init(String name, String title, String description) {  
-    rootModel = SysMLKaosModel.init((parameters.name + "RootModel"),("Root model for " + parameters.name),"Root model",null);  
-  }  
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml"];
 
+@URI("http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml")
+@Version("0.1")
+public model SysMLKaos {
+
+	SysMLKaosModel rootModel with ModelInstance(isRequired=true);
+
+	ExcelWorkbook serializingDocument with BasicExcelModelSlot();
+
+	public ExcelSheet goalModelSheet() {
+		return serializingDocument.getExcelSheetByName("Goal Model");
+	}
+
+	/** Creates a new SysML/KAOS goal model */
+	create::init(String name, String title, String description) {
+		rootModel = new SysMLKaosModel::init(parameters.name + "RootModel", "Root model for " + parameters.name, "Root model", null)
+				with (name="RootModel");
+	}
+
+	delete() {
+	}
 }

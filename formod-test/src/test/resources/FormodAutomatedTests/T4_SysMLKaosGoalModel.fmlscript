@@ -1,0 +1,106 @@
+// T4 - a SysML/KAOS goal model holds goals, refinements, agents and groups.
+// Exercises SysMLKaos.init, SysMLKaosModel.init and the Goal / Refinement / Agent / AgentAssignment / GoalGroup concepts.
+
+service ResourceCenterService add_temp_rc;
+
+sysMLKaos = load -r ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml"];
+assert sysMLKaos != null;
+assert sysMLKaos.name == "SysMLKaos";
+
+kaos = new SysMLKaos::init("LandingGear", "Landing gear goals", "") with (name="TestKaos");
+assert kaos != null;
+
+// The root model is created by the constructor
+rootModel = kaos.rootModel;
+assert rootModel != null;
+assert rootModel.modelName == "LandingGearRootModel";
+assert rootModel.parentModel == null;
+assert rootModel.goals().size == 0;
+
+// A functional goal, and the type/description the constructor sets
+extend = rootModel.addFunctionalGoal("Extend gear", "", "The gear shall extend");
+assert extend != null;
+assert extend.name == "Extend gear";
+assert extend.description == "The gear shall extend";
+assert rootModel.goals().size == 1;
+assert extend.parentGoal == null;
+assert extend.refines == null;
+
+// A refinement links a parent goal to the goals defining it
+openDoor = rootModel.addFunctionalGoal("Open door", "", "The door shall open");
+extendCylinder = rootModel.addFunctionalGoal("Extend cylinder", "", "The cylinder shall extend");
+assert rootModel.goals().size == 3;
+
+refinement = rootModel.new Refinement::createLink(extend, openDoor);
+assert refinement != null;
+assert refinement.parentGoal.size == 1;
+assert refinement.childGoals.size == 1;
+assert refinement.isAnd;
+assert refinement.refinementType == "ref_and";
+// The link is recorded on both goals
+assert extend.childrenRefinement.size == 1;
+assert openDoor.parentRefinement.size == 1;
+assert openDoor.parentGoal == extend;
+assert openDoor.refines == refinement;
+
+// A second child goal joins the same refinement, and is not added twice
+refinement.addLinkToAChildrenGoal(extendCylinder);
+assert refinement.childGoals.size == 2;
+refinement.addLinkToAChildrenGoal(extendCylinder);
+assert refinement.childGoals.size == 2;
+assert extendCylinder.parentGoal == extend;
+
+// The logical type is exclusive: setting one clears the others
+refinement.setLogicalTypeToOr();
+assert refinement.isOr;
+assert !refinement.isAnd;
+assert refinement.refinementType == "ref_or";
+refinement.setLogicalTypeToMilestone();
+assert refinement.isMilestone;
+assert !refinement.isOr;
+assert refinement.refinementType == "ref_milestone";
+
+// Agents, and the goals they are made responsible for
+pilot = rootModel.new EnvironmentalAgent::createEnvironmentalAgent("Pilot", "The pilot of the aircraft");
+controller = rootModel.new SoftwareAgent::createSoftwareAgent("Gear controller", "The control software");
+assert rootModel.agents().size == 2;
+assert pilot.name == "Pilot";
+assert controller.name == "Gear controller";
+
+assignment = rootModel.new AgentAssignment(controller, extendCylinder);
+assert assignment != null;
+assert assignment.agent == controller;
+assert assignment.goal == extendCylinder;
+
+// A group gathers goals. The script has no list literal, so the group is built from every goal of the model
+assert rootModel.ungroupedGoals().size == 3;
+assert rootModel.groups().size == 0;
+extension = rootModel.new GoalGroup("Extension", rootModel.goals());
+assert extension != null;
+assert extension.title == "Extension";
+assert extension.goals.size == 3;
+assert rootModel.groups().size == 1;
+
+// GoalGroup.create fills the group, and the goals are told about it by GoalGroupGR at drop time only:
+// a group built from FML alone leaves goalGroup unset, so every goal is still ungrouped here
+assert openDoor.goalGroup == null;
+assert rootModel.ungroupedGoals().size == 3;
+assert extension.parentGroup == null;
+assert extension.childrenGroups().size == 0;
+
+// A refined model, as agent allocation builds them
+subModel = kaos.new SysMLKaosModel::init("Controller", "Controller goals", "", rootModel) with (name="ControllerModel");
+assert subModel != null;
+assert subModel.parentModel == rootModel;
+assert subModel.goals().size == 0;
+
+// Removing a refinement unlinks every goal it held. A goal cannot be deleted from a script: its delete() is a deletion
+// scheme, and the script language has no delete statement
+rootModel.removeRefinement(refinement);
+assert extend.childrenRefinement.size == 0;
+assert openDoor.parentRefinement.size == 0;
+assert extendCylinder.parentRefinement.size == 0;
+assert openDoor.parentGoal == null;
+assert rootModel.goals().size == 3;
+
+log "Test PASSED: T4 - SysML/KAOS goal model, refinements, agents and groups";

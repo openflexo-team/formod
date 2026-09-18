@@ -1,0 +1,90 @@
+// T6 - the SysML/KAOS methodology maps the elements and requirements of a Formose project onto goal models.
+// Exercises SysMLKaosMethodology.create, SysMLKaosElementMapping.createNewMapping, updateMapping and getElementMapping.
+
+service ResourceCenterService add_temp_rc;
+
+// The diagram specification and its example diagram are loaded first, as the goal diagrams of the methodology need them
+goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification"];
+assert goalDiagramSpecification != null;
+exampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
+assert exampleDiagram != null;
+
+formose = load -r ["http://formose.lacl.fr/Formose.fml"];
+assert formose != null;
+
+project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
+core = project.formoseVMI;
+gear = core.projectElement.createChildrenElement("LandingGear", "The landing gear itself");
+rqt = gear.createRequirement("RQ1", "The gear shall extend in less than 15 seconds");
+assert gear.requirements().size == 1;
+
+// The methodology is declared on an element, and brings its own SysML/KAOS goal models
+methodology = project.new SysMLKaosMethodology("LandingGearGoals", gear) with (name="SysMLKaosMethodology");
+assert methodology != null;
+assert methodology.declaringElement == gear;
+assert methodology.sysMLKaos != null;
+assert methodology.sysMLKaos.rootModel != null;
+// It joins the document annotation methodology the Formose constructor had created
+assert project.methodologies().size == 2;
+
+// The constructor maps the element it is declared on
+assert methodology.elementMappings().size == 1;
+gearMapping = methodology.getElementMapping(gear);
+assert gearMapping != null;
+assert gearMapping.element == gear;
+assert gearMapping.parentDiagramElementMapping == null;
+assert gearMapping.agent == null;
+
+// Each mapping owns a goal model, refining the model of its parent mapping, and a main functional goal diagram
+assert gearMapping.goalModel != null;
+assert gearMapping.goalModel.modelName == "LandingGear-GoalModel";
+assert gearMapping.mainFunctionalGoalDiagram != null;
+assert gearMapping.mainFunctionalGoalDiagram.goalModelingDiagram != null;
+assert gearMapping.mainFunctionalGoalDiagram.goalModelingDiagram.diagramTitle == "Functional Goal Diagram";
+assert gearMapping.mainFunctionalGoalDiagram.goalModelingDiagram.diagramName == "LandingGear-MainFunctionalGoalModelingDiagram";
+// diagramTitle is an expression property reading the title of the diagram it maps
+assert gearMapping.mainFunctionalGoalDiagram.diagramTitle == "Functional Goal Diagram";
+assert gearMapping.goalDiagrams().size == 1;
+
+// updateMapping, called by the constructor, turned the requirement the element already had into a functional goal
+assert gearMapping.goalModel.goals().size == 1;
+requirementMapping = gearMapping.ensureGoalRequirementMappingExists(rqt);
+assert requirementMapping != null;
+assert requirementMapping.requirement == rqt;
+assert requirementMapping.goal != null;
+assert requirementMapping.goal.name == "RQ1";
+assert requirementMapping.goal.description == "The gear shall extend in less than 15 seconds";
+// The mapping is reused, not created again
+assert gearMapping.ensureGoalRequirementMappingExists(rqt) == requirementMapping;
+assert gearMapping.goalModel.goals().size == 1;
+
+// A requirement added afterwards reaches the methodology through the NewRequirement event
+rqt2 = gear.createRequirement("RQ2", "The gear shall retract in less than 15 seconds");
+assert gear.requirements().size == 2;
+assert gearMapping.goalModel.goals().size == 2;
+requirementMapping2 = gearMapping.ensureGoalRequirementMappingExists(rqt2);
+assert requirementMapping2.goal.name == "RQ2";
+
+// A new element of the core model gets its own mapping, through the NewElement event
+door = gear.createChildrenElement("Door", "The landing gear door");
+assert methodology.elementMappings().size == 2;
+doorMapping = methodology.getElementMapping(door);
+assert doorMapping != null;
+assert doorMapping.element == door;
+assert doorMapping.parentDiagramElementMapping == gearMapping;
+assert doorMapping.goalModel.modelName == "Door-GoalModel";
+assert doorMapping.goalModel.parentModel == gearMapping.goalModel;
+assert gearMapping.childrenDiagramElementMapping().size == 1;
+
+// retrieveDiagramElementMapping returns the mapping an element already has, and creates none
+assert methodology.retrieveDiagramElementMapping(door) == doorMapping;
+assert methodology.elementMappings().size == 2;
+
+// A second diagram can be asked for, on the same goal model
+secondDiagram = gearMapping.createNewGoalDiagram("Agents", "Who is responsible for what");
+assert secondDiagram != null;
+assert secondDiagram.diagramTitle == "Agents";
+assert secondDiagram.goalModelingDiagram.kaosModel == gearMapping.goalModel;
+assert gearMapping.goalDiagrams().size == 2;
+
+log "Test PASSED: T6 - SysML/KAOS methodology mapping elements and requirements onto goal models";

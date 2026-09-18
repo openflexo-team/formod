@@ -1,0 +1,95 @@
+// T5 - a goal modelling diagram represents a SysML/KAOS goal model, and creating a shape creates the goal it stands for.
+// Exercises GoalModelingDiagram.init, the drop schemes of FunctionalGoalGR / RefinementGR / SoftwareAgentGR and
+// representRequiredRelationships.
+
+service ResourceCenterService add_temp_rc;
+
+// The diagram specification and its example diagram are loaded first: the imports of GoalModelingDiagram resolve against them
+goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification"];
+assert goalDiagramSpecification != null;
+exampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
+assert exampleDiagram != null;
+
+sysMLKaos = load -r ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml"];
+assert sysMLKaos != null;
+
+kaos = new SysMLKaos::init("LandingGear", "Landing gear goals", "") with (name="TestKaos");
+rootModel = kaos.rootModel;
+assert rootModel != null;
+
+// The constructor creates the diagram resource in the resource center of the containing instance
+diagram = kaos.new GoalModelingDiagram::init("GoalDiagram", "Functional goals", rootModel) with (name="TestGoalDiagram");
+assert diagram != null;
+assert diagram.diagramName == "GoalDiagram";
+assert diagram.diagramTitle == "Functional goals";
+assert diagram.kaosModel == rootModel;
+assert diagram.kaosGoalDiagram != null;
+assert diagram.kaosGoalDiagram.shapes.size == 0;
+
+// Dropping a functional goal creates the goal in the model, and its shape in the diagram
+extendGR = diagram.new FunctionalGoalGR::createFunctionalGoal("Extend gear", "", "The gear shall extend");
+assert extendGR != null;
+assert extendGR.goal != null;
+assert extendGR.goal.name == "Extend gear";
+assert extendGR.shape != null;
+assert rootModel.goals().size == 1;
+assert diagram.kaosGoalDiagram.shapes.size == 1;
+
+// Representing an existing goal only adds a shape
+openDoor = rootModel.addFunctionalGoal("Open door", "", "The door shall open");
+assert rootModel.goals().size == 2;
+openDoorGR = diagram.new FunctionalGoalGR::representFunctionalGoal(openDoor);
+assert openDoorGR.goal == openDoor;
+assert rootModel.goals().size == 2;
+assert diagram.kaosGoalDiagram.shapes.size == 2;
+
+// A top goal is laid out from its index
+extendCylinder = rootModel.addFunctionalGoal("Extend cylinder", "", "The cylinder shall extend");
+topGR = diagram.new FunctionalGoalGR::representTopFunctionalGoal(extendCylinder, 2);
+assert topGR.goal == extendCylinder;
+assert topGR.shape != null;
+// representTopFunctionalGoal lays the shape out from the index it is given: 20 + index * 10
+assert topGR.shape.graphicalRepresentation.x == 40;
+assert topGR.shape.graphicalRepresentation.y == 40;
+assert diagram.kaosGoalDiagram.shapes.size == 3;
+
+// Dropping a refinement creates it in the model, with its logical type set
+refinementGR = diagram.new RefinementGR::dropAndRequirement();
+assert refinementGR != null;
+assert refinementGR.refinement != null;
+assert refinementGR.shape != null;
+assert refinementGR.refinement.isAnd;
+assert refinementGR.parentRefinementLinkGR.size == 0;
+assert refinementGR.childRefinementsLinksGR.size == 0;
+assert diagram.kaosGoalDiagram.shapes.size == 4;
+
+orRefinementGR = diagram.new RefinementGR::dropOrRequirement();
+assert orRefinementGR.refinement.isOr;
+assert !orRefinementGR.refinement.isAnd;
+
+// Neither dropped refinement has a goal yet, so representRequiredRelationships takes their shapes off the diagram:
+// removeExtraRefinments keeps only the refinements that have at least one parent goal and one child goal represented
+assert diagram.kaosGoalDiagram.shapes.size == 5;
+diagram.representRequiredRelationships();
+assert diagram.kaosGoalDiagram.shapes.size == 3;
+
+// An agent, dropped the same way
+agentGR = diagram.new SoftwareAgentGR::createSoftwareAgent("Gear controller", "The control software");
+assert agentGR != null;
+assert agentGR.agent != null;
+assert agentGR.agent.name == "Gear controller";
+assert rootModel.agents().size == 1;
+assert agentGR.shape != null;
+assert diagram.kaosGoalDiagram.shapes.size == 4;
+
+// Once the model holds a refinement between two represented goals, the diagram draws it, with one link to the parent goal
+// and one to the child goal
+linked = rootModel.new Refinement::createLink(extendGR.goal, openDoor);
+assert linked.parentGoal.size == 1;
+assert linked.childGoals.size == 1;
+diagram.representRequiredRelationships();
+// The refinement is drawn as one more shape, with a connector to the parent goal and another to the child goal
+assert diagram.kaosGoalDiagram.shapes.size == 5;
+assert diagram.kaosGoalDiagram.connectors.size == 2;
+
+log "Test PASSED: T5 - goal modelling diagram, drop schemes and represented relationships";
