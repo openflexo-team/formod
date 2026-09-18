@@ -45,6 +45,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -72,6 +73,7 @@ public interface AddBOperation extends BAction<BOperation> {
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 
 	@Setter(INDENTIFIER_NAME_KEY)

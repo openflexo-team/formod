@@ -41,6 +41,7 @@ package org.openflexo.module.formose.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -55,11 +56,14 @@ import org.openflexo.foundation.fml.cli.command.FMLCommandExecutionException;
 import org.openflexo.foundation.fml.cli.command.FMLScript;
 import org.openflexo.foundation.fml.cli.command.fml.FMLAssertException;
 import org.openflexo.foundation.fml.cli.test.FMLScriptParserTestCase;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.rm.Resource;
 import org.openflexo.rm.ResourceLocator;
 import org.openflexo.rm.Resources;
 import org.openflexo.ta.b.BTechnologyAdapter;
+import org.openflexo.ta.b.rm.AtelierBProjectResource;
+import org.openflexo.ta.b.rm.AtelierBProjectResourceFactory;
 import org.openflexo.technologyadapter.diagram.DiagramTechnologyAdapter;
 import org.openflexo.technologyadapter.docx.DocXTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
@@ -105,5 +109,35 @@ public class FormodAutomatedTests extends FMLScriptParserTestCase {
 		FlexoEditor editor = new DefaultFlexoEditor(null, serviceManager);
 		assertNotNull(editor);
 		commandInterpreter = new CommandInterpreter(serviceManager, System.in, System.out, System.err, HOME_DIR);
+		provisionAtelierBProjects();
+	}
+
+	/** Stable URI under which the scripts load the blank Atelier B project the B methodology generates its models in */
+	public static final String SOURCE_ATELIER_B_PROJECT_URI = "http://formose.lacl.fr/test/SourceAtelierBProject";
+	/** Stable URI under which the scripts load the second blank Atelier B project the B methodology is given */
+	public static final String GENERATED_ATELIER_B_PROJECT_URI = "http://formose.lacl.fr/test/GeneratedAtelierBProject";
+
+	/**
+	 * Infrastructure only: an Atelier B project cannot be created from a script, so two blank ones are generated in a fresh directory
+	 * resource center and registered under stable URIs, which the scripts then load
+	 */
+	private void provisionAtelierBProjects() throws IOException {
+		DirectoryResourceCenter atelierBRC = makeNewDirectoryResourceCenter();
+		provisionAtelierBProject(atelierBRC, "SourceAtelierBProject", SOURCE_ATELIER_B_PROJECT_URI);
+		provisionAtelierBProject(atelierBRC, "GeneratedAtelierBProject", GENERATED_ATELIER_B_PROJECT_URI);
+	}
+
+	private static void provisionAtelierBProject(DirectoryResourceCenter rc, String name, String uri) throws IOException {
+		File projectDirectory = new File(rc.getRootDirectory(), name);
+		AtelierBProjectResourceFactory.generateBlankAtelierBProject(projectDirectory);
+		try {
+			rc.getDirectoryWatcher().waitNextWatching();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		File dbFile = new File(new File(projectDirectory, AtelierBProjectResourceFactory.BDP_DIR), name + ".db");
+		AtelierBProjectResource resource = rc.getResource(dbFile, AtelierBProjectResource.class);
+		assertNotNull("Atelier B project " + name + " was not registered", resource);
+		resource.setURI(uri);
 	}
 }

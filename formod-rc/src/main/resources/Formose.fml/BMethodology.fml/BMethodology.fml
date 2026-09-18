@@ -1,0 +1,1383 @@
+/**
+ * Methodology generating B formal models from the domain models of a Formose project, and propagating back to the domain models
+ * the sets and set values added in B.
+ *
+ * One BElementMapping per mapped element holds one BMapping per domain model mapping. A BMapping owns an Atelier B context (sets,
+ * constants, properties) and a machine (variables, invariants, events, INITIALISATION), both kept up to date by rules: the
+ * structural rules (numbered after the Formose methodology: 3 to 22) map concepts, individuals, associations and logical formulas
+ * onto the context and the machine, the behavioral rules map the goals of the goal group onto events, and the back-propagating
+ * rules map the sets and set values found in the context back onto concepts and individuals.
+ *
+ * Migrated from the legacy B-Methodology.fml.xml serialization (formod 2.1), and renamed: a hyphen is not allowed in an FML
+ * identifier. Its URI is therefore http://formose.lacl.fr/Formose.fml/BMethodology.fml.
+ *
+ * Deliberate divergences from the legacy model:
+ * - the legacy closed each structural matching with the named deletion scheme deleteWithBItem, and the back-propagating matching
+ *   with deleteWithDMItem; "end match ... unmatched: delete()" runs the FIRST deletion scheme of a concept (CORE-F-2), so every rule
+ *   declares deleteWithBItem first. Concept2SetMapping and Individual2SetValueMapping need both, which the matching engine cannot
+ *   express: backPropagateUpdates therefore finds or creates their mappings explicitly, and calls deleteWithDMItem on the mappings
+ *   whose B element is gone, instead of going through a matching set;
+ * - roles and properties named "set" (Concept2SetMapping, Individual2SetValueMapping, FlexoBSet) became bSet, and parameters named
+ *   "concept" became aConcept: both are keywords in 2.99. The B technology adapter renamed the "set" attribute of AddBSetValue to
+ *   bSet for the same reason;
+ * - the legacy tested a concept kind by name (selected.concept.name != "Association"): written with instanceof;
+ * - the legacy "container" attribute of the BSetRole and AtelierBComponentRole declarations (context.componentResource.bComponent,
+ *   sourceProject) is not a property of these roles any more: dropped;
+ * - createContext passed parent.context as the component to extend even for a top-level mapping, which has no parent, so the whole
+ *   component creation could not be evaluated: it now extends the parent context only when there is a parent;
+ * - Individual2VariableMapping and Individual2ConstantMapping expect a name for unnamed maplets; the rules naming an individual
+ *   passed none, and now pass null explicitly;
+ * - the legacy looked the rule mappings up in the VirtualModel instance; they live in the BMapping that created them, and are read
+ *   there;
+ * - bindings the legacy resolved loosely against the containing instance (context, machine, properties, invariants,
+ *   initialisationOperationBody, domainModel, sourceProject) are written explicitly; the goal model a BMapping reads is the one of
+ *   its BElementMapping, where the legacy read domainModelMapping.goalModel, which DomainModelMapping does not have;
+ * - Concept2Property carried two dead deletion schemes, deleteWithBItemOld and deleteWithBItemOld2, and the max/min helpers only the
+ *   first one used: dropped, deleteWithBItem is the one the matching runs;
+ * - the legacy used "=" where it meant ==, "|" for || and "&" for &&;
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
+ * @version 0.1
+ */
+
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+use org.openflexo.ta.b.AtelierBProjectModelSlot as ATB;
+use org.openflexo.ta.b.BModelSlot as B;
+
+import java.util.List;
+import org.openflexo.ta.b.model.BSet;
+import org.openflexo.ta.b.model.BSetValue;
+import org.openflexo.ta.b.model.BAbstractVariable;
+import org.openflexo.ta.b.model.BAbstractConstant;
+import org.openflexo.ta.b.model.BOperation;
+import org.openflexo.ta.b.model.BPredicate;
+import org.openflexo.ta.b.model.BSubstitution;
+import org.openflexo.ta.b.model.BExpression;
+import org.openflexo.ta.b.model.substitution.BParallelSubstitution;
+import org.openflexo.ta.b.model.atelierb.AtelierBComponent;
+import org.openflexo.ta.b.model.atelierb.AtelierBProject;
+import org.openflexo.ta.b.rm.AtelierBProjectResource;
+
+import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
+import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
+import ["http://formose.lacl.fr/Formose.fml/DomainModelMethodology.fml"];
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml"];
+import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml"];
+import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagram.fml"];
+
+@URI("http://formose.lacl.fr/Formose.fml/BMethodology.fml")
+@Version("0.1")
+public model BMethodology extends Methodology {
+
+	/** The Atelier B project the B models are generated in */
+	AtelierBProject sourceProject with AtelierBProjectModelSlot(isRequired=true);
+
+	AtelierBProject generatedProject with AtelierBProjectModelSlot(isRequired=true);
+
+	/** The domain model methodology whose domain models this methodology formalizes */
+	DomainModelMethodology domainModelMethodology with ModelInstance();
+
+	/** The mapping of the element this methodology is declared on */
+	BElementMapping rootBElementMapping with ConceptInstance();
+
+	create(DomainModelMethodology domainModelMethodology, AtelierBProjectResource sourceProject,
+			AtelierBProjectResource generatedProject) {
+		log "Create B-Methodology";
+		sourceProject = parameters.sourceProject.resourceData;
+		generatedProject = parameters.generatedProject.resourceData;
+		domainModelMethodology = parameters.domainModelMethodology;
+		declaringElement = domainModelMethodology.declaringElement;
+		rootBElementMapping = new BElementMapping(declaringElement);
+	}
+
+	delete() {
+	}
+
+	/** The mapping of supplied element, null when this element has none */
+	public BElementMapping getBElementMapping(Element element) {
+		return select unique BElementMapping from this where (selected.element == parameters.element);
+	}
+
+	/** Maps one element onto the B models derived from the domain models of its domain modelling mapping */
+	public concept BElementMapping {
+
+		DomainModellingElementMapping domainModellingElementMapping
+				with ConceptInstance(virtualModelInstance=container.domainModelMethodology);
+		BMapping[0,*] topLevelBMappings with ConceptInstance(virtualModelInstance=container);
+
+		Element element {
+			Element get() {
+				return domainModellingElementMapping.element;
+			}
+		};
+
+		SysMLKaosModel goalModel {
+			SysMLKaosModel get() {
+				return domainModellingElementMapping.goalModel;
+			}
+		};
+
+		create(Element anElement) {
+			domainModellingElementMapping = container.domainModelMethodology.getDomainModelElementMapping(parameters.anElement);
+			for (DomainModelMapping domainModelMapping : domainModellingElementMapping.topLevelDomainModelMappings) {
+				BMapping newBMapping = new BMapping(domainModelMapping, null);
+				topLevelBMappings.add(newBMapping);
+			}
+			this.updateFromDomainModel();
+		}
+
+		delete() {
+		}
+
+		/** Make sure every top-level domain model mapping has its B mapping, and update them all */
+		public updateFromDomainModel() {
+			for (DomainModelMapping domainModelMapping : domainModellingElementMapping.topLevelDomainModelMappings) {
+				BMapping mapping = select unique BMapping from this where (selected.domainModelMapping == domainModelMapping);
+				if (mapping == null) {
+					log "Create top-level B mapping";
+					mapping = new BMapping(domainModelMapping, null);
+					topLevelBMappings.add(mapping);
+				}
+				mapping.updateFromDomainModel();
+			}
+		}
+
+		/** Maps one domain model onto an Atelier B context and machine */
+		public concept BMapping {
+
+			BMapping parent with ConceptInstance(virtualModelInstance=container.container);
+			BMapping[0,*] children with ConceptInstance(virtualModelInstance=container.container);
+			DomainModelMapping domainModelMapping with ConceptInstance(virtualModelInstance=container.container.domainModelMethodology);
+			AtelierBComponent context with AtelierBComponentRole();
+			AtelierBComponent machine with AtelierBComponentRole();
+			BPredicate[0,*] properties with BPredicateRole();
+			BPredicate[0,*] invariants with BPredicateRole();
+			BOperation initialisationOperation with BOperationRole();
+			BParallelSubstitution initialisationOperationBody with BParallelSubstitutionRole();
+
+			DomainModel domainModel {
+				DomainModel get() {
+					return domainModelMapping.domainModel;
+				}
+			};
+
+			create(DomainModelMapping domainModelMapping, BMapping parent) {
+				domainModelMapping = parameters.domainModelMapping;
+				parent = parameters.parent;
+				if (parent != null) {
+					parent.children.add(this);
+				}
+				context = this.createContext();
+				machine = this.createMachine();
+				initialisationOperation = this.createInitialisationAction();
+				initialisationOperationBody = B::CreateBParallelSubstitution() in (machine.componentResource.bComponent);
+				initialisationOperation.setOperationBody(initialisationOperationBody);
+				this.updateStructuralPart();
+				this.updateBehavioralPart();
+			}
+
+			delete() {
+			}
+
+			/** The Atelier B context of this mapping, extending the context of the parent mapping */
+			AtelierBComponent createContext() {
+				AtelierBComponent newContext = null;
+				if (parent != null) {
+					newContext = ATB::AddAtelierBComponent(
+							componentName=container.element.identifier + domainModelMapping.goalGroup.title + "Context",
+							componentType=$System, extendsComponent=parent.context) in (container.container.sourceProject);
+				}
+				else {
+					newContext = ATB::AddAtelierBComponent(
+							componentName=container.element.identifier + domainModelMapping.goalGroup.title + "Context",
+							componentType=$System) in (container.container.sourceProject);
+				}
+				return newContext;
+			}
+
+			/** The Atelier B machine of this mapping, seeing its context, and refining the machine of the parent mapping */
+			AtelierBComponent createMachine() {
+				AtelierBComponent newMachine = null;
+				if (parent == null) {
+					log "Create top-level machine";
+					newMachine = ATB::AddAtelierBComponent(componentName=container.element.identifier + domainModelMapping.goalGroup.title,
+							componentType=$System, sees=context) in (container.container.sourceProject);
+				}
+				else {
+					log "Create child machine";
+					newMachine = ATB::AddAtelierBComponent(componentName=container.element.identifier + domainModelMapping.goalGroup.title,
+							componentType=$Refinement, refines=parent.machine, sees=context) in (container.container.sourceProject);
+				}
+				return newMachine;
+			}
+
+			BOperation createInitialisationAction() {
+				BOperation initialisation = null;
+				if (parent == null) {
+					initialisation = B::AddBOperation(identifierName="INITIALISATION") in (machine.componentResource.bComponent);
+				}
+				else {
+					initialisation = B::AddBRefinedOperation(identifierName="INITIALISATION", refinementKeyword="extends",
+							refinedOperationName="INITIALISATION") in (machine.componentResource.bComponent);
+				}
+				return initialisation;
+			}
+
+			/** Apply the structural rules: the context and the machine follow the concepts and individuals of the domain model */
+			public updateStructuralPart() {
+				log "update of the structural part";
+				int da = 0;
+				int ra = 0;
+				int ri = 0;
+				int di = 0;
+				String formula = "";
+				MatchingSet<StructuralRuleMapping> matchingSet = begin match StructuralRuleMapping from this;
+
+				List<Concept> abstractConcepts = select Concept from domainModel
+						where (!(selected instanceof Association), !(selected instanceof DefinedConcept),
+								!(selected instanceof DefaultDataType), selected.parentConcept == null);
+				for (Concept aConcept : abstractConcepts) {
+					log "Concept without parent (rules 3 & 4)";
+					match Concept2SetMapping in matchingSet from this where (domainConcept=aConcept)
+							unmatched: new Concept2SetMapping(aConcept);
+				}
+
+				List<Individual> enumeratedIndividuals = select Individual from domainModel
+						where (selected.individualOf != null, !(selected instanceof MapletIndividual), !selected.isVariable,
+								selected.individualOf.isEnumeration, selected.individualOf.parentConcept == null,
+								!(selected.individualOf instanceof Association), !(selected.individualOf instanceof DefinedConcept),
+								!(selected.individualOf instanceof DefaultDataType));
+				for (Individual individual : enumeratedIndividuals) {
+					log "Constant individual of an abstract enumerated Set (rule 4)";
+					Concept2SetMapping map = select unique Concept2SetMapping from this
+							where (selected.domainConcept == individual.individualOf);
+					match Individual2SetValueMapping in matchingSet from this where (individual=individual)
+							unmatched: new Individual2SetValueMapping(individual, map);
+				}
+
+				List<Concept> conceptsWithConstantParent = select Concept from domainModel
+						where (selected.parentConcept != null, !selected.parentConcept.isVariable);
+				for (Concept aConcept : conceptsWithConstantParent) {
+					log "Concrete concept with constant parent  (rule 5)";
+					formula = aConcept.name + " <: " + aConcept.parentConcept.name;
+					if (aConcept.isVariable) {
+						log "Variable concept";
+						match Concept2VariableMapping in matchingSet from this where (domainConcept=aConcept)
+								unmatched: new Concept2VariableMapping(aConcept);
+						match Concept2Invariant in matchingSet from this where (domainConcept=aConcept, formula=formula)
+								unmatched: new Concept2Invariant(aConcept, formula);
+					}
+					else {
+						log "Constant concept";
+						match Concept2ConstantMapping in matchingSet from this where (domainConcept=aConcept)
+								unmatched: new Concept2ConstantMapping(aConcept);
+						match Concept2Property in matchingSet from this where (domainConcept=aConcept, formula=formula)
+								unmatched: new Concept2Property(aConcept, formula);
+					}
+				}
+
+				List<Concept> conceptsWithVariableParent = select Concept from domainModel
+						where (selected.parentConcept != null, selected.parentConcept.isVariable);
+				for (Concept aConcept : conceptsWithVariableParent) {
+					log "Concrete concept with variable parent  (rules 6 & 7)";
+					formula = aConcept.name + " <: " + aConcept.parentConcept.name;
+					if (aConcept.isVariable) {
+						log "Variable concept  (rule 7)";
+						match Concept2VariableMapping in matchingSet from this where (domainConcept=aConcept)
+								unmatched: new Concept2VariableMapping(aConcept);
+						match Concept2Invariant in matchingSet from this where (domainConcept=aConcept, formula=formula)
+								unmatched: new Concept2Invariant(aConcept, formula);
+					}
+					else {
+						log "Constant concept  (rule 6)";
+						String propertyFormula = aConcept.name + " <: " + this.getConstantParent(aConcept.parentConcept).name;
+						match Concept2ConstantMapping in matchingSet from this where (domainConcept=aConcept)
+								unmatched: new Concept2ConstantMapping(aConcept);
+						match Concept2Property in matchingSet from this where (domainConcept=aConcept, formula=propertyFormula)
+								unmatched: new Concept2Property(aConcept, propertyFormula);
+						match Concept2Invariant in matchingSet from this where (domainConcept=aConcept, formula=formula)
+								unmatched: new Concept2Invariant(aConcept, formula);
+					}
+				}
+
+				List<DefinedConcept> abstractDefinedConcepts = select DefinedConcept from domainModel
+						where (selected.parentConcept == null);
+				for (DefinedConcept aConcept : abstractDefinedConcepts) {
+					log "Abstract defined concept (rule 9)";
+					if (aConcept.isVariable) {
+						log "Variable abstract defined concept (rule 9)";
+						match Concept2VariableMapping in matchingSet from this where (domainConcept=aConcept)
+								unmatched: new Concept2VariableMapping(aConcept);
+					}
+					else {
+						log "Constant abstract defined concept (rule 9)";
+						match Concept2ConstantMapping in matchingSet from this where (domainConcept=aConcept)
+								unmatched: new Concept2ConstantMapping(aConcept);
+					}
+				}
+
+				List<Individual> individualsOfConstantConcepts = select Individual from domainModel
+						where (selected.individualOf != null, !(selected instanceof MapletIndividual), !selected.individualOf.isVariable,
+								!selected.individualOf.isEnumeration);
+				for (Individual individual : individualsOfConstantConcepts) {
+					log "Individual of a constant concept that is not an abstract enumeration (rule 11)";
+					formula = individual.name + " : " + individual.individualOf.name;
+					if (individual.isVariable) {
+						log "Variable individual";
+						match Individual2VariableMapping in matchingSet from this where (individual=individual)
+								unmatched: new Individual2VariableMapping(individual, null);
+						match Individual2Invariant in matchingSet from this where (individual=individual, formula=formula)
+								unmatched: new Individual2Invariant(individual, formula);
+					}
+					else {
+						log "Constant individual";
+						match Individual2ConstantMapping in matchingSet from this where (individual=individual)
+								unmatched: new Individual2ConstantMapping(individual, null);
+						match Individual2Property in matchingSet from this where (individual=individual, formula=formula)
+								unmatched: new Individual2Property(individual, formula);
+					}
+				}
+
+				List<Individual> individualsOfVariableConcepts = select Individual from domainModel
+						where (selected.individualOf != null, selected.individualOf.isVariable, !(selected instanceof MapletIndividual));
+				for (Individual individual : individualsOfVariableConcepts) {
+					log "Individual of a variable concept  (rules 12 & 13)";
+					formula = individual.name + " : " + individual.individualOf.name;
+					if (individual.isVariable) {
+						log "Variable individual  (rule 13)";
+						match Individual2VariableMapping in matchingSet from this where (individual=individual)
+								unmatched: new Individual2VariableMapping(individual, null);
+						match Individual2Invariant in matchingSet from this where (individual=individual, formula=formula)
+								unmatched: new Individual2Invariant(individual, formula);
+					}
+					else {
+						log "Constant individual  (rule 12)";
+						String propertyFormula = individual.name + " : " + this.getConstantParent(individual.individualOf).name;
+						match Individual2ConstantMapping in matchingSet from this where (individual=individual)
+								unmatched: new Individual2ConstantMapping(individual, null);
+						match Individual2Property in matchingSet from this where (individual=individual, formula=propertyFormula)
+								unmatched: new Individual2Property(individual, propertyFormula);
+						match Individual2Invariant in matchingSet from this where (individual=individual, formula=formula)
+								unmatched: new Individual2Invariant(individual, formula);
+					}
+				}
+
+				List<Individual> variableEnumeratedIndividuals = select Individual from domainModel
+						where (selected.individualOf != null, !(selected instanceof MapletIndividual), selected.isVariable,
+								selected.individualOf.isEnumeration, selected.individualOf.parentConcept == null,
+								!(selected.individualOf instanceof Association), !(selected.individualOf instanceof DefinedConcept),
+								!(selected.individualOf instanceof DefaultDataType));
+				for (Individual individual : variableEnumeratedIndividuals) {
+					log "Variable individual of a concept that is an abstract enumeration (rule 14)";
+					formula = individual.name + " : " + individual.individualOf.name;
+					match Individual2VariableMapping in matchingSet from this where (individual=individual)
+							unmatched: new Individual2VariableMapping(individual, null);
+					match Individual2Invariant in matchingSet from this where (individual=individual, formula=formula)
+							unmatched: new Individual2Invariant(individual, formula);
+				}
+
+				List<MapletIndividual> maplets = select MapletIndividual from domainModel
+						where (selected.individualOf instanceof Association);
+				for (MapletIndividual individual : maplets) {
+					log "Maplet individual (rule 15)";
+					if (individual.name != null) {
+						String typingFormula = individual.name + " : " + individual.individualOf.name;
+						String valueFormula = individual.name + " = (" + individual.antecedent.name + " |-> " + individual.image.name + ")";
+						if (individual.isVariable) {
+							log "Variable named maplet individual (rule 15)";
+							match Individual2VariableMapping in matchingSet from this where (individual=individual)
+									unmatched: new Individual2VariableMapping(individual, null);
+							match Individual2Invariant in matchingSet from this where (individual=individual, formula=typingFormula)
+									unmatched: new Individual2Invariant(individual, typingFormula);
+							if (individual.antecedent != null && individual.image != null) {
+								match Individual2Invariant in matchingSet from this where (individual=individual, formula=valueFormula)
+										unmatched: new Individual2Invariant(individual, valueFormula);
+							}
+						}
+						else {
+							log "Constant named maplet individual (rule 15)";
+							match Individual2ConstantMapping in matchingSet from this where (individual=individual)
+									unmatched: new Individual2ConstantMapping(individual, null);
+							if (individual.individualOf.isVariable) {
+								String relationFormula = individual.name + " : "
+										+ this.getConstantParent(individual.individualOf.domain).name + "<->"
+										+ this.getConstantParent(individual.individualOf.range).name;
+								match Individual2Property in matchingSet from this where (individual=individual, formula=relationFormula)
+										unmatched: new Individual2Property(individual, relationFormula);
+								match Individual2Invariant in matchingSet from this where (individual=individual, formula=typingFormula)
+										unmatched: new Individual2Invariant(individual, typingFormula);
+							}
+							else {
+								match Individual2Property in matchingSet from this where (individual=individual, formula=typingFormula)
+										unmatched: new Individual2Property(individual, typingFormula);
+							}
+							if (individual.antecedent != null && individual.image != null) {
+								match Individual2Property in matchingSet from this where (individual=individual, formula=valueFormula)
+										unmatched: new Individual2Property(individual, valueFormula);
+							}
+						}
+					}
+					else {
+						String normalisedName = individual.getNormalisedString();
+						String valueFormula = normalisedName + " = (" + individual.antecedent.name + " |-> " + individual.image.name + ")";
+						String typingFormula = normalisedName + " : " + individual.individualOf.name;
+						if (individual.antecedent.isVariable || individual.image.isVariable || individual.individualOf.isVariable) {
+							match Individual2VariableMapping in matchingSet from this where (individual=individual)
+									unmatched: new Individual2VariableMapping(individual, normalisedName);
+							match Individual2Invariant in matchingSet from this where (individual=individual, formula=valueFormula)
+									unmatched: new Individual2Invariant(individual, valueFormula);
+							match Individual2Invariant in matchingSet from this where (individual=individual, formula=typingFormula)
+									unmatched: new Individual2Invariant(individual, typingFormula);
+							match UnnamedMapletIndividual2Initialisation in matchingSet from this where (individual=individual)
+									unmatched: new UnnamedMapletIndividual2Initialisation(individual);
+						}
+						else {
+							match Individual2ConstantMapping in matchingSet from this where (individual=individual)
+									unmatched: new Individual2ConstantMapping(individual, normalisedName);
+							match Individual2Property in matchingSet from this where (individual=individual, formula=valueFormula)
+									unmatched: new Individual2Property(individual, valueFormula);
+							match Individual2Property in matchingSet from this where (individual=individual, formula=typingFormula)
+									unmatched: new Individual2Property(individual, typingFormula);
+						}
+					}
+				}
+
+				List<Concept> enumeratedConcepts = select Concept from domainModel
+						where (selected.parentConcept != null, selected.isEnumeration, !selected.isVariable);
+				for (Concept aConcept : enumeratedConcepts) {
+					log "Enumerated concept with parent  (rule 8)";
+					String enumerationFormula = aConcept.name + " = " + this.getConstantIndividualString(aConcept);
+					match Concept2Property in matchingSet from this where (domainConcept=aConcept, formula=enumerationFormula)
+							unmatched: new Concept2Property(aConcept, enumerationFormula);
+				}
+
+				List<LogicalFormula> logicalFormulas = select LogicalFormula from domainModel;
+				for (LogicalFormula logicalFormula : logicalFormulas) {
+					if (this.isInvariant(logicalFormula)) {
+						match LogicalFormula2Invariant in matchingSet from this where (logicalFormula=logicalFormula)
+								unmatched: new LogicalFormula2Invariant(logicalFormula);
+					}
+					else {
+						match LogicalFormula2Property in matchingSet from this where (logicalFormula=logicalFormula)
+								unmatched: new LogicalFormula2Property(logicalFormula);
+					}
+				}
+
+				List<Association> associations = select Association from domainModel;
+				for (Association aConcept : associations) {
+					log "Association (rules 9 & 10)";
+					if (aConcept.parentConcept == null) {
+						if (aConcept.isVariable) {
+							log "Variable abstract association  (rule 9)";
+							match Concept2VariableMapping in matchingSet from this where (domainConcept=aConcept)
+									unmatched: new Concept2VariableMapping(aConcept);
+						}
+						else {
+							log "Constant abstract association (rule 9)";
+							match Concept2ConstantMapping in matchingSet from this where (domainConcept=aConcept)
+									unmatched: new Concept2ConstantMapping(aConcept);
+						}
+					}
+					da = B::String2Int(string=aConcept.domainCardinality.getMaxCardinality()) in (context.componentResource.bComponent);
+					di = B::String2Int(string=aConcept.domainCardinality.getMinCardinality()) in (context.componentResource.bComponent);
+					log "domainCardinality " + aConcept.domainCardinality + " da=" + da + " di=" + di;
+					ra = B::String2Int(string=aConcept.rangeCardinality.getMaxCardinality()) in (context.componentResource.bComponent);
+					ri = B::String2Int(string=aConcept.rangeCardinality.getMinCardinality()) in (context.componentResource.bComponent);
+					log "rangeCardinality  " + aConcept.rangeCardinality + " ra=" + ra + " ri=" + ri;
+					String domainName = aConcept.domain.name;
+					String rangeName = aConcept.range.name;
+					if (ra == 1) {
+						formula = domainName + " +-> " + rangeName;
+						if (ri == 1) {
+							formula = domainName + " --> " + rangeName;
+						}
+						if (di == 1) {
+							if (ri == 1) {
+								formula = domainName + " -->> " + rangeName;
+							}
+							else {
+								formula = domainName + " +->> " + rangeName;
+							}
+						}
+						if (da == 1) {
+							if (ri == 1) {
+								if (di == 1) {
+									formula = domainName + " >->> " + rangeName;
+								}
+								else {
+									formula = domainName + " >-> " + rangeName;
+								}
+							}
+							else {
+								formula = domainName + " >+> " + rangeName;
+							}
+						}
+						if ((da > -1 && da != 1) || di > 1) {
+							if (di == da) {
+								formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) = " + di + ")";
+							}
+							else {
+								if (da == -1) {
+									formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) >= " + di + ")";
+									if (da > -1) {
+										if (di == 0) {
+											formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) <= " + da
+													+ ")";
+										}
+										else {
+											if (di > 0) {
+												formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) : " + di
+														+ ".." + da + ")";
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					else {
+						formula = domainName + " <-> " + rangeName;
+						if (di == da) {
+							formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) = " + di + ")";
+						}
+						else {
+							if (da == -1 && di > 0) {
+								formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) >= " + di + ")";
+							}
+							else {
+								if (da > -1) {
+									if (di == 0) {
+										formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) <= " + da + ")";
+									}
+									else {
+										if (di > 0) {
+											formula = formula + " & \n !xx.(xx:" + rangeName + "=> card(" + aConcept.name + "~[{xx}]) : " + di + ".."
+													+ da + ")";
+										}
+									}
+								}
+							}
+						}
+						if (ri == ra) {
+							formula = formula + " & \n !xx.(xx:" + domainName + "=> card(" + aConcept.name + "[{xx}]) = " + ri + ")";
+						}
+						else {
+							if (ra == -1 && ri > 0) {
+								formula = formula + " & \n !xx.(xx:" + domainName + "=> card(" + aConcept.name + "[{xx}]) >= " + ri + ")";
+							}
+							else {
+								if (ra > -1) {
+									if (ri == 0) {
+										formula = formula + " & \n !xx.(xx:" + domainName + "=> card(" + aConcept.name + "[{xx}]) <= " + ra + ")";
+									}
+									else {
+										if (ri > 0) {
+											formula = formula + " & \n !xx.(xx:" + domainName + "=> card(" + aConcept.name + "[{xx}]) : " + ri + ".."
+													+ ra + ")";
+										}
+									}
+								}
+							}
+						}
+					}
+					formula = aConcept.name + " : " + formula;
+					log "Association: rules 18-22";
+					if (aConcept.isASymmetric) {
+						formula = formula + " &\n (" + aConcept.name + "~ /\\ " + aConcept.name + ") <: id(" + domainName + ")";
+					}
+					if (aConcept.isTransitive) {
+						formula = formula + " &\n (" + aConcept.name + " ; " + aConcept.name + ") <: " + aConcept.name;
+					}
+					if (aConcept.isSysmmetric) {
+						formula = formula + " &\n " + aConcept.name + "~ = " + aConcept.name;
+					}
+					if (aConcept.isReflexive) {
+						formula = formula + " &\n id(" + domainName + ") <: " + aConcept.name;
+					}
+					if (aConcept.isIrreflexive) {
+						formula = formula + " &\n id(" + domainName + ") /\\ " + aConcept.name + " = {}";
+					}
+					log "formula = " + formula;
+					if (aConcept.isVariable) {
+						match Concept2Invariant in matchingSet from this where (domainConcept=aConcept, formula=formula)
+								unmatched: new Concept2Invariant(aConcept, formula);
+					}
+					else {
+						match Concept2Property in matchingSet from this where (domainConcept=aConcept, formula=formula)
+								unmatched: new Concept2Property(aConcept, formula);
+					}
+				}
+
+				List<Concept> variableConcepts = select Concept from domainModel where (selected.isVariable);
+				for (Concept aConcept : variableConcepts) {
+					log "Variable concept initialisation (rule 17)";
+					String individualsString = this.getConstantIndividualString(aConcept);
+					match Concept2Initialisation in matchingSet from this
+							where (domainConcept=aConcept, individualsString=individualsString)
+							unmatched: new Concept2Initialisation(aConcept, individualsString);
+				}
+
+				List<Individual> variableIndividuals = select Individual from domainModel
+						where (selected.isVariable, selected.name != null);
+				for (Individual individual : variableIndividuals) {
+					log "Variable individual initialisation (rule 16)";
+					match Individual2Initialisation in matchingSet from this where (individual=individual)
+							unmatched: new Individual2Initialisation(individual);
+				}
+
+				end match UnnamedMapletIndividual2Initialisation in matchingSet unmatched: delete();
+				end match Individual2Initialisation in matchingSet unmatched: delete();
+				end match Concept2Initialisation in matchingSet unmatched: delete();
+				end match Individual2Invariant in matchingSet unmatched: delete();
+				end match Individual2Property in matchingSet unmatched: delete();
+				end match LogicalFormula2Invariant in matchingSet unmatched: delete();
+				end match LogicalFormula2Property in matchingSet unmatched: delete();
+				end match Concept2Invariant in matchingSet unmatched: delete();
+				end match Concept2Property in matchingSet unmatched: delete();
+				end match Individual2ConstantMapping in matchingSet unmatched: delete();
+				end match Individual2VariableMapping in matchingSet unmatched: delete();
+				end match Concept2ConstantMapping in matchingSet unmatched: delete();
+				end match Individual2SetValueMapping in matchingSet unmatched: delete();
+				end match Concept2SetMapping in matchingSet unmatched: delete();
+				end match Concept2VariableMapping in matchingSet unmatched: delete();
+				log "END STRUCTURAL PART UPDATE";
+
+				for (Concept2SetMapping rule : select Concept2SetMapping from this) {
+					rule.updateNameFromDM();
+				}
+				for (Concept2VariableMapping rule : select Concept2VariableMapping from this) {
+					rule.updateNameFromDM();
+				}
+				for (Individual2SetValueMapping rule : select Individual2SetValueMapping from this) {
+					rule.updateNameFromDM();
+				}
+				for (Concept2ConstantMapping rule : select Concept2ConstantMapping from this) {
+					rule.updateNameFromDM();
+				}
+				for (Individual2VariableMapping rule : select Individual2VariableMapping from this) {
+					rule.updateNameFromDM();
+				}
+				for (Individual2ConstantMapping rule : select Individual2ConstantMapping from this) {
+					rule.updateNameFromDM();
+				}
+			}
+
+			/** Apply the behavioral rules: every goal of the goal group becomes an event of the machine */
+			public updateBehavioralPart() {
+				log "update of the behavioral part";
+				MatchingSet<BehavioralRuleMapping> matchingSet = begin match BehavioralRuleMapping from this;
+				if (domainModelMapping.goalGroup != null) {
+					for (Goal goal : domainModelMapping.goalGroup.goals) {
+						log "Apply rule for goal " + goal;
+						match EventMapping in matchingSet from this where (goal=goal) unmatched: new EventMapping(goal);
+					}
+				}
+				end match EventMapping in matchingSet unmatched: delete();
+				for (EventMapping rule : select EventMapping from this) {
+					rule.updateNameFromGM();
+				}
+			}
+
+			/** Make sure every child domain model mapping has its B mapping, and update them all */
+			public updateFromDomainModel() {
+				for (DomainModelMapping childDomainModelMapping : domainModelMapping.children) {
+					BMapping mapping = select unique BMapping from container where (selected.domainModelMapping == childDomainModelMapping);
+					if (mapping == null) {
+						log "Create child B mapping";
+						mapping = container.new BMapping(childDomainModelMapping, this);
+					}
+					mapping.updateFromDomainModel();
+				}
+			}
+
+			public updateFormalModel() {
+				this.updateFromDomainModel();
+				this.updateStructuralPart();
+				this.updateBehavioralPart();
+			}
+
+			/** The first constant concept among supplied concept and its ancestors */
+			Concept getConstantParent(Concept aConcept) {
+				if (parameters.aConcept.isVariable) {
+					return this.getConstantParent(parameters.aConcept.parentConcept);
+				}
+				return parameters.aConcept;
+			}
+
+			/** The B enumeration of the constant individuals of supplied concept, "{a, b, c}" */
+			String getConstantIndividualString(Concept aConcept) {
+				String str = "";
+				List<MapletIndividual> maplets = select MapletIndividual from domainModel
+						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == parameters.aConcept);
+				for (MapletIndividual individual : maplets) {
+					str = str + individual.getCanonicalString() + ", ";
+				}
+				List<Individual> individuals = select Individual from domainModel
+						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == parameters.aConcept,
+								!(selected instanceof MapletIndividual));
+				for (Individual individual : individuals) {
+					str = str + individual.getCanonicalString() + ", ";
+				}
+				log "getConstantIndividualString str=" + str;
+				if (str.contains(",")) {
+					return "{" + str.substring(0, str.length() - 2) + "}";
+				}
+				return "{}";
+			}
+
+			/** The conjunction of the properties from index i on */
+			BPredicate getProperties(int i) {
+				if (parameters.i >= properties.size) {
+					return null;
+				}
+				if (parameters.i == properties.size - 1) {
+					return properties.get(parameters.i);
+				}
+				BPredicate conjunction = B::CreateBBinaryPredicatePredicate(operator=$Conjunct, leftOperand=properties.get(parameters.i),
+						rightOperand=this.getProperties(parameters.i + 1)) in (context.componentResource.bComponent);
+				return conjunction;
+			}
+
+			/** The conjunction of the invariants from index i on */
+			BPredicate getInvariant(int i) {
+				if (parameters.i >= invariants.size) {
+					return null;
+				}
+				if (parameters.i == invariants.size - 1) {
+					return invariants.get(parameters.i);
+				}
+				BPredicate conjunction = B::CreateBBinaryPredicatePredicate(operator=$Conjunct, leftOperand=invariants.get(parameters.i),
+						rightOperand=this.getInvariant(parameters.i + 1)) in (machine.componentResource.bComponent);
+				return conjunction;
+			}
+
+			/** A logical formula is an invariant when it mentions a variable concept or a variable individual */
+			boolean isInvariant(LogicalFormula logicalFormula) {
+				List<Concept> variableConcepts = select Concept from domainModel where (selected.isVariable);
+				for (Concept aConcept : variableConcepts) {
+					if (parameters.logicalFormula.assertion.contains(aConcept.name)) {
+						return true;
+					}
+				}
+				List<Individual> variableIndividuals = select Individual from domainModel where (selected.isVariable);
+				for (Individual individual : variableIndividuals) {
+					if (parameters.logicalFormula.assertion.contains(individual.name)) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			/** Propagate back to the domain model the sets and set values added to the context in B (rules b-1 & b-2) */
+			public backPropagateUpdates() {
+				log "back Propagating Structural Part Updates";
+				for (BSet aSet : context.componentResource.bComponent.getSets()) {
+					log "Back propagating the addition of a set " + aSet.name + " (rules b-1 & b-2)";
+					Concept2SetMapping setMapping = select unique Concept2SetMapping from this where (selected.bSet == aSet);
+					if (setMapping == null) {
+						FlexoBSet cset = new FlexoBSet();
+						cset.bSet = aSet;
+						setMapping = new Concept2SetMapping::createWithSet(cset);
+					}
+					for (BSetValue aSetValue : aSet.getEnumeratedValues()) {
+						log "Back propagating the addition of a setValue " + aSetValue.name + " (rule b-2)";
+						Individual2SetValueMapping setValueMapping = select unique Individual2SetValueMapping from this
+								where (selected.setValue == aSetValue, selected.bSet == aSet);
+						if (setValueMapping == null) {
+							FlexoBSetValue csetValue = new FlexoBSetValue();
+							csetValue.setValue = aSetValue;
+							setValueMapping = new Individual2SetValueMapping::createWithSetValue(csetValue);
+						}
+					}
+				}
+				// The mappings whose B element is gone lose their domain model representation
+				for (Individual2SetValueMapping rule : select Individual2SetValueMapping from this) {
+					if (!context.componentResource.bComponent.getSets().contains(rule.bSet)
+							|| !rule.bSet.getEnumeratedValues().contains(rule.setValue)) {
+						rule.deleteWithDMItem();
+					}
+				}
+				for (Concept2SetMapping rule : select Concept2SetMapping from this) {
+					if (!context.componentResource.bComponent.getSets().contains(rule.bSet)) {
+						rule.deleteWithDMItem();
+					}
+				}
+				for (Concept2SetMapping rule : select Concept2SetMapping from this) {
+					rule.updateNameFromB();
+				}
+				for (Concept2VariableMapping rule : select Concept2VariableMapping from this) {
+					rule.updateNameFromB();
+				}
+				for (Individual2SetValueMapping rule : select Individual2SetValueMapping from this) {
+					rule.updateNameFromB();
+				}
+				for (Concept2ConstantMapping rule : select Concept2ConstantMapping from this) {
+					rule.updateNameFromB();
+				}
+				for (Individual2VariableMapping rule : select Individual2VariableMapping from this) {
+					rule.updateNameFromB();
+				}
+				for (Individual2ConstantMapping rule : select Individual2ConstantMapping from this) {
+					rule.updateNameFromB();
+				}
+				for (EventMapping rule : select EventMapping from this) {
+					rule.updateNameFromB();
+				}
+			}
+
+			/** Base of the structural rules, which the structural matching keeps up to date */
+			public concept StructuralRuleMapping {
+
+				create() {
+				}
+
+				/** Remove the B element this rule created: what the structural matching runs on a rule nothing matches any more */
+				delete::deleteWithBItem() {
+				}
+
+				delete() {
+				}
+
+				public updateNameFromDM() {
+				}
+
+				public updateNameFromB() {
+				}
+			}
+
+			/** Base of the behavioral rules, which the behavioral matching keeps up to date */
+			public concept BehavioralRuleMapping {
+
+				create() {
+				}
+
+				delete() {
+				}
+
+				public updateNameFromGM() {
+				}
+
+				public updateNameFromB() {
+				}
+			}
+
+			/** Base of the rules that also propagate B elements back to the domain model */
+			public concept BackPropagatingRuleMapping {
+
+				create() {
+				}
+
+				delete() {
+				}
+
+				/** Remove the domain model element this rule created */
+				delete::deleteWithDMItem() {
+				}
+
+				public updateNameFromB() {
+				}
+			}
+
+			/** Rules 3 & 4, b-1: a concept without parent is a set of the context */
+			public concept Concept2SetMapping extends StructuralRuleMapping, BackPropagatingRuleMapping {
+
+				BSet bSet with BSetRole();
+				Concept domainConcept with ConceptInstance(virtualModelInstance=container.domainModel);
+				ConceptGR domainConceptGR with ConceptInstance(virtualModelInstance=container.domainModelMapping.defaultDiagram);
+
+				create(Concept aConcept) {
+					log "Concept2SetMapping: create Set related to concept " + parameters.aConcept;
+					domainConcept = parameters.aConcept;
+					bSet = B::AddBSet(identifierName=parameters.aConcept.name) in (container.context.componentResource.bComponent);
+				}
+
+				delete::deleteWithBItem() {
+					container.context.componentResource.bComponent.removeFromSets(bSet);
+					delete bSet;
+				}
+
+				create::createWithSet(FlexoBSet aSet) {
+					log "Concept2SetMapping: create Concept related to set " + parameters.aSet.bSet.name;
+					bSet = parameters.aSet.bSet;
+					domainConcept = container.domainModel.new Concept(bSet.name, false, false, null);
+					domainConceptGR = container.domainModelMapping.defaultDiagram.new ConceptGR(domainConcept,
+							container.domainModelMapping.defaultDiagram);
+				}
+
+				delete::deleteWithDMItem() {
+					delete domainConceptGR;
+				}
+
+				public updateNameFromDM() {
+					bSet.name = domainConcept.name;
+				}
+
+				public updateNameFromB() {
+					domainConcept.name = bSet.name;
+				}
+			}
+
+			/** Rules 7, 9, 13: a variable concept is an abstract variable of the machine */
+			public concept Concept2VariableMapping extends StructuralRuleMapping {
+
+				Concept domainConcept with ConceptInstance(virtualModelInstance=container.domainModel);
+				BAbstractVariable variable with BAbstractVariableRole();
+
+				delete::deleteWithBItem() {
+					container.machine.componentResource.bComponent.removeFromAbstractVariables(variable);
+					delete variable;
+				}
+
+				create(Concept aConcept) {
+					log "Concept2VariableMapping: create variable related to concept " + parameters.aConcept;
+					domainConcept = parameters.aConcept;
+					variable = B::AddBAbstractVariable(identifierName=domainConcept.name) in (container.machine.componentResource.bComponent);
+				}
+
+				public updateNameFromDM() {
+					variable.name = domainConcept.name;
+				}
+
+				public updateNameFromB() {
+					domainConcept.name = variable.name;
+				}
+			}
+
+			/** The behavioral rule: a goal is an event of the machine, refining the event of its parent goal */
+			public concept EventMapping extends BehavioralRuleMapping {
+
+				BOperation operation with BOperationRole();
+				Goal goal with ConceptInstance(virtualModelInstance=container.container.goalModel);
+
+				create(Goal aGoal) {
+					goal = parameters.aGoal;
+					log "Handling event " + goal + " parentGoal=" + goal.parentGoal;
+					if (goal.parentGoal != null) {
+						operation = B::AddBRefinedOperation(identifierName=goal.name, refinementKeyword=goal.refines.refinementType,
+								refinedOperationName=goal.parentGoal.name) in (container.machine.componentResource.bComponent);
+						log "Add refined event";
+					}
+					else {
+						operation = B::AddBOperation(identifierName=goal.name) in (container.machine.componentResource.bComponent);
+						log "Add normal event";
+					}
+				}
+
+				/** Remove the event this rule created: what the behavioral matching runs on a rule nothing matches any more */
+				delete::deleteWithBItem() {
+					container.machine.componentResource.bComponent.removeFromOperations(operation);
+					delete operation;
+				}
+
+				delete() {
+				}
+
+				public updateNameFromGM() {
+					operation.name = goal.name;
+					if (goal.parentGoal != null) {
+						log "Concrete event; its parent name must also be updated... but !";
+					}
+				}
+
+				public updateNameFromB() {
+					goal.name = operation.name;
+				}
+			}
+
+			/** Rule 4, b-2: an individual of an abstract enumerated concept is a value of the set of that concept */
+			public concept Individual2SetValueMapping extends StructuralRuleMapping, BackPropagatingRuleMapping {
+
+				Individual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BSetValue setValue with BSetValueRole();
+				BSet bSet with BSetRole();
+				IndividualGR individualGR with ConceptInstance(virtualModelInstance=container.domainModelMapping.defaultDiagram);
+
+				create(Individual individual, Concept2SetMapping concept2SetMapping) {
+					log "Individual2SetValueMapping: create SetValue related to individual " + parameters.individual;
+					individual = parameters.individual;
+					setValue = B::AddBSetValue(identifierName=parameters.individual.name, bSet=parameters.concept2SetMapping.bSet)
+							in (container.context.componentResource.bComponent);
+					bSet = parameters.concept2SetMapping.bSet;
+				}
+
+				delete::deleteWithBItem() {
+					bSet.removeFromEnumeratedValues(setValue);
+					delete setValue;
+				}
+
+				create::createWithSetValue(FlexoBSetValue aSetValue) {
+					log "Individual2SetValueMapping: create Individual related to setValue " + parameters.aSetValue.setValue.name;
+					setValue = parameters.aSetValue.setValue;
+					bSet = setValue.getSet();
+					Concept2SetMapping concept2SetMapping = select unique Concept2SetMapping from container
+							where (selected.bSet.name == bSet.name);
+					log "concept found: " + concept2SetMapping.domainConcept.name;
+					concept2SetMapping.domainConcept.isEnumeration = true;
+					individual = container.domainModel.new Individual(setValue.name, concept2SetMapping.domainConcept, false, null);
+					individualGR = container.domainModelMapping.defaultDiagram.new IndividualGR(individual,
+							container.domainModelMapping.defaultDiagram);
+				}
+
+				delete::deleteWithDMItem() {
+					delete individualGR;
+				}
+
+				public updateNameFromDM() {
+					setValue.name = individual.name;
+				}
+
+				public updateNameFromB() {
+					individual.name = setValue.name;
+				}
+			}
+
+			/** Rules 6, 9: a constant concept is an abstract constant of the context */
+			public concept Concept2ConstantMapping extends StructuralRuleMapping {
+
+				Concept domainConcept with ConceptInstance(virtualModelInstance=container.domainModel);
+				BAbstractConstant constant with BAbstractConstantRole();
+
+				delete::deleteWithBItem() {
+					container.context.componentResource.bComponent.removeFromAbstractConstants(constant);
+					delete constant;
+				}
+
+				create(Concept aConcept) {
+					log "Concept2ConstantMapping: create Constant related to concept " + parameters.aConcept;
+					domainConcept = parameters.aConcept;
+					constant = B::AddBAbstractConstant(identifierName=domainConcept.name) in (container.context.componentResource.bComponent);
+				}
+
+				public updateNameFromDM() {
+					constant.name = domainConcept.name;
+				}
+
+				public updateNameFromB() {
+					domainConcept.name = constant.name;
+				}
+			}
+
+			/** Rules 11, 13, 14, 15: a variable individual is an abstract variable of the machine */
+			public concept Individual2VariableMapping extends StructuralRuleMapping {
+
+				Individual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BAbstractVariable variable with BAbstractVariableRole();
+
+				delete::deleteWithBItem() {
+					container.machine.componentResource.bComponent.removeFromAbstractVariables(variable);
+					delete variable;
+				}
+
+				/** An unnamed maplet is named after nameString */
+				create(Individual anIndividual, String nameString) {
+					log "Individual2VariableMapping: create variable related to individual " + parameters.anIndividual;
+					individual = parameters.anIndividual;
+					if (individual.name == null) {
+						variable = B::AddBAbstractVariable(identifierName=parameters.nameString)
+								in (container.machine.componentResource.bComponent);
+					}
+					else {
+						variable = B::AddBAbstractVariable(identifierName=individual.name) in (container.machine.componentResource.bComponent);
+					}
+				}
+
+				public updateNameFromDM() {
+					variable.name = individual.name;
+				}
+
+				public updateNameFromB() {
+					individual.name = variable.name;
+				}
+			}
+
+			/** Rules 11, 12, 15: a constant individual is an abstract constant of the context */
+			public concept Individual2ConstantMapping extends StructuralRuleMapping {
+
+				Individual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BAbstractConstant constant with BAbstractConstantRole();
+
+				delete::deleteWithBItem() {
+					container.context.componentResource.bComponent.removeFromAbstractConstants(constant);
+					delete constant;
+				}
+
+				/** An unnamed maplet is named after nameString */
+				create(Individual anIndividual, String nameString) {
+					log "Individual2ConstantMapping: create Constant related to individual " + parameters.anIndividual;
+					individual = parameters.anIndividual;
+					if (individual.name == null) {
+						constant = B::AddBAbstractConstant(identifierName=parameters.nameString)
+								in (container.context.componentResource.bComponent);
+					}
+					else {
+						constant = B::AddBAbstractConstant(identifierName=individual.name) in (container.context.componentResource.bComponent);
+					}
+				}
+
+				public updateNameFromDM() {
+					constant.name = individual.name;
+				}
+
+				public updateNameFromB() {
+					individual.name = constant.name;
+				}
+			}
+
+			/** Rules 5, 6, 8, 10, 18-22: a property of the context stating a fact about a constant concept */
+			public concept Concept2Property extends StructuralRuleMapping {
+
+				Concept domainConcept with ConceptInstance(virtualModelInstance=container.domainModel);
+				BPredicate typingPredicate with BPredicateRole();
+				String formula;
+
+				create(Concept aConcept, String formula) {
+					log "Concept2Property: create Property " + parameters.formula + " related to concept " + parameters.aConcept;
+					domainConcept = parameters.aConcept;
+					formula = parameters.formula;
+					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+					container.properties.add(typingPredicate);
+					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+				}
+
+				delete::deleteWithBItem() {
+					container.properties.remove(typingPredicate);
+					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+				}
+			}
+
+			/** Rules 5, 6, 7, 10, 18-22: an invariant of the machine stating a fact about a variable concept */
+			public concept Concept2Invariant extends StructuralRuleMapping {
+
+				Concept domainConcept with ConceptInstance(virtualModelInstance=container.domainModel);
+				BPredicate typingPredicate with BPredicateRole();
+				String formula;
+
+				create(Concept aConcept, String formula) {
+					log "Concept2Invariant: create Invariant " + parameters.formula + " related to concept " + parameters.aConcept;
+					domainConcept = parameters.aConcept;
+					formula = parameters.formula;
+					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+					container.invariants.add(typingPredicate);
+					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+				}
+
+				delete::deleteWithBItem() {
+					container.invariants.remove(typingPredicate);
+					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+				}
+			}
+
+			/** A logical formula mentioning no variable is a property of the context */
+			public concept LogicalFormula2Property extends StructuralRuleMapping {
+
+				LogicalFormula logicalFormula with ConceptInstance(virtualModelInstance=container.domainModel);
+				BPredicate typingPredicate with BPredicateRole();
+
+				create(LogicalFormula aLogicalFormula) {
+					log "LogicalFormula2Property: create Property related to logicalFormula " + parameters.aLogicalFormula.assertion;
+					logicalFormula = parameters.aLogicalFormula;
+					typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
+							in (container.context.componentResource.bComponent);
+					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+					container.properties.add(typingPredicate);
+					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+				}
+
+				delete::deleteWithBItem() {
+					container.properties.remove(typingPredicate);
+					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+				}
+			}
+
+			/** A logical formula mentioning a variable is an invariant of the machine */
+			public concept LogicalFormula2Invariant extends StructuralRuleMapping {
+
+				LogicalFormula logicalFormula with ConceptInstance(virtualModelInstance=container.domainModel);
+				BPredicate typingPredicate with BPredicateRole();
+
+				create(LogicalFormula aLogicalFormula) {
+					log "LogicalFormula2Invariant: create Invariant related to logicalFormula " + parameters.aLogicalFormula.assertion;
+					logicalFormula = parameters.aLogicalFormula;
+					typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
+							in (container.machine.componentResource.bComponent);
+					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+					container.invariants.add(typingPredicate);
+					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+				}
+
+				delete::deleteWithBItem() {
+					container.invariants.remove(typingPredicate);
+					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+				}
+			}
+
+			/** Rules 11, 12, 15: a property of the context stating a fact about a constant individual */
+			public concept Individual2Property extends StructuralRuleMapping {
+
+				Individual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BPredicate typingPredicate with BPredicateRole();
+				String formula;
+
+				create(Individual anIndividual, String formula) {
+					log "Individual2Property: create Property " + parameters.formula + " related to individual " + parameters.anIndividual;
+					individual = parameters.anIndividual;
+					formula = parameters.formula;
+					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+					container.properties.add(typingPredicate);
+					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+				}
+
+				delete::deleteWithBItem() {
+					container.properties.remove(typingPredicate);
+					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+				}
+			}
+
+			/** Rules 11 to 15: an invariant of the machine stating a fact about a variable individual */
+			public concept Individual2Invariant extends StructuralRuleMapping {
+
+				Individual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BPredicate typingPredicate with BPredicateRole();
+				String formula;
+
+				create(Individual anIndividual, String formula) {
+					log "Individual2Invariant: create Invariant " + parameters.formula + " related to individual " + parameters.anIndividual;
+					individual = parameters.anIndividual;
+					formula = parameters.formula;
+					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+					container.invariants.add(typingPredicate);
+					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+				}
+
+				delete::deleteWithBItem() {
+					container.invariants.remove(typingPredicate);
+					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+				}
+			}
+
+			/** Rule 17: a variable concept is initialised with the enumeration of its constant individuals */
+			public concept Concept2Initialisation extends StructuralRuleMapping {
+
+				Concept domainConcept with ConceptInstance(virtualModelInstance=container.domainModel);
+				String individualsString;
+				BSubstitution substitution with BSubstitutionRole();
+
+				create(Concept aConcept, String individualsString) {
+					log "Concept2Initialisation: create Initialisation substitution related to concept " + parameters.aConcept;
+					domainConcept = parameters.aConcept;
+					individualsString = parameters.individualsString;
+					BExpression left = B::CreateBExpressionFromString(expressionAsString=domainConcept.name)
+							in (container.machine.componentResource.bComponent);
+					BExpression right = B::CreateBExpressionFromString(expressionAsString=individualsString)
+							in (container.machine.componentResource.bComponent);
+					substitution = B::CreateBSubstitution(operator="AssignSubstitution", leftOperand=left, rightOperand=right)
+							in (container.machine.componentResource.bComponent);
+					log "substitution " + substitution.getNormalizedBRepresentation();
+					container.initialisationOperationBody.addToSubstitutions(substitution);
+				}
+
+				delete::deleteWithBItem() {
+					container.initialisationOperationBody.removeFromSubstitutions(substitution);
+					delete substitution;
+				}
+			}
+
+			/** Rule 16: a variable individual is initialised with its initial value, or with any element of its concept */
+			public concept Individual2Initialisation extends StructuralRuleMapping {
+
+				Individual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BSubstitution substitution with BSubstitutionRole();
+
+				create(Individual anIndividual) {
+					log "Individual2Initialisation: create Initialisation substitution related to individual " + parameters.anIndividual;
+					individual = parameters.anIndividual;
+					BExpression left = B::CreateBExpressionFromString(expressionAsString=individual.name)
+							in (container.machine.componentResource.bComponent);
+					if (individual.initialValue != null) {
+						String rightString = "";
+						if (individual.initialValue.name != null) {
+							rightString = individual.initialValue.name;
+						}
+						else {
+							rightString = individual.getCanonicalString();
+						}
+						BExpression right = B::CreateBExpressionFromString(expressionAsString=rightString)
+								in (container.machine.componentResource.bComponent);
+						substitution = B::CreateBSubstitution(operator="AssignSubstitution", leftOperand=left, rightOperand=right)
+								in (container.machine.componentResource.bComponent);
+					}
+					else {
+						BExpression right = B::CreateBExpressionFromString(expressionAsString=individual.individualOf.name)
+								in (container.machine.componentResource.bComponent);
+						substitution = B::CreateBSubstitution(operator="BecomeElementOfSubstitution", leftOperand=left, rightOperand=right)
+								in (container.machine.componentResource.bComponent);
+					}
+					log "substitution " + substitution.getNormalizedBRepresentation();
+					container.initialisationOperationBody.addToSubstitutions(substitution);
+				}
+
+				delete::deleteWithBItem() {
+					container.initialisationOperationBody.removeFromSubstitutions(substitution);
+					delete substitution;
+				}
+			}
+
+			/** Rule 15: an unnamed variable maplet is initialised with its antecedent |-> image */
+			public concept UnnamedMapletIndividual2Initialisation extends StructuralRuleMapping {
+
+				MapletIndividual individual with ConceptInstance(virtualModelInstance=container.domainModel);
+				BSubstitution substitution with BSubstitutionRole();
+
+				create(MapletIndividual anIndividual) {
+					log "UnnamedMapletIndividual2Initialisation: create Initialisation substitution related to UnnamedMapletIndividual "
+							+ parameters.anIndividual;
+					individual = parameters.anIndividual;
+					BExpression left = B::CreateBExpressionFromString(expressionAsString=individual.getNormalisedString())
+							in (container.machine.componentResource.bComponent);
+					BExpression right = B::CreateBExpressionFromString(
+							expressionAsString=individual.antecedent.name + " |-> " + individual.image.name)
+							in (container.machine.componentResource.bComponent);
+					substitution = B::CreateBSubstitution(operator="AssignSubstitution", leftOperand=left, rightOperand=right)
+							in (container.machine.componentResource.bComponent);
+					log "substitution " + substitution.getNormalizedBRepresentation();
+					container.initialisationOperationBody.addToSubstitutions(substitution);
+				}
+
+				delete::deleteWithBItem() {
+					container.initialisationOperationBody.removeFromSubstitutions(substitution);
+					delete substitution;
+				}
+			}
+
+			/** Carries a B set to Concept2SetMapping.createWithSet */
+			public concept FlexoBSet {
+
+				BSet bSet with BSetRole();
+
+				create() {
+					bSet = null;
+				}
+
+				delete() {
+				}
+			}
+
+			/** Carries a B set value to Individual2SetValueMapping.createWithSetValue */
+			public concept FlexoBSetValue {
+
+				BSetValue setValue with BSetValueRole();
+
+				create() {
+					setValue = null;
+				}
+
+				delete() {
+				}
+			}
+		}
+	}
+}

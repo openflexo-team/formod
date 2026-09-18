@@ -45,6 +45,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -70,14 +71,17 @@ public interface AddBSetValue extends BAction<BSetValue> {
 	public static final String INDENTIFIER_NAME_KEY = "identifierName";
 	
 	@PropertyIdentifier(type = DataBinding.class)
-	public static final String SET_KEY = "set";
+	// Not "set", which is a reserved keyword of FML: the property could not be written in textual FML
+	public static final String SET_KEY = "bSet";
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 
 	@Getter(value = SET_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SET_KEY, required = true, description = "<html>set the new value belongs to</html>")
 	public DataBinding<BSet> getSet();
 
 	@Setter(INDENTIFIER_NAME_KEY)

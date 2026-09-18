@@ -45,6 +45,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -75,6 +76,7 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 
 	@Setter(INDENTIFIER_NAME_KEY)
@@ -82,6 +84,7 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 
 	@Getter(value = REFINEMENT_KEYWORD_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = REFINEMENT_KEYWORD_KEY, required = true, description = "<html>keyword of the refinement</html>")
 	public DataBinding<String> getRefinementKeyword();
 
 	@Setter(REFINEMENT_KEYWORD_KEY)
@@ -89,6 +92,7 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 
 	@Getter(value = REFINED_OPERATION_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = REFINED_OPERATION_NAME_KEY, required = true, description = "<html>name of the refined operation</html>")
 	public DataBinding<String> getRefinedOperationName();
 
 	@Setter(REFINED_OPERATION_NAME_KEY)

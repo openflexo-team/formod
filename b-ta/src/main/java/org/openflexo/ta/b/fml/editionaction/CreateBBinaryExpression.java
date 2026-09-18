@@ -45,6 +45,8 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
+import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -98,6 +100,7 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 
 	@Getter(value = OPERATOR_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = OPERATOR_KEY, required = true, kind = AttributeKind.Enum, description = "<html>operator of the expression</html>")
 	public BinaryOperator getOperator();
 
 	@Setter(OPERATOR_KEY)
@@ -105,6 +108,7 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 
 	@Getter(value = LEFT_OPERAND_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = LEFT_OPERAND_KEY, required = true, description = "<html>left operand</html>")
 	public DataBinding<BExpression> getLeftOperand();
 
 	@Setter(LEFT_OPERAND_KEY)
@@ -112,6 +116,7 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 
 	@Getter(value = RIGHT_OPERAND_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = RIGHT_OPERAND_KEY, required = true, description = "<html>right operand</html>")
 	public DataBinding<BExpression> getRightOperand();
 
 	@Setter(RIGHT_OPERAND_KEY)

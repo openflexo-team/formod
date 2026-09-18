@@ -1,0 +1,106 @@
+// T10 - the B methodology generates an Atelier B context and machine from the domain models of the domain model methodology.
+// Exercises BMethodology.create, BElementMapping.create, BMapping.create (createContext, createMachine, createInitialisationAction),
+// the structural rules 3 and 4 (a concept without parent is a set, the individuals of an enumerated one are its values) and the
+// behavioral rule (a goal is an event).
+// The runner provisions the two blank Atelier B projects the methodology is given (FormodAutomatedTests.provisionAtelierBProjects).
+
+service ResourceCenterService add_temp_rc;
+
+goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification"];
+goalExampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
+domainDiagramSpecification = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification"];
+domainExampleDiagram = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram"];
+
+sourceProject = load -r ["http://formose.lacl.fr/test/SourceAtelierBProject"];
+assert sourceProject != null;
+generatedProject = load -r ["http://formose.lacl.fr/test/GeneratedAtelierBProject"];
+assert generatedProject != null;
+
+formose = load -r ["http://formose.lacl.fr/Formose.fml"];
+project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
+gear = project.formoseVMI.projectElement.createChildrenElement("LandingGear", "The landing gear itself");
+
+// Goals, grouped: the group gives its domain model, and its goals the events of the machine
+kaosMethodology = project.new SysMLKaosMethodology("LandingGearGoals", gear) with (name="SysMLKaosMethodology");
+gearGoalModel = kaosMethodology.getElementMapping(gear).goalModel;
+gearGoalModel.addFunctionalGoal("ExtendGear", "", "The gear shall extend");
+gearGoalModel.addFunctionalGoal("RetractGear", "", "The gear shall retract");
+extension = gearGoalModel.new GoalGroup("Extension", gearGoalModel.goals());
+
+domainMethodology = project.new DomainModelMethodology(kaosMethodology) with (name="DomainModelMethodology");
+extensionMapping = domainMethodology.rootElementMapping.topLevelDomainModelMappings.get(0);
+domainModel = extensionMapping.domainModel;
+assert domainModel.modelName == "LandingGear-Extension";
+
+// The domain model: an abstract concept, and an abstract enumerated one with two individuals
+doors = domainModel.new Concept("DOORS", false, false, null);
+positions = domainModel.new Concept("POSITIONS", false, true, null);
+opened = domainModel.new Individual("opened", positions, false, null);
+closed = domainModel.new Individual("closed", positions, false, null);
+// A constant concept with a constant parent (rule 5), and a variable one (rules 7 and 17)
+mainDoors = domainModel.new Concept("MAIN_DOORS", false, false, doors);
+lockedDoors = domainModel.new Concept("lockedDoors", true, false, doors);
+
+// The B methodology is declared where the domain model methodology is, and generates the B models at once
+bMethodology = project.new BMethodology(domainMethodology, sourceProject.resource, generatedProject.resource) with (name="BMethodology");
+assert bMethodology != null;
+assert bMethodology.declaringElement == gear;
+assert bMethodology.sourceProject == sourceProject;
+assert bMethodology.domainModelMethodology == domainMethodology;
+assert project.methodologies().size == 4;
+
+rootMapping = bMethodology.rootBElementMapping;
+assert rootMapping != null;
+assert rootMapping.element == gear;
+assert bMethodology.getBElementMapping(gear) == rootMapping;
+assert rootMapping.topLevelBMappings.size == 1;
+
+bMapping = rootMapping.topLevelBMappings.get(0);
+assert bMapping.domainModelMapping == extensionMapping;
+assert bMapping.domainModel == domainModel;
+assert bMapping.parent == null;
+
+// A context and a machine seeing it, named after the element and the group; "context" is a command of the script language, so
+// the context is read from the Atelier B project, by name
+assert bMapping.machine != null;
+assert bMapping.machine.name == "LandingGearExtension";
+atelierBContext = sourceProject.getComponentNamed("LandingGearExtensionContext");
+assert atelierBContext != null;
+contextText = atelierBContext.getNormalizedBRepresentation();
+machineText = bMapping.machine.getNormalizedBRepresentation();
+
+// Rules 3 & 4: DOORS and POSITIONS are sets of the context, POSITIONS enumerating its two individuals
+assert contextText.contains("DOORS;");
+assert contextText.contains("POSITIONS = {opened, closed}");
+// Rule 5: a constant concept with a constant parent is an abstract constant, typed by a property
+assert contextText.contains("ABSTRACT_CONSTANTS");
+assert contextText.contains("MAIN_DOORS <: DOORS");
+// Rules 7 & 17: a variable concept is an abstract variable of the machine, typed by an invariant, and initialised empty
+assert machineText.contains("SEES");
+assert machineText.contains("LandingGearExtensionContext");
+assert machineText.contains("ABSTRACT_VARIABLES");
+assert machineText.contains("lockedDoors <: DOORS");
+assert machineText.contains("INITIALISATION = lockedDoors := {}");
+// The behavioral rule: one event per goal of the group
+assert machineText.contains("ExtendGear = skip");
+assert machineText.contains("RetractGear = skip");
+
+// The INITIALISATION operation, whose body collects the initialisation substitutions
+assert bMapping.initialisationOperation != null;
+assert bMapping.initialisationOperationBody != null;
+
+// Updating the formal model again changes nothing: every rule finds the mapping it created, and none is dropped
+bMapping.updateFormalModel();
+assert atelierBContext.getNormalizedBRepresentation() == contextText;
+assert bMapping.machine.getNormalizedBRepresentation() == machineText;
+
+// Renaming a concept renames its constant, and replaces its property: the old one no longer matches, and the structural matching
+// removes it from the context (deleteWithBItem, the first deletion scheme of Concept2Property)
+mainDoors.creationAction("MAIN_GEAR_DOORS", false, false, doors);
+bMapping.updateFormalModel();
+renamedText = atelierBContext.getNormalizedBRepresentation();
+assert renamedText.contains("MAIN_GEAR_DOORS <: DOORS");
+// Neither the constant nor its property keeps the old name ("MAIN_GEAR_DOORS" does not contain "MAIN_DOORS")
+assert !renamedText.contains("MAIN_DOORS");
+
+log "Test PASSED: T10 - B methodology generating the context and the machine";

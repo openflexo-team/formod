@@ -45,6 +45,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -79,14 +80,17 @@ public interface AddBSubsetPredicate extends BAction<BSubsetPredicate> {
 
 	@Getter(value = SUB_SET_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SUB_SET_NAME_KEY, required = true, description = "<html>name of the subset</html>")
 	public DataBinding<String> getSubSetName();
 	
 	@Getter(value = SUPER_SET_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SUPER_SET_NAME_KEY, required = true, description = "<html>name of the superset</html>")
 	public DataBinding<String> getSuperSetName();
 	
 	@Getter(value = IS_INVARIANT_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = IS_INVARIANT_KEY, required = true, description = "<html>true for an invariant, false for a property</html>")
 	public DataBinding<Boolean> getIsInvariant();
 
 	@Setter(SUB_SET_NAME_KEY)

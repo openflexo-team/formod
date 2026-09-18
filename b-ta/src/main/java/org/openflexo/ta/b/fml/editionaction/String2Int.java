@@ -45,6 +45,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -69,6 +70,7 @@ public interface String2Int extends BAction<Integer> {
 
 	@Getter(value = STRING_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = STRING_KEY, required = true, description = "<html>string to convert</html>")
 	public DataBinding<String> getString();
 
 	@Setter(STRING_KEY)

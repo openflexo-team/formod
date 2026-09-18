@@ -46,6 +46,8 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
+import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
 import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
@@ -86,6 +88,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 	@Getter(value = COMPONENT_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = COMPONENT_NAME_KEY, required = true, description = "<html>name of the new component</html>")
 	public DataBinding<String> getComponentName();
 
 	@Setter(COMPONENT_NAME_KEY)
@@ -93,6 +96,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 	@Getter(value = COMPONENT_TYPE_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = COMPONENT_TYPE_KEY, required = true, kind = AttributeKind.Enum, description = "<html>kind of the new component: MACHINE, REFINEMENT, IMPLEMENTATION...</html>")
 	public BComponentType getComponentType();
 
 	@Setter(COMPONENT_TYPE_KEY)
@@ -102,6 +106,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 	@Getter(value = REFINES_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = REFINES_KEY, required = false, description = "<html>component the new component refines</html>")
 	public DataBinding<AtelierBComponent> getRefines();
 
 	@Setter(REFINES_KEY)
@@ -109,6 +114,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 	@Getter(value = EXTENDS_COMPONENT_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = EXTENDS_COMPONENT_KEY, required = false, description = "<html>component the new component extends</html>")
 	public DataBinding<AtelierBComponent> getExtendsComponent();
 
 	@Setter(EXTENDS_COMPONENT_KEY)
@@ -116,6 +122,7 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 	@Getter(value = SEES_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SEES_KEY, required = false, description = "<html>component the new component sees</html>")
 	public DataBinding<AtelierBComponent> getSees();
 
 	@Setter(SEES_KEY)
