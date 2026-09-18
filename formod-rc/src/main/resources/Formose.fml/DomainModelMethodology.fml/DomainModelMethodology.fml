@@ -1,0 +1,200 @@
+/**
+ * Methodology deriving domain models from the SysML/KAOS goal models of a Formose project: every top-level group of goals gets a
+ * domain model (with its default diagram), and every child group a domain model refining the one of its parent group.
+ *
+ * It is declared on the element the SysML/KAOS methodology it relies on is declared on, and holds one DomainModellingElementMapping
+ * per mapped element, each holding one DomainModelMapping per group of goals.
+ *
+ * Migrated from the legacy DomainModel-Methodology.fml.xml serialization (formod 2.1), and renamed: a hyphen is not allowed in an
+ * FML identifier. Its URI is therefore http://formose.lacl.fr/Formose.fml/DomainModelMethodology.fml.
+ *
+ * Deliberate divergences from the legacy model, most of them repairs:
+ * - createTopLevelDomainModelMapping and createChildDomainModel passed a name where the only creation scheme of DomainModelMapping
+ *   expects a group of goals, so neither could work: DomainModelMapping gets a second creation scheme, createNamed, building the
+ *   same domain model and diagram from a name instead of a group;
+ * - updateFromSysMLKAOS added each new child mapping to "children" a second time, after its creation scheme had already added it
+ *   to its parent: the duplicate add is dropped; it also stops on a mapping built from a name, which has no group to follow;
+ * - the domain model of a mapping with a parent refines the parent's domain model, and the root domain model otherwise: the legacy
+ *   chose with a conditional expression, whose branches Connie evaluates both, and is now written as two explicit branches;
+ * - createTopLevelDomainModelMapping notified a property named "getDomainModelElementMapping(element)", which is a behaviour
+ *   signature and no property at all: dropped;
+ * - the DomainModelMapping lookups read the mappings where they live, in the DomainModellingElementMapping holding them, where the
+ *   legacy looked in the VirtualModel instance;
+ * - element, goalModel, parentDomainModel and modelName, legacy expression properties, are computed properties; the legacy
+ *   get/set properties of SysMLKaosModel and GoalGroup they read (topLevelGroups, childrenGroups) are behaviours in 2.99;
+ * - bindings the legacy resolved loosely against the containing instance (element, domainModelling) are written explicitly;
+ * - the created instances no longer carry a title: virtualModelInstanceTitle is deprecated in 2.99, only name is set;
+ * - the debug logs in French are dropped;
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
+ * @version 0.1
+ */
+
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+
+import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
+import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
+import ["http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml"];
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml"];
+import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml"];
+import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml"];
+import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagram.fml"];
+
+@URI("http://formose.lacl.fr/Formose.fml/DomainModelMethodology.fml")
+@Version("0.1")
+public model DomainModelMethodology extends Methodology {
+
+	/** The domain models this methodology derives, under their unique root domain model */
+	DomainModelling domainModelling with ModelInstance();
+
+	/** The SysML/KAOS methodology whose goal groups this methodology follows */
+	SysMLKaosMethodology sysMLKaosMethodology with ModelInstance();
+
+	/** The mapping of the element this methodology is declared on */
+	DomainModellingElementMapping rootElementMapping with ConceptInstance();
+
+	/** The mapping of supplied element, null when this element has none */
+	public DomainModellingElementMapping getDomainModelElementMapping(Element element) {
+		return select unique DomainModellingElementMapping from this where (selected.element == parameters.element);
+	}
+
+	delete() {
+	}
+
+	create(SysMLKaosMethodology sysmlKaosMethodology) {
+		domainModelling = container.new DomainModelling() with (name="DomainModelling");
+		sysMLKaosMethodology = parameters.sysmlKaosMethodology;
+		declaringElement = sysMLKaosMethodology.declaringElement;
+		rootElementMapping = new DomainModellingElementMapping(declaringElement, null);
+	}
+
+	/** Maps one element onto the domain models derived from the goal groups of its SysML/KAOS goal model */
+	public concept DomainModellingElementMapping {
+
+		SysMLKaosElementMapping sysMLKaosElementMapping with ConceptInstance(virtualModelInstance=container.sysMLKaosMethodology);
+		DomainModelMapping parentDomainModelMapping with ConceptInstance(virtualModelInstance=container);
+		DomainModelMapping[0,*] topLevelDomainModelMappings with ConceptInstance(virtualModelInstance=container);
+
+		Element element {
+			Element get() {
+				return sysMLKaosElementMapping.element;
+			}
+		};
+
+		SysMLKaosModel goalModel {
+			SysMLKaosModel get() {
+				return sysMLKaosElementMapping.goalModel;
+			}
+		};
+
+		DomainModel parentDomainModel {
+			DomainModel get() {
+				return parentDomainModelMapping.domainModel;
+			}
+		};
+
+		delete() {
+		}
+
+		create(Element anElement, DomainModelMapping parentDomainModelMapping) {
+			sysMLKaosElementMapping = container.sysMLKaosMethodology.getElementMapping(parameters.anElement);
+			parentDomainModelMapping = parameters.parentDomainModelMapping;
+			this.updateFromSysMLKAOS();
+		}
+
+		public createTopLevelDomainModelMapping(String name, DomainModelMapping parent) {
+			log "Create top-level domain model mapping";
+			DomainModelMapping topLevel = new DomainModelMapping::createNamed(parameters.name, parameters.parent);
+			topLevelDomainModelMappings.add(topLevel);
+		}
+
+		/** Make sure every top-level group of goals of the goal model has its domain model mapping, and update them all */
+		public updateFromSysMLKAOS() {
+			for (GoalGroup topLevelGroup : goalModel.topLevelGroups()) {
+				DomainModelMapping mapping = select unique DomainModelMapping from this where (selected.goalGroup == topLevelGroup);
+				if (mapping == null) {
+					log "Create top-level mapping";
+					mapping = new DomainModelMapping(topLevelGroup, parentDomainModelMapping);
+					topLevelDomainModelMappings.add(mapping);
+				}
+				mapping.updateFromSysMLKAOS();
+			}
+		}
+
+		/** Maps one group of goals onto a domain model and its default diagram */
+		public concept DomainModelMapping {
+
+			DomainModel domainModel with ConceptInstance(virtualModelInstance=container.container.domainModelling);
+			DomainModelDiagram defaultDiagram with ConceptInstance(virtualModelInstance=container.container.domainModelling);
+			DomainModelMapping parent with ConceptInstance(virtualModelInstance=container.container);
+			DomainModelMapping[0,*] children with ConceptInstance(virtualModelInstance=container.container);
+			GoalGroup goalGroup with ConceptInstance(virtualModelInstance=container.goalModel);
+
+			String modelName {
+				String get() {
+					return domainModel.modelName;
+				}
+			};
+
+			create(GoalGroup goalGroup, DomainModelMapping parentDomainModelMapping) {
+				parent = parameters.parentDomainModelMapping;
+				goalGroup = parameters.goalGroup;
+				if (parent != null) {
+					parent.children.add(this);
+				}
+				log "creating domain mapping";
+				this.createDomainModel(parameters.goalGroup.title);
+			}
+
+			/** A domain model named after supplied name rather than after a group of goals */
+			create::createNamed(String name, DomainModelMapping parentDomainModelMapping) {
+				parent = parameters.parentDomainModelMapping;
+				if (parent != null) {
+					parent.children.add(this);
+				}
+				log "creating domain mapping";
+				this.createDomainModel(parameters.name);
+			}
+
+			/** Create the domain model of this mapping, refining the one of its parent, and its default diagram */
+			private createDomainModel(String title) {
+				if (parent != null) {
+					domainModel = container.container.domainModelling.new DomainModel(
+							container.element.identifier + "-" + parameters.title, parent.domainModel)
+							with (name=container.element.identifier + "-" + parameters.title);
+				}
+				else {
+					domainModel = container.container.domainModelling.new DomainModel(
+							container.element.identifier + "-" + parameters.title, container.container.domainModelling.rootDomainModel)
+							with (name=container.element.identifier + "-" + parameters.title);
+				}
+				defaultDiagram = container.container.domainModelling.new DomainModelDiagram::init(domainModel,
+						container.element.identifier + "-DomainModel-" + parameters.title + "-Diagram")
+						with (name=container.element.identifier + "-DomainModel-" + parameters.title + "-Diagram");
+				notify "domainModel" in this;
+				notify "defaultDiagram" in this;
+			}
+
+			public DomainModelMapping createChildDomainModel(String name) {
+				DomainModelMapping newDomainModelMapping = container.new DomainModelMapping::createNamed(parameters.name, this);
+				notify "children" in this;
+				return newDomainModelMapping;
+			}
+
+			/** Make sure every child group of the group of goals has its domain model mapping, and update them all */
+			public updateFromSysMLKAOS() {
+				if (goalGroup != null) {
+					for (GoalGroup childGroup : goalGroup.childrenGroups()) {
+						DomainModelMapping mapping = select unique DomainModelMapping from container
+								where (selected.goalGroup == childGroup);
+						if (mapping == null) {
+							log "Create child mapping";
+							mapping = container.new DomainModelMapping(childGroup, this);
+						}
+						mapping.updateFromSysMLKAOS();
+					}
+				}
+			}
+		}
+	}
+}

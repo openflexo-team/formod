@@ -1,0 +1,81 @@
+// T8 - a domain model diagram represents a domain model: dropping a shape creates the model object it stands for, and the two
+// deletion schemes differ, deleteView() removing the representation only.
+// Exercises DomainModelDiagram.init, the drop and creation schemes of ConceptGR and IndividualGR, the link
+// concepts IndividualOfGR and ParentConceptGR, representAdditionnalConceptLinks and deleteView.
+
+service ResourceCenterService add_temp_rc;
+
+// The diagram specification and its example diagram are loaded first, as the diagram needs them
+specification = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification"];
+assert specification != null;
+exampleDiagram = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram"];
+assert exampleDiagram != null;
+
+domainModelling = load -r ["http://formose.lacl.fr/DomainModel/DomainModelling.fml"];
+modelling = new DomainModelling() with (name="TestDomainModelling");
+root = modelling.rootDomainModel;
+gearModel = modelling.new DomainModel("LandingGear", root) with (name="GearModel");
+
+// The diagram, with its logical formula pane
+diagram = modelling.new DomainModelDiagram::init(gearModel, "GearDiagram") with (name="GearDiagram");
+assert diagram != null;
+assert diagram.domainModel == gearModel;
+assert diagram.diagram != null;
+assert diagram.logicalFormulaPane != null;
+assert diagram.logicalFormulaPane.logicalFormulas != null;
+assert diagram.diagram.shapes.size == 1;
+
+// Dropping a concept creates it in the domain model the diagram presents
+equipmentGR = diagram.new ConceptGR::dropConceptGRAtTopLevel("Equipment", false, false);
+assert equipmentGR != null;
+assert equipmentGR.modelConcept != null;
+assert equipmentGR.modelConcept.name == "Equipment";
+assert equipmentGR.containerShape != null;
+assert equipmentGR.label != null;
+assert !equipmentGR.isView;
+assert gearModel.concepts.size == 1;
+assert diagram.diagram.shapes.size == 2;
+
+doorGR = diagram.new ConceptGR::dropConceptGRAtTopLevel("Door", false, true);
+door = doorGR.modelConcept;
+assert door.isEnumeration;
+assert gearModel.concepts.size == 2;
+
+// A parent concept link, drawn by its creation scheme (the link scheme needs a drawn connector)
+parentLink = diagram.new ParentConceptGR(doorGR, equipmentGR);
+assert parentLink.childConceptGR == doorGR;
+assert parentLink.parentConceptGR == equipmentGR;
+assert parentLink.parentConceptShape != null;
+assert diagram.diagram.connectors.size == 1;
+
+// Dropping an individual, and linking it to its concept
+leftDoorGR = diagram.new IndividualGR::dropIndividualGRAtTopLevel("leftDoor", false);
+leftDoor = leftDoorGR.individual;
+assert leftDoor.name == "leftDoor";
+assert leftDoor.individualOf == null;
+leftDoor.individualOf = door;
+individualOf = diagram.new IndividualOfGR(leftDoorGR, doorGR);
+assert individualOf.connector != null;
+assert diagram.diagram.connectors.size == 2;
+
+// A concept already in the model is represented with the links to what the diagram shows
+sealed = gearModel.new Concept("SealedDoor", false, false, door);
+sealedGR = diagram.new ConceptGR::representConceptGRAtTopLevel(sealed);
+assert sealedGR.modelConcept == sealed;
+// representAdditionnalConceptLinks drew the link to its parent concept
+assert diagram.diagram.connectors.size == 3;
+
+// DefaultDataTypeGR is not exercised here: its drop schemes take a DefaultDataTypeEnum value or a DefaultDataType, and a script
+// can produce neither (no enum literal; root.concepts.get(0) is typed Concept, and the script language has no cast)
+
+// deleteView(), called as a behaviour, removes the representation of the door and of its links, and nothing in the model
+shapesBefore = diagram.diagram.shapes.size;
+doorGR.deleteView();
+assert gearModel.concepts.size == 3;
+// The IndividualOfGR ran its deleteView() too, not its delete(): the individual still is an individual of the door
+assert leftDoor.individualOf == door;
+assert diagram.diagram.shapes.size == shapesBefore - 1;
+// The three connectors all touched the door: its two parent concept links and the individual-of link
+assert diagram.diagram.connectors.size == 0;
+
+log "Test PASSED: T8 - domain model diagram, drop schemes, links and deleteView";

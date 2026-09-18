@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Diagram id="0" diagramSpecificationURI="http://formose.lacl.fr//resources/DomainModel/DomainModel.fml/DomainModelDiagram/DomainModelDiagramSpec" uri="http://formose.lacl.fr//resources/DomainModel/DomainModel.fml/DomainModelDiagram/DomainModelDiagramSpec/ExampleDiagram.diagram" name="ExampleDiagram.diagram" userID="FLX" flexoID="1">
+<Diagram id="0" diagramSpecificationURI="http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification" uri="http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram" name="ExampleDiagram.diagram" userID="FLX" flexoID="1">
   <Connector id="1" name="Connector7" userID="FLX" flexoID="7">
     <StartShape idref="2" />
     <EndShape idref="24" />

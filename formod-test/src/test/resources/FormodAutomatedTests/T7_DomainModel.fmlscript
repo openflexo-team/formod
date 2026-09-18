@@ -1,0 +1,90 @@
+// T7 - a DomainModelling holds the root domain model with the default data types, and domain models hold concepts,
+// associations and individuals.
+// Exercises DomainModelling.create, DomainModel.create and the Concept / Association / Cardinality / Individual /
+// MapletIndividual / LogicalFormula / DefinedConcept concepts, and the computed properties concepts, sole_individuals and isSole.
+
+service ResourceCenterService add_temp_rc;
+
+domainModelling = load -r ["http://formose.lacl.fr/DomainModel/DomainModelling.fml"];
+assert domainModelling != null;
+
+modelling = new DomainModelling() with (name="TestDomainModelling");
+assert modelling != null;
+
+// The root domain model is created with the five default data types
+root = modelling.rootDomainModel;
+assert root != null;
+assert root.modelName == "Root";
+assert root.parentDomainModel == null;
+assert root.concepts.size == 5;
+
+// A domain model refining the root one
+gearModel = modelling.new DomainModel("LandingGear", root) with (name="GearModel");
+assert gearModel.modelName == "LandingGear";
+assert gearModel.parentDomainModel == root;
+assert gearModel.concepts.size == 0;
+
+// Concepts, and the concept hierarchy
+equipment = gearModel.new Concept("Equipment", false, false, null);
+assert equipment.name == "Equipment";
+assert !equipment.isVariable;
+assert equipment.parentConcept == null;
+door = gearModel.new Concept("Door", false, true, equipment);
+assert door.isEnumeration;
+assert door.parentConcept == equipment;
+assert gearModel.concepts.size == 2;
+
+// An association and its cardinalities
+domainCardinality = gearModel.new Cardinality("1");
+rangeCardinality = gearModel.new Cardinality("0..*");
+assert rangeCardinality.getMinCardinality() == "0";
+assert rangeCardinality.getMaxCardinality() == "-1";
+bounded = gearModel.new Cardinality("2..5");
+assert bounded.getMinCardinality() == "2";
+assert bounded.getMaxCardinality() == "5";
+assert domainCardinality.getMinCardinality() == "1";
+assert domainCardinality.getMaxCardinality() == "1";
+
+hasDoor = gearModel.new Association("hasDoor", false, false, null, equipment, door, domainCardinality, rangeCardinality,
+		false, false, true, false, true);
+assert hasDoor.name == "hasDoor";
+assert hasDoor.domain == equipment;
+assert hasDoor.range == door;
+assert hasDoor.domainCardinality == domainCardinality;
+assert hasDoor.isASymmetric;
+assert hasDoor.isIrreflexive;
+assert !hasDoor.isTransitive;
+
+// Individuals: one of a concept of this model, one of a default data type of the root model
+leftDoor = gearModel.new Individual("leftDoor", door, false, null);
+assert leftDoor.individualOf == door;
+assert !leftDoor.isSole;
+assert leftDoor.getCanonicalString() == "leftDoor";
+mainGear = gearModel.new Individual("mainGear", equipment, false, null);
+
+// A maplet individual is an individual of an association, from an antecedent to an image
+mainGearHasLeftDoor = gearModel.new MapletIndividual(null, hasDoor, mainGear, leftDoor, false, null);
+assert mainGearHasLeftDoor.individualOf == hasDoor;
+assert mainGearHasLeftDoor.antecedent == mainGear;
+assert mainGearHasLeftDoor.image == leftDoor;
+assert mainGearHasLeftDoor.getCanonicalString() == "mainGear |-> leftDoor";
+assert mainGearHasLeftDoor.getNormalisedString() == "mainGear_leftDoor";
+
+// An individual whose concept is declared in another domain model is "sole"
+naturalType = root.concepts.get(0);
+three = gearModel.new Individual("three", naturalType, false, null);
+assert three.isSole;
+assert gearModel.sole_individuals.size == 1;
+
+// The individuals of a concept, gathered in this model and the models it refines
+assert gearModel.conceptIndividuals(door).size == 1;
+assert gearModel.conceptIndividuals(equipment).size == 1;
+
+// A concept defined by a logical formula
+formula = gearModel.new LogicalFormula("forall d. d : Door => d : Equipment");
+assert formula.assertion == "forall d. d : Door => d : Equipment";
+definedDoor = gearModel.new DefinedConcept("DefinedDoor", false, false, equipment, formula);
+assert definedDoor.parentConcept == equipment;
+assert definedDoor.definedWith.size == 1;
+
+log "Test PASSED: T7 - domain modelling, concepts, associations and individuals";

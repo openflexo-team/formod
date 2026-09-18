@@ -1,0 +1,74 @@
+// T9 - the domain model methodology derives one domain model per group of goals of the SysML/KAOS methodology it relies on.
+// Exercises DomainModelMethodology.create, DomainModellingElementMapping.updateFromSysMLKAOS, the two creation schemes of
+// DomainModelMapping, createChildDomainModel and createTopLevelDomainModelMapping.
+
+service ResourceCenterService add_temp_rc;
+
+// Both diagram specifications are loaded first: the goal diagrams and the domain model diagrams need them
+goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification"];
+goalExampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
+domainDiagramSpecification = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification"];
+domainExampleDiagram = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram"];
+assert domainDiagramSpecification != null;
+
+formose = load -r ["http://formose.lacl.fr/Formose.fml"];
+project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
+gear = project.formoseVMI.projectElement.createChildrenElement("LandingGear", "The landing gear itself");
+
+// The SysML/KAOS methodology, with one group of goals in the goal model of the landing gear
+kaosMethodology = project.new SysMLKaosMethodology("LandingGearGoals", gear) with (name="SysMLKaosMethodology");
+gearGoalModel = kaosMethodology.getElementMapping(gear).goalModel;
+gearGoalModel.addFunctionalGoal("Extend gear", "", "The gear shall extend");
+gearGoalModel.addFunctionalGoal("Retract gear", "", "The gear shall retract");
+extension = gearGoalModel.new GoalGroup("Extension", gearGoalModel.goals());
+assert gearGoalModel.topLevelGroups().size == 1;
+
+// The domain model methodology is declared where the SysML/KAOS one is, and follows its groups of goals
+methodology = project.new DomainModelMethodology(kaosMethodology) with (name="DomainModelMethodology");
+assert methodology != null;
+assert methodology.sysMLKaosMethodology == kaosMethodology;
+assert methodology.declaringElement == gear;
+assert methodology.domainModelling != null;
+root = methodology.domainModelling.rootDomainModel;
+assert root != null;
+assert project.methodologies().size == 3;
+
+rootMapping = methodology.rootElementMapping;
+assert rootMapping != null;
+assert rootMapping.element == gear;
+assert rootMapping.goalModel == gearGoalModel;
+assert methodology.getDomainModelElementMapping(gear) == rootMapping;
+
+// One domain model per top-level group of goals, refining the root domain model, with its default diagram
+assert rootMapping.topLevelDomainModelMappings.size == 1;
+extensionMapping = rootMapping.topLevelDomainModelMappings.get(0);
+assert extensionMapping.goalGroup == extension;
+assert extensionMapping.parent == null;
+assert extensionMapping.domainModel != null;
+assert extensionMapping.domainModel.modelName == "LandingGear-Extension";
+assert extensionMapping.modelName == "LandingGear-Extension";
+assert extensionMapping.domainModel.parentDomainModel == root;
+assert extensionMapping.defaultDiagram != null;
+assert extensionMapping.defaultDiagram.domainModel == extensionMapping.domainModel;
+
+// Updating again creates nothing new
+rootMapping.updateFromSysMLKAOS();
+assert rootMapping.topLevelDomainModelMappings.size == 1;
+
+// A child domain model, named rather than derived from a group, refines the domain model of its parent mapping
+doorsMapping = extensionMapping.createChildDomainModel("Doors");
+assert doorsMapping != null;
+assert doorsMapping.parent == extensionMapping;
+assert doorsMapping.goalGroup == null;
+assert doorsMapping.modelName == "LandingGear-Doors";
+assert doorsMapping.domainModel.parentDomainModel == extensionMapping.domainModel;
+assert extensionMapping.children.size == 1;
+
+// A top-level domain model named by hand
+rootMapping.createTopLevelDomainModelMapping("Sensors", null);
+assert rootMapping.topLevelDomainModelMappings.size == 2;
+sensorsMapping = rootMapping.topLevelDomainModelMappings.get(1);
+assert sensorsMapping.modelName == "LandingGear-Sensors";
+assert sensorsMapping.domainModel.parentDomainModel == root;
+
+log "Test PASSED: T9 - domain model methodology following the groups of goals";

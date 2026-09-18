@@ -1,27 +1,40 @@
-use org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstanceModelSlot;
-
 /**
- * 
+ * Container of the domain models of a Formose project: it creates the unique root domain model, together with the default data
+ * types every other domain model can use (NATURAL, INTEGER, FLOAT, STRING, BOOL).
+ *
+ * Migrated from the legacy DomainModelling.fml.xml serialization (formod 2.1). Its URI follows the 2.99 convention (resource
+ * center base URI + relative path): http://formose.lacl.fr/DomainModel/DomainModelling.fml, no longer
+ * ".../resources/DomainModel/DomainModelling.fml".
+ *
+ * Deliberate divergences from the legacy model:
+ * - the root domain model no longer carries a title: virtualModelInstanceTitle is deprecated in 2.99, only name is set;
+ * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
+ *
  * @version 0.1
  */
-@VirtualModel(uri="http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml")
-public class DomainModelling {
 
-  public DomainModel rootDomainModel;
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
-  @CreationScheme  
-  DomainModelling:create() {  
-    rootDomainModel = DomainModel.create("Root",null);    
-    DefaultDataType.create("NATURAL",false)    
-    DefaultDataType.create("INTEGER",false)    
-    DefaultDataType.create("FLOAT",false)    
-    DefaultDataType.create("STRING",false)    
-    DefaultDataType.create("BOOL",true)  
-  }  
+import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml"];
 
-  @DeletionScheme  
-  Void delete() {  
-  
-  }  
+@URI("http://formose.lacl.fr/DomainModel/DomainModelling.fml")
+@Version("0.1")
+public model DomainModelling {
 
+	/**
+	 * The unique root domain model. The default data types are created at this level (NATURAL, INTEGER, FLOAT, STRING, BOOL).
+	 */
+	DomainModel rootDomainModel with ModelInstance(isRequired=true);
+
+	create() {
+		rootDomainModel = new DomainModel("Root", null) with (name="RootDomainModel");
+		rootDomainModel.new DefaultDataType("NATURAL", false);
+		rootDomainModel.new DefaultDataType("INTEGER", false);
+		rootDomainModel.new DefaultDataType("FLOAT", false);
+		rootDomainModel.new DefaultDataType("STRING", false);
+		rootDomainModel.new DefaultDataType("BOOL", true);
+	}
+
+	delete() {
+	}
 }
