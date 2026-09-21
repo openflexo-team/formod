@@ -95,7 +95,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testSysMLKaos");
 
 		CompilationUnitResource sysmlKaosViewPointResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.SYSML_KAOS_VIEWPOINT_URI);
+				.getCompilationUnitResource(FMSConstants.SYSML_KAOS_URI);
 		assertNotNull(sysmlKaosViewPointResource);
 
 		VirtualModel sysMLKaosVP;
@@ -121,7 +121,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testDomainModel");
 
 		CompilationUnitResource domainModelViewPointResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.DOMAIN_MODELLING_VIEWPOINT_URI);
+				.getCompilationUnitResource(FMSConstants.DOMAIN_MODELLING_URI);
 		assertNotNull(domainModelViewPointResource);
 
 		VirtualModel domainModelVP;
@@ -153,7 +153,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		log("loadFormoseViewPoint()");
 
-		formoseViewpoint = serviceManager.getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+		formoseViewpoint = serviceManager.getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_URI);
 		assertNotNull(formoseViewpoint);
 		System.out.println("Found virtual model: " + formoseViewpoint);
 
@@ -181,7 +181,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testDocumentLibrary");
 
 		CompilationUnitResource dlViewPointResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.DOCUMENT_LIBRARY_VIEWPOINT_URI);
+				.getCompilationUnitResource(FMSConstants.DOCUMENT_LIBRARY_URI);
 		assertNotNull(dlViewPointResource);
 
 		VirtualModel documentLibraryVP;
@@ -199,20 +199,20 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 
 		// assertEquals(4, documentLibraryVP.getVirtualModels(false).size());
 
-		VirtualModel abstractDocumentVM, docXDocumentVM, excelDocumentVM;
+		VirtualModel abstractDocumentVM, wordDocumentVM, excelDocumentVM;
 
 		assertNotNull(abstractDocumentVM = documentLibraryVP.getVirtualModelNamed("AbstractDocument"));
-		assertNotNull(docXDocumentVM = documentLibraryVP.getVirtualModelNamed("DocXDocument"));
+		assertNotNull(wordDocumentVM = documentLibraryVP.getVirtualModelNamed("WordDocument"));
 		assertNotNull(excelDocumentVM = documentLibraryVP.getVirtualModelNamed("ExcelDocument"));
 
 		assertSame(documentLibraryVP, abstractDocumentVM.getContainerVirtualModel());
-		assertSame(documentLibraryVP, docXDocumentVM.getContainerVirtualModel());
+		assertSame(documentLibraryVP, wordDocumentVM.getContainerVirtualModel());
 		assertSame(documentLibraryVP, excelDocumentVM.getContainerVirtualModel());
 
-		assertEquals(1, docXDocumentVM.getParentFlexoConcepts().size());
+		assertEquals(1, wordDocumentVM.getParentFlexoConcepts().size());
 
 		/*VirtualModelImpl vm1 = (VirtualModelImpl) abstractDocumentVM;
-		VirtualModelImpl vm2 = (VirtualModelImpl) docXDocumentVM.getParentFlexoConcepts().get(0);
+		VirtualModelImpl vm2 = (VirtualModelImpl) wordDocumentVM.getParentFlexoConcepts().get(0);
 		
 		System.out.println("Resource.VM1=" + vm1.getResource());
 		System.out.println("Resource.VM2=" + vm2.getResource());
@@ -223,7 +223,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		System.err.println("----------------> VM2:");
 		vm2.getCreationException().printStackTrace();*/
 
-		assertSame(abstractDocumentVM, docXDocumentVM.getParentFlexoConcepts().get(0));
+		assertSame(abstractDocumentVM, wordDocumentVM.getParentFlexoConcepts().get(0));
 	}
 
 	@Test
@@ -254,7 +254,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testMethology");
 
 		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.METHOLOGY_URI);
+				.getCompilationUnitResource(FMSConstants.METHODOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
@@ -274,7 +274,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testDocumentAnnotationMethology");
 
 		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.DOCUMENT_ANNOTATION_METHOLOGY_URI);
+				.getCompilationUnitResource(FMSConstants.DOCUMENT_ANNOTATION_METHODOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
@@ -294,7 +294,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testSysMLKaosMethodology");
 
 		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.SYSML_KAOS_METHOLOGY_URI);
+				.getCompilationUnitResource(FMSConstants.SYSML_KAOS_METHODOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;
@@ -314,7 +314,7 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 		log("testDomainModelMethology");
 
 		CompilationUnitResource fmlResource = serviceManager.getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.DOMAIN_MODEL_METHOLOGY_URI);
+				.getCompilationUnitResource(FMSConstants.DOMAIN_MODEL_METHODOLOGY_URI);
 		assertNotNull(fmlResource);
 
 		VirtualModel virtualModel;

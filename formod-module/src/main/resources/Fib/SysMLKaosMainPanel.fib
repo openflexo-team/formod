@@ -35,22 +35,22 @@
 			showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0"
 			root="data" selectionMode="DiscontiguousTreeSelection"
 			rowHeight="18" manageDynamicModel="true"
-			rightClickAction="controller.rightClick(ElementBrowser.selected,event)"
-			doubleClickAction="controller.doubleClick(ElementBrowser.selected)"
-			clickAction="controller.singleClick(ElementBrowser.selected)"
+			rightClickAction="controller.rightClick(elementBrowser.selected,event)"
+			doubleClickAction="controller.doubleClick(elementBrowser.selected)"
+			clickAction="controller.singleClick(elementBrowser.selected)"
 			constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;location=left)"
-			height="200" width="250" name="ElementBrowser">
+			height="200" width="250" name="elementBrowser">
 		<BrowserElement
 			dataClassName="org.openflexo.module.formose.model.FormoseProjectNature"
 			icon="controller.iconForObject(formoseView)" label="formoseView.name"
 			isEditable="false" defaultVisible="false" name="nature">
 			<Children data="formoseView.formoseVMI.projectElement"
-				name="rootElement" visible="(formoseView.formoseVMI.projectElement.applicableSysMLKaosMethodology = null)"/>
+				name="rootElement" visible="(formoseView.formoseVMI.projectElement.applicableSysMLKaosMethodology == null)"/>
 			<Children data="controller.getElementMapping(formoseView.formoseVMI.projectElement)"
 				name="rootElementMapping" visible="(formoseView.formoseVMI.projectElement.applicableSysMLKaosMethodology != null)"/>
 		</BrowserElement>
 		<BrowserElement 
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore#Element&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element&gt;"
 			icon="controller.iconForObject(element)" label="element.identifier"
 			enabled="(element.applicableSysMLKaosMethodology != null)"
 			isEditable="false" defaultVisible="false" name="element">
@@ -58,14 +58,14 @@
 			<Children data="controller.getChildUnmappedElements(element)" name="childUnmappedElements"/>
 		</BrowserElement>
 		<BrowserElement
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml#SysMLKaosElementMapping&gt;"
 			icon="controller.iconForObject(elementMapping)" label="elementMapping.element.identifier"
 			isEditable="false" defaultVisible="false" name="elementMapping">
 			<Children data="elementMapping.goalDiagrams" name="diagrams" />
 			<Children data="elementMapping.childrenDiagramElementMapping" name="childrenElement" />
 		</BrowserElement>
 		<BrowserElement 
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#DiagramMapping&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml#SysMLKaosElementMapping#DiagramMapping&gt;"
 			icon="controller.iconForObject(diagramMapping)" label="diagramMapping.diagramTitle"
 			isEditable="false" name="diagramMapping">
 		</BrowserElement>
@@ -79,12 +79,12 @@
 			<Table id="11" backgroundSelectionColor="9,80,208"
 				visibleRowCount="3" boundToSelectionManager="true"
 				backgroundNonSelectionColor="255,255,255"
-				iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;"
+				iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element#Requirement&gt;"
 				textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255"
 				textSecondarySelectionColor="0,0,0" lookAndFeel="FlatDesign"
 				textNonSelectionColor="0,0,0" selectionMode="MultipleIntervalSelection"
 				rowHeight="18" manageDynamicModel="true"
-				data="(elementMapping != null ? elementMapping.element.requirements : diagramMapping.container.element.requirements)"
+				data="(elementMapping != null ? elementMapping.element.requirements() : diagramMapping.container.element.requirements())"
 				constraints="border(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=10;insetsRight=0;insetsTop=0;location=north)"
 				name="Table">
 				<IconColumn id="12" data="controller.iconForObject(iterator)"
@@ -96,8 +96,8 @@
 				<LabelColumn id="14" data="iterator.status" resizable="true"
 					title="status" displayTitle="true" columnWidth="50" showIcon="false"
 					name="label" />
-				<AddAction id="15" isAvailable="(ElementBrowser.selected != null)"
-					method="controller.createRequirement(ElementBrowser.selected)"
+				<AddAction id="15" isAvailable="(elementBrowser.selected != null)"
+					method="controller.createRequirement(elementBrowser.selected)"
 					name="add_action" />
 			</Table>
 			<Image id="16" imageWidth="80" sizeAdjustment="FitToAvailableSizeRespectRatio"
@@ -105,11 +105,11 @@
 				data="((diagramMapping != null) ? diagramMapping.goalModelingDiagram.kaosGoalDiagram.screenshotImage.image : elementMapping.mainFunctionalGoalDiagram.goalModelingDiagram.kaosGoalDiagram.screenshotImage.image)"
 				constraints="border(location=center)" height="100" width="200" name="Image" />
 			<FIBVariable
-				type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#SysMLKaosElementMapping&gt;"
-				value="ElementBrowser.selected" name="elementMapping" />
+				type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml#SysMLKaosElementMapping&gt;"
+				value="elementBrowser.selected" name="elementMapping" />
 			<FIBVariable
-				type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/SysMLKaos-Methodology.fml#DiagramMapping&gt;"
-				value="ElementBrowser.selected" name="diagramMapping" />
+				type="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml#SysMLKaosElementMapping#DiagramMapping&gt;"
+				value="elementBrowser.selected" name="diagramMapping" />
 		</Panel>
 	</Panel>
 	<Panel id="18" align="left" borderTop="0" borderTitle="Panel"
@@ -123,7 +123,7 @@
 			action="controller.instantiateSysMLKaosMethodology(formoseView.formoseVMI.projectElement)"
 			label="instantiate_sysml_kaos_methodology" localize="true"
 			constraints="flow()"
-			visible="(formoseView.formoseVMI.projectElement.applicableSysMLKaosMethodology = null)"
+			visible="(formoseView.formoseVMI.projectElement.applicableSysMLKaosMethodology == null)"
 			name="Button2" />
 	</Panel>
 	<LocalizedDictionary id="20">
@@ -178,6 +178,6 @@
 	<FIBVariable id="57"
 		type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
 	<FIBVariable id="58"
-		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;"
+		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.fml&gt;"
 		name="formoseView" />
 </Panel>

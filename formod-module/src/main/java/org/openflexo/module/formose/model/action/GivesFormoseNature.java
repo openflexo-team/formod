@@ -122,7 +122,7 @@ public class GivesFormoseNature extends GivesNatureAction<GivesFormoseNature, Fo
 	public VirtualModel getFormoseVirtualModel() {
 		if (getServiceManager() != null) {
 			try {
-				return getServiceManager().getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+				return getServiceManager().getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_URI);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

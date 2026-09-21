@@ -79,7 +79,7 @@ public class InstantiateSysMLKaosMethodology extends FMSAction<InstantiateSysMLK
 		@Override
 		public boolean isEnabledForSelection(final FlexoConceptInstance element, final Vector<FlexoObject> globalSelection) {
 			return isVisibleForSelection(element, globalSelection)
-					&& element.getFlexoPropertyValue("applicableSysMLKaosMethodology") == null;
+					&& element.getFlexoPropertyValue(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME) == null;
 		}
 	};
 
@@ -112,7 +112,7 @@ public class InstantiateSysMLKaosMethodology extends FMSAction<InstantiateSysMLK
 
 		FlexoConcept elementConcept = getFocusedObject().getFlexoConcept();
 
-		ActionScheme actionScheme = (ActionScheme) elementConcept.getFlexoBehaviour("createSysMLKaosMethodology");
+		ActionScheme actionScheme = (ActionScheme) elementConcept.getFlexoBehaviour(FMSConstants.CREATE_SYSML_KAOS_METHODOLOGY_BEHAVIOUR_NAME);
 		ActionSchemeActionFactory actionType = new ActionSchemeActionFactory(actionScheme, getElement());
 
 		ActionSchemeAction action = actionType.makeNewEmbeddedAction(getElement(), null, this);
@@ -124,7 +124,8 @@ public class InstantiateSysMLKaosMethodology extends FMSAction<InstantiateSysMLK
 
 		newMethodology = (FMLRTVirtualModelInstance) action.getReturnedValue();
 
-		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.METHODOLOGY_ROLE_NAME, null, getNewMethodology());
+		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME,
+				null, getNewMethodology());
 	}
 
 	private FMLRTVirtualModelInstance newMethodology;

@@ -49,9 +49,9 @@ public class FormoseProjectNatureModuleView extends FIBModuleView<FormoseProject
 		super(nature, controller, FMS_PROJECT_MODULE_VIEW_FIB, controller.getModule().getLocales());
 		this.perspective = perspective;
 
-		FIBBrowserWidget<?, ?> browserView = (FIBBrowserWidget<?, ?>) getFIBView("ElementBrowser");
+		FIBBrowserWidget<?, ?> browserView = (FIBBrowserWidget<?, ?>) getFIBView("elementBrowser");
 		// System.out.println("Found browser: " + browserView);
-		/*browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "ElementBrowser");
+		/*browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "elementBrowser");
 		if (browser != null) {
 			bindFlexoActionsToBrowser(browser);
 		}*/

@@ -58,9 +58,9 @@ public class DocumentAnnotationModuleView extends FIBModuleView<FormoseProjectNa
 		super(nature, controller, DOCUMENTATION_ANNOTATION_MODULE_VIEW_FIB, controller.getModule().getLocales());
 		this.perspective = perspective;
 
-		// FIBBrowserWidget<?, ?> browserView = (FIBBrowserWidget<?, ?>) getFIBView("ElementBrowser");
+		// FIBBrowserWidget<?, ?> browserView = (FIBBrowserWidget<?, ?>) getFIBView("elementBrowser");
 		// System.out.println("Found browser: " + browserView);
-		/*browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "ElementBrowser");
+		/*browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "elementBrowser");
 		if (browser != null) {
 			bindFlexoActionsToBrowser(browser);
 		}*/
@@ -165,7 +165,7 @@ public class DocumentAnnotationModuleView extends FIBModuleView<FormoseProjectNa
 
 		public JFIBBrowserWidget<?> getReferencesBrowser() {
 			return (JFIBBrowserWidget<?>) viewForComponent(
-					FlexoFIBView.retrieveFIBBrowserNamed((FIBContainer) getRootComponent(), "ReferencesBrowser"));
+					FlexoFIBView.retrieveFIBBrowserNamed((FIBContainer) getRootComponent(), "referencesBrowser"));
 		}
 
 		/**

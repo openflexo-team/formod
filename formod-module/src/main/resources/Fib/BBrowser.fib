@@ -11,23 +11,23 @@
 		showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0"
 		root="data" selectionMode="DiscontiguousTreeSelection"
 		rootVisible="true" rowHeight="18" localize="true" manageDynamicModel="true"
-		rightClickAction="controller.rightClick(FormoseProjectBrowser.selected,event)"
-		doubleClickAction="controller.doubleClick(FormoseProjectBrowser.selected)"
-		clickAction="controller.singleClick(FormoseProjectBrowser.selected)"
+		rightClickAction="controller.rightClick(formoseProjectBrowser.selected,event)"
+		doubleClickAction="controller.doubleClick(formoseProjectBrowser.selected)"
+		clickAction="controller.singleClick(formoseProjectBrowser.selected)"
 		index="0"
 		constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)"
-		name="FormoseProjectBrowser">
+		name="formoseProjectBrowser">
 		<BrowserElement
 			dataClassName="org.openflexo.module.formose.model.FormoseProjectNature"
 			icon="controller.iconForObject(formoseView)" label="formoseView.name"
 			isEditable="false" name="nature">
 			<Children data="formoseView.formoseVMI.projectElement"
-				name="rootElement" visible="(formoseView.formoseVMI.projectElement.applicableBMethodology = null)"/>
+				name="rootElement" visible="(formoseView.formoseVMI.projectElement.applicableBMethodology == null)"/>
 			<Children data="controller.getBElementMapping(formoseView.formoseVMI.projectElement)"
 				name="rootElementMapping" visible="(formoseView.formoseVMI.projectElement.applicableBMethodology != null)"/>
 		</BrowserElement>
 		<BrowserElement 
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore#Element&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element&gt;"
 			icon="controller.iconForObject(element)" label="element.identifier"
 			enabled="(element.applicableBMethodology != null)"
 			isEditable="false" defaultVisible="false" name="element">
@@ -35,7 +35,7 @@
 			<Children data="controller.getChildBUnmappedElements(element)" name="childUnmappedElements"/>
 		</BrowserElement>
 		<BrowserElement
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/B-Methodology.fml#BElementMapping&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/BMethodology.fml#BElementMapping&gt;"
 			icon="controller.iconForObject(elementMapping)" label="elementMapping.element.identifier"
 			isEditable="false" name="elementMapping">
 			<Children data="elementMapping.topLevelBMappings" name="domainModel" />
@@ -43,7 +43,7 @@
 		</BrowserElement>
 		
 		<BrowserElement
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/B-Methodology.fml#BMapping&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/BMethodology.fml#BElementMapping#BMapping&gt;"
 			icon="controller.iconForObject(domainModelMapping)" label="domainModelMapping.domainModel.modelName"
 			isEditable="false" defaultVisible="false" name="domainModelMapping">
 			<Children data="domainModelMapping.children" name="children" />
@@ -53,7 +53,7 @@
 	<FIBVariable 
 		type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
 	<FIBVariable 
-		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;"
+		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.fml&gt;"
 		value="data.formoseInstance.accessedVirtualModelInstance" name="formoseView" />
 	<LocalizedDictionary />
 </Panel>

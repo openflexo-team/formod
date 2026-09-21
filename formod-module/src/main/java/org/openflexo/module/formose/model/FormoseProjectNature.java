@@ -114,7 +114,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 		public VirtualModel getFormoseViewPoint() {
 			if (formoseViewpoint == null && getServiceManager() != null) {
 				try {
-					formoseViewpoint = getServiceManager().getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+					formoseViewpoint = getServiceManager().getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_URI);
 				} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 					e.printStackTrace();
 				}
@@ -127,7 +127,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 			if (documentLibraryVirtualModel == null && getServiceManager() != null) {
 				try {
 					documentLibraryVirtualModel = getServiceManager().getVirtualModelLibrary()
-							.getVirtualModel(FMSConstants.DOCUMENT_LIBRARY_VIEWPOINT_URI);
+							.getVirtualModel(FMSConstants.DOCUMENT_LIBRARY_URI);
 				} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 					e.printStackTrace();
 				}
@@ -150,7 +150,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 
 		@Override
 		public VirtualModel getFormoseVirtualModel() {
-			return getFormoseViewPoint().getVirtualModelNamed(FMSConstants.FORMOSE_VM_NAME);
+			return getFormoseViewPoint().getVirtualModelNamed(FMSConstants.FORMOSE_CORE_VM_NAME);
 		}
 
 		@Override
@@ -196,14 +196,14 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 			return getFormoseInstance().getAccessedVirtualModelInstance();
 		}
 
+		/**
+		 * The document library of the project, which the document annotation methodology holds
+		 */
 		@Override
 		public FMLRTVirtualModelInstance getDocumentLibrary() {
-			if (getFormoseInstance().getAccessedVirtualModelInstance() != null) {
-				List<VirtualModelInstance<?, ?>> vmiList = getFormoseView()
-						.getVirtualModelInstancesForVirtualModel(getDocumentLibraryVirtualModel());
-				if (vmiList != null && vmiList.size() > 0) {
-					return (FMLRTVirtualModelInstance) vmiList.get(0);
-				}
+			FMLRTVirtualModelInstance docAnnotationMethodology = getDocAnnotationMethodologyVirtualModelInstance();
+			if (docAnnotationMethodology != null) {
+				return docAnnotationMethodology.getFlexoPropertyValue(FMSConstants.DOCUMENT_LIBRARY_ROLE_NAME);
 			}
 			return null;
 		}
@@ -320,7 +320,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 		for (FlexoResourceCenter<?> resourceCenter : lst) {
 			try {
 				ceVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
-						.getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+						.getVirtualModel(FMSConstants.FORMOSE_URI);
 			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -463,7 +463,7 @@ public interface FormoseProject extends FlexoObject, ProjectWrapper<FormoseProje
 			for (FlexoResourceCenter<?> resourceCenter : lst) {
 				try {
 					formoseVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
-							.getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+							.getVirtualModel(FMSConstants.FORMOSE_URI);
 				} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -483,7 +483,7 @@ public interface FormoseProject extends FlexoObject, ProjectWrapper<FormoseProje
 				for (FlexoResourceCenter<?> resourceCenter : lst) {
 					try {
 						documentLibraryVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
-								.getVirtualModel(FMSConstants.DOCUMENT_LIBRARY_VIEWPOINT_URI);
+								.getVirtualModel(FMSConstants.DOCUMENT_LIBRARY_URI);
 					} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -512,7 +512,7 @@ public interface FormoseProject extends FlexoObject, ProjectWrapper<FormoseProje
 
 		@Override
 		public VirtualModel getFormoseVirtualModel() {
-			return getFormoseViewPoint().getVirtualModelNamed(FMSConstants.FORMOSE_VM_NAME);
+			return getFormoseViewPoint().getVirtualModelNamed(FMSConstants.FORMOSE_CORE_VM_NAME);
 		}
 
 		@Override

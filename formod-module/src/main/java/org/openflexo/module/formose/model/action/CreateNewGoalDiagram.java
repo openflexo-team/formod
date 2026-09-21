@@ -117,7 +117,7 @@ public class CreateNewGoalDiagram extends FMSAction<CreateNewGoalDiagram, FlexoC
 			throw new FlexoException(e);
 		}
 
-		/*FMLRTVirtualModelInstance methodology = element.getFlexoPropertyValue("applicableSysMLKaosMethodology");
+		/*FMLRTVirtualModelInstance methodology = element.getFlexoPropertyValue(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME);
 		System.out.println("OK on doit afficher la methodology: " + methodology);
 		FMLRTVirtualModelInstance skbgMethodology = methodology;
 		System.out.println("skbgMethodology=" + skbgMethodology);
@@ -147,7 +147,7 @@ public class CreateNewGoalDiagram extends FMSAction<CreateNewGoalDiagram, FlexoC
 			ActionSchemeAction action2 = actionType.makeNewEmbeddedAction(diagramElementMapping, null, this);
 			action2.doAction();
 		
-			// getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.METHODOLOGY_ROLE_NAME, null,
+			// getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME, null,
 			// getNewMethodology());
 		
 		}*/

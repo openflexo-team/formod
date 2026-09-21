@@ -83,8 +83,8 @@ public class InstantiateDomainModelMethodology extends FMSAction<InstantiateDoma
 		public boolean isEnabledForSelection(final FlexoConceptInstance element, final Vector<FlexoObject> globalSelection) {
 			return isVisibleForSelection(element, globalSelection)
 					&& element.getFlexoConcept().getName().equals(FMSConstants.ELEMENT_CONCEPT_NAME)
-					&& element.getFlexoPropertyValue("applicableDomainModelMethodology") == null
-					&& element.getFlexoPropertyValue("applicableSysMLKaosMethodology") != null;
+					&& element.getFlexoPropertyValue(FMSConstants.APPLICABLE_DOMAIN_MODEL_METHODOLOGY_PROPERTY_NAME) == null
+					&& element.getFlexoPropertyValue(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME) != null;
 		}
 	};
 
@@ -117,7 +117,7 @@ public class InstantiateDomainModelMethodology extends FMSAction<InstantiateDoma
 
 		FlexoConcept elementConcept = getFocusedObject().getFlexoConcept();
 
-		ActionScheme actionScheme = (ActionScheme) elementConcept.getFlexoBehaviour("createDomainModelMethodology");
+		ActionScheme actionScheme = (ActionScheme) elementConcept.getFlexoBehaviour(FMSConstants.CREATE_DOMAIN_MODEL_METHODOLOGY_BEHAVIOUR_NAME);
 		ActionSchemeActionFactory actionType = new ActionSchemeActionFactory(actionScheme, getElement());
 
 		ActionSchemeAction action = actionType.makeNewEmbeddedAction(getElement(), null, this);
@@ -129,7 +129,8 @@ public class InstantiateDomainModelMethodology extends FMSAction<InstantiateDoma
 
 		newMethodology = (FMLRTVirtualModelInstance) action.getReturnedValue();
 
-		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.METHODOLOGY_ROLE_NAME, null, getNewMethodology());
+		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.APPLICABLE_DOMAIN_MODEL_METHODOLOGY_PROPERTY_NAME,
+				null, getNewMethodology());
 	}
 
 	private FMLRTVirtualModelInstance newMethodology;
@@ -139,7 +140,7 @@ public class InstantiateDomainModelMethodology extends FMSAction<InstantiateDoma
 	}
 
 	public FlexoConceptInstance getElement() {
-		FMLRTVirtualModelInstance sysMLKaosMethodology = getFocusedObject().getFlexoPropertyValue("applicableSysMLKaosMethodology");
+		FMLRTVirtualModelInstance sysMLKaosMethodology = getFocusedObject().getFlexoPropertyValue(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME);
 		if (sysMLKaosMethodology != null) {
 			try {
 				return sysMLKaosMethodology.execute("declaringElement");

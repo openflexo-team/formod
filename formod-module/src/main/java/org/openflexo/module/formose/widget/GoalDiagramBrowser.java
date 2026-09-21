@@ -98,7 +98,7 @@ public class GoalDiagramBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 		if (sysMLKaosViewpoint == null && getFlexoController() != null) {
 			try {
 				sysMLKaosViewpoint = getFlexoController().getApplicationContext().getVirtualModelLibrary()
-						.getVirtualModel(FMSConstants.SYSML_KAOS_VIEWPOINT_URI);
+						.getVirtualModel(FMSConstants.SYSML_KAOS_URI);
 			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 				e.printStackTrace();
 			}
@@ -113,7 +113,7 @@ public class GoalDiagramBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getSysMLKaosViewPoint()));
 
-		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "GoalDiagramBrowser");
+		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "goalDiagramBrowser");
 		if (browser != null) {
 			bindFlexoActionsToBrowser(browser);
 		}

@@ -89,7 +89,7 @@ public abstract class AbstractFormoseProjectBrowser extends FIBBrowserView<Formo
 		if (formoseViewpoint == null && getFlexoController() != null) {
 			try {
 				formoseViewpoint = getFlexoController().getApplicationContext().getVirtualModelLibrary()
-						.getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+						.getVirtualModel(FMSConstants.FORMOSE_URI);
 			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 				e.printStackTrace();
 			}
@@ -104,7 +104,7 @@ public abstract class AbstractFormoseProjectBrowser extends FIBBrowserView<Formo
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getFormoseViewPoint()));
 
-		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "FormoseProjectBrowser");
+		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "formoseProjectBrowser");
 		if (browser != null) {
 			bindFlexoActionsToBrowser(browser);
 		}

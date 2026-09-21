@@ -98,7 +98,7 @@ public class DomainModelBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 		if (domainModelViewpoint == null && getFlexoController() != null) {
 			try {
 				domainModelViewpoint = getFlexoController().getApplicationContext().getVirtualModelLibrary()
-						.getVirtualModel(FMSConstants.DOMAIN_MODELLING_VIEWPOINT_URI);
+						.getVirtualModel(FMSConstants.DOMAIN_MODELLING_URI);
 			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 				e.printStackTrace();
 			}
@@ -113,7 +113,7 @@ public class DomainModelBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getDomainModelViewPoint()));
 
-		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "DomainModelBrowser");
+		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "domainModelBrowser");
 		if (browser != null) {
 			bindFlexoActionsToBrowser(browser);
 		}

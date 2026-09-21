@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel id="0" align="left" borderTop="0" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" layout="twocols" borderRight="0" controllerClassName="org.openflexo.module.formose.widget.ReferencesBrowser$ReferencesBrowserFIBController">
-  <Browser id="1" backgroundSelectionColor="9,80,208" visibleRowCount="5" boundToSelectionManager="true" backgroundNonSelectionColor="255,255,255" iteratorClassName="java.lang.Object" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" allowsDragAndDrop="true" textNonSelectionColor="0,0,0" root="formoseView.documentAnnotationMethodology" selected="controller.selectedElement" selectionMode="DiscontiguousTreeSelection" rootVisible="true" rowHeight="18" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(ReferencesBrowser.selected,event)" doubleClickAction="controller.doubleClick(ReferencesBrowser.selected)" clickAction="controller.singleClick(ReferencesBrowser.selected)" index="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="ReferencesBrowser">
-    <BrowserElement id="2" dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology&gt;" icon="controller.iconForObject(methodology)" label="&quot;References&quot;" isEditable="false" name="methodology">
+  <Browser id="1" backgroundSelectionColor="9,80,208" visibleRowCount="5" boundToSelectionManager="true" backgroundNonSelectionColor="255,255,255" iteratorClassName="java.lang.Object" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" allowsDragAndDrop="true" textNonSelectionColor="0,0,0" root="formoseView.documentAnnotationMethodology" selected="controller.selectedElement" selectionMode="DiscontiguousTreeSelection" rootVisible="true" rowHeight="18" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(referencesBrowser.selected,event)" doubleClickAction="controller.doubleClick(referencesBrowser.selected)" clickAction="controller.singleClick(referencesBrowser.selected)" index="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="referencesBrowser">
+    <BrowserElement id="2" dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.fml/DocumentAnnotationMethodology.fml&gt;" icon="controller.iconForObject(methodology)" label="&quot;References&quot;" isEditable="false" name="methodology">
       <Children id="3" data="formoseView.formoseVMI.projectElement" name="elementReferences" />
       <Children id="4" data="methodology.unclassified" name="unclassified" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="5" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
@@ -17,7 +17,7 @@
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="15" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_element" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="16" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_requirement" />
     </BrowserElement>
-    <BrowserElement id="17" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/DocumentAnnotation-Methodology#Unclassified&gt;" icon="controller.iconForObject(unclassified)" label="&quot;Unclassified references&quot;" isEditable="false" defaultVisible="false" name="unclassified">
+    <BrowserElement id="17" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/DocumentAnnotationMethodology.fml#Unclassified&gt;" icon="controller.iconForObject(unclassified)" label="&quot;Unclassified references&quot;" isEditable="false" defaultVisible="false" name="unclassified">
       <Children id="18" data="unclassified.unclassifiedReferences" name="unclassifiedReferences" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="19" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="20" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="cut" />
@@ -32,7 +32,7 @@
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="29" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_element" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="30" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_requirement" />
     </BrowserElement>
-    <BrowserElement id="31" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument#Reference&gt;" icon="controller.iconForObject(reference)" label="reference.preview" isEditable="false" defaultVisible="false" name="reference">
+    <BrowserElement id="31" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml#Reference&gt;" icon="controller.iconForObject(reference)" label="reference.preview" isEditable="false" defaultVisible="false" name="reference">
       <DragOperation id="32" isAvailable="(!(formoseView.documentAnnotationMethodology.getElementReference(target).references.contains(dragged)))" targetElementName="element" action="controller.moveReferenceToElement(dragged,target)" name="dragToElement" />
       <DragOperation id="33" isAvailable="(!(formoseView.documentAnnotationMethodology.getRequirementReference(target).references.contains(dragged)))" targetElementName="requirement" action="controller.moveReferenceToRequirement(dragged,target)" name="dragToRequirement" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="34" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
@@ -48,10 +48,10 @@
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="44" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_element" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="45" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_requirement" />
     </BrowserElement>
-    <BrowserElement id="46" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore#Element&gt;" icon="controller.iconForObject(element)" label="element.identifier" isEditable="false" name="element">
+    <BrowserElement id="46" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element&gt;" icon="controller.iconForObject(element)" label="element.identifier" isEditable="false" name="element">
       <Children id="47" data="formoseView.documentAnnotationMethodology.getElementReference(element).references" name="annotations" />
       <Children id="48" data="element.childrenElements" name="children" />
-      <Children id="49" data="element.requirements" name="children1" />
+      <Children id="49" data="element.requirements()" name="children1" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="50" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="51" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="cut" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="52" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="paste" />
@@ -65,7 +65,7 @@
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="60" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_element" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="61" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="create_requirement" />
     </BrowserElement>
-    <BrowserElement id="62" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore#Requirement&gt;" icon="controller.iconForObject(requirement)" label="requirement.name" isEditable="false" name="requirement">
+    <BrowserElement id="62" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element#Requirement&gt;" icon="controller.iconForObject(requirement)" label="requirement.name" isEditable="false" name="requirement">
       <Children id="63" data="formoseView.documentAnnotationMethodology.getRequirementReference(requirement).references" name="children" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="64" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="65" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="cut" />
@@ -82,6 +82,6 @@
     </BrowserElement>
   </Browser>
   <FIBVariable id="76" type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
-  <FIBVariable id="77" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;" value="data.formoseView" name="formoseView" />
+  <FIBVariable id="77" type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.fml&gt;" value="data.formoseView" name="formoseView" />
   <LocalizedDictionary id="78" />
 </Panel>

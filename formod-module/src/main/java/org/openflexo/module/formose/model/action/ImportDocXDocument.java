@@ -88,7 +88,7 @@ public class ImportDocXDocument extends FMSAction<ImportDocXDocument, FMLRTVirtu
 
 		@Override
 		public boolean isVisibleForSelection(final FMLRTVirtualModelInstance documentLibrary, final Vector<FlexoObject> globalSelection) {
-			return documentLibrary.getVirtualModel().getURI().equals(FMSConstants.DOCUMENT_LIBRARY_VIEWPOINT_URI);
+			return documentLibrary.getVirtualModel().getURI().equals(FMSConstants.DOCUMENT_LIBRARY_URI);
 		}
 
 		@Override

@@ -111,7 +111,7 @@ public class KaosGoalDiagramModuleView extends FMLControlledDiagramModuleView {
 		FMLRTVirtualModelInstance fmlControlledDiagram = getRepresentedObject();
 		FMLRTVirtualModelInstance goalModel;
 		try {
-			goalModel = fmlControlledDiagram.execute("model");
+			goalModel = fmlControlledDiagram.execute("kaosModel");
 			getPerspective().showGoalDiagramBrowser(goalModel);
 			// Activate drag&drop between browser and diagram
 			getPerspective().getGoalDiagramBrowser().getFIBBrowserWidget().registerDragGestureListener(dgListener);

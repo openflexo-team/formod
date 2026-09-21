@@ -29,7 +29,7 @@
  * - ConceptAttributeGR.delete and IndividualAttributeGR.delete refreshed the concept (the individual) AFTER setting it to null,
  *   so the refresh never ran: they refresh it first;
  * - the palette bindings pass their drop scheme arguments explicitly, the values the legacy dialogs started from: a parameterless
- *   call only resolves for a concept declaring no creation scheme (see CORE-D-11);
+ *   call only resolves for a concept declaring no creation scheme (see CORE-D-13);
  * - the legacy read the name of a DefaultDataTypeEnum value with dataType.toString, which does not resolve on an FML enum type:
  *   it is read as "" + dataType, which converts the value to its name;
  * - the legacy used "=" where it meant ==, "|" for || and "&" for &&;

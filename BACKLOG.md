@@ -36,3 +36,19 @@ Both are excluded from `FormodValidationTest` by name (`NOT_MIGRATED`), with a r
 
 **Acceptance criteria.** No legacy `.fml.xml` is left in `formod-rc`, `NOT_MIGRATED` is empty, and whatever survives validates and is
 exercised by a `.fmlscript` scenario of `formod-test`.
+
+## Formose module
+
+### FORMOD-F-2 — Let the B methodology wizard choose where the B models are generated  ·  `TODO`
+
+**Problem.** `BMethodology` takes two Atelier B projects: the source project it reads, and the project it generates the B models into
+(`create(DomainModelMethodology, AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject)`). The wizard of
+`InstantiateBMethodology` asks for one project only — an existing one, or a blank one it creates — and passes it twice, so the B models
+are generated into the source project. The `.fmlscript` scenario `T10_BMethodology` uses two distinct projects.
+
+**Options.**
+1. Add a second choice to the wizard (existing or new generated project), mirroring the first one.
+2. Derive the generated project from the source one (a sibling blank project named after it), with no new question.
+
+**Acceptance criteria.** The wizard creates the methodology on two distinct projects, and `TestBMethology` asserts that the B models land
+in the generated project and leave the source project untouched.

@@ -36,6 +36,7 @@ import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
 import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
 import ["http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml"];
 import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml"];
+import ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml"];
 import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml"];
 import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml"];
 import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagram.fml"];
@@ -129,6 +130,13 @@ public model DomainModelMethodology extends Methodology {
 			DomainModelMapping parent with ConceptInstance(virtualModelInstance=container.container);
 			DomainModelMapping[0,*] children with ConceptInstance(virtualModelInstance=container.container);
 			GoalGroup goalGroup with ConceptInstance(virtualModelInstance=container.goalModel);
+
+			/** The goal modeling diagram of the element whose goals this domain model is derived from */
+			GoalModelingDiagram goalModelingDiagram {
+				GoalModelingDiagram get() {
+					return container.sysMLKaosElementMapping.mainFunctionalGoalDiagram.goalModelingDiagram;
+				}
+			};
 
 			String modelName {
 				String get() {

@@ -31,7 +31,7 @@
  * - init's CreateDiagram no longer names the diagram specification: the action reads it from the TypedDiagram slot it is assigned
  *   to, so the legacy diagramSpecificationURI would be redundant (and diagramName is deprecated in favour of resourceName);
  * - the palette binding of FunctionalGoalGR passes its drop scheme arguments ("Goal", "", "") where the eight others pass none: a
- *   parameterless call resolves only for a concept declaring no creation scheme, which FunctionalGoalGR does (see CORE-D-11);
+ *   parameterless call resolves only for a concept declaring no creation scheme, which FunctionalGoalGR does (see CORE-D-13);
  * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99; the icons they declared follow in the user interface step.
  *
  * @version 0.1

@@ -11,11 +11,11 @@
 		showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0"
 		root="data" selectionMode="DiscontiguousTreeSelection" rowHeight="18"
 		localize="true" manageDynamicModel="true"
-		rightClickAction="controller.rightClick(FormoseProjectBrowser.selected,event)"
-		doubleClickAction="controller.doubleClick(FormoseProjectBrowser.selected)"
-		clickAction="controller.singleClick(FormoseProjectBrowser.selected)"
+		rightClickAction="controller.rightClick(formoseProjectBrowser.selected,event)"
+		doubleClickAction="controller.doubleClick(formoseProjectBrowser.selected)"
+		clickAction="controller.singleClick(formoseProjectBrowser.selected)"
 		constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)"
-		index="0" name="FormoseProjectBrowser">
+		index="0" name="formoseProjectBrowser">
 		<BrowserElement id="3"
 			dataClassName="org.openflexo.module.formose.model.FormoseProjectNature"
 			icon="controller.iconForObject(formoseView)" label="formoseView.projectName"
@@ -24,14 +24,14 @@
 				name="rootElement" />
 		</BrowserElement>
 		<BrowserElement id="16"
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Element&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element&gt;"
 			icon="controller.iconForObject(element)" label="element.identifier"
 			isEditable="false" defaultVisible="false" name="element">
 			<Children id="17" data="element.childrenElements" name="childrenElement" />
-			<Children id="18" data="element.requirements" name="requirements" />
+			<Children id="18" data="element.requirements()" name="requirements" />
 		</BrowserElement>
 		<BrowserElement id="35"
-			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint/FormoseCore.fml#Requirement&gt;"
+			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element#Requirement&gt;"
 			icon="controller.iconForObject(requirement)" label="requirement.name"
 			isEditable="false" name="requirement">
 		</BrowserElement>
@@ -40,6 +40,6 @@
 	<FIBVariable id="53"
 		type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
 	<FIBVariable id="54"
-		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;"
+		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.fml&gt;"
 		value="data.formoseInstance.accessedVirtualModelInstance" name="formoseView" />
 </Panel>

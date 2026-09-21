@@ -118,10 +118,10 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	private static FlexoConceptInstance diagramMapping; // DiagramMapping
 	private static FMLRTVirtualModelInstance goalModelingDiagram; // GoalModelingDiagram
 
-	private static FMLRTVirtualModelInstance domainModellingMethodology; // DomainModel-Methodology
+	private static FMLRTVirtualModelInstance domainModellingMethodology; // DomainModelMethodology
 	private static FlexoConceptInstance domainModellingProjectMapping; // DomainModellingElementMapping
 
-	private static FMLRTVirtualModelInstance bMethodology; // B-Methodology
+	private static FMLRTVirtualModelInstance bMethodology; // BMethodology
 	private static FlexoConceptInstance bProjectMapping; // BElementMapping
 
 	/**
@@ -149,7 +149,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		log("loadViewPoint");
 
-		String viewPointURI = FMSConstants.FORMOSE_VIEWPOINT_URI;
+		String viewPointURI = FMSConstants.FORMOSE_URI;
 		log("Testing ViewPoint loading: " + viewPointURI);
 
 		FlexoResource<FMLCompilationUnit> vpRes = serviceManager.getResourceManager().getResource(viewPointURI, FMLCompilationUnit.class);
@@ -165,7 +165,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		assertNotNull(formoseVP);
 
-		VirtualModel formoseVM = formoseVP.getVirtualModelNamed(FMSConstants.FORMOSE_VM_NAME);
+		VirtualModel formoseVM = formoseVP.getVirtualModelNamed(FMSConstants.FORMOSE_CORE_VM_NAME);
 		assertNotNull(formoseVM);
 
 	}
@@ -210,9 +210,10 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		assertNotNull(formoseVMI = formoseProjectNature.getFormoseVirtualModelInstance());
 
+		// CreateFMLRTVirtualModelInstance saves each virtual model instance it creates, so none of them is modified here
 		assertFalse(view.isModified());
-		// assertTrue(documentLibrary.isModified());
-		assertTrue(formoseVMI.isModified());
+		assertFalse(documentLibrary.isModified());
+		assertFalse(formoseVMI.isModified());
 
 		project.save();
 		documentLibrary.getResource().save();
@@ -258,7 +259,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		goalModelingDiagram = diagramMapping.execute("goalModelingDiagram");
 		assertNotNull(goalModelingDiagram);
 
-		assertSame(diagramMapping.execute("goalModel"), goalModelingDiagram.execute("model"));
+		assertSame(projectMapping.execute("goalModel"), goalModelingDiagram.execute("kaosModel"));
 
 		FlexoConceptInstance fg1gr = dropFunctionalGoal("FG1", 100, 100);
 		FlexoConceptInstance fg2gr = dropFunctionalGoal("FG2", 50, 300);

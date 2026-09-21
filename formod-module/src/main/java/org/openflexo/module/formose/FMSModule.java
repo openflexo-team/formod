@@ -117,7 +117,7 @@ public class FMSModule extends FlexoModule<FMSModule> {
 
 	private void initFormoseViewpoint() {
 		CompilationUnitResource fmsVirtualModelResource = getApplicationContext().getVirtualModelLibrary()
-				.getCompilationUnitResource(FMSConstants.FORMOSE_VIEWPOINT_URI);
+				.getCompilationUnitResource(FMSConstants.FORMOSE_URI);
 		if (fmsVirtualModelResource == null) {
 			logger.severe("Cannot find Formose viewpoint !!!!");
 			System.out.println("RCs=" + getApplicationContext().getResourceCenterService().getResourceCenters());

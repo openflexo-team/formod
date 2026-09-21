@@ -87,8 +87,8 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 		public boolean isEnabledForSelection(final FlexoConceptInstance element, final Vector<FlexoObject> globalSelection) {
 			return isVisibleForSelection(element, globalSelection)
 					&& element.getFlexoConcept().getName().equals(FMSConstants.ELEMENT_CONCEPT_NAME)
-					&& element.getFlexoPropertyValue("applicableBMethodology") == null
-					&& element.getFlexoPropertyValue("applicableDomainModelMethodology") != null;
+					&& element.getFlexoPropertyValue(FMSConstants.APPLICABLE_B_METHODOLOGY_PROPERTY_NAME) == null
+					&& element.getFlexoPropertyValue(FMSConstants.APPLICABLE_DOMAIN_MODEL_METHODOLOGY_PROPERTY_NAME) != null;
 		}
 	};
 
@@ -194,7 +194,8 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 			throw new FlexoException(e);
 		}
 
-		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.METHODOLOGY_ROLE_NAME, null, getNewMethodology());
+		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.APPLICABLE_B_METHODOLOGY_PROPERTY_NAME, null,
+				getNewMethodology());
 	}
 
 	private FMLRTVirtualModelInstance newMethodology;
@@ -204,7 +205,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 	}
 
 	public FlexoConceptInstance getElement() {
-		FMLRTVirtualModelInstance domainModelMethodology = getFocusedObject().getFlexoPropertyValue("applicableDomainModelMethodology");
+		FMLRTVirtualModelInstance domainModelMethodology = getFocusedObject().getFlexoPropertyValue(FMSConstants.APPLICABLE_DOMAIN_MODEL_METHODOLOGY_PROPERTY_NAME);
 		if (domainModelMethodology != null) {
 			try {
 				return domainModelMethodology.execute("declaringElement");

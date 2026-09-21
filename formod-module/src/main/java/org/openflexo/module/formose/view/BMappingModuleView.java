@@ -138,7 +138,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 		try {
 			// Domain model diagram
 			FMLRTVirtualModelInstance goalModelDiagramVMI = bMapping
-					.execute("domainModelMapping.sysMLKaosElementMapping.mainFunctionalGoalDiagram.goalModelingDiagram");
+					.execute("domainModelMapping.goalModelingDiagram");
 			if (goalModelDiagramVMI != null && goalModelDiagramVMI.hasNature(FMLControlledDiagramVirtualModelInstanceNature.INSTANCE)) {
 				DiagramTechnologyAdapterController diagramTAC = getPerspective().getController().getDiagramTAC();
 				FMLControlledDiagramEditor editor = new FMLControlledDiagramEditor(goalModelDiagramVMI, false,

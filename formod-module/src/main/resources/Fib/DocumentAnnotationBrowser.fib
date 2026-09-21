@@ -12,27 +12,27 @@
 		root="formoseView.documentAnnotationMethodology.documentLibrary"
 		selectionMode="DiscontiguousTreeSelection" rootVisible="true"
 		rowHeight="18" localize="true" manageDynamicModel="true"
-		rightClickAction="controller.rightClick(FormoseProjectBrowser.selected,event)"
-		doubleClickAction="controller.doubleClick(FormoseProjectBrowser.selected)"
-		clickAction="controller.singleClick(FormoseProjectBrowser.selected)"
+		rightClickAction="controller.rightClick(formoseProjectBrowser.selected,event)"
+		doubleClickAction="controller.doubleClick(formoseProjectBrowser.selected)"
+		clickAction="controller.singleClick(formoseProjectBrowser.selected)"
 		index="0"
 		constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)"
-		name="FormoseProjectBrowser">
+		name="formoseProjectBrowser">
 		<BrowserElement id="2"
-			dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint&gt;"
+			dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.fml&gt;"
 			icon="controller.iconForObject(documentLibrary)" label="formoseView.projectName"
 			isEditable="false" defaultVisible="false" name="documentLibrary">
-			<Children id="3" data="documentLibrary.documents" name="children" />
+			<Children id="3" data="documentLibrary.documents()" name="children" />
 		</BrowserElement>
 		<BrowserElement id="27"
-			dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.viewpoint/AbstractDocument&gt;"
+			dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml&gt;"
 			icon="controller.iconForObject(document)" label="document.documentName"
 			isEditable="false" name="document" />
 	</Browser>
 	<FIBVariable id="28"
 		type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />
 	<FIBVariable id="54"
-		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.viewpoint&gt;"
+		type="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/Formose.fml&gt;"
 		value="data.formoseInstance.accessedVirtualModelInstance" name="formoseView" />
 	<LocalizedDictionary id="30" />
 </Panel>

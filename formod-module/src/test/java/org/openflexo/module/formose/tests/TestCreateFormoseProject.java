@@ -117,7 +117,7 @@ public class TestCreateFormoseProject extends OpenflexoProjectAtRunTimeTestCaseW
 
 		log("loadViewPoint");
 
-		String viewPointURI = FMSConstants.FORMOSE_VIEWPOINT_URI;
+		String viewPointURI = FMSConstants.FORMOSE_URI;
 		log("Testing ViewPoint loading: " + viewPointURI);
 
 		FlexoResource<FMLCompilationUnit> vpRes = serviceManager.getResourceManager().getResource(viewPointURI, FMLCompilationUnit.class);
@@ -131,7 +131,7 @@ public class TestCreateFormoseProject extends OpenflexoProjectAtRunTimeTestCaseW
 
 		assertNotNull(formoseVP);
 
-		VirtualModel formoseVM = formoseVP.getVirtualModelNamed(FMSConstants.FORMOSE_VM_NAME);
+		VirtualModel formoseVM = formoseVP.getVirtualModelNamed(FMSConstants.FORMOSE_CORE_VM_NAME);
 
 	}
 
@@ -175,9 +175,10 @@ public class TestCreateFormoseProject extends OpenflexoProjectAtRunTimeTestCaseW
 
 		assertNotNull(formoseVMI = formoseProjectNature.getFormoseVirtualModelInstance());
 
+		// CreateFMLRTVirtualModelInstance saves each virtual model instance it creates, so none of them is modified here
 		assertFalse(view.isModified());
-		// assertTrue(documentLibrary.isModified());
-		assertTrue(formoseVMI.isModified());
+		assertFalse(documentLibrary.isModified());
+		assertFalse(formoseVMI.isModified());
 
 		project.save();
 		documentLibrary.getResource().save();

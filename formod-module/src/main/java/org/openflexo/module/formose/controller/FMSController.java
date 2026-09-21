@@ -176,7 +176,7 @@ public class FMSController extends FlexoController {
 				if (type.getName().equals(FMSConstants.DOC_ANNOTATION_METHODOLOGY_VM_NAME)) {
 					return FMSIconLibrary.DOC_LIBRARY_ICON;
 				}
-				else if (type.getName().equals(FMSConstants.FORMOSE_VM_NAME)) {
+				else if (type.getName().equals(FMSConstants.FORMOSE_CORE_VM_NAME)) {
 					return FMSIconLibrary.FMS_SMALL_ICON;
 				}
 				else if (type.getName().equals(FMSConstants.DOMAIN_MODEL_METHODOLOGY_VM_NAME)) {

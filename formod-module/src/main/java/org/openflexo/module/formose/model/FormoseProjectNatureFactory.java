@@ -140,7 +140,7 @@ public class FormoseProjectNatureFactory extends DefaultProjectNatureFactoryImpl
 		for (FlexoResourceCenter<?> resourceCenter : lst) {
 			try {
 				ceVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
-						.getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+						.getVirtualModel(FMSConstants.FORMOSE_URI);
 			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

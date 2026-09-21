@@ -62,7 +62,7 @@ public class GenericProjectBrowser extends FIBBrowserView<FlexoProject<?>> {
 
 	@Override
 	public void initializeFIBComponent() {
-		FIBBrowser projectBrowser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "ProjectBrowser");
+		FIBBrowser projectBrowser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "projectBrowser");
 		if (projectBrowser != null) {
 			bindFlexoActionsToBrowser(projectBrowser);
 		}

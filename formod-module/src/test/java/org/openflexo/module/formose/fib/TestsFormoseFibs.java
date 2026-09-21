@@ -114,7 +114,7 @@ public class TestsFormoseFibs extends GenericFIBTestCase {
 	}
 
 	public static VirtualModel getFormoseViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
-		return serviceManager.getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_VIEWPOINT_URI);
+		return serviceManager.getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_URI);
 	}
 
 	@Override

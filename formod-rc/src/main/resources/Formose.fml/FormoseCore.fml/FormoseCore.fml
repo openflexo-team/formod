@@ -9,11 +9,13 @@
  * - the legacy model carried one nameless, empty FlexoConcept, dropped;
  * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
  *
- * Not migrated yet, and deliberately absent until the VirtualModel they need exists:
- * - ui, the gina-ta driven user interface of Element (Fib/ElementUI.fib), which moves to the container-based user interface;
- * - applicableSysMLKaosMethodology / createSysMLKaosMethodology (SysML/KAOS phase);
- * - applicableDomainModelMethodology / createDomainModelMethodology (domain model phase);
- * - applicableBMethodology / createBMethodology (B phase).
+ * FormoseCore and the three methodologies it creates import each other: an element creates the methodologies declared on it and
+ * finds the one applicable to it, and every methodology is declared on an element.
+ *
+ * Not migrated yet, and deliberately absent: ui, the gina-ta driven user interface of Element (Fib/ElementUI.fib), which moves to
+ * the container-based user interface.
+ *
+ * The methodology instances no longer carry a title: virtualModelInstanceTitle is deprecated in 2.99, only name is set.
  *
  * @version 0.1
  */
@@ -21,6 +23,10 @@
 use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
 import java.util.List;
+import org.openflexo.ta.b.rm.AtelierBProjectResource;
+import ["http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml"];
+import ["http://formose.lacl.fr/Formose.fml/DomainModelMethodology.fml"];
+import ["http://formose.lacl.fr/Formose.fml/BMethodology.fml"];
 
 @URI("http://formose.lacl.fr/Formose.fml/FormoseCore.fml")
 @Version("0.1")
@@ -62,6 +68,75 @@ public model FormoseCore {
 
 		public List<Requirement> requirements() {
 			return select Requirement from this;
+		}
+
+		/** The SysML/KAOS methodology declared on this element, or else the one applicable to its parent */
+		SysMLKaosMethodology applicableSysMLKaosMethodology {
+			SysMLKaosMethodology get() {
+				SysMLKaosMethodology returned = select unique SysMLKaosMethodology from container.container
+						where (selected.declaringElement == this);
+				if (returned != null) {
+					return returned;
+				}
+				if (parent != null) {
+					return parent.applicableSysMLKaosMethodology;
+				}
+				return null;
+			}
+		};
+
+		/** The domain model methodology declared on this element, or else the one applicable to its parent */
+		DomainModelMethodology applicableDomainModelMethodology {
+			DomainModelMethodology get() {
+				DomainModelMethodology returned = select unique DomainModelMethodology from container.container
+						where (selected.declaringElement == this);
+				if (returned != null) {
+					return returned;
+				}
+				if (parent != null) {
+					return parent.applicableDomainModelMethodology;
+				}
+				return null;
+			}
+		};
+
+		/** The B methodology declared on this element, or else the one applicable to its parent */
+		BMethodology applicableBMethodology {
+			BMethodology get() {
+				BMethodology returned = select unique BMethodology from container.container where (selected.declaringElement == this);
+				if (returned != null) {
+					return returned;
+				}
+				if (parent != null) {
+					return parent.applicableBMethodology;
+				}
+				return null;
+			}
+		};
+
+		/** Declare the SysML/KAOS methodology on this element */
+		public SysMLKaosMethodology createSysMLKaosMethodology() {
+			SysMLKaosMethodology methodology = container.container.new SysMLKaosMethodology(identifier + "-SysMLKaos", this)
+					with (name=identifier + "-SysMLKaos-Methodology");
+			notify "applicableSysMLKaosMethodology" in this;
+			return methodology;
+		}
+
+		/** Declare the domain model methodology on this element, following the applicable SysML/KAOS methodology */
+		public DomainModelMethodology createDomainModelMethodology() {
+			log "applicableSysMLKaosMethodology:" + applicableSysMLKaosMethodology;
+			DomainModelMethodology methodology = container.container.new DomainModelMethodology(applicableSysMLKaosMethodology)
+					with (name=identifier + "-DomainModel-Methodology");
+			notify "applicableDomainModelMethodology" in this;
+			return methodology;
+		}
+
+		/** Declare the B methodology on this element, formalizing the applicable domain model methodology */
+		public BMethodology createBMethodology(AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject) {
+			BMethodology methodology = container.container.new BMethodology(applicableDomainModelMethodology, parameters.sourceProject,
+					parameters.generatedProject) with (name=identifier + "-B-Methodology");
+			notify "applicableBMethodology" in this;
+			return methodology;
 		}
 
 		create::createElement(String elementIdentifier) {

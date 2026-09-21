@@ -1,0 +1,49 @@
+// T11 - an element declares the methodologies on itself, and finds the one applicable to it, declared on it or on an ancestor.
+// Exercises Element.createSysMLKaosMethodology / createDomainModelMethodology / createBMethodology and the computed properties
+// applicableSysMLKaosMethodology / applicableDomainModelMethodology / applicableBMethodology, which the Formose module reads.
+// FormoseCore and the methodologies import each other: loading them used to never end (CORE-D-14).
+
+service ResourceCenterService add_temp_rc;
+
+goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification"];
+goalExampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
+domainDiagramSpecification = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification"];
+domainExampleDiagram = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram"];
+sourceProject = load -r ["http://formose.lacl.fr/test/SourceAtelierBProject"];
+generatedProject = load -r ["http://formose.lacl.fr/test/GeneratedAtelierBProject"];
+
+formose = load -r ["http://formose.lacl.fr/Formose.fml"];
+project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
+gear = project.formoseVMI.projectElement.createChildrenElement("LandingGear", "The landing gear itself");
+door = gear.createChildrenElement("Door", "The landing gear door");
+
+// No methodology is declared yet
+assert gear.applicableSysMLKaosMethodology == null;
+assert gear.applicableDomainModelMethodology == null;
+assert gear.applicableBMethodology == null;
+
+// Declared on the gear, each methodology is applicable to the gear and to the door below it
+kaosMethodology = gear.createSysMLKaosMethodology();
+assert kaosMethodology != null;
+assert kaosMethodology.declaringElement == gear;
+assert gear.applicableSysMLKaosMethodology == kaosMethodology;
+assert door.applicableSysMLKaosMethodology == kaosMethodology;
+assert project.formoseVMI.projectElement.applicableSysMLKaosMethodology == null;
+
+domainMethodology = gear.createDomainModelMethodology();
+assert domainMethodology != null;
+assert domainMethodology.sysMLKaosMethodology == kaosMethodology;
+assert gear.applicableDomainModelMethodology == domainMethodology;
+assert door.applicableDomainModelMethodology == domainMethodology;
+
+bMethodology = gear.createBMethodology(sourceProject.resource, generatedProject.resource);
+assert bMethodology != null;
+assert bMethodology.domainModelMethodology == domainMethodology;
+assert bMethodology.declaringElement == gear;
+assert gear.applicableBMethodology == bMethodology;
+assert door.applicableBMethodology == bMethodology;
+
+// With the document annotation methodology the Formose constructor creates, the project now has four
+assert project.methodologies().size == 4;
+
+log "Test PASSED: T11 - element methodologies";
