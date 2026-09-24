@@ -12,7 +12,7 @@
 		rightClickAction="controller.rightClick(projectBrowser.selected,event)"
 		name="projectBrowser" index="0"
 		constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)"
-		visible="!data.hasNature('org.openflexo.module.formose.model.FormoseProjectNature')">
+		visible="!data.hasNature(&quot;org.openflexo.module.formose.model.FormoseProjectNature&quot;)">
 		<BrowserElement dataClassName="org.openflexo.foundation.FlexoProject"
 			label="data.name" icon="controller.iconForObject(project)"
 			isEditable="false" filtered="false" defaultVisible="true" name="project">

@@ -68,7 +68,7 @@
 				isEditable="false" name="elementMapping">
 				<Children data="elementMapping.topLevelDomainModelMappings"
 					name="domainModel" />
-				<!-- <Children data="elementMapping.childrenDiagramElementMapping" name="childrenElement" 
+				<!-- <Children data="elementMapping.childrenDiagramElementMapping()" name="childrenElement" 
 					/> -->
 			</BrowserElement>
 

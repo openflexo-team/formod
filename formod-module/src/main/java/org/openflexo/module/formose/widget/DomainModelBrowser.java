@@ -112,6 +112,8 @@ public class DomainModelBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 		super.initializeFIBComponent();
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getDomainModelViewPoint()));
+		// The component was deserialized with the default binding factory: parse its bindings again, as FML
+		getFIBComponent().rebuildBindings();
 
 		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "domainModelBrowser");
 		if (browser != null) {

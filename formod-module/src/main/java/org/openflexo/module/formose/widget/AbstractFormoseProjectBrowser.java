@@ -103,6 +103,8 @@ public abstract class AbstractFormoseProjectBrowser extends FIBBrowserView<Formo
 		super.initializeFIBComponent();
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getFormoseViewPoint()));
+		// The component was deserialized with the default binding factory: parse its bindings again, as FML
+		getFIBComponent().rebuildBindings();
 
 		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "formoseProjectBrowser");
 		if (browser != null) {

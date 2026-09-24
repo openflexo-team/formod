@@ -61,8 +61,8 @@
 			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml#SysMLKaosElementMapping&gt;"
 			icon="controller.iconForObject(elementMapping)" label="elementMapping.element.identifier"
 			isEditable="false" defaultVisible="false" name="elementMapping">
-			<Children data="elementMapping.goalDiagrams" name="diagrams" />
-			<Children data="elementMapping.childrenDiagramElementMapping" name="childrenElement" />
+			<Children data="elementMapping.goalDiagrams()" name="diagrams" />
+			<Children data="elementMapping.childrenDiagramElementMapping()" name="childrenElement" />
 		</BrowserElement>
 		<BrowserElement 
 			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml#SysMLKaosElementMapping#DiagramMapping&gt;"

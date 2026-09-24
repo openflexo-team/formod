@@ -48,6 +48,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,14 +72,17 @@ import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.rm.FMLRTVirtualModelInstanceResource;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.module.formose.FMSConstants;
 import org.openflexo.module.formose.model.FormoseProjectNature;
 import org.openflexo.module.formose.model.action.GivesFormoseNature;
 import org.openflexo.module.formose.model.action.InstantiateBMethodology;
 import org.openflexo.module.formose.model.action.InstantiateDomainModelMethodology;
 import org.openflexo.module.formose.model.action.InstantiateSysMLKaosMethodology;
+import org.openflexo.ta.b.BTechnologyAdapter;
 import org.openflexo.ta.b.model.atelierb.AtelierBComponent;
 import org.openflexo.ta.b.rm.AtelierBProjectResource;
 import org.openflexo.ta.b.rm.AtelierBProjectResourceFactory;
@@ -369,7 +373,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		FlexoConcept goalGroupGR = goalModelingDiagram.getVirtualModel().getFlexoConcept("GoalGroupGR");
 		assertNotNull(goalGroupGR);
-		DrawRectangleScheme drScheme = (DrawRectangleScheme) goalGroupGR.getFlexoBehaviour("create", String.class);
+		DrawRectangleScheme drScheme = (DrawRectangleScheme) goalGroupGR.getFlexoBehaviour("drawGoalGroup", String.class);
 		DrawRectangleSchemeAction dropSchemeAction = new DrawRectangleSchemeAction(drScheme, goalModelingDiagram, null, editor);
 		dropSchemeAction.setFromLocation(new DianaPoint(x1, y1));
 		dropSchemeAction.setToLocation(new DianaPoint(x2, y2));
@@ -476,11 +480,27 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@Category(UITest.class)
 	public void initializeBlankAtelierBProject() throws IOException, InterruptedException {
 
-		DirectoryResourceCenter atelierBRC = makeNewDirectoryResourceCenter();
+		// The B technology adapter is otherwise activated only when BMethodology is loaded, later: an inactive adapter does not
+		// recognize the Atelier B project the resource center is about to explore
+		TechnologyAdapterService taService = serviceManager.getTechnologyAdapterService();
+		taService.activateTechnologyAdapter(taService.getTechnologyAdapter(BTechnologyAdapter.class), true);
+
+		// A resource center of its own, under its own base URI: makeNewDirectoryResourceCenter() uses the base URI of the test resource
+		// center already on the classpath, and a resource center whose base URI is already registered is silently skipped
+		FlexoResourceCenterService rcService = serviceManager.getResourceCenterService();
+		DirectoryResourceCenter atelierBRC = DirectoryResourceCenter
+				.instanciateNewDirectoryResourceCenter(Files.createTempDirectory("AtelierBProjects").toFile(), rcService);
+		atelierBRC.setDefaultBaseURI("http://formose.lacl.fr/test/AtelierBProjects");
+		rcService.addToResourceCenters(atelierBRC);
+		// The watcher takes what the directory holds when it first runs as already known: it must run before the project is generated
+		if (atelierBRC.getDirectoryWatcher() == null) {
+			atelierBRC.startDirectoryWatching();
+		}
+		atelierBRC.performDirectoryWatchingNow();
 		File targetAtelierBProject = new File(atelierBRC.getRootDirectory(), "TestAtelierBProject");
 		sourceAtelierBProject = AtelierBProjectResourceFactory.generateBlankAtelierBProject(targetAtelierBProject);
-		// Waiting for new resource to be detected
-		atelierBRC.getDirectoryWatcher().waitNextWatching();
+		// Explore the directory now, for the new project to be detected
+		atelierBRC.performDirectoryWatchingNow();
 		File dbDir = new File(targetAtelierBProject, AtelierBProjectResourceFactory.BDP_DIR);
 		File dbFile = new File(dbDir, "TestAtelierBProject.db");
 		// Testing that the resource has been detected as a AtelierBProjectResource

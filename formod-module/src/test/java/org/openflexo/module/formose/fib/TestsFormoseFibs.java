@@ -122,6 +122,8 @@ public class TestsFormoseFibs extends GenericFIBTestCase {
 		super.initFIBComponent(component);
 		try {
 			component.setBindingFactory(new FMLFIBBindingFactory(getFormoseViewPoint()));
+			// The component was deserialized with the default binding factory: parse its bindings again, as FML
+			component.rebuildBindings();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

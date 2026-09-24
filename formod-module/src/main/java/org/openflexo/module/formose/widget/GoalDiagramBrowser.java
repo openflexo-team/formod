@@ -112,6 +112,8 @@ public class GoalDiagramBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 		super.initializeFIBComponent();
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getSysMLKaosViewPoint()));
+		// The component was deserialized with the default binding factory: parse its bindings again, as FML
+		getFIBComponent().rebuildBindings();
 
 		browser = retrieveFIBBrowserNamed((FIBContainer) getFIBComponent(), "goalDiagramBrowser");
 		if (browser != null) {

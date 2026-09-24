@@ -39,7 +39,7 @@
 			icon="controller.iconForObject(elementMapping)" label="elementMapping.element.identifier"
 			isEditable="false" name="elementMapping">
 			<Children data="elementMapping.topLevelBMappings" name="domainModel" />
-			<!--  <Children data="elementMapping.childrenDiagramElementMapping" name="childrenElement" />-->
+			<!--  <Children data="elementMapping.childrenDiagramElementMapping()" name="childrenElement" />-->
 		</BrowserElement>
 		
 		<BrowserElement

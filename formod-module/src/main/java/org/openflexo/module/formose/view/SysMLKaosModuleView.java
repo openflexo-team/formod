@@ -76,6 +76,8 @@ public class SysMLKaosModuleView extends FIBModuleView<FormoseProjectNature> {
 		super.initializeFIBComponent();
 
 		getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getDataObject().getFormoseViewPoint()));
+		// The component was deserialized with the default binding factory: parse its bindings again, as FML
+		getFIBComponent().rebuildBindings();
 
 		/*if (getDataObject() != null) {
 			getFIBComponent().setBindingFactory(new FMLBindingFactory(getDataObject().getFormoseVirtualModel()));

@@ -8,9 +8,9 @@
   </Panel>
   <Browser id="5" allowsExternalDragAndDrop="true" backgroundSelectionColor="9,80,208" visibleRowCount="5" backgroundNonSelectionColor="255,255,255" iteratorClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance" textSelectionColor="255,255,255" backgroundSecondarySelectionColor="178,215,255" showRootsHandle="true" showFooter="true" textNonSelectionColor="0,0,0" root="model" selectionMode="DiscontiguousTreeSelection" rowHeight="18" localize="true" manageDynamicModel="true" rightClickAction="controller.rightClick(goalDiagramBrowser.selected,event)" enterPressedAction="controller.apply()" doubleClickAction="controller.doubleClick(goalDiagramBrowser.selected)" clickAction="controller.singleClick(goalDiagramBrowser.selected)" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" index="2" name="goalDiagramBrowser">
     <BrowserElement id="6" dataClassName="org.openflexo.foundation.fml.VirtualModelInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml&gt;" icon="controller.iconForObject(model)" label="model.stringRepresentation" isEditable="false" name="model">
-      <Children data="model.groups" name="groups" />
-      <Children data="model.ungroupedGoals" name="ungroupedGoals" />
-      <Children data="model.agents" name="agents" />
+      <Children data="model.groups()" name="groups" />
+      <Children data="model.ungroupedGoals()" name="ungroupedGoals" />
+      <Children data="model.agents()" name="agents" />
     </BrowserElement>
     <BrowserElement id="8" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml#GoalGroup&gt;" icon="controller.iconForObject(group)" label="group.stringRepresentation" isEditable="false" name="group">
       <Children data="group.goals" name="goals" />

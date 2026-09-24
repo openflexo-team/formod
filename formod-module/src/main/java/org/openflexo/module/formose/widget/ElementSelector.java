@@ -95,6 +95,8 @@ public class ElementSelector extends FIBFlexoConceptInstanceSelector {
 		super.initFIBComponent(component);
 		if (getFlexoController() != null) {
 			component.setBindingFactory(new FMLFIBBindingFactory(getFlexoController().getFormoseNature().getFormoseViewPoint()));
+			// The component was deserialized with the default binding factory: parse its bindings again, as FML
+			component.rebuildBindings();
 		}
 	}
 
@@ -104,6 +106,8 @@ public class ElementSelector extends FIBFlexoConceptInstanceSelector {
 		if (getFlexoController() != null) {
 			returned.getFIBComponent()
 					.setBindingFactory(new FMLFIBBindingFactory(getFlexoController().getFormoseNature().getFormoseViewPoint()));
+			// The component was deserialized with the default binding factory: parse its bindings again, as FML
+			returned.getFIBComponent().rebuildBindings();
 		}
 		return returned;
 
@@ -114,6 +118,8 @@ public class ElementSelector extends FIBFlexoConceptInstanceSelector {
 		super.setFlexoController(flexoController);
 		if (flexoController != null && getFIBComponent() != null) {
 			getFIBComponent().setBindingFactory(new FMLFIBBindingFactory(getFlexoController().getFormoseNature().getFormoseViewPoint()));
+			// The component was deserialized with the default binding factory: parse its bindings again, as FML
+			getFIBComponent().rebuildBindings();
 		}
 	}
 
