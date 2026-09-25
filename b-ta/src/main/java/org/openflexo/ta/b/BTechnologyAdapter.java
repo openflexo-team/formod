@@ -128,7 +128,8 @@ public class BTechnologyAdapter extends TechnologyAdapter<BTechnologyAdapter> {
 		BResourceRepository<I> returned = resourceCenter.retrieveRepository(BResourceRepository.class, this);
 		if (returned == null) {
 			returned = BResourceRepository.instanciateNewRepository(this, resourceCenter);
-			resourceCenter.registerRepository(returned, BResourceRepository.class, this);
+			// Another thread may have registered one meanwhile: use the registered one (CORE-D-25)
+			returned = resourceCenter.registerRepository(returned, BResourceRepository.class, this);
 		}
 		return returned;
 	}
@@ -138,7 +139,8 @@ public class BTechnologyAdapter extends TechnologyAdapter<BTechnologyAdapter> {
 		AtelierBProjectRepository<I> returned = resourceCenter.retrieveRepository(AtelierBProjectRepository.class, this);
 		if (returned == null) {
 			returned = AtelierBProjectRepository.instanciateNewRepository(this, resourceCenter);
-			resourceCenter.registerRepository(returned, AtelierBProjectRepository.class, this);
+			// Another thread may have registered one meanwhile: use the registered one (CORE-D-25)
+			returned = resourceCenter.registerRepository(returned, AtelierBProjectRepository.class, this);
 		}
 		return returned;
 	}
