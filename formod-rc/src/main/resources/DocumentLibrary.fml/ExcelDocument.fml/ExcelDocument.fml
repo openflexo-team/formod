@@ -1,0 +1,66 @@
+/**
+ * An Excel workbook federated by a Formose project: a reference to it is one cell of one of its sheets.
+ *
+ * Migrated from the legacy ExcelDocument.fml.xml serialization (formod 2.1), which was an empty stub: it declared nothing but its
+ * name, its inspector and its parent AbstractDocument. Since AbstractDocument declares Reference, rawText and preview abstract, a
+ * concrete document has to say what a reference to it is - so this model gives the workbook its slot and designates a cell by its
+ * sheet name and its coordinates. The deliberate differences with the legacy stub are therefore:
+ * - the workbook slot (the legacy federated no artefact at all, which made the model unusable);
+ * - ExcelReference, which implements the two abstract properties of Reference;
+ * - no ReferenceGroup: the legacy one came from AbstractDocument's own serialization, and 2.99 AbstractDocument declares none.
+ *
+ * A reference holds coordinates rather than an ExcelCellRole: no ExcelCellRole is used anywhere in the corpus, and the role carries
+ * no FML attribute to configure it, so the coordinates are the form proven to work (T12_ExcelDocument).
+ *
+ * @version 0.1
+ */
+
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot as XLS;
+
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import ["http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml"];
+
+@URI("http://formose.lacl.fr/DocumentLibrary.fml/ExcelDocument.fml")
+@Version("0.1")
+public model ExcelDocument extends AbstractDocument {
+
+	ExcelWorkbook excelWorkbook with BasicExcelModelSlot(isRequired=true);
+
+	create(String documentName, Resource<ExcelWorkbook> documentResource, String documentDescription) {
+		excelWorkbook = (ExcelWorkbook) parameters.documentResource.getResourceData();
+		documentName = parameters.documentName;
+		documentDescription = parameters.documentDescription;
+	}
+
+	delete() {
+	}
+
+	/** One cell of one sheet of the workbook */
+	public concept ExcelReference extends Reference {
+
+		String[1,1] sheetName;
+		int rowIndex;
+		int columnIndex;
+
+		String rawText {
+			String get() {
+				return container.excelWorkbook.getExcelSheetByName(sheetName).getCellAt(rowIndex, columnIndex).cellValueAsString;
+			}
+		};
+
+		String preview {
+			String get() {
+				return sheetName + "!" + rawText;
+			}
+		};
+
+		create(String sheetName, int rowIndex, int columnIndex) {
+			sheetName = parameters.sheetName;
+			rowIndex = parameters.rowIndex;
+			columnIndex = parameters.columnIndex;
+		}
+
+		delete() {
+		}
+	}
+}

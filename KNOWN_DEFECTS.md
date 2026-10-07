@@ -25,3 +25,16 @@ no real literal token nor any `expression` alternative for one. The lexer reads 
 the migration either.
 
 **Workaround.** None in B text: real values cannot be written in expressions handled by the B technology adapter.
+
+### FORMOD-D-2 — TestBMethology.testReloadProject fails about one run in three  ·  `BLOCKED`
+
+**Symptom.** `formod-module`, uiTest `TestBMethology.testReloadProject` fails intermittently, right after the project is reloaded, on
+the first methodology it asks the reloaded model for: `projectElement.execute("applicableSysMLKaosMethodology")` returns null, or the
+next one does, or `getBElementMapping(...)` does. Measured 2026-10-07: two green runs, one red.
+
+**Cause — not in formod.** The reloaded project holds two generations of the `FormoseVMI.fml.rt` resource, so the project element
+exists twice and the identity comparison of `where (selected.declaringElement == this)` fails for the methodologies that fell on the
+other side. Full measurement in `openflexo-core/KNOWN_DEFECTS.md`, CORE-D-28.
+
+**Nothing to do here** until CORE-D-28 is fixed: the model and the test are right, what they ask of the platform is not delivered
+reliably. Keep the test as it is — it is the reproduction.

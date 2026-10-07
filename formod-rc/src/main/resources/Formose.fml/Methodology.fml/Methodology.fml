@@ -7,6 +7,8 @@
  * @version 0.1
  */
 
+use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
+
 import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
 
 @URI("http://formose.lacl.fr/Formose.fml/Methodology.fml")

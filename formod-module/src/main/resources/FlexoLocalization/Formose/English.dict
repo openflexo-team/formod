@@ -4,7 +4,6 @@ DomainModel=DomainModel
 Element=Element
 Panel=Panel
 Requirement=Requirement
-SysMLKaos-B-Methodology=SysMLKaos-B-Methodology
 b=B
 configure_element=Configure element
 configure_formose_nature=Configure formose nature

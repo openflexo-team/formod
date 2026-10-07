@@ -1,0 +1,32 @@
+// T12 - the document library federates an Excel workbook of the resource center, and a reference designates one of its cells.
+// Exercises the ExcelDocument model, migrated from a legacy stub that federated no artefact at all: its workbook slot, and
+// ExcelReference, which implements the rawText and preview that AbstractDocument declares abstract.
+
+service ResourceCenterService add_temp_rc;
+
+documentLibrary = load -r ["http://formose.lacl.fr/DocumentLibrary.fml"];
+assert documentLibrary != null;
+
+template = load -r ["http://formose.lacl.fr/SysMLKAOS_models_serialization_template.xlsx"];
+assert template != null;
+
+document = new ExcelDocument("SysMLKaosTemplate", template.resource, "The workbook a SysML/KAOS model is serialized into")
+		with (name="SysMLKaosTemplate");
+assert document != null;
+assert document.documentName == "SysMLKaosTemplate";
+assert document.documentDescription == "The workbook a SysML/KAOS model is serialized into";
+assert document.excelWorkbook != null;
+
+// The two sheets the template ships
+goalModelSheet = document.excelWorkbook.getExcelSheetByName("Goal Model");
+assert goalModelSheet != null;
+assert document.excelWorkbook.getExcelSheetByName("Domain Model") != null;
+
+// A reference designates one cell, by sheet name and coordinates
+reference = document.new ExcelReference("Goal Model", 0, 0);
+assert reference != null;
+assert reference.sheetName == "Goal Model";
+assert reference.rowIndex == 0;
+assert reference.columnIndex == 0;
+
+log "Test PASSED: T12 - document library federating an Excel workbook";

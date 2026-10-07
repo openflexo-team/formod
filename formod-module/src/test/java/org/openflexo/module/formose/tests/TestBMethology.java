@@ -570,6 +570,9 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 	}
 
+	/** Number of virtual model instances the view holds before the project is closed */
+	private static int instancesBeforeReload;
+
 	/**
 	 * Reload the project, tests that uri, name and description are persistent
 	 * 
@@ -590,6 +593,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		log("testReloadProject");
 
 		String oldFormoseViewURI = view.getURI();
+		instancesBeforeReload = ((FMLRTVirtualModelInstanceResource) view.getResource()).getVirtualModelInstanceResources().size();
 
 		FlexoProject<File> oldProject = project;
 		String oldURI = oldProject.getProjectURI();
@@ -615,7 +619,11 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 			System.out.println(" > " + resource);
 		}
 
-		assertEquals(8, newFormoseViewResource.getVirtualModelInstanceResources().size());
+		// The five virtual model instances the scenario creates in the view: the core model, the document annotation methodology, and
+		// the SysML/KAOS, domain model and B methodologies. What each methodology instantiates (the goal model, the domain models,
+		// their diagrams) lives inside it, not in the view
+		assertEquals(instancesBeforeReload, newFormoseViewResource.getVirtualModelInstanceResources().size());
+		assertEquals(5, newFormoseViewResource.getVirtualModelInstanceResources().size());
 
 		// System.out.println("view = " + view);
 		// System.out.println("VM=" + view.getVirtualModel());
