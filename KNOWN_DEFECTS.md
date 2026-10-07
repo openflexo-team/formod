@@ -26,7 +26,7 @@ the migration either.
 
 **Workaround.** None in B text: real values cannot be written in expressions handled by the B technology adapter.
 
-### FORMOD-D-2 — TestBMethology.testReloadProject fails about one run in three  ·  `BLOCKED`
+### FORMOD-D-2 — TestBMethology.testReloadProject fails about one run in three  ·  `DONE`
 
 **Symptom.** `formod-module`, uiTest `TestBMethology.testReloadProject` fails intermittently, right after the project is reloaded, on
 the first methodology it asks the reloaded model for: `projectElement.execute("applicableSysMLKaosMethodology")` returns null, or the
@@ -36,5 +36,7 @@ next one does, or `getBElementMapping(...)` does. Measured 2026-10-07: two green
 exists twice and the identity comparison of `where (selected.declaringElement == this)` fails for the methodologies that fell on the
 other side. Full measurement in `openflexo-core/KNOWN_DEFECTS.md`, CORE-D-28.
 
-**Nothing to do here** until CORE-D-28 is fixed: the model and the test are right, what they ask of the platform is not delivered
-reliably. Keep the test as it is — it is the reproduction.
+**Resolved by CORE-D-28 (2026-10-07).** Unloading a resource now resets the `FlexoObjectReference`s that cached one of its objects, so
+a reference resolved before the project was closed no longer answers the dropped generation. Nothing changed in formod: the model and
+the test were right. Measured: `TestBMethology` 6 runs in a row green (9/9) after the fix, against 1 red in 3 before. The test is kept
+as it is — it is the cross-repository reproduction; the one inside openflexo-core is `TestReloadedResourceReferences`.
