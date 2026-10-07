@@ -74,6 +74,13 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 	@Setter(FORMOSE_INSTANCE)
 	public void setFormoseInstance(FormoseInstance formoseVirtualModelInstance);
 
+	/**
+	 * The project name followed by the project extension, displayed as the title of the project view. Computed here rather than in the
+	 * component with <code>data.owner.name + ".prj"</code>: a string addition whose left operand comes from a binding path fails in a
+	 * GINA component (see CORE-D-29 in openflexo-core).
+	 */
+	public String getProjectFileName();
+
 	public VirtualModel getFormoseViewPoint();
 
 	public VirtualModel getDocumentLibraryVirtualModel();
@@ -106,6 +113,11 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 
 	public abstract class FormoseProjectNatureImpl extends ProjectNatureImpl<FormoseProjectNature> implements FormoseProjectNature {
 		private static final Logger logger = Logger.getLogger(FormoseProjectNature.class.getPackage().getName());
+
+		@Override
+		public String getProjectFileName() {
+			return getOwner() != null ? getOwner().getName() + ".prj" : null;
+		}
 
 		private VirtualModel formoseViewpoint;
 		private VirtualModel documentLibraryVirtualModel;

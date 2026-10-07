@@ -51,7 +51,7 @@
     <BrowserElement id="46" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element&gt;" icon="controller.iconForObject(element)" label="element.identifier" isEditable="false" name="element">
       <Children id="47" data="formoseView.documentAnnotationMethodology.getElementReference(element).references" name="annotations" />
       <Children id="48" data="element.childrenElements" name="children" />
-      <Children id="49" data="element.requirements()" name="children1" />
+      <Children id="49" data="element.requirements" name="children1" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="50" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="51" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="cut" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="52" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="paste" />

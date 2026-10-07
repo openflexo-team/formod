@@ -32,6 +32,8 @@ assert extendGR != null;
 assert extendGR.goal != null;
 assert extendGR.goal.name == "Extend gear";
 assert extendGR.shape != null;
+// The shape is labelled by the name of the goal (ShapeRole label binding)
+assert extendGR.shape.graphicalRepresentation.text == "Extend gear";
 assert rootModel.goals().size == 1;
 assert diagram.kaosGoalDiagram.shapes.size == 1;
 
@@ -59,6 +61,7 @@ assert refinementGR != null;
 assert refinementGR.refinement != null;
 assert refinementGR.shape != null;
 assert refinementGR.refinement.isAnd;
+assert refinementGR.shape.graphicalRepresentation.text == "AND";
 assert refinementGR.parentRefinementLinkGR.size == 0;
 assert refinementGR.childRefinementsLinksGR.size == 0;
 assert diagram.kaosGoalDiagram.shapes.size == 4;
@@ -66,6 +69,7 @@ assert diagram.kaosGoalDiagram.shapes.size == 4;
 orRefinementGR = diagram.new RefinementGR::dropOrRequirement();
 assert orRefinementGR.refinement.isOr;
 assert !orRefinementGR.refinement.isAnd;
+assert orRefinementGR.shape.graphicalRepresentation.text == "OR";
 
 // Neither dropped refinement has a goal yet, so representRequiredRelationships takes their shapes off the diagram:
 // removeExtraRefinments keeps only the refinements that have at least one parent goal and one child goal represented

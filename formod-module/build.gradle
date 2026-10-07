@@ -22,6 +22,7 @@ dependencies {
   implementation excelConnectorUi()
   implementation ginaConnector()
   implementation ginaConnectorUi()
+  implementation fmlGinaExtension()
   implementation owlConnector()
   implementation owlConnectorUi()
   

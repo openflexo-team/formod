@@ -38,5 +38,11 @@ assert rqt.name == "RQ1";
 assert rqt.description == "The gear shall extend in less than 15 seconds";
 assert gear.requirements().size == 1;
 assert core.projectElement.requirements().size == 0;
+// The same list as a property, which a browser can observe
+assert gear.requirements.size == 1;
+assert core.projectElement.requirements.size == 0;
+rqt2 = gear.createRequirement("RQ2", "The gear shall retract");
+assert gear.requirements.size == 2;
+assert gear.requirements().size == 2;
 
 log "Test PASSED: T1 - Formose project, element tree and requirements";

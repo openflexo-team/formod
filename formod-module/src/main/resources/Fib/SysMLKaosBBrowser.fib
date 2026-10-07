@@ -28,7 +28,7 @@
     </BrowserElement>
     <BrowserElement id="26" dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element&gt;" icon="controller.iconForObject(element)" label="element.identifier" enabled="(element.applicableSysMLKaosMethodology != null)" isEditable="false" defaultVisible="false" name="element">
       <Children id="27" data="element.childrenElements" name="childrenElement" />
-      <Children id="28" data="element.requirements()" name="requirements" />
+      <Children id="28" data="element.requirements" name="requirements" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="29" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="copy" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="30" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="cut" />
       <FIBBrowserActionAdapter xmlns:p="http://www.openflexo.org/pamela/" id="31" p:modelEntity="org.openflexo.view.FIBBrowserActionAdapter" isAvailable="action.isAvailable(selected)" method="action.performAction(selected)" name="paste" />

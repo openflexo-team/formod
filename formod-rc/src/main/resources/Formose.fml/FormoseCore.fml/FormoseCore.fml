@@ -66,6 +66,16 @@ public model FormoseCore {
 
 		Element[0,*] childrenElements with ConceptInstance(virtualModelInstance=container);
 
+		/**
+		 * The requirements of this element, as a property: a browser can listen to the "requirements" notification
+		 * (a behaviour call such as requirements() is not notification-safe, so a browser bound to it never refreshes)
+		 */
+		List<Requirement> requirements {
+			List<Requirement> get() {
+				return select Requirement from this;
+			}
+		};
+
 		public List<Requirement> requirements() {
 			return select Requirement from this;
 		}

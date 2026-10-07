@@ -28,7 +28,7 @@
 			icon="controller.iconForObject(element)" label="element.identifier"
 			isEditable="false" defaultVisible="false" name="element">
 			<Children id="17" data="element.childrenElements" name="childrenElement" />
-			<Children id="18" data="element.requirements()" name="requirements" />
+			<Children id="18" data="element.requirements" name="requirements" />
 		</BrowserElement>
 		<BrowserElement id="35"
 			dataClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/Formose.fml/FormoseCore.fml#Element#Requirement&gt;"

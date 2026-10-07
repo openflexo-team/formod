@@ -344,7 +344,7 @@ public model GoalModelingDiagram {
 
 	public concept FunctionalGoalGR extends GoalGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=FUNCTIONAL_GOAL_SHAPE, exampleLabel="F-Goal");
+		DiagramShape shape with ShapeRole(metamodelElement=FUNCTIONAL_GOAL_SHAPE, exampleLabel="F-Goal", label=goal.name);
 		FunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createFunctionalGoal(String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
@@ -382,7 +382,7 @@ public model GoalModelingDiagram {
 
 	public abstract concept NonFunctionalGoalGR extends GoalGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=NON_FUNCTIONAL_GOAL_SHAPE, exampleLabel="NF-Goal");
+		DiagramShape shape with ShapeRole(metamodelElement=NON_FUNCTIONAL_GOAL_SHAPE, exampleLabel="NF-Goal", label=goal.name);
 		NonFunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createNonFunctionalGoal(String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
@@ -405,7 +405,7 @@ public model GoalModelingDiagram {
 
 	public concept ContributionGoalGR extends GoalGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=CONTRIBUTION_GOAL_SHAPE, exampleLabel="C-Goal");
+		DiagramShape shape with ShapeRole(metamodelElement=CONTRIBUTION_GOAL_SHAPE, exampleLabel="C-Goal", label=goal.name);
 		ContributionGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createContributionGoal(String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
@@ -424,7 +424,7 @@ public model GoalModelingDiagram {
 	/** Graphical representation of a refinement: one shape, linked to the goals it refines and to those that define it */
 	public concept RefinementGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=REFINEMENT_SHAPE);
+		DiagramShape shape with ShapeRole(metamodelElement=REFINEMENT_SHAPE, label=(refinement.isAnd ? "AND" : (refinement.isOr ? "OR" : (refinement.isMilestone ? "MLS" : (refinement.isData ? "DTA" : "NONE")))));
 		Refinement refinement with ConceptInstance(virtualModelInstance=container.kaosModel);
 		ParentRefinementLinkGR[0,*] parentRefinementLinkGR with ConceptInstance(virtualModelInstance=container);
 		ChildRefinmentLinkGR[0,*] childRefinementsLinksGR with ConceptInstance(virtualModelInstance=container);
@@ -567,7 +567,7 @@ public model GoalModelingDiagram {
 
 	public concept EnvironmentalAgentGR extends AgentGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=ENVIRONMENTAL_AGENT_SHAPE, exampleLabel="Env. Agent");
+		DiagramShape shape with ShapeRole(metamodelElement=ENVIRONMENTAL_AGENT_SHAPE, exampleLabel="Env. Agent", label=agent.name);
 		EnvironmentalAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createEnvironmentalAgent(String name, String description) with DropScheme(targetType=GoalModelingDiagram) {
@@ -585,7 +585,7 @@ public model GoalModelingDiagram {
 
 	public concept SoftwareAgentGR extends AgentGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=SOFTWARE_AGENT_SHAPE, exampleLabel="Soft. Agent");
+		DiagramShape shape with ShapeRole(metamodelElement=SOFTWARE_AGENT_SHAPE, exampleLabel="Soft. Agent", label=agent.name);
 		SoftwareAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createSoftwareAgent(String name, String description) with DropScheme(targetType=GoalModelingDiagram) {
@@ -708,7 +708,7 @@ public model GoalModelingDiagram {
 		ContributionGoalGR contributionGoalGR with ConceptInstance(virtualModelInstance=container);
 		NonFunctionalGoalGR nonFunctionalGoalGR with ConceptInstance(virtualModelInstance=container);
 		Contribution contribution with ConceptInstance(virtualModelInstance=container.kaosModel);
-		DiagramShape node with ShapeRole(metamodelElement=CONTRIBUTION_NODE_SHAPE, exampleLabel="+");
+		DiagramShape node with ShapeRole(metamodelElement=CONTRIBUTION_NODE_SHAPE, exampleLabel="+", label=(contribution.isPositive ? "+" : "-"));
 		DiagramConnector connector1 with ConnectorRole(metamodelElement=CONTRIBUTION_CONNECTOR_1, exampleLabel="+");
 		DiagramConnector connector2 with ConnectorRole(metamodelElement=CONTRIBUTION_CONNECTOR_2, exampleLabel="+");
 
@@ -762,7 +762,7 @@ public model GoalModelingDiagram {
 		ContributionGoalGR contributionGoalGR with ConceptInstance(virtualModelInstance=container);
 		FunctionalGoalGR functionalGoalGR with ConceptInstance(virtualModelInstance=container);
 		Impact impact with ConceptInstance(virtualModelInstance=container.kaosModel);
-		DiagramConnector connector with ConnectorRole(metamodelElement=IMPACT_CONNECTOR, exampleLabel="+");
+		DiagramConnector connector with ConnectorRole(metamodelElement=IMPACT_CONNECTOR, exampleLabel="+", label=(impact.isPositive ? "+" : "-"));
 
 		newPositiveImpact() with LinkScheme(fromType=ContributionGoalGR, toType=FunctionalGoalGR) {
 			contributionGoalGR = fromTarget;
@@ -801,7 +801,7 @@ public model GoalModelingDiagram {
 	/** Graphical representation of a group of goals, drawn as a rectangle around them */
 	public concept GoalGroupGR {
 
-		DiagramShape shape with ShapeRole(metamodelElement=GOAL_GROUP_SHAPE, exampleLabel="Group title");
+		DiagramShape shape with ShapeRole(metamodelElement=GOAL_GROUP_SHAPE, exampleLabel="Group title", label=goalGroup.title);
 		GoalGroup goalGroup with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		drawGoalGroup(String title) with DrawRectangleScheme(childrenType=GoalGR, selectObjects=true) {
