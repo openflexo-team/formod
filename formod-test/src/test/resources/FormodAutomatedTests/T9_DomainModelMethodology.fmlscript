@@ -25,6 +25,7 @@ assert gearGoalModel.topLevelGroups().size == 1;
 
 // The domain model methodology is declared where the SysML/KAOS one is, and follows its groups of goals
 methodology = project.new DomainModelMethodology(kaosMethodology) with (name="DomainModelMethodology");
+assert methodology.name == "DomainModelMethodology";
 assert methodology != null;
 assert methodology.sysMLKaosMethodology == kaosMethodology;
 assert methodology.declaringElement == gear;

@@ -16,12 +16,13 @@ import ["http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml"];
 
 @URI("http://formose.lacl.fr/DocumentLibrary.fml/WordDocument.fml")
 @Version("0.1")
+@Inspector("WordDocument.inspector")
 public model WordDocument extends AbstractDocument {
 
 	// idStrategy (ParaId in the legacy model) is not an FML attribute of DocXModelSlot, and ParaId is its default anyway
 	DocXDocument docXDocument with DocXModelSlot(isRequired=true);
 
-	create(String documentName, Resource<DocXDocument> documentResource, String documentDescription) {
+	create(required String documentName, required Resource<DocXDocument> documentResource, required String documentDescription) {
 		docXDocument = (DocXDocument) parameters.documentResource.getResourceData();
 		documentName = parameters.documentName;
 		documentDescription = parameters.documentDescription;
@@ -30,6 +31,7 @@ public model WordDocument extends AbstractDocument {
 	delete() {
 	}
 
+	@Inspector("WordReference.inspector")
 	public concept WordReference extends Reference {
 
 		DocXTextSelection textSelection with DocXTextSelectionRole(container=docXDocument);

@@ -25,6 +25,8 @@ gear = core.projectElement.createChildrenElement("LandingGear", "The landing gea
 gearReference = annotation.getElementReference(gear);
 assert gearReference != null;
 assert gearReference.element == gear;
+// A reference records who made it: user is a required role
+assert gearReference.user != null;
 assert annotation.elementReferences().size == 1;
 assert annotation.getElementReference(gear) == gearReference;
 assert annotation.elementReferences().size == 1;
@@ -34,6 +36,7 @@ rqt = gear.createRequirement("RQ1", "The gear shall extend in less than 15 secon
 rqtReference = annotation.getRequirementReference(rqt);
 assert rqtReference != null;
 assert rqtReference.requirement == rqt;
+assert rqtReference.user != null;
 assert gearReference.requirementReferences().size == 1;
 assert annotation.getRequirementReference(rqt) == rqtReference;
 assert gearReference.requirementReferences().size == 1;

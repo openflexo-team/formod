@@ -97,6 +97,7 @@ import DiagramConnector SIMPLE_MAPLET_CONNECTOR from [EXAMPLE_DIAGRAM:"STE-135"]
 
 @URI("http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagram.fml")
 @Version("0.1")
+@Inspector("DomainModelDiagram.inspector")
 public model DomainModelDiagram {
 
 	Diagram diagram with TypedDiagram(
@@ -127,7 +128,7 @@ public model DomainModelDiagram {
 	/** The pane listing the logical formulas of the domain model */
 	LogicalFormulaPaneGR logicalFormulaPane with ConceptInstance();
 
-	create::init(DomainModel domainModel, String diagramName) {
+	create::init(required DomainModel domainModel, required String diagramName) {
 		diagram = DIAGRAM::CreateDiagram(resourceName=parameters.diagramName, resourceCenter=this.resourceCenter,
 				relativePath="/Diagrams");
 		domainModel = parameters.domainModel;
@@ -135,7 +136,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A diagram of the root domain model */
-	create(String diagramName) {
+	create(required String diagramName) {
 		domainModel = container.rootDomainModel;
 		diagram = DIAGRAM::CreateDiagram(resourceName=parameters.diagramName, resourceCenter=this.resourceCenter,
 				relativePath="/Diagrams");
@@ -146,6 +147,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A concept of the domain model: a box with a label, enumeration and variable markers, and its attributes */
+	@Inspector("ConceptGR.inspector")
 	public concept ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=C_CONTAINER);
@@ -166,7 +168,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		dropConceptGRAtTopLevel(String conceptName, boolean isVariable, boolean isEnumeration)
+		dropConceptGRAtTopLevel(required String conceptName, required boolean isVariable, required boolean isEnumeration)
 				with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -178,7 +180,7 @@ public model DomainModelDiagram {
 			icon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
 		}
 
-		representConceptGRAtTopLevel(Concept aConcept) with DropScheme(targetType=DomainModelDiagram) {
+		representConceptGRAtTopLevel(required Concept aConcept) with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -189,7 +191,7 @@ public model DomainModelDiagram {
 			this.representAdditionnalConceptLinks();
 		}
 
-		create(Concept aConcept, DomainModelDiagram aDiagram) {
+		create(required Concept aConcept, required DomainModelDiagram aDiagram) {
 			containerShape = DIAGRAM::AddShape(container=parameters.aDiagram.diagram) in (parameters.aDiagram.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (parameters.aDiagram.diagram);
 			label = DIAGRAM::AddShape(container=containerShape) in (parameters.aDiagram.diagram);
@@ -287,6 +289,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A concept defined by a logical formula, which the formula pane lists */
+	@Inspector("DefinedConceptGR.inspector")
 	public concept DefinedConceptGR extends ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=DC_CONTAINER);
@@ -301,7 +304,7 @@ public model DomainModelDiagram {
 		DefinedConcept modelConcept with ConceptInstance(virtualModelInstance=container.domainModel);
 		LogicalFormulaGR logicalFormulaGR with ConceptInstance(virtualModelInstance=container);
 
-		dropDefinedConceptGRAtTopLevel(String name, String logicalFormula, boolean isVariable, boolean isEnumeration)
+		dropDefinedConceptGRAtTopLevel(String name, required String logicalFormula, required boolean isVariable, required boolean isEnumeration)
 				with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -315,7 +318,7 @@ public model DomainModelDiagram {
 			logicalFormulaGR = container.new LogicalFormulaGR(formula, container.logicalFormulaPane);
 		}
 
-		representDefinedConceptGRAtTopLevel(DefinedConcept aConcept) with DropScheme(targetType=DomainModelDiagram) {
+		representDefinedConceptGRAtTopLevel(required DefinedConcept aConcept) with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -382,6 +385,7 @@ public model DomainModelDiagram {
 	}
 
 	/** An individual: a box with a label, a variable marker, and the values of its attributes */
+	@Inspector("IndividualGR.inspector")
 	public concept IndividualGR {
 
 		DiagramShape individualShape with ShapeRole(metamodelElement=I_SHAPE);
@@ -400,7 +404,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		dropIndividualGRAtTopLevel(String individualName, boolean isVariable) with DropScheme(targetType=DomainModelDiagram) {
+		dropIndividualGRAtTopLevel(required String individualName, required boolean isVariable) with DropScheme(targetType=DomainModelDiagram) {
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
@@ -409,7 +413,7 @@ public model DomainModelDiagram {
 			individual = container.domainModel.new Individual(parameters.individualName, null, parameters.isVariable, null);
 		}
 
-		representIndividualGRAtTopLevel(Individual individual) with DropScheme(targetType=DomainModelDiagram) {
+		representIndividualGRAtTopLevel(required Individual individual) with DropScheme(targetType=DomainModelDiagram) {
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
@@ -419,7 +423,7 @@ public model DomainModelDiagram {
 			this.representAdditionnalIndividualLinks();
 		}
 
-		create(Individual aIndividual, DomainModelDiagram aDiagram) {
+		create(required Individual aIndividual, required DomainModelDiagram aDiagram) {
 			individual = parameters.aIndividual;
 			individualShape = DIAGRAM::AddShape(container=parameters.aDiagram.diagram) in (parameters.aDiagram.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (parameters.aDiagram.diagram);
@@ -558,7 +562,7 @@ public model DomainModelDiagram {
 			notify "concepts" in container.domainModel;
 		}
 
-		create(IndividualGR fromGR, ConceptGR toGR) {
+		create(required IndividualGR fromGR, required ConceptGR toGR) {
 			individualGR = parameters.fromGR;
 			conceptGR = parameters.toGR;
 			connector = DIAGRAM::AddConnector(fromShape=individualGR.individualShape, toShape=conceptGR.containerShape)
@@ -584,6 +588,7 @@ public model DomainModelDiagram {
 	}
 
 	/** An association between two concepts: a box between them, with a connector to each */
+	@Inspector("AssociationGR.inspector")
 	public concept AssociationGR extends ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=A_CONTAINER, label="");
@@ -599,7 +604,7 @@ public model DomainModelDiagram {
 		AssociationLeftArrowGR associationLeftArrowGR with ConceptInstance(virtualModelInstance=container);
 		AssociationRightArrowGR associationRightArrowGR with ConceptInstance(virtualModelInstance=container);
 
-		dropAssociationGRAtTopLevel(String name, boolean isVariable, boolean isEnumeration)
+		dropAssociationGRAtTopLevel(required String name, required boolean isVariable, required boolean isEnumeration)
 				with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -613,7 +618,7 @@ public model DomainModelDiagram {
 					null, null, domainCardinality, rangeCardinality, false, false, false, false, false);
 		}
 
-		createAssociation(String name, boolean isVariable, boolean isEnumeration) with LinkScheme(fromType=ConceptGR, toType=ConceptGR) {
+		createAssociation(required String name, required boolean isVariable, required boolean isEnumeration) with LinkScheme(fromType=ConceptGR, toType=ConceptGR) {
 			Cardinality domainCardinality = container.domainModel.new Cardinality("0..*");
 			Cardinality rangeCardinality = container.domainModel.new Cardinality("0..*");
 			modelConcept = container.domainModel.new Association(parameters.name, parameters.isVariable, parameters.isEnumeration, null,
@@ -637,7 +642,7 @@ public model DomainModelDiagram {
 							- containerShape.graphicalRepresentation.height / 2)) in (container.diagram);
 		}
 
-		representAssociationGRAtTopLevel(Association association) with DropScheme(targetType=DomainModelDiagram) {
+		representAssociationGRAtTopLevel(required Association association) with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -722,6 +727,7 @@ public model DomainModelDiagram {
 	}
 
 	/** The connector from the domain concept of an association to the association, labelled with the domain cardinality */
+	@Inspector("AssociationLeftArrowGR.inspector")
 	public concept AssociationLeftArrowGR {
 
 		DiagramConnector cardinalityShapeLeft with ConnectorRole(metamodelElement=ASSOCIATION_LEFT_CONNECTOR,
@@ -745,7 +751,7 @@ public model DomainModelDiagram {
 			associationGR.associationLeftArrowGR = this;
 		}
 
-		create(ConceptGR conceptGR, AssociationGR assocationGR) {
+		create(required ConceptGR conceptGR, required AssociationGR assocationGR) {
 			conceptGR = parameters.conceptGR;
 			associationGR = parameters.assocationGR;
 			cardinalityShapeLeft = DIAGRAM::AddConnector(fromShape=conceptGR.containerShape, toShape=associationGR.containerShape)
@@ -767,6 +773,7 @@ public model DomainModelDiagram {
 	}
 
 	/** The connector from an association to its range concept, labelled with the range cardinality */
+	@Inspector("AssociationRightArrowGR.inspector")
 	public concept AssociationRightArrowGR {
 
 		ConceptGR conceptGR with ConceptInstance(virtualModelInstance=container);
@@ -790,7 +797,7 @@ public model DomainModelDiagram {
 			associationGR.associationRightArrowGR = this;
 		}
 
-		create(ConceptGR conceptGR, AssociationGR assocationGR) {
+		create(required ConceptGR conceptGR, required AssociationGR assocationGR) {
 			conceptGR = parameters.conceptGR;
 			associationGR = parameters.assocationGR;
 			cardinalityShapeRight = DIAGRAM::AddConnector(fromShape=associationGR.containerShape, toShape=conceptGR.containerShape)
@@ -833,7 +840,7 @@ public model DomainModelDiagram {
 			childConceptGR.modelConcept.parentConcept = parentConceptGR.modelConcept;
 		}
 
-		create(ConceptGR fromGR, ConceptGR toGR) {
+		create(required ConceptGR fromGR, required ConceptGR toGR) {
 			childConceptGR = parameters.fromGR;
 			parentConceptGR = parameters.toGR;
 			parentConceptShape = DIAGRAM::AddConnector(fromShape=childConceptGR.containerShape, toShape=parentConceptGR.containerShape)
@@ -876,7 +883,7 @@ public model DomainModelDiagram {
 			fromIndividualGR.individual.initialValue = toIndividualGR.individual;
 		}
 
-		create(IndividualGR fromGR, IndividualGR toGR) {
+		create(required IndividualGR fromGR, required IndividualGR toGR) {
 			fromIndividualGR = parameters.fromGR;
 			toIndividualGR = parameters.toGR;
 			connector = DIAGRAM::AddConnector(fromShape=fromIndividualGR.individualShape, toShape=toIndividualGR.individualShape)
@@ -898,6 +905,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A maplet individual (antecedent |-> image): a box between the two individuals, with a connector to each */
+	@Inspector("MapletIndividualGR.inspector")
 	public concept MapletIndividualGR extends IndividualGR {
 
 		DiagramShape individualShape with ShapeRole(metamodelElement=MI_SHAPE);
@@ -911,7 +919,7 @@ public model DomainModelDiagram {
 		MapletIndividualAntecedentGR mapletIndividualAntecedentGR with ConceptInstance(virtualModelInstance=container);
 		MapletIndividualImageGR mapletIndividualImageGR with ConceptInstance(virtualModelInstance=container);
 
-		dropMapletIndividualGRAtTopLevel(String name, boolean isVariable) with DropScheme(targetType=DomainModelDiagram) {
+		dropMapletIndividualGRAtTopLevel(required String name, required boolean isVariable) with DropScheme(targetType=DomainModelDiagram) {
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
@@ -920,7 +928,7 @@ public model DomainModelDiagram {
 			individual = container.domainModel.new MapletIndividual(parameters.name, null, null, null, parameters.isVariable, null);
 		}
 
-		createMapletIndividual(String name, boolean isVariable) with LinkScheme(fromType=IndividualGR, toType=IndividualGR) {
+		createMapletIndividual(required String name, required boolean isVariable) with LinkScheme(fromType=IndividualGR, toType=IndividualGR) {
 			individual = container.domainModel.new MapletIndividual(parameters.name, null, fromTarget.individual, toTarget.individual,
 					parameters.isVariable, null);
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
@@ -941,7 +949,7 @@ public model DomainModelDiagram {
 							- individualShape.graphicalRepresentation.height / 2)) in (container.diagram);
 		}
 
-		representMapletIndividualGRAtTopLevel(MapletIndividual individual) with DropScheme(targetType=DomainModelDiagram) {
+		representMapletIndividualGRAtTopLevel(required MapletIndividual individual) with DropScheme(targetType=DomainModelDiagram) {
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
@@ -1062,7 +1070,7 @@ public model DomainModelDiagram {
 			mapletIndividualGR.mapletIndividualAntecedentGR = this;
 		}
 
-		create(IndividualGR individualGR, MapletIndividualGR mapletIndividualGR) {
+		create(required IndividualGR individualGR, required MapletIndividualGR mapletIndividualGR) {
 			individualGR = parameters.individualGR;
 			mapletIndividualGR = parameters.mapletIndividualGR;
 			antecedentShape = DIAGRAM::AddConnector(fromShape=individualGR.individualShape, toShape=mapletIndividualGR.individualShape)
@@ -1106,7 +1114,7 @@ public model DomainModelDiagram {
 			mapletIndividualGR.mapletIndividualImageGR = this;
 		}
 
-		create(IndividualGR individualGR, MapletIndividualGR mapletIndividualGR) {
+		create(required IndividualGR individualGR, required MapletIndividualGR mapletIndividualGR) {
 			individualGR = parameters.individualGR;
 			mapletIndividualGR = parameters.mapletIndividualGR;
 			imageShape = DIAGRAM::AddConnector(fromShape=mapletIndividualGR.individualShape, toShape=individualGR.individualShape)
@@ -1138,7 +1146,7 @@ public model DomainModelDiagram {
 		DiagramShape icon with ShapeRole(metamodelElement=DT_ICON, containerElement=containerShape);
 		DefaultDataType modelConcept with ConceptInstance(virtualModelInstance=container.domainModel);
 
-		dropDefaultDataTypeGRAtTopLevel(DefaultDataTypeEnum dataType) with DropScheme(targetType=DomainModelDiagram) {
+		dropDefaultDataTypeGRAtTopLevel(required DefaultDataTypeEnum dataType) with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -1147,7 +1155,7 @@ public model DomainModelDiagram {
 					where (selected.name.equalsIgnoreCase("" + parameters.dataType));
 		}
 
-		representDefaultDataTypeGRAtTopLevel(DefaultDataType dataType) with DropScheme(targetType=DomainModelDiagram) {
+		representDefaultDataTypeGRAtTopLevel(required DefaultDataType dataType) with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -1205,7 +1213,7 @@ public model DomainModelDiagram {
 			modelConcept = null;
 		}
 
-		public changeType(DefaultDataTypeEnum newType) {
+		public changeType(required DefaultDataTypeEnum newType) {
 			DefaultDataType dataType = select unique DefaultDataType from container.container.rootDomainModel
 					where (selected.name.equalsIgnoreCase("" + parameters.newType));
 			modelConcept = dataType;
@@ -1213,6 +1221,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A maplet shown as a single connector from its antecedent to its image */
+	@Inspector("SimpleMapletIndividualGR.inspector")
 	public concept SimpleMapletIndividualGR {
 
 		DiagramConnector connector with ConnectorRole(metamodelElement=SIMPLE_MAPLET_CONNECTOR, label=individual.individualOf.name);
@@ -1226,7 +1235,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		linkIndividualGRToIndividualGR(Association association) with LinkScheme(fromType=IndividualGR, toType=IndividualGR) {
+		linkIndividualGRToIndividualGR(required Association association) with LinkScheme(fromType=IndividualGR, toType=IndividualGR) {
 			connector = DIAGRAM::AddConnector(fromShape=fromTarget.individualShape, toShape=toTarget.individualShape)
 					in (container.diagram);
 			fromIndividualGR = fromTarget;
@@ -1235,7 +1244,7 @@ public model DomainModelDiagram {
 					toIndividualGR.individual, false, null);
 		}
 
-		create(IndividualGR fromGR, IndividualGR toGR, MapletIndividual individual) {
+		create(required IndividualGR fromGR, required IndividualGR toGR, required MapletIndividual individual) {
 			fromIndividualGR = parameters.fromGR;
 			toIndividualGR = parameters.toGR;
 			connector = DIAGRAM::AddConnector(fromShape=fromIndividualGR.individualShape, toShape=toIndividualGR.individualShape)
@@ -1259,6 +1268,7 @@ public model DomainModelDiagram {
 	}
 
 	/** An attribute of a concept (an association from the concept to a data type), shown as a line inside the concept box */
+	@Inspector("ConceptAttributeGR.inspector")
 	public concept ConceptAttributeGR {
 
 		DiagramShape attributeLabel with ShapeRole(metamodelElement=ATTRIBUTE_LABEL, exampleLabel="attribute : TYPE",
@@ -1274,7 +1284,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		dropAttributeGRonConceptGR(String name, DefaultDataTypeEnum dataType, boolean isVariable, String rangeCardinality)
+		dropAttributeGRonConceptGR(required String name, required DefaultDataTypeEnum dataType, required boolean isVariable, required String rangeCardinality)
 				with DropScheme(targetType=ConceptGR) {
 			conceptGR = target;
 			DefaultDataType rangeDataType = select unique DefaultDataType from container.container.rootDomainModel
@@ -1288,7 +1298,7 @@ public model DomainModelDiagram {
 			conceptGR.refreshConcept();
 		}
 
-		representAssociationGRInConcept(Association association) with DropScheme(targetType=ConceptGR) {
+		representAssociationGRInConcept(required Association association) with DropScheme(targetType=ConceptGR) {
 			conceptGR = target;
 			if (parameters.association.domain != null && parameters.association.domain == conceptGR.modelConcept) {
 				modelConcept = parameters.association;
@@ -1311,18 +1321,19 @@ public model DomainModelDiagram {
 			conceptGR.refreshConcept();
 		}
 
-		public setAttributeRange(DefaultDataTypeEnum newType) {
+		public setAttributeRange(required DefaultDataTypeEnum newType) {
 			DefaultDataType dataType = select unique DefaultDataType from container.container.rootDomainModel
 					where (selected.name.equalsIgnoreCase("" + parameters.newType));
 			modelConcept.range = dataType;
 		}
 
-		public setAssociationRange(Concept newType) {
+		public setAssociationRange(required Concept newType) {
 			modelConcept.range = parameters.newType;
 		}
 	}
 
 	/** The value of an attribute of an individual (a maplet of the attribute), shown as a line inside the individual box */
+	@Inspector("IndividualAttributeGR.inspector")
 	public concept IndividualAttributeGR {
 
 		DiagramShape attributeLabel with ShapeRole(metamodelElement=ATTRIBUTE_LABEL, exampleLabel="attribute = 'value'",
@@ -1336,7 +1347,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		dropAttributeGRonIndividualGR(Association attribute, Individual valueIndividual, String valueString)
+		dropAttributeGRonIndividualGR(required Association attribute, Individual valueIndividual, String valueString)
 				with DropScheme(targetType=IndividualGR) {
 			individualGR = target;
 			if (parameters.attribute.domain != individualGR.individual.individualOf) {
@@ -1359,7 +1370,7 @@ public model DomainModelDiagram {
 			individualGR.refreshIndividual();
 		}
 
-		representMapletIndividualGRInIndividual(MapletIndividual maplet) with DropScheme(targetType=IndividualGR) {
+		representMapletIndividualGRInIndividual(required MapletIndividual maplet) with DropScheme(targetType=IndividualGR) {
 			individualGR = target;
 			if (parameters.maplet.antecedent != null && parameters.maplet.antecedent == individualGR.individual) {
 				individual = parameters.maplet;
@@ -1382,14 +1393,14 @@ public model DomainModelDiagram {
 			individualGR.refreshIndividual();
 		}
 
-		public setAttributeType(Association newType) {
+		public setAttributeType(required Association newType) {
 			if (parameters.newType.domain != individualGR.individual.individualOf) {
 				log "INVALID TYPE";
 			}
 			individual.individualOf = parameters.newType;
 		}
 
-		public setAttributeValue(Individual newValue) {
+		public setAttributeValue(required Individual newValue) {
 			if (parameters.newValue.individualOf != individual.individualOf.range) {
 				log "INVALID VALUE";
 			}
@@ -1404,7 +1415,7 @@ public model DomainModelDiagram {
 		DiagramShape label with ShapeRole(metamodelElement=LF_PANE_LABEL, containerElement=logicalFormulas, label="Logical Formulas");
 		DiagramShape formulas with ShapeRole(metamodelElement=LF_PANE_FORMULAS, containerElement=logicalFormulas);
 
-		create(DomainModelDiagram aDiagram) {
+		create(required DomainModelDiagram aDiagram) {
 			logicalFormulas = DIAGRAM::AddShape(container=parameters.aDiagram.diagram) in (parameters.aDiagram.diagram);
 			label = DIAGRAM::AddShape(container=logicalFormulas) in (parameters.aDiagram.diagram);
 			formulas = DIAGRAM::AddShape(container=logicalFormulas) in (parameters.aDiagram.diagram);
@@ -1429,20 +1440,21 @@ public model DomainModelDiagram {
 	}
 
 	/** A logical formula, shown as a line of the formula pane */
+	@Inspector("LogicalFormulaGR.inspector")
 	public concept LogicalFormulaGR {
 
 		LogicalFormula logicalFormula with ConceptInstance(virtualModelInstance=container.domainModel);
 		DiagramShape logicalFormulaShape with ShapeRole(metamodelElement=LF_SHAPE, label=logicalFormula.assertion);
 		LogicalFormulaPaneGR logicalFormulaPaneGR with ConceptInstance(virtualModelInstance=container);
 
-		dropLogicalFormulaGROnFormulaPane(String formula) with DropScheme(targetType=LogicalFormulaPaneGR) {
+		dropLogicalFormulaGROnFormulaPane(required String formula) with DropScheme(targetType=LogicalFormulaPaneGR) {
 			logicalFormulaPaneGR = target;
 			logicalFormula = container.domainModel.new LogicalFormula(parameters.formula);
 			logicalFormulaShape = DIAGRAM::AddShape(container=logicalFormulaPaneGR.formulas) in (container.diagram);
 			logicalFormulaPaneGR.refreshFormulaPanel();
 		}
 
-		create(LogicalFormula formula, LogicalFormulaPaneGR aLogicalFormulaPane) {
+		create(required LogicalFormula formula, required LogicalFormulaPaneGR aLogicalFormulaPane) {
 			logicalFormula = parameters.formula;
 			logicalFormulaPaneGR = parameters.aLogicalFormulaPane;
 			logicalFormulaShape = DIAGRAM::AddShape(container=logicalFormulaPaneGR.formulas) in (container.diagram);

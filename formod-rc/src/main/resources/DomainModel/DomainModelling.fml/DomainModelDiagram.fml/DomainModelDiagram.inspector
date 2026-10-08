@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of DomainModelDiagram, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="DomainModelDiagramInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="DomainModelDiagram" layout="twocols" index="0" name="DomainModelDiagramInspectorTab">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.domainModel.modelName" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="parentDomainModel" name="parentDomainModelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBVirtualModelInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance" manageDynamicModel="true" data="data.domainModel.parentDomainModel" name="parentDomainModelSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+			</Custom>
+		</Tab>
+	</TabPanel>
+</Panel>

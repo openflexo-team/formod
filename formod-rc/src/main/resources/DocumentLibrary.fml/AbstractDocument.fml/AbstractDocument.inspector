@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of AbstractDocument, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="AbstractDocumentInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="AbstractDocument" layout="twocols" index="0" name="AbstractDocumentInspectorTab">
+			<Label label="document_name" name="documentNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.documentName" name="documentNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="document_description" name="documentDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.documentDescription" validateOnReturn="true" useScrollBar="true" name="documentDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

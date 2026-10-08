@@ -36,6 +36,8 @@ rqt = gear.createRequirement("RQ1", "The gear shall extend in less than 15 secon
 assert rqt != null;
 assert rqt.name == "RQ1";
 assert rqt.description == "The gear shall extend in less than 15 seconds";
+// A requirement is created with its status: status is a required role
+assert rqt.status == "Not proved";
 assert gear.requirements().size == 1;
 assert core.projectElement.requirements().size == 0;
 // The same list as a property, which a browser can observe

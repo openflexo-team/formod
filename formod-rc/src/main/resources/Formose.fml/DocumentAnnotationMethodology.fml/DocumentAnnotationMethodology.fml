@@ -18,6 +18,7 @@
 
 use org.openflexo.foundation.fml.rt.FMLRTModelSlot as FMLRT;
 
+import java.lang.System;
 import java.util.List;
 import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
 import ["http://formose.lacl.fr/Formose.fml/Methodology.fml"];
@@ -38,6 +39,7 @@ public model DocumentAnnotationMethodology extends Methodology {
 	}
 
 	create() {
+		name = "DocumentAnnotationMethodology";
 		unclassified = new Unclassified();
 		declaringElement = container.formoseVMI.projectElement;
 		documentLibrary = new DocumentLibrary() with (name="DocumentLibrary");
@@ -111,9 +113,10 @@ public model DocumentAnnotationMethodology extends Methodology {
 
 		Reference[0,*] references with ConceptInstance(virtualModelInstance=container.documentLibrary);
 
-		create(String aName, String aDescription) {
+		create(required String aName, required String aDescription) {
 			name = parameters.aName;
 			description = parameters.aDescription;
+			user = System.getProperty("user.name");
 		}
 
 		delete() {
@@ -145,8 +148,9 @@ public model DocumentAnnotationMethodology extends Methodology {
 			return select RequirementReference from this;
 		}
 
-		create::createNewEmptyElementReference(Element anElement) {
+		create::createNewEmptyElementReference(required Element anElement) {
 			element = parameters.anElement;
+			user = System.getProperty("user.name");
 		}
 
 		delete() {
@@ -156,8 +160,9 @@ public model DocumentAnnotationMethodology extends Methodology {
 
 			Requirement requirement with ConceptInstance(virtualModelInstance=container.container.formoseVMI);
 
-			create::createEmpty(Requirement aRequirement) {
+			create::createEmpty(required Requirement aRequirement) {
 				requirement = parameters.aRequirement;
+				user = System.getProperty("user.name");
 			}
 
 			delete() {
@@ -176,7 +181,7 @@ public model DocumentAnnotationMethodology extends Methodology {
 		delete() {
 		}
 
-		public addToUnclassifiedReferences(Reference reference) {
+		public addToUnclassifiedReferences(required Reference reference) {
 			unclassifiedReferences.add(parameters.reference);
 			notify "unclassifiedReferences" in this;
 		}

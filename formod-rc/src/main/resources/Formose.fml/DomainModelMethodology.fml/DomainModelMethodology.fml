@@ -63,6 +63,7 @@ public model DomainModelMethodology extends Methodology {
 	}
 
 	create(SysMLKaosMethodology sysmlKaosMethodology) {
+		name = "DomainModelMethodology";
 		domainModelling = container.new DomainModelling() with (name="DomainModelling");
 		sysMLKaosMethodology = parameters.sysmlKaosMethodology;
 		declaringElement = sysMLKaosMethodology.declaringElement;
@@ -70,6 +71,7 @@ public model DomainModelMethodology extends Methodology {
 	}
 
 	/** Maps one element onto the domain models derived from the goal groups of its SysML/KAOS goal model */
+	@Inspector("DomainModellingElementMapping.inspector")
 	public concept DomainModellingElementMapping {
 
 		SysMLKaosElementMapping sysMLKaosElementMapping with ConceptInstance(virtualModelInstance=container.sysMLKaosMethodology);
@@ -97,13 +99,13 @@ public model DomainModelMethodology extends Methodology {
 		delete() {
 		}
 
-		create(Element anElement, DomainModelMapping parentDomainModelMapping) {
+		create(required Element anElement, DomainModelMapping parentDomainModelMapping) {
 			sysMLKaosElementMapping = container.sysMLKaosMethodology.getElementMapping(parameters.anElement);
 			parentDomainModelMapping = parameters.parentDomainModelMapping;
 			this.updateFromSysMLKAOS();
 		}
 
-		public createTopLevelDomainModelMapping(String name, DomainModelMapping parent) {
+		public createTopLevelDomainModelMapping(required String name, required DomainModelMapping parent) {
 			log "Create top-level domain model mapping";
 			DomainModelMapping topLevel = new DomainModelMapping::createNamed(parameters.name, parameters.parent);
 			topLevelDomainModelMappings.add(topLevel);
@@ -123,6 +125,7 @@ public model DomainModelMethodology extends Methodology {
 		}
 
 		/** Maps one group of goals onto a domain model and its default diagram */
+		@Inspector("DomainModelMapping.inspector")
 		public concept DomainModelMapping {
 
 			DomainModel domainModel with ConceptInstance(virtualModelInstance=container.container.domainModelling);
@@ -183,7 +186,7 @@ public model DomainModelMethodology extends Methodology {
 				notify "defaultDiagram" in this;
 			}
 
-			public DomainModelMapping createChildDomainModel(String name) {
+			public DomainModelMapping createChildDomainModel(required String name) {
 				DomainModelMapping newDomainModelMapping = container.new DomainModelMapping::createNamed(parameters.name, this);
 				notify "children" in this;
 				return newDomainModelMapping;

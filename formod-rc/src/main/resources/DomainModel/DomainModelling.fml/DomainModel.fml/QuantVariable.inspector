@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of QuantVariable, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="QuantVariableInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="QuantVariable" layout="twocols" index="0" name="QuantVariableInspectorTab">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

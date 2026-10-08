@@ -22,6 +22,8 @@ assert gear.requirements().size == 1;
 methodology = project.new SysMLKaosMethodology("LandingGearGoals", gear) with (name="SysMLKaosMethodology");
 assert methodology != null;
 assert methodology.declaringElement == gear;
+// name is a required role of every methodology
+assert methodology.name == "LandingGearGoals";
 assert methodology.sysMLKaos != null;
 assert methodology.sysMLKaos.rootModel != null;
 // It joins the document annotation methodology the Formose constructor had created

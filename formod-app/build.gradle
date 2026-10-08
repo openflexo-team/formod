@@ -3,6 +3,12 @@ dependencies {
   implementation project(':formod-module')
   implementation project(':formod-rc')
 
+  // ./gradlew :formod:formod-app:run -PwithModeller adds the OpenFlexo Modeller (the standard FML tools) to the classpath,
+  // to diagnose a project from within the running application
+  if (project.hasProperty('withModeller')) {
+    runtimeOnly openflexo("om-module")
+  }
+
   testImplementation flexoFoundation()
   testImplementation flexoUi()
   testImplementation flexoFoundationTest()

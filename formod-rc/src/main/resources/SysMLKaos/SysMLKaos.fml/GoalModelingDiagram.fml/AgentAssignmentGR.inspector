@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of AgentAssignmentGR, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="AgentAssignmentGRInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="AgentAllocationGR" layout="twocols" index="0" name="AgentAssignmentGRInspectorTab">
+			<Label label="Agent" name="agentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.agentAssignment.agent.name" readOnly="true" name="agentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="Goal" name="goalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.agentAssignment.goal.name" readOnly="true" name="goalTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

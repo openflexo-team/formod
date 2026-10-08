@@ -42,3 +42,14 @@ are generated into the source project. The `.fmlscript` scenario `T10_BMethodolo
 
 **Acceptance criteria.** The wizard creates the methodology on two distinct projects, and `TestBMethology` asserts that the B models land
 in the generated project and leave the source project untouched.
+
+### FORMOD-F-3 — Let the graphical-representation concepts derive their inspector  ·  `TODO`
+
+**Problem.** FORMOD-D-5 restored the 52 inspectors as the legacy had them: a `…GR` concept has its own inspector, which repeats entries of the
+model concept it represents (`goal.name`, `modelConcept.name`, …). The free modelling editor does it differently:
+`@Inspector(derived=<role>)` hands the inspection of the GR instance to the model concept's inspector, so there is one inspector per notion.
+
+**Options.** Derive every GR whose entries all go through one role to that role; keep its own inspector for the few that show something of the
+GR itself (connectors, labels).
+
+**Acceptance.** Selecting a GR shows the inspector of its model concept; `FormodInspectorsTest` still passes with the lower count.

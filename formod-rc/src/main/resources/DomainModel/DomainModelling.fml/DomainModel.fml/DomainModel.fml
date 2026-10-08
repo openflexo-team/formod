@@ -34,6 +34,7 @@ import java.util.ArrayList;
 @URI("http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml")
 @Version("0.1")
 @Renderer("modelName")
+@Inspector("DomainModel.inspector")
 public model DomainModel {
 
 	String[1,1] modelName;
@@ -65,7 +66,7 @@ public model DomainModel {
 	}
 
 	/** The individuals of supplied concept, in this domain model and in every domain model it refines */
-	public List<Individual> conceptIndividuals(Concept aConcept) {
+	public List<Individual> conceptIndividuals(required Concept aConcept) {
 		DomainModel dm = this;
 		List<Individual> list = new ArrayList();
 		List<Individual> individuals = select Individual from dm
@@ -81,6 +82,7 @@ public model DomainModel {
 
 	/** A set of individuals that share common characteristics */
 	@Renderer("name")
+	@Inspector("Concept.inspector")
 	public concept Concept {
 
 		String[1,1] name;
@@ -88,7 +90,7 @@ public model DomainModel {
 		boolean isEnumeration;
 		Concept parentConcept with ConceptInstance(virtualModelInstance=container);
 
-		create(String aName, boolean anIsVariable, boolean anIsEnumeration, Concept aParentConcept) {
+		create(required String aName, required boolean anIsVariable, required boolean anIsEnumeration, Concept aParentConcept) {
 			this.creationAction(parameters.aName, parameters.anIsVariable, parameters.anIsEnumeration, parameters.aParentConcept);
 		}
 
@@ -96,10 +98,10 @@ public model DomainModel {
 			notify "concepts" in container;
 		}
 
-		public addIndividual(String name, boolean isVariable, Individual initialValue) {
+		public addIndividual(required String name, required boolean isVariable, Individual initialValue) {
 		}
 
-		public creationAction(String name, boolean isVariable, boolean isEnumeration, Concept parentConcept) {
+		public creationAction(required String name, required boolean isVariable, required boolean isEnumeration, Concept parentConcept) {
 			name = parameters.name;
 			isVariable = parameters.isVariable;
 			isEnumeration = parameters.isEnumeration;
@@ -114,11 +116,12 @@ public model DomainModel {
 			notify "concepts" in container;
 		}
 
-		create(String aName, boolean isEnumeration) {
+		create(required String aName, required boolean isEnumeration) {
 			this.creationAction(parameters.aName, false, parameters.isEnumeration, null);
 		}
 	}
 
+	@Inspector("DefinedConcept.inspector")
 	public concept DefinedConcept extends Concept {
 
 		LogicalFormula[1,*] definedWith with ConceptInstance(virtualModelInstance=container);
@@ -130,12 +133,13 @@ public model DomainModel {
 			notify "concepts" in container;
 		}
 
-		create(String aName, boolean anIsVariable, boolean anIsEnumeration, Concept aParentConcept, LogicalFormula definedWith) {
+		create(required String aName, required boolean anIsVariable, required boolean anIsEnumeration, Concept aParentConcept, required LogicalFormula definedWith) {
 			this.creationAction(parameters.aName, parameters.anIsVariable, parameters.anIsEnumeration, parameters.aParentConcept);
 			definedWith.add(parameters.definedWith);
 		}
 	}
 
+	@Inspector("Association.inspector")
 	public concept Association extends Concept {
 
 		boolean isTransitive;
@@ -148,9 +152,9 @@ public model DomainModel {
 		Cardinality domainCardinality with ConceptInstance(virtualModelInstance=container);
 		Cardinality rangeCardinality with ConceptInstance(virtualModelInstance=container);
 
-		create(String aName, boolean isVariable, boolean isEnumeration, Concept parentConcept, Concept aDomain, Concept aRange,
-				Cardinality domainCardinality, Cardinality rangeCardinality, boolean anIsTransitive, boolean anIsSysmmetric,
-				boolean anIsASymmetric, boolean anIsReflexive, boolean anIsIrreflexive) {
+		create(required String aName, required boolean isVariable, required boolean isEnumeration, Concept parentConcept, required Concept aDomain, Concept aRange,
+				required Cardinality domainCardinality, required Cardinality rangeCardinality, required boolean anIsTransitive, required boolean anIsSysmmetric,
+				required boolean anIsASymmetric, required boolean anIsReflexive, required boolean anIsIrreflexive) {
 			isTransitive = parameters.anIsTransitive;
 			isSysmmetric = parameters.anIsSysmmetric;
 			isASymmetric = parameters.anIsASymmetric;
@@ -176,11 +180,12 @@ public model DomainModel {
 	 * Legacy validity note: cardinality.matches("(([0-9]+)\\.\\.([0-9]+))") ? (lower bound <= upper bound) : true
 	 */
 	@Renderer("cardinality")
+	@Inspector("Cardinality.inspector")
 	public concept Cardinality {
 
 		String[1,1] cardinality = "0..*";
 
-		create(String cardinality) {
+		create(required String cardinality) {
 			cardinality = parameters.cardinality;
 		}
 
@@ -208,6 +213,7 @@ public model DomainModel {
 
 	/** Items of the world */
 	@Renderer("name")
+	@Inspector("Individual.inspector")
 	public concept Individual {
 
 		String name;
@@ -225,7 +231,7 @@ public model DomainModel {
 			}
 		};
 
-		create(String aName, Concept aConcept, boolean anIsVariable, Individual initialValue) {
+		create(required String aName, required Concept aConcept, required boolean anIsVariable, Individual initialValue) {
 			this.creationAction(parameters.aName, parameters.aConcept, parameters.anIsVariable, parameters.initialValue);
 		}
 
@@ -234,7 +240,7 @@ public model DomainModel {
 			notify "sole_individuals" in container;
 		}
 
-		public creationAction(String name, Concept aConcept, boolean isVariable, Individual initialValue) {
+		public creationAction(required String name, required Concept aConcept, required boolean isVariable, Individual initialValue) {
 			name = parameters.name;
 			isVariable = parameters.isVariable;
 			initialValue = parameters.initialValue;
@@ -249,6 +255,7 @@ public model DomainModel {
 	}
 
 	/** An individual of an association: the pair (antecedent, image) */
+	@Inspector("MapletIndividual.inspector")
 	public concept MapletIndividual extends Individual {
 
 		Individual antecedent with ConceptInstance(virtualModelInstance=container);
@@ -262,7 +269,7 @@ public model DomainModel {
 			notify "sole_individuals" in container;
 		}
 
-		create(String aName, Association aConcept, Individual antecedent, Individual image, boolean anIsVariable,
+		create(required String aName, required Association aConcept, Individual antecedent, Individual image, required boolean anIsVariable,
 				Individual initialValue) {
 			this.creationAction(parameters.aName, parameters.aConcept, parameters.anIsVariable, parameters.initialValue);
 			antecedent = parameters.antecedent;
@@ -288,7 +295,7 @@ public model DomainModel {
 		Individual[0,*] individuals with ConceptInstance(virtualModelInstance=container);
 		QuantVariable[0,*] variables with ConceptInstance(virtualModelInstance=container);
 
-		create(String anAssertion) {
+		create(required String anAssertion) {
 			assertion = parameters.anAssertion;
 		}
 
@@ -300,11 +307,12 @@ public model DomainModel {
 	}
 
 	@Renderer("name")
+	@Inspector("QuantVariable.inspector")
 	public concept QuantVariable {
 
 		String[1,1] name;
 
-		create(String aName) {
+		create(required String aName) {
 			name = parameters.aName;
 		}
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of Association, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="AssociationInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Association" layout="twocols" index="0" name="AssociationInspectorTab">
+			<Label label="domain" name="domainLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.domain.name" readOnly="true" name="domainTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="range" name="rangeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.range.name" readOnly="true" name="rangeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="domainCardinality" name="domainCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.domainCardinality.cardinality" name="domainCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="rangeCardinality" name="rangeCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.rangeCardinality.cardinality" name="rangeCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="isTransitive" name="isTransitiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isTransitive" name="isTransitiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="isSysmmetric" name="isSysmmetricLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isSysmmetric" name="isSysmmetricCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="isASymmetric" name="isASymmetricLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isASymmetric" name="isASymmetricCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="isReflexive" name="isReflexiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isReflexive" name="isReflexiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="isIrreflexive" name="isIrreflexiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isIrreflexive" name="isIrreflexiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of DomainModellingElementMapping, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="DomainModellingElementMappingInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Element" layout="twocols" index="0" name="DomainModellingElementMappingInspectorTab">
+			<Label label="element" name="elementLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.element.identifier" name="elementTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.element.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

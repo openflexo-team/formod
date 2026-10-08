@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of IndividualGR, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="IndividualGRInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Individual" layout="twocols" index="0" name="IndividualGRInspectorTab">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.individual.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="isVariable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.individual.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="individual of" name="individualOfLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.individual.individualOf.name" readOnly="true" name="individualOfTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="initial value" name="initialValueLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.individual.initialValue.name" readOnly="true" name="initialValueTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

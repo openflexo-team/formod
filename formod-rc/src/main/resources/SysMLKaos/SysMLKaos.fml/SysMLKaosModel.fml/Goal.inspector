@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of Goal, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="GoalInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="AbstractKaosElement" layout="twocols" index="0" name="GoalInspectorTab">
+			<Label label="goalName" name="goalNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.name" name="goalNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+			<Label label="parent" name="parentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.parentGoal.name" readOnly="true" name="parentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

@@ -43,6 +43,7 @@ lockedDoors = domainModel.new Concept("lockedDoors", true, false, doors);
 
 // The B methodology is declared where the domain model methodology is, and generates the B models at once
 bMethodology = project.new BMethodology(domainMethodology, sourceProject.resource, generatedProject.resource) with (name="BMethodology");
+assert bMethodology.name == "BMethodology";
 assert bMethodology != null;
 assert bMethodology.declaringElement == gear;
 assert bMethodology.sourceProject == sourceProject;

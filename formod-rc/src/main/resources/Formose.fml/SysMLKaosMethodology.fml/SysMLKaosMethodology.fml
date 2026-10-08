@@ -55,7 +55,8 @@ public model SysMLKaosMethodology extends Methodology {
 		return select SysMLKaosElementMapping from this;
 	}
 
-	create(String sysMLKaosViewName, Element element) {
+	create(required String sysMLKaosViewName, Element element) {
+		name = parameters.sysMLKaosViewName;
 		sysMLKaos = container.new SysMLKaos::init(parameters.sysMLKaosViewName, parameters.sysMLKaosViewName, "")
 				with (name=parameters.sysMLKaosViewName);
 		declaringElement = parameters.element;
@@ -94,6 +95,7 @@ public model SysMLKaosMethodology extends Methodology {
 	}
 
 	/** Maps one element of the core model onto its goal model and the diagrams presenting it */
+	@Inspector("SysMLKaosElementMapping.inspector")
 	public concept SysMLKaosElementMapping {
 
 		Element element with ConceptInstance(virtualModelInstance=container.formoseVMI);
@@ -113,7 +115,7 @@ public model SysMLKaosMethodology extends Methodology {
 			return select SysMLKaosElementMapping from container where (selected.parentDiagramElementMapping == this);
 		}
 
-		create::createNewMapping(Element anElement) {
+		create::createNewMapping(required Element anElement) {
 			element = parameters.anElement;
 			if (parameters.anElement.parent != null) {
 				parentDiagramElementMapping = container.getElementMapping(parameters.anElement.parent);
@@ -177,7 +179,7 @@ public model SysMLKaosMethodology extends Methodology {
 		}
 
 		/** The mapping of supplied requirement, created with a new goal if this requirement has none yet */
-		public GoalRequirementMapping ensureGoalRequirementMappingExists(Requirement requirement) {
+		public GoalRequirementMapping ensureGoalRequirementMappingExists(required Requirement requirement) {
 			List<GoalRequirementMapping> mappings = select GoalRequirementMapping from this
 					where (selected.requirement == parameters.requirement);
 			if (mappings.size > 0) {
@@ -196,7 +198,7 @@ public model SysMLKaosMethodology extends Methodology {
 			return newElementMapping;
 		}
 
-		private GoalRequirementMapping getGoalRequirementMapping(Goal goal) {
+		private GoalRequirementMapping getGoalRequirementMapping(required Goal goal) {
 			List<GoalRequirementMapping> mappings = select GoalRequirementMapping from this
 					where (selected.goal == parameters.goal);
 			if (mappings.size > 0) {
@@ -216,7 +218,7 @@ public model SysMLKaosMethodology extends Methodology {
 			}
 		}
 
-		public DiagramMapping createNewGoalDiagram(String diagramTitle, String diagramDescription) {
+		public DiagramMapping createNewGoalDiagram(required String diagramTitle, String diagramDescription) {
 			DiagramMapping newDiagramMapping = new DiagramMapping::createGoalDiagram(parameters.diagramTitle,
 					parameters.diagramDescription);
 			notify "goalDiagrams" in this;
@@ -248,7 +250,7 @@ public model SysMLKaosMethodology extends Methodology {
 			Requirement requirement with ConceptInstance(virtualModelInstance=container.container.formoseVMI);
 			Goal goal with ConceptInstance(virtualModelInstance=container.goalModel);
 
-			create(Requirement aRequirement, Goal aGoal) {
+			create(required Requirement aRequirement, required Goal aGoal) {
 				requirement = parameters.aRequirement;
 				goal = parameters.aGoal;
 			}
@@ -268,14 +270,14 @@ public model SysMLKaosMethodology extends Methodology {
 			}
 
 			/** Maps an existing requirement onto a new functional goal */
-			create::createNewGoal(Requirement requirement) {
+			create::createNewGoal(required Requirement requirement) {
 				requirement = parameters.requirement;
 				goal = container.goalModel.new FunctionalGoal(parameters.requirement.name, "",
 						parameters.requirement.description, false);
 			}
 
 			/** Maps an existing goal onto a new requirement of the mapped element */
-			create::createNewRequirement(Goal goal) {
+			create::createNewRequirement(required Goal goal) {
 				goal = parameters.goal;
 				requirement = container.element.new Requirement::createRequirement(parameters.goal.name,
 						parameters.goal.description);
@@ -301,6 +303,7 @@ public model SysMLKaosMethodology extends Methodology {
 		}
 
 		/** Maps the element onto one diagram presenting its goal model */
+		@Inspector("DiagramMapping.inspector")
 		public concept DiagramMapping {
 
 			GoalModelingDiagram goalModelingDiagram with ConceptInstance(virtualModelInstance=container.container.sysMLKaos);

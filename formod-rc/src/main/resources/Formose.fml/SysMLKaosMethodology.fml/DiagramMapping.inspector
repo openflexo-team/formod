@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of DiagramMapping, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="DiagramMappingInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Goal Modeling Diagram" layout="twocols" index="0" name="DiagramMappingInspectorTab">
+			<Label label="diagramTitle" name="diagramTitleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.goalModelingDiagram.diagramTitle" name="diagramTitleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="diagramDescription" name="diagramDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.goalModelingDiagram.diagramDescription" validateOnReturn="true" useScrollBar="true" name="diagramDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

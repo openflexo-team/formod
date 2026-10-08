@@ -39,7 +39,7 @@ public model FormoseCore {
 		return select Element from this;
 	}
 
-	create::init(String projectName) {
+	create::init(required String projectName) {
 		projectElement = new Element::createElement("Project");
 		notify "projectElement" in this;
 	}
@@ -51,11 +51,12 @@ public model FormoseCore {
 		return new Element::createElement("elementTODO");
 	}
 
-	public removeElement(Element element) {
+	public removeElement(required Element element) {
 		delete parameters.element;
 	}
 
 	@Renderer("identifier")
+	@Inspector("Element.inspector")
 	public concept Element {
 
 		String[1,1] identifier;
@@ -156,7 +157,7 @@ public model FormoseCore {
 		delete() {
 		}
 
-		public Element createChildrenElement(String elementIdentifier, String elementDescription) {
+		public Element createChildrenElement(required String elementIdentifier, String elementDescription) {
 			log "Creating new element " + parameters.elementIdentifier;
 			Element newElement = container.new Element::createElement(parameters.elementIdentifier);
 			newElement.description = parameters.elementDescription;
@@ -166,7 +167,7 @@ public model FormoseCore {
 			return newElement;
 		}
 
-		public Requirement createRequirement(String name, String description) {
+		public Requirement createRequirement(required String name, String description) {
 			log "Creating new requirement " + parameters.name;
 			Requirement newRequirement = new Requirement::createRequirement(parameters.name, parameters.description);
 			notify "requirements" in this;
@@ -174,12 +175,13 @@ public model FormoseCore {
 			return newRequirement;
 		}
 
-		public Requirement createRequirementNoNotification(String name, String description) {
+		public Requirement createRequirementNoNotification(required String name, String description) {
 			Requirement newRequirement = new Requirement::createRequirement(parameters.name, parameters.description);
 			notify "requirements" in this;
 			return newRequirement;
 		}
 
+		@Inspector("Requirement.inspector")
 		public concept Requirement {
 
 			String[1,1] name;
@@ -194,6 +196,7 @@ public model FormoseCore {
 			create::createRequirement(String name, String description) {
 				name = parameters.name;
 				description = parameters.description;
+				status = "Not proved";
 				notify "requirements" in container;
 			}
 

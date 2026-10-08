@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of BMapping, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="BMappingInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="BMapping" layout="twocols" index="0" name="BMappingInspectorTab">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.domainModelMapping.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="parent" name="parentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.parent" name="parentSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
+				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/Formose.viewpoint/B-Methodology.fml#BMapping"' mandatory="true" />
+			</Custom>
+		</Tab>
+	</TabPanel>
+</Panel>

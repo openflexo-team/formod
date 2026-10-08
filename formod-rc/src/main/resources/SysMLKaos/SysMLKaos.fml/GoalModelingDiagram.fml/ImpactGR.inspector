@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of ImpactGR, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="ImpactGRInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Impact" layout="twocols" index="0" name="ImpactGRInspectorTab">
+			<Label label="Contribution goal" name="contributionGoalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.contributionGoalGR.goal.name" name="contributionGoalTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="Functional goal" name="functionalGoalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.functionalGoalGR.goal.name" readOnly="true" name="functionalGoalTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="Contribution" name="contributionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data='(data.impact.isPositive ? "Positive" : "Negative")' readOnly="true" name="contributionTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.impact.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

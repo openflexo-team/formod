@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of MapletIndividual, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="MapletIndividualInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="MapletIndividual" layout="twocols" index="0" name="MapletIndividualInspectorTab">
+			<Label label="antecedent" name="antecedentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.antecedent.name" readOnly="true" name="antecedentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="image" name="imageLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.image.name" readOnly="true" name="imageTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

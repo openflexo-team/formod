@@ -36,7 +36,7 @@ public model Formose {
 	}
 
 	/** Initialize a new Formose project, together with its core model */
-	create::initFormoseView(String projectName, String projectDescription) {
+	create::initFormoseView(required String projectName, String projectDescription) {
 		projectName = parameters.projectName;
 		projectDescription = parameters.projectDescription;
 		formoseVMI = new FormoseCore::init(parameters.projectName) with (name="FormoseVMI");

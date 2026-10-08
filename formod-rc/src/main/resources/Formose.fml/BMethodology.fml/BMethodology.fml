@@ -83,6 +83,7 @@ public model BMethodology extends Methodology {
 	create(DomainModelMethodology domainModelMethodology, AtelierBProjectResource sourceProject,
 			AtelierBProjectResource generatedProject) {
 		log "Create B-Methodology";
+		name = "BMethodology";
 		sourceProject = parameters.sourceProject.resourceData;
 		generatedProject = parameters.generatedProject.resourceData;
 		domainModelMethodology = parameters.domainModelMethodology;
@@ -143,6 +144,7 @@ public model BMethodology extends Methodology {
 		}
 
 		/** Maps one domain model onto an Atelier B context and machine */
+		@Inspector("BMapping.inspector")
 		public concept BMapping {
 
 			BMapping parent with ConceptInstance(virtualModelInstance=container.container);
@@ -697,7 +699,7 @@ public model BMethodology extends Methodology {
 			}
 
 			/** The first constant concept among supplied concept and its ancestors */
-			Concept getConstantParent(Concept aConcept) {
+			Concept getConstantParent(required Concept aConcept) {
 				if (parameters.aConcept.isVariable) {
 					return this.getConstantParent(parameters.aConcept.parentConcept);
 				}
@@ -705,7 +707,7 @@ public model BMethodology extends Methodology {
 			}
 
 			/** The B enumeration of the constant individuals of supplied concept, "{a, b, c}" */
-			String getConstantIndividualString(Concept aConcept) {
+			String getConstantIndividualString(required Concept aConcept) {
 				String str = "";
 				List<MapletIndividual> maplets = select MapletIndividual from domainModel
 						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == parameters.aConcept);
@@ -752,7 +754,7 @@ public model BMethodology extends Methodology {
 			}
 
 			/** A logical formula is an invariant when it mentions a variable concept or a variable individual */
-			boolean isInvariant(LogicalFormula logicalFormula) {
+			boolean isInvariant(required LogicalFormula logicalFormula) {
 				List<Concept> variableConcepts = select Concept from domainModel where (selected.isVariable);
 				for (Concept aConcept : variableConcepts) {
 					if (parameters.logicalFormula.assertion.contains(aConcept.name)) {
@@ -992,7 +994,7 @@ public model BMethodology extends Methodology {
 				BSet bSet with BSetRole();
 				IndividualGR individualGR with ConceptInstance(virtualModelInstance=container.domainModelMapping.defaultDiagram);
 
-				create(Individual individual, Concept2SetMapping concept2SetMapping) {
+				create(required Individual individual, required Concept2SetMapping concept2SetMapping) {
 					log "Individual2SetValueMapping: create SetValue related to individual " + parameters.individual;
 					individual = parameters.individual;
 					setValue = B::AddBSetValue(identifierName=parameters.individual.name, bSet=parameters.concept2SetMapping.bSet)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of WordReference, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="WordReferenceInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="DocXReference" layout="twocols" index="0" name="WordReferenceInspectorTab">
+			<Label label="text_selection" name="textSelectionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.textSelection.toString" readOnly="true" name="textSelectionTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="raw_text" name="rawTextLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.rawText" validateOnReturn="true" useScrollBar="true" readOnly="true" name="rawTextTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

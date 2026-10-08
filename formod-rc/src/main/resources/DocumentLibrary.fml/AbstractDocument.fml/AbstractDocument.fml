@@ -9,12 +9,14 @@
 
 @URI("http://formose.lacl.fr/DocumentLibrary.fml/AbstractDocument.fml")
 @Version("0.1")
+@Inspector("AbstractDocument.inspector")
 public abstract model AbstractDocument {
 
 	String documentName;
 	String documentDescription;
 
 	/** A reference is a portion of a document (which can be of various formats) */
+	@Inspector("Reference.inspector")
 	public abstract concept Reference {
 
 		abstract String rawText;

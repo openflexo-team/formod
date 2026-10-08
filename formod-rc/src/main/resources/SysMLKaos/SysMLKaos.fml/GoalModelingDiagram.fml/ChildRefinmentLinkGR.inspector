@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of ChildRefinmentLinkGR, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="ChildRefinmentLinkGRInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="ChildRefinment" layout="twocols" index="0" name="ChildRefinmentLinkGRInspectorTab">
+			<Label label="Child goal" name="childGoalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.childrenGoalGR.goal.name" readOnly="true" name="childGoalTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="Description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextArea data="data.childrenGoalGR.goal.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of ConceptAttributeGR, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="ConceptAttributeGRInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Attribute Embedded in Concept" layout="twocols" index="0" name="ConceptAttributeGRInspectorTab">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.modelConcept.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="is_variable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.modelConcept.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="attribute_range" name="attributeRangeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.modelConcept.range" name="attributeRangeSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
+				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#Concept"' mandatory="true" />
+			</Custom>
+			<Label label="range_cardinality" name="rangeCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.modelConcept.rangeCardinality.cardinality" name="rangeCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+		</Tab>
+	</TabPanel>
+</Panel>

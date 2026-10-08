@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of Concept, rebuilt from the Inspector of its legacy .fml.xml serialization. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="ConceptInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Concept" layout="twocols" index="0" name="ConceptInspectorTab">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<TextField data="data.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="isVariable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="isEnumeration" name="isEnumerationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<CheckBox data="data.isEnumeration" name="isEnumerationCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="parentConcept" name="parentConceptLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.parentConcept" name="parentConceptSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
+				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#Concept"' mandatory="true" />
+			</Custom>
+		</Tab>
+	</TabPanel>
+</Panel>
