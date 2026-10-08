@@ -5,8 +5,8 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Defined Concept" layout="twocols" index="0" name="DefinedConceptGRInspectorTab">
-			<Label label="definedWith" name="definedWithLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextArea data="data.modelConcept.definedWith.get(0).assertion" validateOnReturn="true" useScrollBar="true" name="definedWithTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+			<Label label="definedWith" name="definedWithLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+			<TextArea data="data.modelConcept.definedWith.get(0).assertion" validateOnReturn="true" useScrollBar="true" name="definedWithTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=101)" />
 		</Tab>
 	</TabPanel>
 </Panel>

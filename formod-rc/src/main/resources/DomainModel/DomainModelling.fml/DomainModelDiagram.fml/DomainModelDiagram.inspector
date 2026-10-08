@@ -5,10 +5,10 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="DomainModelDiagram" layout="twocols" index="0" name="DomainModelDiagramInspectorTab">
-			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.domainModel.modelName" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="parentDomainModel" name="parentDomainModelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBVirtualModelInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance" manageDynamicModel="true" data="data.domainModel.parentDomainModel" name="parentDomainModelSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.domainModel.modelName" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+			<Label label="parentDomainModel" name="parentDomainModelLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBVirtualModelInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance" manageDynamicModel="true" data="data.domainModel.parentDomainModel" name="parentDomainModelSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)">
 				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
 			</Custom>
 		</Tab>

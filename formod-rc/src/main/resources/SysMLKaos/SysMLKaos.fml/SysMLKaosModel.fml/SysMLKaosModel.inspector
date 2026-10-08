@@ -5,10 +5,10 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="KAOS Model" layout="twocols" index="0" name="SysMLKaosModelInspectorTab">
-			<Label label="modelTitle" name="modelTitleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.modelTitle" name="modelTitleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="modelDescription" name="modelDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextArea data="data.modelDescription" validateOnReturn="true" useScrollBar="true" name="modelDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+			<Label label="modelTitle" name="modelTitleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.modelTitle" name="modelTitleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+			<Label label="modelDescription" name="modelDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<TextArea data="data.modelDescription" validateOnReturn="true" useScrollBar="true" name="modelDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
 		</Tab>
 	</TabPanel>
 </Panel>

@@ -5,8 +5,8 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Refinement" layout="twocols" index="0" name="RefinementGRInspectorTab">
-			<Label label="Type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data='(data.refinement.isAnd ? "AND" : (data.refinement.isOr ? "OR" : (data.refinement.isMilestone ? "MLS" : (data.refinement.isData ? "DTA" : "NONE"))))' readOnly="true" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="Type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data='(data.refinement.isAnd ? "AND" : (data.refinement.isOr ? "OR" : (data.refinement.isMilestone ? "MLS" : (data.refinement.isData ? "DTA" : "NONE"))))' readOnly="true" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
 		</Tab>
 	</TabPanel>
 </Panel>

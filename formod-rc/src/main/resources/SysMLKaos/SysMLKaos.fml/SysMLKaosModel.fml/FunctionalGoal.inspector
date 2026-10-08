@@ -5,8 +5,8 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Functional Goal" layout="twocols" index="0" name="FunctionalGoalInspectorTab">
-			<Label label="type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.functionalGoalType" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+			<TextField data="data.functionalGoalType" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=101)" />
 		</Tab>
 	</TabPanel>
 </Panel>

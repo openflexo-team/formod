@@ -5,8 +5,8 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="DocXDocument" layout="twocols" index="0" name="WordDocumentInspectorTab">
-			<Label label="file" name="fileLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.docXDocument.resource.uRI" readOnly="true" name="fileTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="file" name="fileLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+			<TextField data="data.docXDocument.resource.uRI" readOnly="true" name="fileTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=101)" />
 		</Tab>
 	</TabPanel>
 </Panel>

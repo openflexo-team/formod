@@ -5,24 +5,24 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Association" layout="twocols" index="0" name="AssociationGRInspectorTab">
-			<Label label="domain" name="domainLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.modelConcept.domain.name" readOnly="true" name="domainTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="range" name="rangeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.modelConcept.range.name" readOnly="true" name="rangeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="domainCardinality" name="domainCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.modelConcept.domainCardinality.cardinality" name="domainCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="rangeCardinality" name="rangeCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.modelConcept.rangeCardinality.cardinality" name="rangeCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="isTransitive" name="isTransitiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isTransitive" name="isTransitiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
-			<Label label="isSysmmetric" name="isSysmmetricLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isSysmmetric" name="isSysmmetricCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
-			<Label label="isASymmetric" name="isASymmetricLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isASymmetric" name="isASymmetricCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
-			<Label label="isReflexive" name="isReflexiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isReflexive" name="isReflexiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
-			<Label label="isIrreflexive" name="isIrreflexiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isIrreflexive" name="isIrreflexiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="domain" name="domainLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+			<TextField data="data.modelConcept.domain.name" readOnly="true" name="domainTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=101)" />
+			<Label label="range" name="rangeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=102)" />
+			<TextField data="data.modelConcept.range.name" readOnly="true" name="rangeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=102)" />
+			<Label label="domainCardinality" name="domainCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=103)" />
+			<TextField data="data.modelConcept.domainCardinality.cardinality" name="domainCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=103)" />
+			<Label label="rangeCardinality" name="rangeCardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=104)" />
+			<TextField data="data.modelConcept.rangeCardinality.cardinality" name="rangeCardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=104)" />
+			<Label label="isTransitive" name="isTransitiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=105)" />
+			<CheckBox data="data.modelConcept.isTransitive" name="isTransitiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=105)" />
+			<Label label="isSysmmetric" name="isSysmmetricLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=106)" />
+			<CheckBox data="data.modelConcept.isSysmmetric" name="isSysmmetricCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=106)" />
+			<Label label="isASymmetric" name="isASymmetricLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=107)" />
+			<CheckBox data="data.modelConcept.isASymmetric" name="isASymmetricCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=107)" />
+			<Label label="isReflexive" name="isReflexiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=108)" />
+			<CheckBox data="data.modelConcept.isReflexive" name="isReflexiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=108)" />
+			<Label label="isIrreflexive" name="isIrreflexiveLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=109)" />
+			<CheckBox data="data.modelConcept.isIrreflexive" name="isIrreflexiveCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=109)" />
 		</Tab>
 	</TabPanel>
 </Panel>

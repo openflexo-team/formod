@@ -5,14 +5,14 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Attribute Embedded in Individual" layout="twocols" index="0" name="IndividualAttributeGRInspectorTab">
-			<Label label="attribut" name="attributLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.individual.individualOf" name="attributSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+			<Label label="attribut" name="attributLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.individual.individualOf" name="attributSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)">
 				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
 				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
 				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#Association"' mandatory="true" />
 			</Custom>
-			<Label label="valeur" name="valeurLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.individual.image" name="valeurSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)">
+			<Label label="valeur" name="valeurLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.individual.image" name="valeurSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)">
 				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
 				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
 				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr//resources/DomainModel/DomainModelling.fml/DomainModel.fml#Individual"' mandatory="true" />

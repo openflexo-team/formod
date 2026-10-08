@@ -5,12 +5,12 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Concept" layout="twocols" index="0" name="ConceptGRInspectorTab">
-			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.modelConcept.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="is_variable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
-			<Label label="is_enumeration" name="isEnumerationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckBox data="data.modelConcept.isEnumeration" name="isEnumerationCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" />
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.modelConcept.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+			<Label label="is_variable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<CheckBox data="data.modelConcept.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=2)" />
+			<Label label="is_enumeration" name="isEnumerationLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
+			<CheckBox data="data.modelConcept.isEnumeration" name="isEnumerationCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=3)" />
 		</Tab>
 	</TabPanel>
 </Panel>

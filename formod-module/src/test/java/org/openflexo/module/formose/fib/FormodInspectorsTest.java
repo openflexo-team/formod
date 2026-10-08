@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -18,7 +19,13 @@ import org.openflexo.foundation.fml.rm.FIBComponentResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.test.OpenflexoTestCase;
 import org.openflexo.gina.model.FIBComponent;
+import org.openflexo.gina.model.FIBModelFactory;
+import org.openflexo.gina.model.container.FIBPanel;
+import org.openflexo.gina.model.container.FIBTab;
+import org.openflexo.gina.model.container.FIBTabPanel;
+import org.openflexo.gina.model.FIBContainer;
 import org.openflexo.gina.utils.FIBInspector;
+import org.openflexo.inspector.ModuleInspectorController;
 import org.openflexo.pamela.validation.ValidationError;
 import org.openflexo.pamela.validation.ValidationReport;
 import org.openflexo.ta.b.BTechnologyAdapter;
@@ -124,6 +131,118 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 					+ report.getValidationModel().localizedIssueDetailedInformations(error) + " (" + report.getErrorsCount() + " in all)";
 		}
 		return null;
+	}
+
+
+	/**
+	 * The inspector of an instance is ADDITIVE: FunctionalGoalGR shows what GoalGR shows (the name and description of the goal), then
+	 * its own Type - the generated inspectors carry <code>index = depth * 100 + position</code>.
+	 */
+	@Test
+	@TestOrder(3)
+	public void test2FunctionalGoalGRShowsGoalGRThenItsOwnWidgets() throws Exception {
+		FlexoConcept functionalGoalGR = concept("http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml", "FunctionalGoalGR");
+		assertEquals(Arrays.asList("GoalGR", "FunctionalGoalGR"), contributorNames(functionalGoalGR));
+
+		assertEquals(Arrays.asList("goalLabel", "goalTextField", "descriptionLabel", "descriptionTextArea", "typeLabel", "typeTextField"),
+				composedWidgetNames(functionalGoalGR));
+	}
+
+	/**
+	 * For every concept whose hierarchy contributes several inspectors: the composed widgets are those of the ancestors, then the
+	 * concept's own, each in its own order - a widget named like an ancestor's replacing it.
+	 */
+	@Test
+	@TestOrder(4)
+	public void test3EveryComposedInspectorListsAncestorsFirst() throws Exception {
+		int composed = 0;
+		List<String> wrong = new ArrayList<>();
+		for (String uri : MODEL_URIS) {
+			List<FlexoConcept> concepts = new ArrayList<>();
+			collect(serviceManager.getVirtualModelLibrary().getVirtualModel(uri), concepts);
+			for (FlexoConcept concept : concepts) {
+				if (concept.getInspectorContributingConcepts().size() < 2) {
+					continue;
+				}
+				composed++;
+				List<String> expected = new ArrayList<>();
+				for (FlexoConcept contributor : concept.getInspectorContributingConcepts()) {
+					for (String name : ownWidgetNames(contributor)) {
+						expected.remove(name);
+						expected.add(name);
+					}
+				}
+				List<String> actual = composedWidgetNames(concept);
+				if (!expected.equals(actual)) {
+					wrong.add(concept.getName() + ": expected " + expected + " but got " + actual);
+				}
+			}
+		}
+		assertTrue("Wrong composition:\n" + String.join("\n", wrong), wrong.isEmpty());
+		assertTrue("Expected the 12 concepts overriding an ancestor's inspector, found " + composed, composed >= 12);
+	}
+
+	private FlexoConcept concept(String modelUri, String name)
+			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+		VirtualModel model = serviceManager.getVirtualModelLibrary().getVirtualModel(modelUri);
+		assertNotNull("No VirtualModel " + modelUri, model);
+		List<FlexoConcept> concepts = new ArrayList<>();
+		collect(model, concepts);
+		for (FlexoConcept concept : concepts) {
+			if (name.equals(concept.getName())) {
+				return concept;
+			}
+		}
+		throw new AssertionError("No concept " + name + " in " + modelUri);
+	}
+
+	private static List<String> contributorNames(FlexoConcept concept) {
+		List<String> returned = new ArrayList<>();
+		for (FlexoConcept contributor : concept.getInspectorContributingConcepts()) {
+			returned.add(contributor.getName());
+		}
+		return returned;
+	}
+
+	/** The widgets of the (first) tab of the inspector this concept itself contributes, in file order */
+	private static List<String> ownWidgetNames(FlexoConcept contributor) {
+		FIBContainer component = (FIBContainer) FMLControlledComponent.loadInspectorComponent(contributor, null);
+		List<String> returned = new ArrayList<>();
+		FIBContainer tab = (FIBContainer) ((FIBContainer) component.getSubComponentNamed("Tab")).getSubComponents().get(0);
+		for (FIBComponent widget : tab.getSubComponents()) {
+			returned.add(widget.getName());
+		}
+		return returned;
+	}
+
+	/** The widgets the inspector of an instance of supplied concept shows, composed as the inspector controller does */
+	private List<String> composedWidgetNames(FlexoConcept concept) throws Exception {
+		List<FIBContainer> containers = new ArrayList<>();
+		for (FlexoConcept contributor : concept.getInspectorContributingConcepts()) {
+			containers.add((FIBContainer) FMLControlledComponent.loadInspectorComponent(contributor, null));
+		}
+		// Stand-in for FlexoConceptInstance.inspector: a TabPanel holding the platform's BasicTab
+		FIBModelFactory factory = new FIBModelFactory(null, serviceManager.getTechnologyAdapterService(), FIBInspector.class);
+		FIBInspector classInspector = factory.newInstance(FIBInspector.class);
+		classInspector.setName("Inspector");
+		classInspector.setLayout(FIBPanel.Layout.border);
+		classInspector.setDataClass(org.openflexo.foundation.fml.rt.FlexoConceptInstance.class);
+		FIBTabPanel classTabPanel = factory.newInstance(FIBTabPanel.class);
+		classTabPanel.setName("Tab");
+		FIBTab basicTab = factory.newFIBTab();
+		basicTab.setName("BasicTab");
+		classTabPanel.addToSubComponents(basicTab);
+		classInspector.addToSubComponents(classTabPanel);
+
+		ModuleInspectorController.mergeContainerInspectors(classInspector, containers, concept, null);
+
+		FIBContainer tab = (FIBContainer) classInspector.getTabPanel().getSubComponentNamed(concept.getName() + "Panel");
+		assertNotNull("No composed tab for " + concept, tab);
+		List<String> returned = new ArrayList<>();
+		for (FIBComponent widget : tab.getSubComponents()) {
+			returned.add(widget.getName());
+		}
+		return returned;
 	}
 
 }

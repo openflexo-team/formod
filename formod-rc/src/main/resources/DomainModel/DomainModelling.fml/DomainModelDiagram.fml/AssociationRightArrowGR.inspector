@@ -5,8 +5,8 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Association Range" layout="twocols" index="0" name="AssociationRightArrowGRInspectorTab">
-			<Label label="cardinality" name="cardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.associationGR.modelConcept.rangeCardinality.cardinality" name="cardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="cardinality" name="cardinalityLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.associationGR.modelConcept.rangeCardinality.cardinality" name="cardinalityTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
 		</Tab>
 	</TabPanel>
 </Panel>

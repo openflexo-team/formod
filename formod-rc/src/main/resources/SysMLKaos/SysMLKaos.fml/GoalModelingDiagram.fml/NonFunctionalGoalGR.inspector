@@ -5,10 +5,10 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Non Functional Goal" layout="twocols" index="0" name="NonFunctionalGoalGRInspectorTab">
-			<Label label="Type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.goal.nonFunctionalGoalType" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="Topic" name="topicLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.goal.topic" name="topicTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="Type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+			<TextField data="data.goal.nonFunctionalGoalType" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=101)" />
+			<Label label="Topic" name="topicLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=102)" />
+			<TextField data="data.goal.topic" name="topicTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=102)" />
 		</Tab>
 	</TabPanel>
 </Panel>

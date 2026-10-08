@@ -5,10 +5,10 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="GoalGroupGR" layout="twocols" index="0" name="GoalGroupGRInspectorTab">
-			<Label label="title" name="titleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.goalGroup.title" name="titleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="goals" name="goalsLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckboxList data="data.goalGroup.goals" list="data.container.kaosModel.goals()" iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" showIcon="false" visibleRowCount="5" name="goalsCheckboxList" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
+			<Label label="title" name="titleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.goalGroup.title" name="titleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+			<Label label="goals" name="goalsLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<CheckboxList data="data.goalGroup.goals" list="data.container.kaosModel.goals()" iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" showIcon="false" visibleRowCount="5" name="goalsCheckboxList" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
 		</Tab>
 	</TabPanel>
 </Panel>

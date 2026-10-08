@@ -5,8 +5,8 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="DomainModel" layout="twocols" index="0" name="DomainModelMappingInspectorTab">
-			<Label label="modelName" name="modelNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.domainModel.modelName" name="modelNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="modelName" name="modelNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.domainModel.modelName" name="modelNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
 		</Tab>
 	</TabPanel>
 </Panel>

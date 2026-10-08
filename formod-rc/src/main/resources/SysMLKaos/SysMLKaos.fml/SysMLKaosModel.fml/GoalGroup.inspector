@@ -5,10 +5,10 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="GoalGroup" layout="twocols" index="0" name="GoalGroupInspectorTab">
-			<Label label="goals" name="goalsLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<CheckboxList data="data.goals" list="data.container.goals()" iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" showIcon="false" visibleRowCount="5" name="goalsCheckboxList" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
-			<Label label="parent" name="parentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.parentGroup.title" readOnly="true" name="parentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="goals" name="goalsLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<CheckboxList data="data.goals" list="data.container.goals()" iteratorClassName="org.openflexo.foundation.fml.FlexoConceptInstanceType&lt;http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal&gt;" showIcon="false" visibleRowCount="5" name="goalsCheckboxList" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=1)" />
+			<Label label="parent" name="parentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<TextField data="data.parentGroup.title" readOnly="true" name="parentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)" />
 		</Tab>
 	</TabPanel>
 </Panel>

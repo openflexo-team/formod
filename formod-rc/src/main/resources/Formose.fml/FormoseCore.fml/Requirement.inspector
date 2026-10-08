@@ -5,12 +5,12 @@
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
 	<TabPanel name="Tab">
 		<Tab title="Requirement" layout="twocols" index="0" name="RequirementInspectorTab">
-			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
-			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextArea data="data.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" />
-			<Label label="status" name="statusLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left)" />
-			<TextField data="data.status" readOnly="true" name="statusTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" />
+			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<TextArea data="data.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
+			<Label label="status" name="statusLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
+			<TextField data="data.status" readOnly="true" name="statusTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=3)" />
 		</Tab>
 	</TabPanel>
 </Panel>
