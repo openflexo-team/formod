@@ -13,6 +13,7 @@ import ["http://formose.lacl.fr/Formose.fml/FormoseCore.fml"];
 
 @URI("http://formose.lacl.fr/Formose.fml/Methodology.fml")
 @Version("0.1")
+@Inspector("Methodology.inspector")
 public abstract model Methodology {
 
 	String[1,1] name;

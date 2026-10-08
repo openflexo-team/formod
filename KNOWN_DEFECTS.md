@@ -82,6 +82,9 @@ generated from the legacy serialization (`legacy_inspectors_to_container.py`, in
 `FormodInspectorsTest` (52, bindings included). The graphical-representation concepts keep their own inspector (faithful to the legacy)
 rather than deriving to the model concept: see FORMOD-F-3.
 
+**Added, not restored (2026-10-08).** `Methodology.inspector` (name and declaring element, read-only): the legacy declared an inspector with no entry for the
+methodologies. The four methodologies inherit it through the additive composition of inspectors (asserted by `FormodInspectorsTest`).
+
 ### FORMOD-D-6 — Required roles never set: methodologies and requirements are invalid  ·  `DONE`
 
 **Symptom.** The methodologies show an error cross when a project is opened: `Missing required role name` (`Methodology.name`), `user`

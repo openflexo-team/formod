@@ -48,12 +48,12 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 			"http://formose.lacl.fr/DocumentLibrary.fml/WordDocument.fml", "http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml",
 			"http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagram.fml", "http://formose.lacl.fr/Formose.fml/BMethodology.fml",
 			"http://formose.lacl.fr/Formose.fml/DomainModelMethodology.fml", "http://formose.lacl.fr/Formose.fml/FormoseCore.fml",
-			"http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml",
+			"http://formose.lacl.fr/Formose.fml/SysMLKaosMethodology.fml", "http://formose.lacl.fr/Formose.fml/Methodology.fml",
 			"http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml",
 			"http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml" };
 
 	/** Number of <code>.inspector</code> files rebuilt from the legacy serialization */
-	private static final int EXPECTED_INSPECTORS = 52;
+	private static final int EXPECTED_INSPECTORS = 53;
 
 	@Test
 	@TestOrder(1)
@@ -182,6 +182,21 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 		assertTrue("Expected the 12 concepts overriding an ancestor's inspector, found " + composed, composed >= 12);
 	}
 
+	/**
+	 * Every methodology inherits the inspector of Methodology (an addition to the legacy, which declared none): it shows the name and the
+	 * element the methodology is declared on, and nothing of its own.
+	 */
+	@Test
+	@TestOrder(5)
+	public void test4MethodologiesInheritTheMethodologyInspector() throws Exception {
+		for (String model : new String[] { "SysMLKaosMethodology", "DocumentAnnotationMethodology", "DomainModelMethodology", "BMethodology" }) {
+			FlexoConcept methodology = concept("http://formose.lacl.fr/Formose.fml/" + model + ".fml", model);
+			assertEquals(model, Arrays.asList("Methodology"), contributorNames(methodology));
+			assertEquals(model, Arrays.asList("nameLabel", "nameTextField", "declaringElementLabel", "declaringElementTextField"),
+					composedWidgetNames(methodology));
+		}
+	}
+
 	private FlexoConcept concept(String modelUri, String name)
 			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
 		VirtualModel model = serviceManager.getVirtualModelLibrary().getVirtualModel(modelUri);
@@ -236,7 +251,16 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 
 		ModuleInspectorController.mergeContainerInspectors(classInspector, containers, concept, null);
 
+		// Several contributors make one tab named <Concept>Panel; a single one keeps the tab of its own component
 		FIBContainer tab = (FIBContainer) classInspector.getTabPanel().getSubComponentNamed(concept.getName() + "Panel");
+		if (tab == null) {
+			for (FIBComponent candidate : classInspector.getTabPanel().getSubComponents()) {
+				if (candidate instanceof FIBContainer && !"BasicTab".equals(candidate.getName())) {
+					tab = (FIBContainer) candidate;
+					break;
+				}
+			}
+		}
 		assertNotNull("No composed tab for " + concept, tab);
 		List<String> returned = new ArrayList<>();
 		for (FIBComponent widget : tab.getSubComponents()) {

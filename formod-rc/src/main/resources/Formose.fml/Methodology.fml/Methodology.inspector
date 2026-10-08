@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of Methodology, inherited (ancestors first) by every methodology: SysML/KAOS, document annotation, domain model and B.
+     The legacy serialization declared an inspector with no entry for them; this one is an addition, not a restoration. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="MethodologyInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<TabPanel name="Tab">
+		<Tab title="Methodology" layout="twocols" index="0" name="MethodologyInspectorTab">
+			<Label label="Name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+			<TextField data="data.name" readOnly="true" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+			<Label label="Declared on element" name="declaringElementLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+			<TextField data="data.declaringElement.identifier" readOnly="true" name="declaringElementTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)" />
+		</Tab>
+	</TabPanel>
+</Panel>
