@@ -1,0 +1,52 @@
+// T13 - the other goal and agent drops of the goal diagram palette: a non functional goal, a contribution goal, an environmental agent.
+// T5 covers the functional goal, the refinements and the software agent; each drop scheme here is what the palette runs.
+
+service ResourceCenterService add_temp_rc;
+
+// The diagram specification and its example diagram are loaded first: the imports of GoalModelingDiagram resolve against them
+goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification"];
+assert goalDiagramSpecification != null;
+exampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
+assert exampleDiagram != null;
+
+sysMLKaos = load -r ["http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml"];
+assert sysMLKaos != null;
+
+kaos = new SysMLKaos::init("LandingGear", "Landing gear goals", "") with (name="TestKaos");
+rootModel = kaos.rootModel;
+assert rootModel != null;
+
+// The constructor creates the diagram resource in the resource center of the containing instance
+diagram = kaos.new GoalModelingDiagram::init("GoalDiagram", "Functional goals", rootModel) with (name="TestGoalDiagram");
+assert diagram != null;
+assert diagram.diagramName == "GoalDiagram";
+assert diagram.diagramTitle == "Functional goals";
+assert diagram.kaosModel == rootModel;
+assert diagram.kaosGoalDiagram != null;
+assert diagram.kaosGoalDiagram.shapes.size == 0;
+
+// A non functional goal
+nfGR = diagram.new NonFunctionalGoalGR::createNonFunctionalGoal("Safety", "", "The landing gear shall be safe");
+assert nfGR != null;
+assert nfGR.goal != null;
+assert nfGR.goal.name == "Safety";
+assert nfGR.shape != null;
+
+// A contribution goal
+cGR = diagram.new ContributionGoalGR::createContributionGoal("Reliability", "", "The landing gear shall be reliable");
+assert cGR != null;
+assert cGR.goal != null;
+assert cGR.goal.name == "Reliability";
+assert cGR.shape != null;
+
+// An environmental agent
+envGR = diagram.new EnvironmentalAgentGR::createEnvironmentalAgent("Pilot", "The person flying");
+assert envGR != null;
+assert envGR.agent != null;
+assert envGR.agent.name == "Pilot";
+assert envGR.shape != null;
+
+assert rootModel.goals().size == 2;
+assert diagram.kaosGoalDiagram.shapes.size == 3;
+
+log "Test PASSED: T13 - non functional goal, contribution goal and environmental agent drops";

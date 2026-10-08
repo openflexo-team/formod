@@ -87,13 +87,13 @@ public model GoalModelingDiagram {
 			paletteElementBindings={
 					PaletteElementBinding:(call=new FunctionalGoalGR::createFunctionalGoal("Goal", "", ""),
 							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#F-Goal"),
-					PaletteElementBinding:(call=new NonFunctionalGoalGR::createNonFunctionalGoal(),
+					PaletteElementBinding:(call=new NonFunctionalGoalGR::createNonFunctionalGoal("Goal", "", ""),
 							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#NF-Goal"),
-					PaletteElementBinding:(call=new ContributionGoalGR::createContributionGoal(),
+					PaletteElementBinding:(call=new ContributionGoalGR::createContributionGoal("Goal", "", ""),
 							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#C-Goal"),
-					PaletteElementBinding:(call=new EnvironmentalAgentGR::createEnvironmentalAgent(),
+					PaletteElementBinding:(call=new EnvironmentalAgentGR::createEnvironmentalAgent("Agent", ""),
 							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#Env. Agent"),
-					PaletteElementBinding:(call=new SoftwareAgentGR::createSoftwareAgent(),
+					PaletteElementBinding:(call=new SoftwareAgentGR::createSoftwareAgent("Agent", ""),
 							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#Soft. Agent"),
 					PaletteElementBinding:(call=new RefinementGR::dropAndRequirement(),
 							paletteElementId="http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalPalette.palette#AND"),
@@ -350,7 +350,7 @@ public model GoalModelingDiagram {
 		DiagramShape shape with ShapeRole(metamodelElement=FUNCTIONAL_GOAL_SHAPE, exampleLabel="F-Goal", label=goal.name);
 		FunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
-		createFunctionalGoal(required String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
+		createFunctionalGoal(required String name = "Goal", String type = "Functional", String description) with DropScheme(targetType=GoalModelingDiagram) {
 			goal = container.kaosModel.new FunctionalGoal(parameters.name, parameters.type, parameters.description, true);
 			log "Creating goal " + parameters.name;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
@@ -384,12 +384,12 @@ public model GoalModelingDiagram {
 	}
 
 	@Inspector("NonFunctionalGoalGR.inspector")
-	public abstract concept NonFunctionalGoalGR extends GoalGR {
+	public concept NonFunctionalGoalGR extends GoalGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=NON_FUNCTIONAL_GOAL_SHAPE, exampleLabel="NF-Goal", label=goal.name);
 		NonFunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
-		createNonFunctionalGoal(required String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
+		createNonFunctionalGoal(required String name = "Goal", String type = "NonFunctional", String description) with DropScheme(targetType=GoalModelingDiagram) {
 			goal = container.kaosModel.new NonFunctionalGoal(parameters.name, parameters.type, parameters.description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
@@ -413,7 +413,7 @@ public model GoalModelingDiagram {
 		DiagramShape shape with ShapeRole(metamodelElement=CONTRIBUTION_GOAL_SHAPE, exampleLabel="C-Goal", label=goal.name);
 		ContributionGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
-		createContributionGoal(required String name, String type, String description) with DropScheme(targetType=GoalModelingDiagram) {
+		createContributionGoal(required String name = "Goal", String type = "Contribution", String description) with DropScheme(targetType=GoalModelingDiagram) {
 			goal = container.kaosModel.new ContributionGoal(parameters.name, parameters.type, parameters.description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
@@ -577,7 +577,7 @@ public model GoalModelingDiagram {
 		DiagramShape shape with ShapeRole(metamodelElement=ENVIRONMENTAL_AGENT_SHAPE, exampleLabel="Env. Agent", label=agent.name);
 		EnvironmentalAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
 
-		createEnvironmentalAgent(required String name, String description) with DropScheme(targetType=GoalModelingDiagram) {
+		createEnvironmentalAgent(required String name = "Agent", String description) with DropScheme(targetType=GoalModelingDiagram) {
 			agent = container.kaosModel.new EnvironmentalAgent::createEnvironmentalAgent(parameters.name, parameters.description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
@@ -595,7 +595,7 @@ public model GoalModelingDiagram {
 		DiagramShape shape with ShapeRole(metamodelElement=SOFTWARE_AGENT_SHAPE, exampleLabel="Soft. Agent", label=agent.name);
 		SoftwareAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
 
-		createSoftwareAgent(required String name, String description) with DropScheme(targetType=GoalModelingDiagram) {
+		createSoftwareAgent(required String name = "Agent", String description) with DropScheme(targetType=GoalModelingDiagram) {
 			agent = container.kaosModel.new SoftwareAgent::createSoftwareAgent(parameters.name, parameters.description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
