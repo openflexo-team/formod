@@ -3,20 +3,16 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="AgentAssignmentInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="AgentAssignment" layout="twocols" index="0" name="AgentAssignmentInspectorTab">
-			<Label label="agent" name="agentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
-			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.agent" name="agentSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)">
-				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
-				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
-				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent"' mandatory="true" />
-			</Custom>
-			<Label label="goal" name="goalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
-			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.goal" name="goalSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)">
-				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
-				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
-				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Goal"' mandatory="true" />
-			</Custom>
-		</Tab>
-	</TabPanel>
+	<Label label="agent" name="agentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.agent" name="agentSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)">
+		<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+		<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
+		<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml#Agent"' mandatory="true" />
+	</Custom>
+	<Label label="goal" name="goalLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+	<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.goal" name="goalSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)">
+		<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+		<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
+		<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml#Goal"' mandatory="true" />
+	</Custom>
 </Panel>

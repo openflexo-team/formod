@@ -3,12 +3,8 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="GoalModelingDiagramInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="Goal Modeling Diagram" layout="twocols" index="0" name="GoalModelingDiagramInspectorTab">
-			<Label label="diagramTitle" name="diagramTitleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
-			<TextField data="data.diagramTitle" name="diagramTitleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
-			<Label label="diagramDescription" name="diagramDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
-			<TextArea data="data.diagramDescription" validateOnReturn="true" useScrollBar="true" name="diagramDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
-		</Tab>
-	</TabPanel>
+	<Label label="diagramTitle" name="diagramTitleLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<TextField data="data.diagramTitle" name="diagramTitleTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+	<Label label="diagramDescription" name="diagramDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+	<TextArea data="data.diagramDescription" validateOnReturn="true" useScrollBar="true" name="diagramDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
 </Panel>

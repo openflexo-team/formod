@@ -3,18 +3,14 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="SysMLKaosElementMappingInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="Element" layout="twocols" index="0" name="SysMLKaosElementMappingInspectorTab">
-			<Label label="element" name="elementLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
-			<TextField data="data.element.identifier" name="elementTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
-			<Label label="agent" name="agentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
-			<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.agent" name="agentSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)">
-				<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
-				<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
-				<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/SysMLKaos/SysMLKaos.viewpoint/SysMLKaosModel.fml#Agent"' mandatory="true" />
-			</Custom>
-			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
-			<TextArea data="data.element.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=3)" />
-		</Tab>
-	</TabPanel>
+	<Label label="element" name="elementLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<TextField data="data.element.identifier" name="elementTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+	<Label label="agent" name="agentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+	<Custom componentClassName="org.openflexo.fml.rt.controller.widget.FIBFlexoConceptInstanceSelector" dataClassForComponent="org.openflexo.foundation.fml.rt.FlexoConceptInstance" manageDynamicModel="true" data="data.agent" name="agentSelector" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=2)">
+		<Assignment variable="component.serviceManager" value="controller.flexoController.applicationContext" mandatory="true" />
+		<Assignment variable="component.virtualModelInstance" value="data.container" mandatory="true" />
+		<Assignment variable="component.expectedFlexoConceptTypeURI" value='"http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml#Agent"' mandatory="true" />
+	</Custom>
+	<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
+	<TextArea data="data.element.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=3)" />
 </Panel>

@@ -3,10 +3,6 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="DefinedConceptInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="DefinedConcept" layout="twocols" index="0" name="DefinedConceptInspectorTab">
-			<Label label="Defined with" name="definedWithLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
-			<TextArea data="data.definedWith.get(0).assertion" validateOnReturn="true" useScrollBar="true" name="definedWithTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=101)" />
-		</Tab>
-	</TabPanel>
+	<Label label="Defined with" name="definedWithLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+	<TextArea data="data.definedWith.get(0).assertion" validateOnReturn="true" useScrollBar="true" name="definedWithTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=101)" />
 </Panel>

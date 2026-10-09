@@ -19,6 +19,8 @@ import org.openflexo.foundation.fml.rm.FIBComponentResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.test.OpenflexoTestCase;
 import org.openflexo.gina.model.FIBComponent;
+import org.openflexo.gina.model.widget.FIBCustom;
+import org.openflexo.gina.model.widget.FIBCustom.FIBCustomAssignment;
 import org.openflexo.gina.model.FIBModelFactory;
 import org.openflexo.gina.model.container.FIBPanel;
 import org.openflexo.gina.model.container.FIBTab;
@@ -53,7 +55,7 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 			"http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml" };
 
 	/** Number of <code>.inspector</code> files rebuilt from the legacy serialization */
-	private static final int EXPECTED_INSPECTORS = 53;
+	private static final int EXPECTED_INSPECTORS = 33;
 
 	@Test
 	@TestOrder(1)
@@ -74,8 +76,8 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 			List<FlexoConcept> concepts = new ArrayList<>();
 			collect(model, concepts);
 			for (FlexoConcept concept : concepts) {
-				// A concept inherits the inspector of its parent: only the ones declaring their own are checked
-				if (!concept.hasMetaData(FlexoConcept.INSPECTOR_METADATA)) {
+				// A concept inherits the inspector of its parent, or hands it to another object (derived): only the ones declaring a file are checked
+				if (!concept.hasMetaData(FlexoConcept.INSPECTOR_METADATA) || concept.hasDerivedInspector()) {
 					continue;
 				}
 				count++;
@@ -130,22 +132,81 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 			return "Invalid binding in " + fileName + ", " + error.getValidable() + ": "
 					+ report.getValidationModel().localizedIssueDetailedInformations(error) + " (" + report.getErrorsCount() + " in all)";
 		}
+		// A selector of instances names the concept it lists by URI, which no validation of bindings checks: an URI that designates nothing
+		// (the legacy ones did, after the move off the .viewpoint folders) gives a selector with nothing to choose from
+		for (FIBComponent widget : ((FIBContainer) component).getAllSubComponents()) {
+			if (widget instanceof FIBCustom) {
+				for (FIBCustomAssignment assignment : ((FIBCustom) widget).getAssignments()) {
+					// Every property of the selector is listed as an assignment; only the ones given a value count
+					if (assignment.getVariable() != null && "component.expectedFlexoConceptTypeURI".equals(assignment.getVariable().toString())
+							&& assignment.getValue() != null && assignment.getValue().isSet()) {
+						String expected = assignment.getValue().toString().replace("\"", "").replace("'", "");
+						if (concept.getServiceManager().getVirtualModelLibrary().getFlexoConcept(expected) == null) {
+							return "No concept " + expected + ", selected by " + widget.getName() + " in " + fileName;
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 
 
 	/**
-	 * The inspector of an instance is ADDITIVE: FunctionalGoalGR shows what GoalGR shows (the name and description of the goal), then
-	 * its own Type - the generated inspectors carry <code>index = depth * 100 + position</code>.
+	 * The inspector of an instance is ADDITIVE: a FunctionalGoal shows what Goal shows (the name and description of the goal), then its own
+	 * Type - the generated inspectors carry <code>index = depth * 100 + position</code>.
 	 */
 	@Test
 	@TestOrder(3)
-	public void test2FunctionalGoalGRShowsGoalGRThenItsOwnWidgets() throws Exception {
-		FlexoConcept functionalGoalGR = concept("http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml", "FunctionalGoalGR");
-		assertEquals(Arrays.asList("GoalGR", "FunctionalGoalGR"), contributorNames(functionalGoalGR));
+	public void test2FunctionalGoalShowsGoalThenItsOwnWidgets() throws Exception {
+		FlexoConcept functionalGoal = concept("http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml", "FunctionalGoal");
+		assertEquals(Arrays.asList("Goal", "FunctionalGoal"), contributorNames(functionalGoal));
 
-		assertEquals(Arrays.asList("goalLabel", "goalTextField", "descriptionLabel", "descriptionTextArea", "typeLabel", "typeTextField"),
-				composedWidgetNames(functionalGoalGR));
+		List<String> expected = new ArrayList<>(ownWidgetNames(concept("http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/SysMLKaosModel.fml", "Goal")));
+		expected.addAll(ownWidgetNames(functionalGoal));
+		assertEquals(expected, composedWidgetNames(functionalGoal));
+	}
+
+	/**
+	 * A graphical representation has no inspector of its own: it hands the inspection to the object it stands for (the goal, the concept,
+	 * the individual...), whose inspector is the one place where that object is described. The derivation is not inherited, so every
+	 * concrete representation declares it.
+	 */
+	@Test
+	@TestOrder(3)
+	public void test2bGraphicalRepresentationsDeriveToWhatTheyStandFor() throws Exception {
+		String goals = "http://formose.lacl.fr/SysMLKaos/SysMLKaos.fml/GoalModelingDiagram.fml";
+		String domain = "http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagram.fml";
+		String[][] derivations = { { goals, "FunctionalGoalGR", "goal" }, { goals, "NonFunctionalGoalGR", "goal" },
+				{ goals, "ContributionGoalGR", "goal" }, { goals, "EnvironmentalAgentGR", "agent" }, { goals, "SoftwareAgentGR", "agent" },
+				{ goals, "RefinementGR", "refinement" }, { goals, "ParentRefinementLinkGR", "parentGoalGR.goal" },
+				{ goals, "ChildRefinmentLinkGR", "childrenGoalGR.goal" }, { goals, "AgentAssignmentGR", "agentAssignment" },
+				{ goals, "ContributionGR", "contribution" }, { goals, "ImpactGR", "impact" }, { goals, "GoalGroupGR", "goalGroup" },
+				{ domain, "ConceptGR", "modelConcept" }, { domain, "DefinedConceptGR", "modelConcept" },
+				{ domain, "DefaultDataTypeGR", "modelConcept" }, { domain, "AssociationGR", "modelConcept" },
+				{ domain, "IndividualGR", "individual" }, { domain, "MapletIndividualGR", "individual" },
+				{ domain, "SimpleMapletIndividualGR", "individual" }, { domain, "ConceptAttributeGR", "modelConcept" },
+				{ domain, "IndividualAttributeGR", "individual" }, { domain, "LogicalFormulaGR", "logicalFormula" },
+				{ domain, "AssociationLeftArrowGR", "associationGR.modelConcept" },
+				{ domain, "AssociationRightArrowGR", "associationGR.modelConcept" } };
+		List<String> wrong = new ArrayList<>();
+		for (String[] derivation : derivations) {
+			FlexoConcept gr = concept(derivation[0], derivation[1]);
+			if (!gr.hasDerivedInspector()) {
+				wrong.add(derivation[1] + " does not derive its inspector");
+				continue;
+			}
+			if (!derivation[2].equals(String.valueOf(gr.getDerivedInspector()))) {
+				wrong.add(derivation[1] + " derives to " + gr.getDerivedInspector() + " instead of " + derivation[2]);
+			}
+			if (!gr.getDerivedInspector().isValid()) {
+				wrong.add(derivation[1] + ": invalid binding " + gr.getDerivedInspector() + ": " + gr.getDerivedInspector().invalidBindingReason());
+			}
+			if (gr.getInspectorComponentResource() != null) {
+				wrong.add(derivation[1] + " derives AND resolves its own inspector " + gr.getInspectorComponentResource().getURI());
+			}
+		}
+		assertTrue("Wrong derivations:\n" + String.join("\n", wrong), wrong.isEmpty());
 	}
 
 	/**
@@ -179,7 +240,7 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 			}
 		}
 		assertTrue("Wrong composition:\n" + String.join("\n", wrong), wrong.isEmpty());
-		assertTrue("Expected the 12 concepts overriding an ancestor's inspector, found " + composed, composed >= 12);
+		assertTrue("Expected the 6 concepts overriding an ancestor's inspector, found " + composed, composed >= 6);
 	}
 
 	/**
@@ -219,11 +280,18 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 		return returned;
 	}
 
-	/** The widgets of the (first) tab of the inspector this concept itself contributes, in file order */
+	/**
+	 * The widgets the inspector this concept itself contributes holds, in file order: those of its panel, which is a plain one for the
+	 * inspectors of Formose (the platform makes it a tab), or of its first tab for a component built with a TabPanel
+	 */
 	private static List<String> ownWidgetNames(FlexoConcept contributor) {
 		FIBContainer component = (FIBContainer) FMLControlledComponent.loadInspectorComponent(contributor, null);
 		List<String> returned = new ArrayList<>();
-		FIBContainer tab = (FIBContainer) ((FIBContainer) component.getSubComponentNamed("Tab")).getSubComponents().get(0);
+		FIBContainer tab = component;
+		FIBComponent tabPanel = component.getSubComponentNamed("Tab");
+		if (tabPanel instanceof FIBContainer) {
+			tab = (FIBContainer) ((FIBContainer) tabPanel).getSubComponents().get(0);
+		}
 		for (FIBComponent widget : tab.getSubComponents()) {
 			returned.add(widget.getName());
 		}

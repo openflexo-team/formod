@@ -3,12 +3,8 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="AbstractDocumentInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="AbstractDocument" layout="twocols" index="0" name="AbstractDocumentInspectorTab">
-			<Label label="document_name" name="documentNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
-			<TextField data="data.documentName" name="documentNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
-			<Label label="document_description" name="documentDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
-			<TextArea data="data.documentDescription" validateOnReturn="true" useScrollBar="true" name="documentDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
-		</Tab>
-	</TabPanel>
+	<Label label="document_name" name="documentNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<TextField data="data.documentName" name="documentNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+	<Label label="document_description" name="documentDescriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+	<TextArea data="data.documentDescription" validateOnReturn="true" useScrollBar="true" name="documentDescriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
 </Panel>

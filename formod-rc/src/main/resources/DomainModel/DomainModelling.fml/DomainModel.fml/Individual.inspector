@@ -3,16 +3,12 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="IndividualInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="Individual" layout="twocols" index="0" name="IndividualInspectorTab">
-			<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
-			<TextField data="data.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
-			<Label label="isVariable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
-			<CheckBox data="data.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=2)" />
-			<Label label="initialValue" name="initialValueLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
-			<TextField data="data.initialValue.name" readOnly="true" name="initialValueTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=3)" />
-			<Label label="individual of" name="individualOfLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=4)" />
-			<TextField data="data.individualOf.name" readOnly="true" name="individualOfTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=4)" />
-		</Tab>
-	</TabPanel>
+	<Label label="name" name="nameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<TextField data="data.name" name="nameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+	<Label label="isVariable" name="isVariableLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+	<CheckBox data="data.isVariable" name="isVariableCheckBox" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right;index=2)" />
+	<Label label="initialValue" name="initialValueLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
+	<TextField data="data.initialValue.name" readOnly="true" name="initialValueTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=3)" />
+	<Label label="individual of" name="individualOfLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=4)" />
+	<TextField data="data.individualOf.name" readOnly="true" name="individualOfTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=4)" />
 </Panel>

@@ -80,7 +80,7 @@ type, description, the cardinalities of an association, …) were gone. 52 conce
 **Fixed (2026-10-07).** One `Xxx.inspector` per concept in the container of its model, with an explicit `@Inspector("Xxx.inspector")`,
 generated from the legacy serialization (`legacy_inspectors_to_container.py`, in the `migrate-fml-serialization` skill). Validated by
 `FormodInspectorsTest` (52, bindings included). The graphical-representation concepts keep their own inspector (faithful to the legacy)
-rather than deriving to the model concept: see FORMOD-F-3.
+rather than deriving to the model concept (done later, FORMOD-F-3).
 
 **Added, not restored (2026-10-08).** `Methodology.inspector` (name and declaring element, read-only): the legacy declared an inspector with no entry for the
 methodologies. The four methodologies inherit it through the additive composition of inspectors (asserted by `FormodInspectorsTest`).

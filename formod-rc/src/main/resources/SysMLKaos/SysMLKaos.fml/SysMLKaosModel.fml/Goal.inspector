@@ -3,14 +3,10 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="GoalInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="AbstractKaosElement" layout="twocols" index="0" name="GoalInspectorTab">
-			<Label label="goalName" name="goalNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
-			<TextField data="data.name" name="goalNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
-			<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
-			<TextArea data="data.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
-			<Label label="parent" name="parentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
-			<TextField data="data.parentGoal.name" readOnly="true" name="parentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=3)" />
-		</Tab>
-	</TabPanel>
+	<Label label="goalName" name="goalNameLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<TextField data="data.name" name="goalNameTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+	<Label label="description" name="descriptionLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=2)" />
+	<TextArea data="data.description" validateOnReturn="true" useScrollBar="true" name="descriptionTextArea" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right;index=2)" />
+	<Label label="parent" name="parentLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=3)" />
+	<TextField data="data.parentGoal.name" readOnly="true" name="parentTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=3)" />
 </Panel>

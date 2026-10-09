@@ -155,6 +155,15 @@ public class FMSController extends FlexoController {
 		}
 	}
 
+	/**
+	 * The objects of Formose are presented by their own inspector alone: the standard tabs (label of the instance, table of its actors) only
+	 * add noise to it.
+	 */
+	@Override
+	public boolean hidesStandardInspectorTabs() {
+		return true;
+	}
+
 	@Override
 	public ImageIcon iconForObject(final Object object) {
 		if (object instanceof FormoseProjectNature) {

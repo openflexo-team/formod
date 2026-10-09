@@ -316,7 +316,6 @@ public model GoalModelingDiagram {
 	}
 
 	/** Graphical representation of a goal, whatever its kind */
-	@Inspector("GoalGR.inspector")
 	public abstract concept GoalGR {
 
 		abstract DiagramShape shape;
@@ -344,7 +343,7 @@ public model GoalModelingDiagram {
 		}
 	}
 
-	@Inspector("FunctionalGoalGR.inspector")
+	@Inspector(derived=goal)
 	public concept FunctionalGoalGR extends GoalGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=FUNCTIONAL_GOAL_SHAPE, exampleLabel="F-Goal", label=goal.name);
@@ -383,7 +382,7 @@ public model GoalModelingDiagram {
 		}
 	}
 
-	@Inspector("NonFunctionalGoalGR.inspector")
+	@Inspector(derived=goal)
 	public concept NonFunctionalGoalGR extends GoalGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=NON_FUNCTIONAL_GOAL_SHAPE, exampleLabel="NF-Goal", label=goal.name);
@@ -407,7 +406,7 @@ public model GoalModelingDiagram {
 		}
 	}
 
-	@Inspector("ContributionGoalGR.inspector")
+	@Inspector(derived=goal)
 	public concept ContributionGoalGR extends GoalGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=CONTRIBUTION_GOAL_SHAPE, exampleLabel="C-Goal", label=goal.name);
@@ -427,7 +426,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** Graphical representation of a refinement: one shape, linked to the goals it refines and to those that define it */
-	@Inspector("RefinementGR.inspector")
+	@Inspector(derived=refinement)
 	public concept RefinementGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=REFINEMENT_SHAPE, label=(refinement.isAnd ? "AND" : (refinement.isOr ? "OR" : (refinement.isMilestone ? "MLS" : (refinement.isData ? "DTA" : "NONE")))));
@@ -546,7 +545,6 @@ public model GoalModelingDiagram {
 	}
 
 	/** Graphical representation of an agent, whatever its kind */
-	@Inspector("AgentGR.inspector")
 	public abstract concept AgentGR {
 
 		abstract DiagramShape shape;
@@ -572,6 +570,7 @@ public model GoalModelingDiagram {
 		}
 	}
 
+	@Inspector(derived=agent)
 	public concept EnvironmentalAgentGR extends AgentGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=ENVIRONMENTAL_AGENT_SHAPE, exampleLabel="Env. Agent", label=agent.name);
@@ -590,6 +589,7 @@ public model GoalModelingDiagram {
 		}
 	}
 
+	@Inspector(derived=agent)
 	public concept SoftwareAgentGR extends AgentGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=SOFTWARE_AGENT_SHAPE, exampleLabel="Soft. Agent", label=agent.name);
@@ -609,7 +609,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** The connector from a refinement to one of the goals it refines */
-	@Inspector("ParentRefinementLinkGR.inspector")
+	@Inspector(derived=parentGoalGR.goal)
 	public concept ParentRefinementLinkGR {
 
 		RefinementGR refinementGR with ConceptInstance(virtualModelInstance=container);
@@ -644,7 +644,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** The connector from one of the goals defining a refinement to that refinement */
-	@Inspector("ChildRefinmentLinkGR.inspector")
+	@Inspector(derived=childrenGoalGR.goal)
 	public concept ChildRefinmentLinkGR {
 
 		RefinementGR refinementGR with ConceptInstance(virtualModelInstance=container);
@@ -679,7 +679,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** The connector from an agent to the goal it is assigned to */
-	@Inspector("AgentAssignmentGR.inspector")
+	@Inspector(derived=agentAssignment)
 	public concept AgentAssignmentGR {
 
 		AgentGR agentGR with ConceptInstance(virtualModelInstance=container);
@@ -713,7 +713,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** The two connectors and the node representing the contribution of a contribution goal to a non functional goal */
-	@Inspector("ContributionGR.inspector")
+	@Inspector(derived=contribution)
 	public concept ContributionGR {
 
 		ContributionGoalGR contributionGoalGR with ConceptInstance(virtualModelInstance=container);
@@ -768,7 +768,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** The connector representing the impact of a contribution goal on a functional goal */
-	@Inspector("ImpactGR.inspector")
+	@Inspector(derived=impact)
 	public concept ImpactGR {
 
 		ContributionGoalGR contributionGoalGR with ConceptInstance(virtualModelInstance=container);
@@ -811,7 +811,7 @@ public model GoalModelingDiagram {
 	}
 
 	/** Graphical representation of a group of goals, drawn as a rectangle around them */
-	@Inspector("GoalGroupGR.inspector")
+	@Inspector(derived=goalGroup)
 	public concept GoalGroupGR {
 
 		DiagramShape shape with ShapeRole(metamodelElement=GOAL_GROUP_SHAPE, exampleLabel="Group title", label=goalGroup.title);

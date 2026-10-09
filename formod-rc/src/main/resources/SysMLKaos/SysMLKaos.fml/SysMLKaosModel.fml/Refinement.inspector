@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inspector of Refinement. The entries were those of the inspector of RefinementGR, which now derives to this one. -->
+<Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="RefinementInspector"
+	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
+	controllerClassName="org.openflexo.inspector.FIBInspectorController">
+	<Label label="Type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=1)" />
+	<TextField data='(data.isAnd ? "AND" : (data.isOr ? "OR" : (data.isMilestone ? "MLS" : (data.isData ? "DTA" : "NONE"))))' readOnly="true" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=1)" />
+</Panel>

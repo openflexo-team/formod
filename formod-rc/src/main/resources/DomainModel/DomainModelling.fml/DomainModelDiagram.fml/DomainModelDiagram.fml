@@ -147,7 +147,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A concept of the domain model: a box with a label, enumeration and variable markers, and its attributes */
-	@Inspector("ConceptGR.inspector")
+	@Inspector(derived=modelConcept)
 	public concept ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=C_CONTAINER);
@@ -289,7 +289,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A concept defined by a logical formula, which the formula pane lists */
-	@Inspector("DefinedConceptGR.inspector")
+	@Inspector(derived=modelConcept)
 	public concept DefinedConceptGR extends ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=DC_CONTAINER);
@@ -385,7 +385,7 @@ public model DomainModelDiagram {
 	}
 
 	/** An individual: a box with a label, a variable marker, and the values of its attributes */
-	@Inspector("IndividualGR.inspector")
+	@Inspector(derived=individual)
 	public concept IndividualGR {
 
 		DiagramShape individualShape with ShapeRole(metamodelElement=I_SHAPE);
@@ -588,7 +588,7 @@ public model DomainModelDiagram {
 	}
 
 	/** An association between two concepts: a box between them, with a connector to each */
-	@Inspector("AssociationGR.inspector")
+	@Inspector(derived=modelConcept)
 	public concept AssociationGR extends ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=A_CONTAINER, label="");
@@ -727,7 +727,7 @@ public model DomainModelDiagram {
 	}
 
 	/** The connector from the domain concept of an association to the association, labelled with the domain cardinality */
-	@Inspector("AssociationLeftArrowGR.inspector")
+	@Inspector(derived=associationGR.modelConcept)
 	public concept AssociationLeftArrowGR {
 
 		DiagramConnector cardinalityShapeLeft with ConnectorRole(metamodelElement=ASSOCIATION_LEFT_CONNECTOR,
@@ -773,7 +773,7 @@ public model DomainModelDiagram {
 	}
 
 	/** The connector from an association to its range concept, labelled with the range cardinality */
-	@Inspector("AssociationRightArrowGR.inspector")
+	@Inspector(derived=associationGR.modelConcept)
 	public concept AssociationRightArrowGR {
 
 		ConceptGR conceptGR with ConceptInstance(virtualModelInstance=container);
@@ -905,7 +905,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A maplet individual (antecedent |-> image): a box between the two individuals, with a connector to each */
-	@Inspector("MapletIndividualGR.inspector")
+	@Inspector(derived=individual)
 	public concept MapletIndividualGR extends IndividualGR {
 
 		DiagramShape individualShape with ShapeRole(metamodelElement=MI_SHAPE);
@@ -1136,6 +1136,7 @@ public model DomainModelDiagram {
 	}
 
 	/** One of the default data types of the root domain model (NATURAL, INTEGER, FLOAT, STRING, BOOL) */
+	@Inspector(derived=modelConcept)
 	public concept DefaultDataTypeGR extends ConceptGR {
 
 		DiagramShape containerShape with ShapeRole(metamodelElement=DT_CONTAINER);
@@ -1221,7 +1222,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A maplet shown as a single connector from its antecedent to its image */
-	@Inspector("SimpleMapletIndividualGR.inspector")
+	@Inspector(derived=individual)
 	public concept SimpleMapletIndividualGR {
 
 		DiagramConnector connector with ConnectorRole(metamodelElement=SIMPLE_MAPLET_CONNECTOR, label=individual.individualOf.name);
@@ -1268,7 +1269,7 @@ public model DomainModelDiagram {
 	}
 
 	/** An attribute of a concept (an association from the concept to a data type), shown as a line inside the concept box */
-	@Inspector("ConceptAttributeGR.inspector")
+	@Inspector(derived=modelConcept)
 	public concept ConceptAttributeGR {
 
 		DiagramShape attributeLabel with ShapeRole(metamodelElement=ATTRIBUTE_LABEL, exampleLabel="attribute : TYPE",
@@ -1333,7 +1334,7 @@ public model DomainModelDiagram {
 	}
 
 	/** The value of an attribute of an individual (a maplet of the attribute), shown as a line inside the individual box */
-	@Inspector("IndividualAttributeGR.inspector")
+	@Inspector(derived=individual)
 	public concept IndividualAttributeGR {
 
 		DiagramShape attributeLabel with ShapeRole(metamodelElement=ATTRIBUTE_LABEL, exampleLabel="attribute = 'value'",
@@ -1440,7 +1441,7 @@ public model DomainModelDiagram {
 	}
 
 	/** A logical formula, shown as a line of the formula pane */
-	@Inspector("LogicalFormulaGR.inspector")
+	@Inspector(derived=logicalFormula)
 	public concept LogicalFormulaGR {
 
 		LogicalFormula logicalFormula with ConceptInstance(virtualModelInstance=container.domainModel);

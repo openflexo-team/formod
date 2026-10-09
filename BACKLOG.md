@@ -43,7 +43,7 @@ are generated into the source project. The `.fmlscript` scenario `T10_BMethodolo
 **Acceptance criteria.** The wizard creates the methodology on two distinct projects, and `TestBMethology` asserts that the B models land
 in the generated project and leave the source project untouched.
 
-### FORMOD-F-3 — Let the graphical-representation concepts derive their inspector  ·  `TODO`
+### FORMOD-F-3 — Let the graphical-representation concepts derive their inspector  ·  `DONE`
 
 **Problem.** FORMOD-D-5 restored the 52 inspectors as the legacy had them: a `…GR` concept has its own inspector, which repeats entries of the
 model concept it represents (`goal.name`, `modelConcept.name`, …). The free modelling editor does it differently:
@@ -53,3 +53,8 @@ model concept it represents (`goal.name`, `modelConcept.name`, …). The free mo
 GR itself (connectors, labels).
 
 **Acceptance.** Selecting a GR shows the inspector of its model concept; `FormodInspectorsTest` still passes with the lower count.
+
+**Done (2026-10-09).** All 24 concrete `…GR` concepts of the goal and domain diagrams declare `@Inspector(derived=<role>)` (`derived` is a property
+of each concept, not inherited), and their 23 `.inspector` files are gone (with the abstract `GoalGR` and `AgentGR`, now useless). Three model
+concepts that had no inspector received the entries their representation showed: `Refinement`, `Contribution` and `Impact`. The
+`FormodInspectorsTest` checks every derivation (valid binding, no inspector of its own).

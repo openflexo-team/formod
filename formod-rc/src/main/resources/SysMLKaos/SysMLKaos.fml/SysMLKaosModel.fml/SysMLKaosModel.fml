@@ -199,6 +199,7 @@ public model SysMLKaosModel {
 	 * A refinement relationship between a goal and a collection of goals; its semantics (and, or, milestone, data) is carried by the
 	 * logical type
 	 */
+	@Inspector("Refinement.inspector")
 	public concept Refinement {
 
 		/** The goals being refined */
@@ -374,6 +375,7 @@ public model SysMLKaosModel {
 	}
 
 	/** Contribution of a contribution goal to a non functional goal */
+	@Inspector("Contribution.inspector")
 	public concept Contribution {
 
 		ContributionGoal contributionGoal with ConceptInstance(virtualModelInstance=container);
@@ -392,6 +394,7 @@ public model SysMLKaosModel {
 	}
 
 	/** Impact of a contribution goal on a functional goal */
+	@Inspector("Impact.inspector")
 	public concept Impact {
 
 		ContributionGoal contributionGoal with ConceptInstance(virtualModelInstance=container);

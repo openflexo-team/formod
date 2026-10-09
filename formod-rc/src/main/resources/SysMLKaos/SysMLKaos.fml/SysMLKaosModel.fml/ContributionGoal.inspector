@@ -3,10 +3,6 @@
 <Panel className="org.openflexo.gina.utils.FIBInspector" layout="twocols" name="ContributionGoalInspector"
 	dataClassName="org.openflexo.foundation.fml.rt.FlexoConceptInstance"
 	controllerClassName="org.openflexo.inspector.FIBInspectorController">
-	<TabPanel name="Tab">
-		<Tab title="Contribution Goal" layout="twocols" index="0" name="ContributionGoalInspectorTab">
-			<Label label="type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
-			<TextField data="data.contributionGoalType" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=101)" />
-		</Tab>
-	</TabPanel>
+	<Label label="type" name="typeLabel" constraints="twocols(expandHorizontally=false;expandVertically=false;location=left;index=101)" />
+	<TextField data="data.contributionGoalType" name="typeTextField" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right;index=101)" />
 </Panel>
