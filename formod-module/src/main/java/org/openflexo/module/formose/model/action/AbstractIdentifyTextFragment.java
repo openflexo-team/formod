@@ -113,8 +113,8 @@ public abstract class AbstractIdentifyTextFragment<A extends FlexoAction<A, Form
 	protected FlexoConceptInstance makeDocXReference() {
 		// System.out.println("On identifie un fragment avec la text selection: " + getTextSelection());
 
-		FlexoConcept docXReferenceConcept = getFocusedObject().getDocumentLibraryVirtualModel().getVirtualModelNamed("DocXDocument")
-				.getFlexoConcept("DocXReference");
+		FlexoConcept docXReferenceConcept = getFocusedObject().getDocumentLibraryVirtualModel().getVirtualModelNamed("WordDocument")
+				.getFlexoConcept("WordReference");
 
 		// System.out.println("docXReferenceConcept=" + docXReferenceConcept);
 

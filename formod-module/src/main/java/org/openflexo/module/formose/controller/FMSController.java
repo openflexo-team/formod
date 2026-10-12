@@ -218,7 +218,7 @@ public class FMSController extends FlexoController {
 				else if (type.getName().equals(FMSConstants.REFERENCE_CONCEPT_NAME)) {
 					return DocXIconLibrary.FRAGMENT_ICON;
 				}
-				else if (type.getName().equals("DocXReference")) {
+				else if (type.getName().equals("WordReference")) {
 					return DocXIconLibrary.FRAGMENT_ICON;
 				}
 				else if (type.getName().equals(FMSConstants.UNCLASSIFIED_CONCEPT_NAME)) {

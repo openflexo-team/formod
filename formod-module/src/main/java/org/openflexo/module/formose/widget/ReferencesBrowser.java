@@ -126,7 +126,7 @@ public class ReferencesBrowser extends AbstractFormoseProjectBrowser {
 					focusedElement = selectedFCI.getContainerFlexoConceptInstance();
 					focusedReference = null;
 				}
-				else if (selectedFCI.getFlexoConcept().getName().equals("DocXReference")) {
+				else if (selectedFCI.getFlexoConcept().getName().equals("WordReference")) {
 					focusedReference = selectedFCI;
 					FMLRTVirtualModelInstance abstractDocVMI = (FMLRTVirtualModelInstance) selectedFCI.getOwningVirtualModelInstance();
 					if (getFlexoController().getCurrentModuleView() instanceof DocXRequirementModuleView

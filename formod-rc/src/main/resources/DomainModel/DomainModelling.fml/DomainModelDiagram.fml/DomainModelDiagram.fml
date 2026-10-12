@@ -168,7 +168,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		dropConceptGRAtTopLevel(required String conceptName, required boolean isVariable, required boolean isEnumeration)
+		dropConceptGRAtTopLevel(required String conceptName = "Concept", required boolean isVariable = false, required boolean isEnumeration = false)
 				with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -304,7 +304,7 @@ public model DomainModelDiagram {
 		DefinedConcept modelConcept with ConceptInstance(virtualModelInstance=container.domainModel);
 		LogicalFormulaGR logicalFormulaGR with ConceptInstance(virtualModelInstance=container);
 
-		dropDefinedConceptGRAtTopLevel(String name, required String logicalFormula, required boolean isVariable, required boolean isEnumeration)
+		dropDefinedConceptGRAtTopLevel(String name = "DefConcept", required String logicalFormula = "", required boolean isVariable = false, required boolean isEnumeration = false)
 				with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -404,7 +404,7 @@ public model DomainModelDiagram {
 			}
 		};
 
-		dropIndividualGRAtTopLevel(required String individualName, required boolean isVariable) with DropScheme(targetType=DomainModelDiagram) {
+		dropIndividualGRAtTopLevel(required String individualName = "Individual", required boolean isVariable = false) with DropScheme(targetType=DomainModelDiagram) {
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
@@ -604,7 +604,7 @@ public model DomainModelDiagram {
 		AssociationLeftArrowGR associationLeftArrowGR with ConceptInstance(virtualModelInstance=container);
 		AssociationRightArrowGR associationRightArrowGR with ConceptInstance(virtualModelInstance=container);
 
-		dropAssociationGRAtTopLevel(required String name, required boolean isVariable, required boolean isEnumeration)
+		dropAssociationGRAtTopLevel(required String name = "Association", required boolean isVariable = false, required boolean isEnumeration = false)
 				with DropScheme(targetType=DomainModelDiagram) {
 			containerShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			enumIcon = DIAGRAM::AddShape(container=containerShape) in (container.diagram);
@@ -919,7 +919,7 @@ public model DomainModelDiagram {
 		MapletIndividualAntecedentGR mapletIndividualAntecedentGR with ConceptInstance(virtualModelInstance=container);
 		MapletIndividualImageGR mapletIndividualImageGR with ConceptInstance(virtualModelInstance=container);
 
-		dropMapletIndividualGRAtTopLevel(required String name, required boolean isVariable) with DropScheme(targetType=DomainModelDiagram) {
+		dropMapletIndividualGRAtTopLevel(required String name = "Maplet", required boolean isVariable = false) with DropScheme(targetType=DomainModelDiagram) {
 			individualShape = DIAGRAM::AddShape(container=container.diagram) in (container.diagram);
 			icon = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
 			label = DIAGRAM::AddShape(container=individualShape) in (container.diagram);
@@ -1448,7 +1448,7 @@ public model DomainModelDiagram {
 		DiagramShape logicalFormulaShape with ShapeRole(metamodelElement=LF_SHAPE, label=logicalFormula.assertion);
 		LogicalFormulaPaneGR logicalFormulaPaneGR with ConceptInstance(virtualModelInstance=container);
 
-		dropLogicalFormulaGROnFormulaPane(required String formula) with DropScheme(targetType=LogicalFormulaPaneGR) {
+		dropLogicalFormulaGROnFormulaPane(required String formula = "") with DropScheme(targetType=LogicalFormulaPaneGR) {
 			logicalFormulaPaneGR = target;
 			logicalFormula = container.domainModel.new LogicalFormula(parameters.formula);
 			logicalFormulaShape = DIAGRAM::AddShape(container=logicalFormulaPaneGR.formulas) in (container.diagram);
