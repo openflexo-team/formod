@@ -83,12 +83,19 @@ public class TestCreateBlankAtelierBProject extends AbstractBTest {
 		DirectoryResourceCenter atelierBRC = makeNewDirectoryResourceCenter();
 		File targetAtelierBProject = new File(atelierBRC.getRootDirectory(), "TestAtelierBProject");
 		generatedAtelierBProject = AtelierBProjectResourceFactory.generateBlankAtelierBProject(targetAtelierBProject);
-		// Waiting for new resource to be detected
-		atelierBRC.getDirectoryWatcher().waitNextWatching();
 		File dbDir = new File(targetAtelierBProject, AtelierBProjectResourceFactory.BDP_DIR);
 		File dbFile = new File(dbDir, "TestAtelierBProject.db");
-		// Testing that the resource has been detected as a AtelierBProjectResource
-		generatedAtelierBProjectResource = atelierBRC.getResource(dbFile, AtelierBProjectResource.class);
+		// Waiting for new resource to be detected: waitNextWatching() is done when the watching IN PROGRESS ends, which may have started before
+		// the project was written, and it gives up with an InterruptedException after 5 seconds (CORE-D-36): wait again, a few times
+		for (int attempt = 0; attempt < 10 && generatedAtelierBProjectResource == null; attempt++) {
+			try {
+				atelierBRC.getDirectoryWatcher().waitNextWatching();
+			} catch (InterruptedException e) {
+				// This wait timed out: try again
+			}
+			// Testing that the resource has been detected as a AtelierBProjectResource
+			generatedAtelierBProjectResource = atelierBRC.getResource(dbFile, AtelierBProjectResource.class);
+		}
 		assertNotNull(generatedAtelierBProjectResource);
 	}
 
