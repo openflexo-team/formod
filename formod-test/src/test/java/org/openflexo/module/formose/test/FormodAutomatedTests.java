@@ -130,13 +130,18 @@ public class FormodAutomatedTests extends FMLScriptParserTestCase {
 	private static void provisionAtelierBProject(DirectoryResourceCenter rc, String name, String uri) throws IOException {
 		File projectDirectory = new File(rc.getRootDirectory(), name);
 		AtelierBProjectResourceFactory.generateBlankAtelierBProject(projectDirectory);
-		try {
-			rc.getDirectoryWatcher().waitNextWatching();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
 		File dbFile = new File(new File(projectDirectory, AtelierBProjectResourceFactory.BDP_DIR), name + ".db");
-		AtelierBProjectResource resource = rc.getResource(dbFile, AtelierBProjectResource.class);
+		// waitNextWatching() is done when the watching IN PROGRESS ends, which may have started before the project was written, and it gives
+		// up with an InterruptedException after 5 seconds (CORE-D-36): wait again, a few times, until the project is registered
+		AtelierBProjectResource resource = null;
+		for (int attempt = 0; attempt < 10 && resource == null; attempt++) {
+			try {
+				rc.getDirectoryWatcher().waitNextWatching();
+			} catch (InterruptedException e) {
+				// This wait timed out: try again
+			}
+			resource = rc.getResource(dbFile, AtelierBProjectResource.class);
+		}
 		assertNotNull("Atelier B project " + name + " was not registered", resource);
 		resource.setURI(uri);
 	}

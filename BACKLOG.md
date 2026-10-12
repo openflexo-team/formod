@@ -58,3 +58,11 @@ GR itself (connectors, labels).
 of each concept, not inherited), and their 23 `.inspector` files are gone (with the abstract `GoalGR` and `AgentGR`, now useless). Three model
 concepts that had no inspector received the entries their representation showed: `Refinement`, `Contribution` and `Impact`. The
 `FormodInspectorsTest` checks every derivation (valid binding, no inspector of its own).
+
+### FORMOD-F-4 — Break the import cycle between FormoseCore and the methodologies  ·  `TODO`
+
+**Problem.** `FormoseCore` imports `SysMLKaosMethodology`, `DomainModelMethodology` and `BMethodology` (to type the properties that give the methodology applicable to an element), and each of them imports `FormoseCore` (and `Methodology`, which does too). Loading a unit then runs into the guard of the resource loader and logs about 135 transient warnings (CORE-D-34); every unit is valid in the end.
+
+**Options.** (a) Move the properties typed by the methodologies out of `FormoseCore` into a model both import; (b) type them by the common parent `Methodology` and let the methodologies declare the precise accessors; (c) keep the cycle and wait for the platform to load it quietly.
+
+**Acceptance.** No `Unresolved type` / `Preventing StackOverflow` warning at the start of formod-app, `formod-test` and `formod-module` unchanged.
