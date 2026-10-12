@@ -27,6 +27,8 @@ gear = core.projectElement.createChildrenElement("LandingGear", "The landing gea
 assert gear != null;
 assert gear.identifier == "LandingGear";
 assert gear.description == "The landing gear itself";
+// The string representation of an element is its identifier: @Renderer(identifier), an expression
+assert gear.stringRepresentation == "LandingGear";
 assert gear.parent == core.projectElement;
 assert core.projectElement.childrenElements.size == 1;
 assert core.allElements().size == 2;

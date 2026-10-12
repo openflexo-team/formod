@@ -94,3 +94,9 @@ methodologies. The four methodologies inherit it through the additive compositio
 **Fixed (2026-10-07), decided with the user.** `name` is set in the creation scheme of each methodology (the view name for SysML/KAOS, the
 model name otherwise), `status` is `"Not proved"` at creation (first value of the documented list), `user` is `System.getProperty("user.name")`.
 Asserted in T1, T3, T6, T9 and T10.
+
+### FORMOD-D-7 — `@Renderer("name")`: the expression was written as a string  ·  `DONE`
+
+**Symptom.** The 14 `@Renderer` of the Formose models were written with quotes around the expression (`@Renderer("identifier")`, `@Renderer("element.identifier")`…) — the form of the legacy `renderer="…"` attribute. In FML the expression is written without quotes; quotes denote a string. The parser tolerated it (measured: the string representation of an element was still its identifier, `LandingGear`, and not the constant), and the FML printer wrote the expression back without the quotes: the source file did not say what the model meant.
+
+**Fixed (2026-10-09).** The 14 occurrences are written `@Renderer(name)`, `@Renderer(identifier)`, `@Renderer(element.identifier)`… The scenarios assert it (`T1`: an element, `T4`: a goal).

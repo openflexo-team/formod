@@ -55,7 +55,7 @@ public model FormoseCore {
 		delete parameters.element;
 	}
 
-	@Renderer("identifier")
+	@Renderer(identifier)
 	@Inspector("Element.inspector")
 	public concept Element {
 

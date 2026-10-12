@@ -139,7 +139,7 @@ public model DocumentAnnotationMethodology extends Methodology {
 		}
 	}
 
-	@Renderer("element.identifier")
+	@Renderer(element.identifier)
 	public concept ElementReference extends NamedReference {
 
 		Element element with ConceptInstance(virtualModelInstance=container.formoseVMI);

@@ -79,7 +79,7 @@ public model SysMLKaosModel {
 	/**
 	 * An abstract goal, functional or not, achieved by one of its refinements
 	 */
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("Goal.inspector")
 	public abstract concept Goal {
 
@@ -135,7 +135,7 @@ public model SysMLKaosModel {
 	 * A functional goal: a plain goal to be refined while no responsibility is defined, an expectation once an environmental agent
 	 * is made responsible for it, a requirement once a software agent is
 	 */
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("FunctionalGoal.inspector")
 	public concept FunctionalGoal extends Goal {
 
@@ -163,7 +163,7 @@ public model SysMLKaosModel {
 	 * A non functional goal: a plain goal to be refined while no contribution is defined, an elementary non functional goal once at
 	 * least one contribution is
 	 */
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("NonFunctionalGoal.inspector")
 	public concept NonFunctionalGoal extends Goal {
 
@@ -181,7 +181,7 @@ public model SysMLKaosModel {
 	}
 
 	/** A goal contributing to non functional goals */
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("ContributionGoal.inspector")
 	public concept ContributionGoal extends Goal {
 
@@ -338,7 +338,7 @@ public model SysMLKaosModel {
 		}
 	}
 
-	@Renderer("name")
+	@Renderer(name)
 	public concept EnvironmentalAgent extends Agent {
 
 		create::createEnvironmentalAgent(String name, String description) {
@@ -347,7 +347,7 @@ public model SysMLKaosModel {
 		}
 	}
 
-	@Renderer("name")
+	@Renderer(name)
 	public concept SoftwareAgent extends Agent {
 
 		create::createSoftwareAgent(String name, String description) {
@@ -413,7 +413,7 @@ public model SysMLKaosModel {
 	}
 
 	/** A group of goals, itself possibly contained in the group of their parent goals */
-	@Renderer("title")
+	@Renderer(title)
 	@Inspector("GoalGroup.inspector")
 	public concept GoalGroup {
 

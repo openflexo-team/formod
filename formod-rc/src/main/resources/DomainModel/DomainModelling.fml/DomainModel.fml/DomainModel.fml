@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 @URI("http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModel.fml")
 @Version("0.1")
-@Renderer("modelName")
+@Renderer(modelName)
 @Inspector("DomainModel.inspector")
 public model DomainModel {
 
@@ -81,7 +81,7 @@ public model DomainModel {
 	}
 
 	/** A set of individuals that share common characteristics */
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("Concept.inspector")
 	public concept Concept {
 
@@ -179,7 +179,7 @@ public model DomainModel {
 	 *
 	 * Legacy validity note: cardinality.matches("(([0-9]+)\\.\\.([0-9]+))") ? (lower bound <= upper bound) : true
 	 */
-	@Renderer("cardinality")
+	@Renderer(cardinality)
 	@Inspector("Cardinality.inspector")
 	public concept Cardinality {
 
@@ -212,7 +212,7 @@ public model DomainModel {
 	}
 
 	/** Items of the world */
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("Individual.inspector")
 	public concept Individual {
 
@@ -306,7 +306,7 @@ public model DomainModel {
 		}
 	}
 
-	@Renderer("name")
+	@Renderer(name)
 	@Inspector("QuantVariable.inspector")
 	public concept QuantVariable {
 

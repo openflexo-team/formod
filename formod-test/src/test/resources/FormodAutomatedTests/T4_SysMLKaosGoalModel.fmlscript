@@ -19,6 +19,8 @@ assert rootModel.goals().size == 0;
 
 // A functional goal, and the type/description the constructor sets
 extend = rootModel.addFunctionalGoal("Extend gear", "", "The gear shall extend");
+// The string representation of a goal is its name: @Renderer(name), an expression
+assert extend.stringRepresentation == "Extend gear";
 assert extend != null;
 assert extend.name == "Extend gear";
 assert extend.description == "The gear shall extend";
