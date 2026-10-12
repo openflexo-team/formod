@@ -464,7 +464,14 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 				}
 			}
 
-			logger.warning("To be implemented: getObjectWithSerializationIdentifier(objectId)");
+			// An event (or an operation) ?
+			for (BOperation operation : getOperations()) {
+				if (operation != null && operation.getName() != null && operation.getName().equals(objectId)) {
+					return operation;
+				}
+			}
+
+			logger.warning("To be implemented: getObjectWithSerializationIdentifier(" + objectId + ")");
 			return null;
 		}
 	}

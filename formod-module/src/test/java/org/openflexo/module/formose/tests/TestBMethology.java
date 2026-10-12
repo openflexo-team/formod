@@ -633,7 +633,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@Test
 	@TestOrder(100)
 	@Category(UITest.class)
-	public void testReloadProject() throws java.io.IOException, FileNotFoundException, ResourceLoadingCancelledException, FlexoException, TypeMismatchException,
+	public void testReloadProject() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, TypeMismatchException,
 			NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 
 		log("testReloadProject");
@@ -641,8 +641,6 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		String oldFormoseViewURI = view.getURI();
 		instancesBeforeReload = ((FMLRTVirtualModelInstanceResource) view.getResource()).getVirtualModelInstanceResources().size();
 
-		// TEMP-DEBUG
-		org.apache.commons.io.FileUtils.copyDirectory(project.getProjectDirectory(), new File("/private/tmp/claude-501/-Users-sylvainguerin-GIT-2-99/6880ff90-66b4-446e-9e32-bb3f2fc15eca/scratchpad/reloadproj"));
 		FlexoProject<File> oldProject = project;
 		String oldURI = oldProject.getProjectURI();
 		System.out.println("Old URI: " + oldURI);
@@ -691,10 +689,6 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		FlexoConceptInstance topLevel = bProjectMapping.execute("topLevelBMappings.get(0)");
 		assertNotNull(topLevel);
 
-		// TEMP-DEBUG
-		for (org.openflexo.foundation.fml.rt.ModelSlotInstance<?, ?> msi : bMethodology.getModelSlotInstances()) {
-			System.out.println("RELOAD-MSI " + msi.getModelSlot().getName() + " -> " + (msi instanceof org.openflexo.foundation.fml.rt.FreeModelSlotInstance ? ((org.openflexo.foundation.fml.rt.FreeModelSlotInstance<?, ?, ?>) msi).getResource() : "n/a") + " class=" + msi.getClass().getSimpleName());
-		}
 		// The B views of a reloaded project show the context and the machine of a mapping: they must be found again, with their content
 		AtelierBComponent context = topLevel.execute("context");
 		AtelierBComponent machine = topLevel.execute("machine");
@@ -702,15 +696,19 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		assertNotNull("The machine of the first mapping is not found again after the reload", machine);
 		assertNotNull(context.getComponentResource().getBComponent());
 		assertNotNull(machine.getComponentResource().getBComponent());
-		System.out.println("RELOAD-CONTEXT " + context.getBPrettyPrint());
-		System.out.println("RELOAD-MACHINE " + machine.getBPrettyPrint());
 		assertTrue(context.getBPrettyPrint().contains("SETS"));
 
 		List<FlexoConceptInstance> instances = topLevel.getEmbeddedFlexoConceptInstances();
 		System.out.println("instances = " + instances);
+		// The events the behavioral rules created are found again by their name
+		boolean eventFound = false;
 		for (FlexoConceptInstance rule : instances) {
-			System.out.println("RELOAD-RULE " + rule.getFlexoConcept().getName() + " -> " + rule.getActors());
+			if (rule.getFlexoConcept().getName().equals("EventMapping")) {
+				eventFound = true;
+				assertNotNull("The event of an EventMapping is not found again after the reload", rule.execute("operation"));
+			}
 		}
+		assertTrue(eventFound);
 
 		/*assertEquals(5, instances.size());
 		assertEquals("ConceptA", instances.get(0).execute("set.name"));

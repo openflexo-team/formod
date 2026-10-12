@@ -21,8 +21,10 @@
  *   "concept" became aConcept: both are keywords in 2.99. The B technology adapter renamed the "set" attribute of AddBSetValue to
  *   bSet for the same reason;
  * - the legacy tested a concept kind by name (selected.concept.name != "Association"): written with instanceof;
- * - the legacy "container" attribute of the BSetRole and AtelierBComponentRole declarations (context.componentResource.bComponent,
- *   sourceProject) is not a property of these roles any more: dropped;
+ * - the legacy "container" attribute of the BSetRole declarations (context.componentResource.bComponent) is dropped: the references to
+ *   B objects carry their resource. The one of the AtelierBComponentRole declarations (the Atelier B project) is KEPT, as
+ *   container=container.container.bProject: it is the only way for the role to know its model slot, and without it a component is not
+ *   found again when the project is reloaded (the first version of this migration dropped it too);
  * - createContext passed parent.context as the component to extend even for a top-level mapping, which has no parent, so the whole
  *   component creation could not be evaluated: it now extends the parent context only when there is a parent;
  * - Individual2VariableMapping and Individual2ConstantMapping expect a name for unnamed maplets; the rules naming an individual
@@ -150,8 +152,8 @@ public model BMethodology extends Methodology {
 			BMapping parent with ConceptInstance(virtualModelInstance=container.container);
 			BMapping[0,*] children with ConceptInstance(virtualModelInstance=container.container);
 			DomainModelMapping domainModelMapping with ConceptInstance(virtualModelInstance=container.container.domainModelMethodology);
-			AtelierBComponent context with AtelierBComponentRole();
-			AtelierBComponent machine with AtelierBComponentRole();
+			AtelierBComponent context with AtelierBComponentRole(container=container.container.bProject);
+			AtelierBComponent machine with AtelierBComponentRole(container=container.container.bProject);
 			BPredicate[0,*] properties with BPredicateRole();
 			BPredicate[0,*] invariants with BPredicateRole();
 			BParallelSubstitution initialisationOperationBody with BParallelSubstitutionRole();

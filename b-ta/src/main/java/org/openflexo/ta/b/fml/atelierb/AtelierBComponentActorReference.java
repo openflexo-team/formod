@@ -117,7 +117,9 @@ public interface AtelierBComponentActorReference extends ActorReference<AtelierB
 				return getAtelierBProject().getComponentNamed(componentName);
 			}
 			if (object == null) {
-				logger.warning("Could not retrieve component " + componentName);
+				logger.warning("Could not retrieve component " + componentName + ": role=" + getFlexoRole() + " roleModelSlot=" + (getFlexoRole() != null ? getFlexoRole().getModelSlot() : null)
+						+ " vmi=" + getVirtualModelInstance() + " model slot instance=" + getModelSlotInstance()
+						+ " resource=" + getAtelierBProjectResource() + " project=" + getAtelierBProject());
 			}
 			return object;
 

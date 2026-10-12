@@ -133,3 +133,63 @@ found no other scheme in this case (the other differences are renamed parameters
 
 **Not covered.** Nothing prevents two groups from having the same title (same duplicate URI): not measured whether the application reports it
 better than a `DuplicateURIException` in the log.
+
+### FORMOD-D-10 — The B views of a reloaded project are empty  ·  `DONE`
+
+**Symptom.** After closing and reopening a project holding a B methodology, the B perspective showed no B code (2026-10-12, `TestFormose12`/`13`).
+
+**Cause (measured).** The references to the generated components (`AtelierBComponentActorReference`) find the Atelier B project through the model slot of their role, which a role infers from its `container` binding (`FlexoRole.getInferedModelSlot`). The legacy `AtelierBComponentRole` declarations carried `container="sourceProject"`; the migration dropped it, claiming it was not a property of the role. After a reload `getFlexoRole().getModelSlot()` was `null`, so `context` and `machine` were not found again. Reproduced headless by `TestBMethology.testReloadProject`, which asserted nothing about B.
+
+**Fixed (2026-10-12).** `AtelierBComponent context/machine with AtelierBComponentRole(container=container.container.bProject)`; the header of `BMethodology.fml` says why. `BComponent.getObjectWithSerializationIdentifier` also looks events up by name (an `EventMapping` lost its event after a reload). `testReloadProject` asserts the context, the machine (with content) and the events. Confirmed in the application by the user.
+
+### FORMOD-D-11 — INITIALISATION was generated as an event the B parser cannot read  ·  `DONE`
+
+**Symptom.** After saving and reloading, two of four generated B files failed to load (`ParserException: [6,2] expecting … identifier literal`).
+
+**Cause (measured).** `BMethodology` created an event named `INITIALISATION` inside `EVENTS` (a refinement extended it), as the legacy did. The grammar's `event` rule takes an `identifier_literal`, and `INITIALISATION` is a keyword, so the written text could not be read back; real Atelier B projects (`UnSysteme.sys`, `QuOnRaffine.ref`) write it as a clause before the events. The B technology adapter had no model for that clause (`inAInitialisationMachineClause` was an empty TODO).
+
+**Fixed (2026-10-12), decided with the user.** `BComponent.initialisation` (a substitution), parsed by `BSemanticsAnalyzer`, written by `BComponentNode` between the invariant and `EVENTS`/`OPERATIONS`, and omitted when empty. `BMethodology` sets the clause with the body its rules fill (`initialisationOperation` is gone). Tests: `TestBPrettyPrint.testInitialisation` (read, write, read again), `TestBMethology.generatedBFilesCanBeReadBack` (every generated file is parsed back), T10.
+
+**Not verified.** That Atelier B itself accepts the generated files (clause form follows its sample projects; a system with no variable has no clause at all). The `ref_and`/`ref_or` refinement keywords of the events are the Formose ones, read back fine by our parser.
+
+### FORMOD-D-12 — A refinement was written with an empty `REFINES`  ·  `DONE`
+
+**Symptom.** A B project whose methodology was never saved could not be loaded again: `[4,1] expecting identifier`.
+
+**Cause (measured).** `makeNewRefinement` writes the file at once, before the refined component is set; the skeleton `REFINES` / `END` is not parseable.
+
+**Fixed (2026-10-12).** `AddAtelierBComponent` writes the refinement again once `refines`, `extends` and `sees` are set. `TestBMethology.instantiateBMethodology` checks every `.ref` before any save (red without the fix, after the first version of its regular expression, which accepted `REFINES`/`END`, was corrected).
+
+### FORMOD-D-13 — Refinement and contribution nodes lost their position  ·  `DONE`
+
+**Symptom.** A refinement node (AND/OR) appeared far to the right of the two goals it refines.
+
+**Cause (measured).** The legacy placed these nodes with `GraphicalAction`s (middle of the two shapes); five schemes lost them in the migration: `createRefinement`, `representRefinment`, `newPositiveContribution`, `newNegativeContribution`, `representContribution`. Same family as FORMOD-D-3/4/9.
+
+**Fixed (2026-10-12).** The five placements are written again (middle of the two shapes, minus half the node size). Confirmed in the application for refinements. Not measured: a contribution node, and `representRefinment` after a reload.
+
+### FORMOD-D-14 — The save panel opened twice  ·  `DONE`
+
+**Symptom.** Cmd-S showed the "review unsaved resources" panel, then showed it again.
+
+**Cause (inferred, not observed in the log).** The File menu held two entries with the same Cmd-S accelerator calling `reviewModifiedResources()`: `FileMenu.SaveItem` (base) and `FMSFileMenu.SaveModifiedItem` (formod). Removed the formod one. The user confirmed the panel opens once.
+
+### FORMOD-D-15 — References to B predicates and to the INITIALISATION substitution are lost on reload  ·  `TODO`
+
+**Symptom.** After a reload, `Concept2Property.typingPredicate` and the rules' `initialisationOperationBody` are empty (their reference has the identifier `null`: `…#FLX_null`).
+
+**Measured.** `BComponent.getObjectWithSerializationIdentifier` finds a component, sets, constants, variables and (since FORMOD-D-10) events, by name; predicates and substitutions have no identifier. The B views do not depend on it, but a later update of the generation cannot remove or change those objects.
+
+**To decide.** An identifier scheme for predicates and substitutions (position-based, or generated and written in a comment), or rebuild these roles from the B text at load time.
+
+### FORMOD-D-16 — Five inspectors give a FlexoConceptInstance where a VirtualModelInstance is expected  ·  `TODO`
+
+**Symptom.** Warning `component.virtualModelInstance=data.container … argument type mismatch` when `BMapping` is selected.
+
+**Measured.** `Assignment variable="component.virtualModelInstance" value="data.container"` in `BMapping.inspector`, `SysMLKaosElementMapping.inspector`, `Concept.inspector` and (twice) `AgentAssignment.inspector`. For a nested concept `data.container` is the enclosing instance. **Not measured:** the effect (the selector is probably empty); the fix I would try is `data.owningVirtualModelInstance`.
+
+### FORMOD-D-17 — Default names of dropped objects were identical  ·  `DONE`
+
+**Symptom.** Defaults added so that drops need no dialog gave every concept the name `Concept` (B: duplicate declarations, `DuplicateURIException`).
+
+**Fixed (2026-10-12).** `DomainModel.newName(prefix)` (delegating to the root domain model) and `SysMLKaosModel.newName(prefix)` number the names (`Concept1`, `Individual2`, `Goal1`, `Agent2`…), never reusing a number. The five domain drops and the five goal/agent drops use them as default value. Trap measured: in a default value `container` is the container of the diagram, and `container.newName(…)` was rejected at load (`unresolved path element`), while a slot of the diagram (`domainModel`, `kaosModel`) resolves.
