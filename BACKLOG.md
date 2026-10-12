@@ -29,19 +29,21 @@ and unusable), their localized dictionaries, and the `SysMLKaos-B-Methodology` e
 
 ## Formose module
 
-### FORMOD-F-2 — Let the B methodology wizard choose where the B models are generated  ·  `TODO`
+### FORMOD-F-2 — The B methodology has two Atelier B project slots, only one is meant  ·  `DONE`
 
-**Problem.** `BMethodology` takes two Atelier B projects: the source project it reads, and the project it generates the B models into
-(`create(DomainModelMethodology, AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject)`). The wizard of
-`InstantiateBMethodology` asks for one project only — an existing one, or a blank one it creates — and passes it twice, so the B models
-are generated into the source project. The `.fmlscript` scenario `T10_BMethodology` uses two distinct projects.
+**Problem.** `BMethodology` declared two Atelier B project slots, `sourceProject` and `generatedProject`, and the wizard asked for one project and
+passed it twice. Measured: `generatedProject` was never read (FML, Java, `.fib`), and every B component was created `in (sourceProject)`, in the
+legacy `.fml.xml` as well. In the legacy file `generatedProject` is the older slot (`flexoID` 7) and `sourceProject` a later one (`flexoID` 2975),
+which suggests the second slot was added afterwards and took over the generation: an inference, not a proof. No code reads B written by hand from
+a source project.
 
-**Options.**
-1. Add a second choice to the wizard (existing or new generated project), mirroring the first one.
-2. Derive the generated project from the source one (a sibling blank project named after it), with no new question.
+**Decided with the user (2026-10-12).** There is one project: the Atelier B project the B models are generated in. First tried as two projects
+(generate into `generatedProject`, a third wizard step), then dropped: the use case (SysML/KAOS then domain model) has no source project.
 
-**Acceptance criteria.** The wizard creates the methodology on two distinct projects, and `TestBMethology` asserts that the B models land
-in the generated project and leave the source project untouched.
+**Done.** `BMethodology` has one slot, `bProject`; `create(domainModelMethodology, bProject)`, `Element.createBMethodology(bProject)`; the wizard
+asks for one project, as it did; `InstantiateBMethodology` forces the exploration of a project it has just created and reports a project that is
+not recognized instead of passing `null`. Scripts T10/T11 and `TestBMethology` use one project (T10 and the test assert the models land in it).
+Projects created before this change keep the old slot names in their saved methodology: to be thrown away (user's decision).
 
 ### FORMOD-F-3 — Let the graphical-representation concepts derive their inspector  ·  `DONE`
 

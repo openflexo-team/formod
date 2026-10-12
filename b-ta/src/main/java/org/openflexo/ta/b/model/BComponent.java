@@ -98,6 +98,8 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	public static final String PROPERTIES_KEY = "properties";
 	@PropertyIdentifier(type = BPredicate.class)
 	public static final String INVARIANT_KEY = "invariant";
+	@PropertyIdentifier(type = BSubstitution.class)
+	public static final String INITIALISATION_KEY = "initialisation";
 	@PropertyIdentifier(type = BPredicate.class, cardinality = Cardinality.LIST)
 	public static final String ASSERTIONS_KEY = "assertions";
 	@PropertyIdentifier(type = BOperation.class, cardinality = Cardinality.LIST)
@@ -276,6 +278,23 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 	 */
 	@Setter(INVARIANT_KEY)
 	public void setInvariant(BPredicate predicate);
+
+	/**
+	 * Return the substitution contained in the INITIALISATION clause, which comes before the EVENTS (or OPERATIONS) of a component
+	 * 
+	 * @return
+	 */
+	@Getter(value = INITIALISATION_KEY)
+	@XMLElement(context = "Initialisation_")
+	public BSubstitution getInitialisation();
+
+	/**
+	 * Sets the substitution contained in the INITIALISATION clause
+	 * 
+	 * @param substitution
+	 */
+	@Setter(INITIALISATION_KEY)
+	public void setInitialisation(BSubstitution substitution);
 
 	/**
 	 * Return predicates contained in ASSERTIONS

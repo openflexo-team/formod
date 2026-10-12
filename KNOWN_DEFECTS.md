@@ -100,3 +100,36 @@ Asserted in T1, T3, T6, T9 and T10.
 **Symptom.** The 14 `@Renderer` of the Formose models were written with quotes around the expression (`@Renderer("identifier")`, `@Renderer("element.identifier")`…) — the form of the legacy `renderer="…"` attribute. In FML the expression is written without quotes; quotes denote a string. The parser tolerated it (measured: the string representation of an element was still its identifier, `LandingGear`, and not the constant), and the FML printer wrote the expression back without the quotes: the source file did not say what the model meant.
 
 **Fixed (2026-10-09).** The 14 occurrences are written `@Renderer(name)`, `@Renderer(identifier)`, `@Renderer(element.identifier)`… The scenarios assert it (`T1`: an element, `T4`: a goal).
+
+### FORMOD-D-8 — The B components of a hand-made domain model are named `<element>null`  ·  `DONE`
+
+**Symptom.** In the running application, a domain model mapping created by hand (`createTopLevelDomainModelMapping`, `createChildDomainModel`)
+generated the Atelier B components `Projectnull.sys`, `ProjectnullContext.sys` and `Projectnull.ref`, and a second one raised a
+`DuplicateURIException`. Seen on 2026-10-12 with a project where the domain model had no group of goals.
+
+**Cause (measured).** `BMapping.createContext` / `createMachine` named the components `element.identifier + domainModelMapping.goalGroup.title`.
+A mapping created by name has no `goalGroup`, so the title was `null`. The legacy `.fml.xml` had the same expression: not a migration regression.
+
+**Fix (2026-10-12).** `DomainModelMapping` now stores its `title` (the title of its group of goals, or the name it was created with), set by
+`createDomainModel`, and `BMethodology` names the components after it. `T9_DomainModelMethodology` asserts the titles and `T10_BMethodology`
+generates the B models of a named mapping (`LandingGearSensors`, `LandingGearSensorsContext`). T10 fails with the old expression (32 tests,
+1 failure) and passes with the fix (32/32).
+
+**Not covered.** A mapping saved before the fix has no stored title: it keeps generating `…null` names. A project created after the fix is fine.
+
+### FORMOD-D-9 — A group of goals drawn on the goal diagram has no title  ·  `DONE`
+
+**Symptom.** In the running application (project `TestFormose9`, 2026-10-12), drawing a group of goals on the goal diagram opened no dialog, and
+the group had a `null` title. Creating the domain model methodology then derived one domain model per group, named `Project-null`: two groups gave
+two mappings with the same URI (`DuplicateURIException` ×3 in the log: the model instance, the diagram instance, the diagram resource).
+
+**Cause (measured).** The legacy `DrawRectangleScheme` of `GoalGroupGR` carried `isRequired="true"` (widget `TEXT_FIELD`) on its `title`
+parameter; the migrated `drawGoalGroup(String title)` did not: the same loss as FORMOD-D-4, which missed this scheme. Without `required`
+the creation wizard is not shown.
+
+**Fixed (2026-10-12).** `drawGoalGroup(required String title)`, with no default value on purpose: two groups with the same default title would
+give the same domain model name again. `formod-test` 32/32. A scan of every legacy `isRequired="true"` parameter against the migrated files
+found no other scheme in this case (the other differences are renamed parameters, and the parameters of events, left without `required` on purpose).
+
+**Not covered.** Nothing prevents two groups from having the same title (same duplicate URI): not measured whether the application reports it
+better than a `DuplicateURIException` in the log.

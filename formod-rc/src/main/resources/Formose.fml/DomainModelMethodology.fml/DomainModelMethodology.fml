@@ -130,6 +130,8 @@ public model DomainModelMethodology extends Methodology {
 
 			DomainModel domainModel with ConceptInstance(virtualModelInstance=container.container.domainModelling);
 			DomainModelDiagram defaultDiagram with ConceptInstance(virtualModelInstance=container.container.domainModelling);
+			/** The title this mapping was created with: the title of its group of goals, or the name given to a named mapping */
+			String title;
 			DomainModelMapping parent with ConceptInstance(virtualModelInstance=container.container);
 			DomainModelMapping[0,*] children with ConceptInstance(virtualModelInstance=container.container);
 			GoalGroup goalGroup with ConceptInstance(virtualModelInstance=container.goalModel);
@@ -169,6 +171,7 @@ public model DomainModelMethodology extends Methodology {
 
 			/** Create the domain model of this mapping, refining the one of its parent, and its default diagram */
 			private createDomainModel(String title) {
+				this.title = parameters.title;
 				if (parent != null) {
 					domainModel = container.container.domainModelling.new DomainModel(
 							container.element.identifier + "-" + parameters.title, parent.domainModel)

@@ -216,6 +216,12 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 								}
 							}
 
+							if (isRefinement() && ((AbstractBRefinement) newComponent.getComponentResource().getBComponent())
+									.getRefinesComponent() != null) {
+								// The skeleton written when the component was created has no name after REFINES, which the B parser rejects:
+								// write it again now that the refined component is known, so that a component never saved afterwards stays readable
+								newComponent.getComponentResource().save();
+							}
 						} catch (SaveResourceException e) {
 							e.printStackTrace();
 							throw new FMLExecutionException(e);

@@ -38,17 +38,8 @@
 
 package org.openflexo.module.formose.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
-
-import org.openflexo.FlexoCst;
-import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.formose.controller.FMSController;
 import org.openflexo.view.menu.FileMenu;
-import org.openflexo.view.menu.FlexoMenuItem;
 
 /**
  * 'File' menu for Formose Prototype
@@ -67,12 +58,6 @@ public class FMSFileMenu extends FileMenu {
 	}
 
 	@Override
-	public void addSpecificItems() {
-		add(new SaveModifiedItem());
-		addSeparator();
-	}
-
-	@Override
 	public void quit() {
 		if (getFMSController().getApplicationContext().getResourceManager().getUnsavedResources().size() == 0) {
 			super.quit();
@@ -81,24 +66,6 @@ public class FMSFileMenu extends FileMenu {
 			super.quit();
 		}
 
-	}
-
-	public class SaveModifiedItem extends FlexoMenuItem {
-		public SaveModifiedItem() {
-			super(new SaveModifiedAction(), "save", KeyStroke.getKeyStroke(KeyEvent.VK_S, FlexoCst.META_MASK), getController(), true);
-			setIcon(IconLibrary.SAVE_ICON);
-		}
-	}
-
-	public class SaveModifiedAction extends AbstractAction {
-		public SaveModifiedAction() {
-			super();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			getFMSController().reviewModifiedResources();
-		}
 	}
 
 }

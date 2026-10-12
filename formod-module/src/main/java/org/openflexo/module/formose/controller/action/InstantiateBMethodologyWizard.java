@@ -61,14 +61,14 @@ public class InstantiateBMethodologyWizard extends FlexoActionWizard<Instantiate
 	private static final Logger logger = Logger.getLogger(InstantiateBMethodologyWizard.class.getPackage().getName());
 
 	private final ConfigureBMethodology configuration;
-	private final IndicatesAtelierBSourceProject sourceFolderIndication;
+	private final IndicatesAtelierBProject projectFolderIndication;
 
-	private static final Dimension DIMENSIONS = new Dimension(600, 400);
+	private static final Dimension DIMENSIONS = new Dimension(600, 560);
 
 	public InstantiateBMethodologyWizard(InstantiateBMethodology action, FlexoController controller) {
 		super(action, controller);
 		addStep(configuration = new ConfigureBMethodology());
-		addStep(sourceFolderIndication = new IndicatesAtelierBSourceProject());
+		addStep(projectFolderIndication = new IndicatesAtelierBProject());
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public class InstantiateBMethodologyWizard extends FlexoActionWizard<Instantiate
 
 	}
 
-	@FIBPanel("Fib/Wizard/IndicatesAtelierBSourceProject.fib")
-	public class IndicatesAtelierBSourceProject extends WizardStep {
+	@FIBPanel("Fib/Wizard/IndicatesAtelierBProject.fib")
+	public class IndicatesAtelierBProject extends WizardStep {
 
 		public ApplicationContext getServiceManager() {
 			return getController().getApplicationContext();
@@ -156,7 +156,7 @@ public class InstantiateBMethodologyWizard extends FlexoActionWizard<Instantiate
 
 		@Override
 		public String getTitle() {
-			return getAction().getLocales().localizedForKey("indicates_atelierB_source_project");
+			return getAction().getLocales().localizedForKey("indicates_atelierB_project");
 		}
 
 		public String getChoice() {
@@ -179,21 +179,21 @@ public class InstantiateBMethodologyWizard extends FlexoActionWizard<Instantiate
 				return false;
 
 			if (getChoice().equals("open_existing_Bproject")) {
-				if (getSourceProjectFolder() == null || !getSourceProjectFolder().exists()) {
-					setIssueMessage(getAction().getLocales().localizedForKey("you_should_provide_a_valid_source_project_folder"),
+				if (getProjectFolder() == null || !getProjectFolder().exists()) {
+					setIssueMessage(getAction().getLocales().localizedForKey("you_should_provide_a_valid_project_folder"),
 							IssueMessageType.ERROR);
 					return false;
 				}
 
-				if (getSourceProjectFolder().exists() && !(new File(getSourceProjectFolder(), "bdp").exists())) {
+				if (getProjectFolder().exists() && !(new File(getProjectFolder(), "bdp").exists())) {
 					setIssueMessage(getAction().getLocales().localizedForKey("it_does_not_appear_to_be_a_valid_atelierB_project"),
 							IssueMessageType.ERROR);
 					return false;
 				}
 			}
 			else {
-				if (getSourceCreationFolder() == null || !getSourceCreationFolder().exists()) {
-					setIssueMessage(getAction().getLocales().localizedForKey("you_should_provide_a_valid_source_creation_folder"),
+				if (getCreationFolder() == null || !getCreationFolder().exists()) {
+					setIssueMessage(getAction().getLocales().localizedForKey("you_should_provide_a_valid_creation_folder"),
 							IssueMessageType.ERROR);
 					return false;
 				}
@@ -208,15 +208,15 @@ public class InstantiateBMethodologyWizard extends FlexoActionWizard<Instantiate
 
 		}
 
-		public File getSourceCreationFolder() {
-			return getAction().getSourceCreationFolder();
+		public File getCreationFolder() {
+			return getAction().getCreationFolder();
 		}
 
-		public void setSourceCreationFolder(File sourceCreationFolder) {
-			if (!sourceCreationFolder.equals(getSourceCreationFolder())) {
-				File oldValue = getSourceCreationFolder();
-				getAction().setSourceCreationFolder(sourceCreationFolder);
-				getPropertyChangeSupport().firePropertyChange("sourceCreationFolder", oldValue, sourceCreationFolder);
+		public void setCreationFolder(File creationFolder) {
+			if (!creationFolder.equals(getCreationFolder())) {
+				File oldValue = getCreationFolder();
+				getAction().setCreationFolder(creationFolder);
+				getPropertyChangeSupport().firePropertyChange("creationFolder", oldValue, creationFolder);
 				checkValidity();
 			}
 		}
@@ -234,15 +234,15 @@ public class InstantiateBMethodologyWizard extends FlexoActionWizard<Instantiate
 			}
 		}
 
-		public File getSourceProjectFolder() {
-			return getAction().getSourceProjectFolder();
+		public File getProjectFolder() {
+			return getAction().getProjectFolder();
 		}
 
-		public void setSourceProjectFolder(File sourceProjectFolder) {
-			if (!sourceProjectFolder.equals(getSourceProjectFolder())) {
-				File oldValue = getSourceProjectFolder();
-				getAction().setSourceProjectFolder(sourceProjectFolder);
-				getPropertyChangeSupport().firePropertyChange("sourceProjectFolder", oldValue, sourceProjectFolder);
+		public void setProjectFolder(File projectFolder) {
+			if (!projectFolder.equals(getProjectFolder())) {
+				File oldValue = getProjectFolder();
+				getAction().setProjectFolder(projectFolder);
+				getPropertyChangeSupport().firePropertyChange("projectFolder", oldValue, projectFolder);
 				checkValidity();
 			}
 		}

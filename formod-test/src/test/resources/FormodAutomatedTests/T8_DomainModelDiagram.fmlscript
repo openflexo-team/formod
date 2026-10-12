@@ -78,4 +78,13 @@ assert diagram.diagram.shapes.size == shapesBefore - 1;
 // The three connectors all touched the door: its two parent concept links and the individual-of link
 assert diagram.diagram.connectors.size == 0;
 
+// Default names of the drops: the prefix and a number which is never given twice, whatever the kind of object
+// every model asks the root one: the numbers are shared by the whole tree of domain models
+first = gearModel.newName("Concept");
+second = root.newName("Concept");
+third = gearModel.newName("Individual");
+assert first == "Concept1";
+assert second == "Concept2";
+assert third == "Individual3";
+
 log "Test PASSED: T8 - domain model diagram, drop schemes, links and deleteView";

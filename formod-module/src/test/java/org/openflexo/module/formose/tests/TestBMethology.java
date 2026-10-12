@@ -83,7 +83,9 @@ import org.openflexo.module.formose.model.action.InstantiateBMethodology;
 import org.openflexo.module.formose.model.action.InstantiateDomainModelMethodology;
 import org.openflexo.module.formose.model.action.InstantiateSysMLKaosMethodology;
 import org.openflexo.ta.b.BTechnologyAdapter;
+import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.atelierb.AtelierBComponent;
+import org.openflexo.ta.b.model.parser.BParser;
 import org.openflexo.ta.b.rm.AtelierBProjectResource;
 import org.openflexo.ta.b.rm.AtelierBProjectResourceFactory;
 import org.openflexo.technologyadapter.diagram.fml.DrawRectangleScheme;
@@ -472,8 +474,8 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		assertNotNull(parentLinkGR);
 	}
 
-	private static File sourceAtelierBProject;
-	private static AtelierBProjectResource sourceAtelierBProjectResource;
+	private static File atelierBProject;
+	private static AtelierBProjectResource atelierBProjectResource;
 
 	@Test
 	@TestOrder(18)
@@ -498,27 +500,26 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		}
 		atelierBRC.performDirectoryWatchingNow();
 		File targetAtelierBProject = new File(atelierBRC.getRootDirectory(), "TestAtelierBProject");
-		sourceAtelierBProject = AtelierBProjectResourceFactory.generateBlankAtelierBProject(targetAtelierBProject);
+		atelierBProject = AtelierBProjectResourceFactory.generateBlankAtelierBProject(targetAtelierBProject);
 		// Explore the directory now, for the new project to be detected
 		atelierBRC.performDirectoryWatchingNow();
 		File dbDir = new File(targetAtelierBProject, AtelierBProjectResourceFactory.BDP_DIR);
 		File dbFile = new File(dbDir, "TestAtelierBProject.db");
 		// Testing that the resource has been detected as a AtelierBProjectResource
-		sourceAtelierBProjectResource = atelierBRC.getResource(dbFile, AtelierBProjectResource.class);
-		assertNotNull(sourceAtelierBProjectResource);
+		atelierBProjectResource = atelierBRC.getResource(dbFile, AtelierBProjectResource.class);
+		assertNotNull(atelierBProjectResource);
 	}
 
 	@Test
 	@TestOrder(19)
 	@Category(UITest.class)
 	public void instantiateBMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			ReflectiveOperationException, InvalidBindingException {
+			ReflectiveOperationException, InvalidBindingException, FileNotFoundException, ResourceLoadingCancelledException, FlexoException, java.io.IOException {
 
 		log("instantiateBMethodology");
 
 		InstantiateBMethodology instantiateBMethodology = InstantiateBMethodology.ACTION_TYPE.makeNewAction(projectElement, null, editor);
-		instantiateBMethodology.setSourceProjectFolder(sourceAtelierBProject);
-		System.out.println("generatedAtelierBProject=" + sourceAtelierBProject);
+		instantiateBMethodology.setProjectFolder(atelierBProject);
 		instantiateBMethodology.doAction();
 		assertTrue(instantiateBMethodology.hasActionExecutionSucceeded());
 
@@ -530,7 +531,17 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		assertSame(domainModellingProjectMapping, bProjectMapping.execute("domainModellingElementMapping"));
 
-		sourceAtelierBProjectResource.save();
+		// Nothing has been saved yet: the refinements written when the components were created must already be readable, which means
+		// naming the refined component after REFINES (the B parser rejects the keyword alone)
+		File[] refinementFiles = atelierBProject.listFiles((dir, name) -> name.endsWith(".ref"));
+		assertNotNull(refinementFiles);
+		assertTrue(refinementFiles.length > 0);
+		for (File refinementFile : refinementFiles) {
+			String refinementText = new String(Files.readAllBytes(refinementFile.toPath()), "UTF-8");
+			assertTrue(refinementFile + " has no refined component:\n" + refinementText, refinementText.matches("(?s).*REFINES[ \\t]+\\w+.*"));
+		}
+
+		atelierBProjectResource.save();
 
 		log("Level1");
 
@@ -539,6 +550,9 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		AtelierBComponent context1 = level1Mapping.execute("context");
 		AtelierBComponent machine1 = level1Mapping.execute("machine");
+
+		// The B models are generated in the project the methodology was given
+		assertNotNull(atelierBProjectResource.getResourceData().getComponentNamed(machine1.getName()));
 
 		System.out.println(context1.getComponentResource().getName() + "\n");
 		System.out.println(context1.getBPrettyPrint());
@@ -570,6 +584,38 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 	}
 
+	/**
+	 * The B models written by the generation are read back by the parser of the B technology adapter: a file the application cannot
+	 * read again makes the B views of a reloaded project empty
+	 */
+	@Test
+	@TestOrder(20)
+	@Category(UITest.class)
+	public void generatedBFilesCanBeReadBack() throws Exception {
+
+		log("generatedBFilesCanBeReadBack");
+
+		File[] generatedFiles = atelierBProject.listFiles((dir, name) -> name.endsWith(".sys") || name.endsWith(".ref"));
+		assertNotNull(generatedFiles);
+		assertTrue(generatedFiles.length > 0);
+		for (File generatedFile : generatedFiles) {
+			String text = new String(Files.readAllBytes(generatedFile.toPath()), "UTF-8");
+			String componentName = generatedFile.getName().substring(0, generatedFile.getName().lastIndexOf('.'));
+			AtelierBComponent generatedComponent = atelierBProjectResource.getResourceData().getComponentNamed(componentName);
+			assertNotNull(componentName, generatedComponent);
+			BComponent readBack = null;
+			try (java.io.FileInputStream stream = new java.io.FileInputStream(generatedFile)) {
+				readBack = BParser.parse(stream, generatedComponent.getComponentResource().getFactory());
+			} catch (Exception e) {
+				throw new AssertionError(generatedFile.getName() + " cannot be read back:\n" + text, e);
+			}
+			assertNotNull(generatedFile.getName() + " cannot be read back:\n" + text, readBack);
+			assertEquals(componentName, readBack.getName());
+			// INITIALISATION is a clause, written before the events: no event is named INITIALISATION
+			assertFalse(text, text.matches("(?s).*EVENTS.*INITIALISATION.*"));
+		}
+	}
+
 	/** Number of virtual model instances the view holds before the project is closed */
 	private static int instancesBeforeReload;
 
@@ -587,7 +633,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@Test
 	@TestOrder(100)
 	@Category(UITest.class)
-	public void testReloadProject() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, TypeMismatchException,
+	public void testReloadProject() throws java.io.IOException, FileNotFoundException, ResourceLoadingCancelledException, FlexoException, TypeMismatchException,
 			NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 
 		log("testReloadProject");
@@ -595,6 +641,8 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		String oldFormoseViewURI = view.getURI();
 		instancesBeforeReload = ((FMLRTVirtualModelInstanceResource) view.getResource()).getVirtualModelInstanceResources().size();
 
+		// TEMP-DEBUG
+		org.apache.commons.io.FileUtils.copyDirectory(project.getProjectDirectory(), new File("/private/tmp/claude-501/-Users-sylvainguerin-GIT-2-99/6880ff90-66b4-446e-9e32-bb3f2fc15eca/scratchpad/reloadproj"));
 		FlexoProject<File> oldProject = project;
 		String oldURI = oldProject.getProjectURI();
 		System.out.println("Old URI: " + oldURI);
@@ -643,11 +691,26 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		FlexoConceptInstance topLevel = bProjectMapping.execute("topLevelBMappings.get(0)");
 		assertNotNull(topLevel);
 
+		// TEMP-DEBUG
+		for (org.openflexo.foundation.fml.rt.ModelSlotInstance<?, ?> msi : bMethodology.getModelSlotInstances()) {
+			System.out.println("RELOAD-MSI " + msi.getModelSlot().getName() + " -> " + (msi instanceof org.openflexo.foundation.fml.rt.FreeModelSlotInstance ? ((org.openflexo.foundation.fml.rt.FreeModelSlotInstance<?, ?, ?>) msi).getResource() : "n/a") + " class=" + msi.getClass().getSimpleName());
+		}
+		// The B views of a reloaded project show the context and the machine of a mapping: they must be found again, with their content
 		AtelierBComponent context = topLevel.execute("context");
 		AtelierBComponent machine = topLevel.execute("machine");
+		assertNotNull("The context of the first mapping is not found again after the reload", context);
+		assertNotNull("The machine of the first mapping is not found again after the reload", machine);
+		assertNotNull(context.getComponentResource().getBComponent());
+		assertNotNull(machine.getComponentResource().getBComponent());
+		System.out.println("RELOAD-CONTEXT " + context.getBPrettyPrint());
+		System.out.println("RELOAD-MACHINE " + machine.getBPrettyPrint());
+		assertTrue(context.getBPrettyPrint().contains("SETS"));
 
 		List<FlexoConceptInstance> instances = topLevel.getEmbeddedFlexoConceptInstances();
 		System.out.println("instances = " + instances);
+		for (FlexoConceptInstance rule : instances) {
+			System.out.println("RELOAD-RULE " + rule.getFlexoConcept().getName() + " -> " + rule.getActors());
+		}
 
 		/*assertEquals(5, instances.size());
 		assertEquals("ConceptA", instances.get(0).execute("set.name"));

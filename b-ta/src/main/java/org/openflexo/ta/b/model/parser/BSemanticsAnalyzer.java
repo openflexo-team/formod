@@ -553,7 +553,11 @@ public class BSemanticsAnalyzer extends DepthFirstAdapter {
 
 	@Override
 	public void inAInitialisationMachineClause(AInitialisationMachineClause node) {
-		// TODO Auto-generated method stub
+		BSubstitutionNode<?, ?> substitutionNode = substitutionFactory.makeSubstitutionNode(node.getSubstitutions());
+		BObject bObject = getBObject();
+		if (bObject instanceof BComponent) {
+			((BComponent) bObject).setInitialisation(substitutionNode.getModelObject());
+		}
 		super.inAInitialisationMachineClause(node);
 	}
 

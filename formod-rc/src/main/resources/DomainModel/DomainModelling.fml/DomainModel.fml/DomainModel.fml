@@ -42,6 +42,25 @@ public model DomainModel {
 	/** The domain model this one refines, null for the root domain model */
 	DomainModel parentDomainModel with ModelInstance();
 
+	/** Last number given by newName() on the root domain model: numbers are never reused, so a default name is unique in the whole tree */
+	int nameCounter = 0;
+
+	/**
+	 * A default name for a concept, an individual or an association dropped without a name: the prefix and the next number. Every domain
+	 * model asks the root one, so that a model extending another never redeclares one of its names.
+	 */
+	public String newName(String prefix) {
+		if (parentDomainModel != null) {
+			return parentDomainModel.newName(parameters.prefix);
+		}
+		int next = 1;
+		if (nameCounter != null) {
+			next = nameCounter + 1;
+		}
+		nameCounter = next;
+		return parameters.prefix + next;
+	}
+
 	/** All concepts declared in this domain model */
 	List<Concept> concepts {
 		List<Concept> get() {

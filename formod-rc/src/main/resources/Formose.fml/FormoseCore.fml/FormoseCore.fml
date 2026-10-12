@@ -143,9 +143,8 @@ public model FormoseCore {
 		}
 
 		/** Declare the B methodology on this element, formalizing the applicable domain model methodology */
-		public BMethodology createBMethodology(AtelierBProjectResource sourceProject, AtelierBProjectResource generatedProject) {
-			BMethodology methodology = container.container.new BMethodology(applicableDomainModelMethodology, parameters.sourceProject,
-					parameters.generatedProject) with (name=identifier + "-B-Methodology");
+		public BMethodology createBMethodology(AtelierBProjectResource bProject) {
+			BMethodology methodology = container.container.new BMethodology(applicableDomainModelMethodology, parameters.bProject) with (name=identifier + "-B-Methodology");
 			notify "applicableBMethodology" in this;
 			return methodology;
 		}

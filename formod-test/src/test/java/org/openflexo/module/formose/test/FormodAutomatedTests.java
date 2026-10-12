@@ -109,22 +109,19 @@ public class FormodAutomatedTests extends FMLScriptParserTestCase {
 		FlexoEditor editor = new DefaultFlexoEditor(null, serviceManager);
 		assertNotNull(editor);
 		commandInterpreter = new CommandInterpreter(serviceManager, System.in, System.out, System.err, HOME_DIR);
-		provisionAtelierBProjects();
+		provisionAtelierBProject();
 	}
 
 	/** Stable URI under which the scripts load the blank Atelier B project the B methodology generates its models in */
-	public static final String SOURCE_ATELIER_B_PROJECT_URI = "http://formose.lacl.fr/test/SourceAtelierBProject";
-	/** Stable URI under which the scripts load the second blank Atelier B project the B methodology is given */
-	public static final String GENERATED_ATELIER_B_PROJECT_URI = "http://formose.lacl.fr/test/GeneratedAtelierBProject";
+	public static final String ATELIER_B_PROJECT_URI = "http://formose.lacl.fr/test/AtelierBProject";
 
 	/**
-	 * Infrastructure only: an Atelier B project cannot be created from a script, so two blank ones are generated in a fresh directory
-	 * resource center and registered under stable URIs, which the scripts then load
+	 * Infrastructure only: an Atelier B project cannot be created from a script, so a blank one is generated in a fresh directory
+	 * resource center and registered under a stable URI, which the scripts then load
 	 */
-	private void provisionAtelierBProjects() throws IOException {
+	private void provisionAtelierBProject() throws IOException {
 		DirectoryResourceCenter atelierBRC = makeNewDirectoryResourceCenter();
-		provisionAtelierBProject(atelierBRC, "SourceAtelierBProject", SOURCE_ATELIER_B_PROJECT_URI);
-		provisionAtelierBProject(atelierBRC, "GeneratedAtelierBProject", GENERATED_ATELIER_B_PROJECT_URI);
+		provisionAtelierBProject(atelierBRC, "AtelierBProject", ATELIER_B_PROJECT_URI);
 	}
 
 	private static void provisionAtelierBProject(DirectoryResourceCenter rc, String name, String uri) throws IOException {

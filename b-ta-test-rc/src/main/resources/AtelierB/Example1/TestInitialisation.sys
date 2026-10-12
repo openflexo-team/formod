@@ -1,0 +1,16 @@
+/* System6
+ * Test INITIALISATION: a clause written before the events, not an event
+ */
+SYSTEM
+    System6
+ABSTRACT_VARIABLES
+    count,
+    total
+INVARIANT
+    (count : NATURAL & 
+    total : NATURAL)
+INITIALISATION
+    count := 0 || total := 0
+EVENTS
+    Increment = count := count + 1
+END

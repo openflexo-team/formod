@@ -54,6 +54,19 @@ public model SysMLKaosModel {
 		return select GoalGroup from this where (selected.parentGroup == null);
 	}
 
+	/** Last number given by newName(): the numbers are never reused, so a default name is unique in the goal model */
+	int nameCounter = 0;
+
+	/** A default name for a goal or an agent dropped without a name: the prefix and the next number */
+	public String newName(String prefix) {
+		int next = 1;
+		if (nameCounter != null) {
+			next = nameCounter + 1;
+		}
+		nameCounter = next;
+		return parameters.prefix + next;
+	}
+
 	create::init(String name, String title, String description, SysMLKaosModel parentModel) {
 		modelName = parameters.name;
 		modelTitle = parameters.title;

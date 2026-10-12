@@ -61,6 +61,8 @@ doorsMapping = extensionMapping.createChildDomainModel("Doors");
 assert doorsMapping != null;
 assert doorsMapping.parent == extensionMapping;
 assert doorsMapping.goalGroup == null;
+assert doorsMapping.title == "Doors";
+assert extensionMapping.title == "Extension";
 assert doorsMapping.modelName == "LandingGear-Doors";
 assert doorsMapping.domainModel.parentDomainModel == extensionMapping.domainModel;
 assert extensionMapping.children.size == 1;
@@ -70,6 +72,7 @@ rootMapping.createTopLevelDomainModelMapping("Sensors", null);
 assert rootMapping.topLevelDomainModelMappings.size == 2;
 sensorsMapping = rootMapping.topLevelDomainModelMappings.get(1);
 assert sensorsMapping.modelName == "LandingGear-Sensors";
+assert sensorsMapping.title == "Sensors";
 assert sensorsMapping.domainModel.parentDomainModel == root;
 
 log "Test PASSED: T9 - domain model methodology following the groups of goals";

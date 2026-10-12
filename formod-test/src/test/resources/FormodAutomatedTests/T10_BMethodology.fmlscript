@@ -11,10 +11,8 @@ goalExampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diag
 domainDiagramSpecification = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification"];
 domainExampleDiagram = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram"];
 
-sourceProject = load -r ["http://formose.lacl.fr/test/SourceAtelierBProject"];
-assert sourceProject != null;
-generatedProject = load -r ["http://formose.lacl.fr/test/GeneratedAtelierBProject"];
-assert generatedProject != null;
+bProject = load -r ["http://formose.lacl.fr/test/AtelierBProject"];
+assert bProject != null;
 
 formose = load -r ["http://formose.lacl.fr/Formose.fml"];
 project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
@@ -41,12 +39,15 @@ closed = domainModel.new Individual("closed", positions, false, null);
 mainDoors = domainModel.new Concept("MAIN_DOORS", false, false, doors);
 lockedDoors = domainModel.new Concept("lockedDoors", true, false, doors);
 
+// A domain model named by hand has no group of goals: its B components are named after its title (FORMOD-D-8)
+domainMethodology.rootElementMapping.createTopLevelDomainModelMapping("Sensors", null);
+
 // The B methodology is declared where the domain model methodology is, and generates the B models at once
-bMethodology = project.new BMethodology(domainMethodology, sourceProject.resource, generatedProject.resource) with (name="BMethodology");
+bMethodology = project.new BMethodology(domainMethodology, bProject.resource) with (name="BMethodology");
 assert bMethodology.name == "BMethodology";
 assert bMethodology != null;
 assert bMethodology.declaringElement == gear;
-assert bMethodology.sourceProject == sourceProject;
+assert bMethodology.bProject == bProject;
 assert bMethodology.domainModelMethodology == domainMethodology;
 assert project.methodologies().size == 4;
 
@@ -54,7 +55,7 @@ rootMapping = bMethodology.rootBElementMapping;
 assert rootMapping != null;
 assert rootMapping.element == gear;
 assert bMethodology.getBElementMapping(gear) == rootMapping;
-assert rootMapping.topLevelBMappings.size == 1;
+assert rootMapping.topLevelBMappings.size == 2;
 
 bMapping = rootMapping.topLevelBMappings.get(0);
 assert bMapping.domainModelMapping == extensionMapping;
@@ -65,7 +66,7 @@ assert bMapping.parent == null;
 // the context is read from the Atelier B project, by name
 assert bMapping.machine != null;
 assert bMapping.machine.name == "LandingGearExtension";
-atelierBContext = sourceProject.getComponentNamed("LandingGearExtensionContext");
+atelierBContext = bProject.getComponentNamed("LandingGearExtensionContext");
 assert atelierBContext != null;
 contextText = atelierBContext.getNormalizedBRepresentation();
 machineText = bMapping.machine.getNormalizedBRepresentation();
@@ -81,13 +82,13 @@ assert machineText.contains("SEES");
 assert machineText.contains("LandingGearExtensionContext");
 assert machineText.contains("ABSTRACT_VARIABLES");
 assert machineText.contains("lockedDoors <: DOORS");
-assert machineText.contains("INITIALISATION = lockedDoors := {}");
+assert machineText.contains("INITIALISATION");
+assert machineText.contains("lockedDoors := {}");
 // The behavioral rule: one event per goal of the group
 assert machineText.contains("ExtendGear = skip");
 assert machineText.contains("RetractGear = skip");
 
-// The INITIALISATION operation, whose body collects the initialisation substitutions
-assert bMapping.initialisationOperation != null;
+// The substitution of the INITIALISATION clause, which collects the initialisation substitutions
 assert bMapping.initialisationOperationBody != null;
 
 // Updating the formal model again changes nothing: every rule finds the mapping it created, and none is dropped
@@ -103,5 +104,10 @@ renamedText = atelierBContext.getNormalizedBRepresentation();
 assert renamedText.contains("MAIN_GEAR_DOORS <: DOORS");
 // Neither the constant nor its property keeps the old name ("MAIN_GEAR_DOORS" does not contain "MAIN_DOORS")
 assert !renamedText.contains("MAIN_DOORS");
+
+sensorsContext = bProject.getComponentNamed("LandingGearSensorsContext");
+assert sensorsContext != null;
+assert bProject.getComponentNamed("LandingGearSensors") != null;
+assert bProject.getComponentNamed("LandingGearnull") == null;
 
 log "Test PASSED: T10 - B methodology generating the context and the machine";

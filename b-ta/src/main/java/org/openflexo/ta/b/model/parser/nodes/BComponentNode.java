@@ -56,9 +56,11 @@ import org.openflexo.ta.b.model.BOperation;
 import org.openflexo.ta.b.model.BPredicate;
 import org.openflexo.ta.b.model.BSeesClause;
 import org.openflexo.ta.b.model.BSet;
+import org.openflexo.ta.b.model.BSubstitution;
 import org.openflexo.ta.b.model.BUsesClause;
 import org.openflexo.ta.b.model.parser.BObjectNode;
 import org.openflexo.ta.b.model.parser.BSemanticsAnalyzer;
+import org.openflexo.ta.b.model.substitution.BParallelSubstitution;
 import org.openflexo.ta.b.parser.node.AMachineHeader;
 import org.openflexo.ta.b.parser.node.Node;
 import org.openflexo.ta.b.parser.node.PMachineHeader;
@@ -126,6 +128,8 @@ public abstract class BComponentNode<N extends Node, T extends BComponent> exten
 
 		appendSection(new String[] { "ASSERTIONS" }, () -> getModelObject().getAssertions(), ";" + LINE_SEPARATOR, BPredicate.class);
 
+		appendInitialisationSection();
+
 		appendSection(new String[] { "EVENTS", "OPERATIONS" }, () -> getModelObject().getOperations(), ";" + LINE_SEPARATOR, BOperation.class);
 
 		append(staticContents(LINE_SEPARATOR, "END", LINE_SEPARATOR), findFragmentBackward("END", null, null), "END");
@@ -160,6 +164,25 @@ public abstract class BComponentNode<N extends Node, T extends BComponent> exten
 		when(() -> predicate.get() != null, spellings[0]).thenAppend(
 				staticContents(LINE_SEPARATOR, keywordText(keywordFragment, spellings[0]), LINE_SEPARATOR), keywordFragment);
 		append(childContents("", predicate, LINE_SEPARATOR, Indentation.Indent), spellings[0] + "Predicate");
+	}
+
+	/**
+	 * The INITIALISATION clause is a clause of its own, written before the EVENTS (or OPERATIONS): it is not an event named
+	 * INITIALISATION, which the grammar does not accept. A clause with nothing to initialise is not written.
+	 */
+	private void appendInitialisationSection() {
+		String[] spellings = new String[] { "INITIALISATION", "INITIALIZATION" };
+		Supplier<BSubstitution> written = () -> {
+			BSubstitution initialisation = getModelObject().getInitialisation();
+			if (initialisation instanceof BParallelSubstitution && ((BParallelSubstitution) initialisation).getSubstitutions().isEmpty()) {
+				return null;
+			}
+			return initialisation;
+		};
+		RawSourceFragment keywordFragment = findKeywordFragment(null, null, spellings);
+		when(() -> written.get() != null, spellings[0]).thenAppend(
+				staticContents(LINE_SEPARATOR, keywordText(keywordFragment, spellings[0]), LINE_SEPARATOR), keywordFragment);
+		append(childContents("", written, LINE_SEPARATOR, Indentation.Indent), spellings[0] + "Substitution");
 	}
 
 	protected RawSourceFragment getKeywordFragment() {

@@ -97,9 +97,8 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 	}
 
 	private String description;
-	private File sourceProjectFolder;
-	private File generatedProjectFolder;
-	private File sourceCreationFolder;
+	private File projectFolder;
+	private File creationFolder;
 	private String choice;
 	private String newProjectName;
 
@@ -135,51 +134,10 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 
 	@Override
 	protected void doAction(final Object context) throws FlexoException {
-		File projectFolder = null;
-		if (getChoice().equals("open_existing_Bproject")) {
-			if (getSourceProjectFolder() == null || !getSourceProjectFolder().exists()) {
-				throw new InvalidArgumentException("No source project folder specified");
-			}
-			projectFolder = getSourceProjectFolder();
-		}
-		else {
-
-			try {
-				projectFolder = AtelierBProjectResourceFactory
-						.generateBlankAtelierBProject(new File(getSourceCreationFolder(), getNewProjectName()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				throw new FlexoException(e);
-			}
-		}
-
-		FlexoResourceCenter<File> resourceCenter = getServiceManager().getResourceCenterService()
-				.getResourceCenterContaining(projectFolder);
-
-		/*for (FlexoResourceCenter<?> rc : getServiceManager().getResourceCenterService().getResourceCenters()) {
-			System.out.println(" > " + rc);
-		}
-		
-		System.out.println("resourceCenter=" + resourceCenter);*/
-
-		if (resourceCenter == null) {
-			// No resource center containing folder, declares a new one
-			FlexoResourceCenterService rcService = getServiceManager().getResourceCenterService();
-			try {
-				resourceCenter = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(projectFolder.getParentFile(), rcService);
-			} catch (IOException e) {
-				throw new FlexoException(e);
-			}
-			rcService.addToResourceCenters(resourceCenter);
-		}
-		File dbFile = new File(new File(projectFolder, "bdp"), projectFolder.getName() + ".db");
-		AtelierBProjectResource sourceProjectResource = resourceCenter.getResource(dbFile, AtelierBProjectResource.class);
-
-		System.out.println("sourceProjectResource=" + sourceProjectResource);
+		AtelierBProjectResource projectResource = retrieveProject();
 
 		try {
-			newMethodology = getFocusedObject().execute("createBMethodology({$source},{$generated})", sourceProjectResource,
-					sourceProjectResource);
+			newMethodology = getFocusedObject().execute("createBMethodology({$bProject})", projectResource);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 			throw new FlexoException(e);
@@ -196,6 +154,52 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 
 		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.APPLICABLE_B_METHODOLOGY_PROPERTY_NAME, null,
 				getNewMethodology());
+	}
+
+	/** Retrieve the Atelier B project designated by the choice: an existing project folder, or a blank project created in a folder */
+	private AtelierBProjectResource retrieveProject() throws FlexoException {
+		File projectFolder = null;
+		if (getChoice().equals("open_existing_Bproject")) {
+			if (getProjectFolder() == null || !getProjectFolder().exists()) {
+				throw new InvalidArgumentException("No project folder specified");
+			}
+			projectFolder = getProjectFolder();
+		}
+		else {
+			try {
+				projectFolder = AtelierBProjectResourceFactory.generateBlankAtelierBProject(new File(getCreationFolder(), getNewProjectName()));
+			} catch (IOException e) {
+				throw new FlexoException(e);
+			}
+		}
+
+		FlexoResourceCenter<File> resourceCenter = getServiceManager().getResourceCenterService()
+				.getResourceCenterContaining(projectFolder);
+		if (resourceCenter == null) {
+			// No resource center containing folder, declares a new one
+			FlexoResourceCenterService rcService = getServiceManager().getResourceCenterService();
+			try {
+				resourceCenter = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(projectFolder.getParentFile(), rcService);
+			} catch (IOException e) {
+				throw new FlexoException(e);
+			}
+			rcService.addToResourceCenters(resourceCenter);
+		}
+		File dbFile = new File(new File(projectFolder, "bdp"), projectFolder.getName() + ".db");
+		AtelierBProjectResource returned = resourceCenter.getResource(dbFile, AtelierBProjectResource.class);
+		if (returned == null && resourceCenter instanceof DirectoryResourceCenter) {
+			// A project that has just been created (or whose resource center has just been declared) is not yet explored
+			DirectoryResourceCenter directoryResourceCenter = (DirectoryResourceCenter) resourceCenter;
+			if (directoryResourceCenter.getDirectoryWatcher() == null) {
+				directoryResourceCenter.startDirectoryWatching();
+			}
+			directoryResourceCenter.performDirectoryWatchingNow();
+			returned = resourceCenter.getResource(dbFile, AtelierBProjectResource.class);
+		}
+		if (returned == null) {
+			throw new FlexoException("The project " + projectFolder + " is not recognized as an Atelier B project");
+		}
+		return returned;
 	}
 
 	private FMLRTVirtualModelInstance newMethodology;
@@ -242,29 +246,29 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 		return (FMLRTVirtualModelInstance) getElement().getOwningVirtualModelInstance();
 	}
 
-	public File getSourceProjectFolder() {
-		return sourceProjectFolder;
+	public File getProjectFolder() {
+		return projectFolder;
 	}
 
-	public void setSourceProjectFolder(File sourceProjectFolder) {
-		if ((sourceProjectFolder == null && this.sourceProjectFolder != null)
-				|| (sourceProjectFolder != null && !sourceProjectFolder.equals(this.sourceProjectFolder))) {
-			File oldValue = this.sourceProjectFolder;
-			this.sourceProjectFolder = sourceProjectFolder;
-			getPropertyChangeSupport().firePropertyChange("sourceProjectFolder", oldValue, sourceProjectFolder);
+	public void setProjectFolder(File projectFolder) {
+		if ((projectFolder == null && this.projectFolder != null)
+				|| (projectFolder != null && !projectFolder.equals(this.projectFolder))) {
+			File oldValue = this.projectFolder;
+			this.projectFolder = projectFolder;
+			getPropertyChangeSupport().firePropertyChange("projectFolder", oldValue, projectFolder);
 		}
 	}
 
-	public File getSourceCreationFolder() {
-		return sourceCreationFolder;
+	public File getCreationFolder() {
+		return creationFolder;
 	}
 
-	public void setSourceCreationFolder(File sourceCreationFolder) {
-		if ((sourceCreationFolder == null && this.sourceCreationFolder != null)
-				|| (sourceCreationFolder != null && !sourceCreationFolder.equals(this.sourceCreationFolder))) {
-			File oldValue = this.sourceCreationFolder;
-			this.sourceCreationFolder = sourceCreationFolder;
-			getPropertyChangeSupport().firePropertyChange("sourceCreationFolder", oldValue, sourceCreationFolder);
+	public void setCreationFolder(File creationFolder) {
+		if ((creationFolder == null && this.creationFolder != null)
+				|| (creationFolder != null && !creationFolder.equals(this.creationFolder))) {
+			File oldValue = this.creationFolder;
+			this.creationFolder = creationFolder;
+			getPropertyChangeSupport().firePropertyChange("creationFolder", oldValue, creationFolder);
 		}
 	}
 
@@ -278,19 +282,6 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 			String oldValue = this.newProjectName;
 			this.newProjectName = newProjectName;
 			getPropertyChangeSupport().firePropertyChange("newProjectName", oldValue, newProjectName);
-		}
-	}
-
-	public File getGeneratedProjectFolder() {
-		return generatedProjectFolder;
-	}
-
-	public void setGeneratedProjectFolder(File generatedProjectFolder) {
-		if ((generatedProjectFolder == null && this.generatedProjectFolder != null)
-				|| (generatedProjectFolder != null && !generatedProjectFolder.equals(this.generatedProjectFolder))) {
-			File oldValue = this.generatedProjectFolder;
-			this.generatedProjectFolder = generatedProjectFolder;
-			getPropertyChangeSupport().firePropertyChange("generatedProjectFolder", oldValue, generatedProjectFolder);
 		}
 	}
 

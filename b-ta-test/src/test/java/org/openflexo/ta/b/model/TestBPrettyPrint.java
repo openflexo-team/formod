@@ -63,6 +63,7 @@ import org.openflexo.ta.b.model.predicate.BLessPredicate;
 import org.openflexo.ta.b.model.predicate.BMemberPredicate;
 import org.openflexo.ta.b.model.predicate.BSubsetPredicate;
 import org.openflexo.ta.b.rm.BResource;
+import org.openflexo.ta.b.model.substitution.BParallelSubstitution;
 import org.openflexo.toolbox.StringUtils;
 
 public class TestBPrettyPrint extends AbstractBTest {
@@ -118,6 +119,27 @@ public class TestBPrettyPrint extends AbstractBTest {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
+	}
+
+	@Test
+	public void testInitialisation() {
+
+		BComponent component = getBComponent("AtelierB/Example1/TestInitialisation.sys");
+		assertTrue(component instanceof BSystem);
+		assertEquals("System6", component.getName());
+
+		// INITIALISATION is a clause of its own (not an event): it is a model object, with its two assignments
+		assertTrue(component.getInitialisation() instanceof BParallelSubstitution);
+		assertEquals(2, ((BParallelSubstitution) component.getInitialisation()).getSubstitutions().size());
+		assertEquals(1, component.getOperations().size());
+
+		// Written back, the clause stays before the events, and the text can be read again
+		String normalizedB = component.getNormalizedBRepresentation();
+		assertTrue(normalizedB, normalizedB.indexOf("INITIALISATION") > 0);
+		assertTrue(normalizedB, normalizedB.indexOf("INITIALISATION") < normalizedB.indexOf("EVENTS"));
+		assertTrue(normalizedB, normalizedB.indexOf("count := 0") > normalizedB.indexOf("INITIALISATION"));
+
+		testPrettyPrint(component);
 	}
 
 	@Test

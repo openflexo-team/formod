@@ -105,4 +105,9 @@ assert extendCylinder.parentRefinement.size == 0;
 assert openDoor.parentGoal == null;
 assert rootModel.goals().size == 3;
 
+// Default names of the drops: the prefix and a number which is never given twice, whatever the kind of object
+assert rootModel.newName("Goal") == "Goal1";
+assert rootModel.newName("Agent") == "Agent2";
+assert subModel.newName("Goal") == "Goal1";
+
 log "Test PASSED: T4 - SysML/KAOS goal model, refinements, agents and groups";

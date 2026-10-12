@@ -35,6 +35,10 @@
  * - Concept2Property carried two dead deletion schemes, deleteWithBItemOld and deleteWithBItemOld2, and the max/min helpers only the
  *   first one used: dropped, deleteWithBItem is the one the matching runs;
  * - the legacy used "=" where it meant ==, "|" for || and "&" for &&;
+ * - the legacy generated INITIALISATION as an event named INITIALISATION inside EVENTS (a refinement extended it), which the grammar of
+ *   the B technology adapter cannot read back and which real Atelier B projects do not do: it is now the INITIALISATION clause, written
+ *   before EVENTS, and a component whose initialisation is empty has none (initialisationOperation is gone, initialisationOperationBody
+ *   is the substitution of the clause);
  * - inspectors are gone: FlexoConceptInspector is deprecated in 2.99.
  *
  * @version 0.1
@@ -69,10 +73,8 @@ import ["http://formose.lacl.fr/DomainModel/DomainModelling.fml/DomainModelDiagr
 @Version("0.1")
 public model BMethodology extends Methodology {
 
-	/** The Atelier B project the B models are generated in */
-	AtelierBProject sourceProject with AtelierBProjectModelSlot(isRequired=true);
-
-	AtelierBProject generatedProject with AtelierBProjectModelSlot(isRequired=true);
+	/** The Atelier B project the B models (contexts, machines, refinements) are generated in */
+	AtelierBProject bProject with AtelierBProjectModelSlot(isRequired=true);
 
 	/** The domain model methodology whose domain models this methodology formalizes */
 	DomainModelMethodology domainModelMethodology with ModelInstance();
@@ -80,12 +82,10 @@ public model BMethodology extends Methodology {
 	/** The mapping of the element this methodology is declared on */
 	BElementMapping rootBElementMapping with ConceptInstance();
 
-	create(DomainModelMethodology domainModelMethodology, AtelierBProjectResource sourceProject,
-			AtelierBProjectResource generatedProject) {
+	create(DomainModelMethodology domainModelMethodology, AtelierBProjectResource bProject) {
 		log "Create B-Methodology";
 		name = "BMethodology";
-		sourceProject = parameters.sourceProject.resourceData;
-		generatedProject = parameters.generatedProject.resourceData;
+		bProject = parameters.bProject.resourceData;
 		domainModelMethodology = parameters.domainModelMethodology;
 		declaringElement = domainModelMethodology.declaringElement;
 		rootBElementMapping = new BElementMapping(declaringElement);
@@ -154,7 +154,6 @@ public model BMethodology extends Methodology {
 			AtelierBComponent machine with AtelierBComponentRole();
 			BPredicate[0,*] properties with BPredicateRole();
 			BPredicate[0,*] invariants with BPredicateRole();
-			BOperation initialisationOperation with BOperationRole();
 			BParallelSubstitution initialisationOperationBody with BParallelSubstitutionRole();
 
 			DomainModel domainModel {
@@ -171,9 +170,8 @@ public model BMethodology extends Methodology {
 				}
 				context = this.createContext();
 				machine = this.createMachine();
-				initialisationOperation = this.createInitialisationAction();
 				initialisationOperationBody = B::CreateBParallelSubstitution() in (machine.componentResource.bComponent);
-				initialisationOperation.setOperationBody(initialisationOperationBody);
+				machine.componentResource.bComponent.setInitialisation(initialisationOperationBody);
 				this.updateStructuralPart();
 				this.updateBehavioralPart();
 			}
@@ -186,13 +184,13 @@ public model BMethodology extends Methodology {
 				AtelierBComponent newContext = null;
 				if (parent != null) {
 					newContext = ATB::AddAtelierBComponent(
-							componentName=container.element.identifier + domainModelMapping.goalGroup.title + "Context",
-							componentType=$System, extendsComponent=parent.context) in (container.container.sourceProject);
+							componentName=container.element.identifier + domainModelMapping.title + "Context",
+							componentType=$System, extendsComponent=parent.context) in (container.container.bProject);
 				}
 				else {
 					newContext = ATB::AddAtelierBComponent(
-							componentName=container.element.identifier + domainModelMapping.goalGroup.title + "Context",
-							componentType=$System) in (container.container.sourceProject);
+							componentName=container.element.identifier + domainModelMapping.title + "Context",
+							componentType=$System) in (container.container.bProject);
 				}
 				return newContext;
 			}
@@ -202,27 +200,15 @@ public model BMethodology extends Methodology {
 				AtelierBComponent newMachine = null;
 				if (parent == null) {
 					log "Create top-level machine";
-					newMachine = ATB::AddAtelierBComponent(componentName=container.element.identifier + domainModelMapping.goalGroup.title,
-							componentType=$System, sees=context) in (container.container.sourceProject);
+					newMachine = ATB::AddAtelierBComponent(componentName=container.element.identifier + domainModelMapping.title,
+							componentType=$System, sees=context) in (container.container.bProject);
 				}
 				else {
 					log "Create child machine";
-					newMachine = ATB::AddAtelierBComponent(componentName=container.element.identifier + domainModelMapping.goalGroup.title,
-							componentType=$Refinement, refines=parent.machine, sees=context) in (container.container.sourceProject);
+					newMachine = ATB::AddAtelierBComponent(componentName=container.element.identifier + domainModelMapping.title,
+							componentType=$Refinement, refines=parent.machine, sees=context) in (container.container.bProject);
 				}
 				return newMachine;
-			}
-
-			BOperation createInitialisationAction() {
-				BOperation initialisation = null;
-				if (parent == null) {
-					initialisation = B::AddBOperation(identifierName="INITIALISATION") in (machine.componentResource.bComponent);
-				}
-				else {
-					initialisation = B::AddBRefinedOperation(identifierName="INITIALISATION", refinementKeyword="extends",
-							refinedOperationName="INITIALISATION") in (machine.componentResource.bComponent);
-				}
-				return initialisation;
 			}
 
 			/** Apply the structural rules: the context and the machine follow the concepts and individuals of the domain model */

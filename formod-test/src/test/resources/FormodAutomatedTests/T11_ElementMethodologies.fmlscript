@@ -9,8 +9,7 @@ goalDiagramSpecification = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagra
 goalExampleDiagram = load -r ["http://formose.lacl.fr/SysMLKaos/GoalDiagram.diagramspecification/GoalDiagram.diagram"];
 domainDiagramSpecification = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification"];
 domainExampleDiagram = load -r ["http://formose.lacl.fr/DomainModel/DomainModelDiagramSpec.diagramspecification/ExampleDiagram.diagram"];
-sourceProject = load -r ["http://formose.lacl.fr/test/SourceAtelierBProject"];
-generatedProject = load -r ["http://formose.lacl.fr/test/GeneratedAtelierBProject"];
+bProject = load -r ["http://formose.lacl.fr/test/AtelierBProject"];
 
 formose = load -r ["http://formose.lacl.fr/Formose.fml"];
 project = new Formose::initFormoseView("LandingGear", "Landing gear system") with (name="TestFormose");
@@ -36,7 +35,7 @@ assert domainMethodology.sysMLKaosMethodology == kaosMethodology;
 assert gear.applicableDomainModelMethodology == domainMethodology;
 assert door.applicableDomainModelMethodology == domainMethodology;
 
-bMethodology = gear.createBMethodology(sourceProject.resource, generatedProject.resource);
+bMethodology = gear.createBMethodology(bProject.resource);
 assert bMethodology != null;
 assert bMethodology.domainModelMethodology == domainMethodology;
 assert bMethodology.declaringElement == gear;
