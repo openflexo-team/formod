@@ -182,11 +182,15 @@ better than a `DuplicateURIException` in the log.
 
 **To decide.** An identifier scheme for predicates and substitutions (position-based, or generated and written in a comment), or rebuild these roles from the B text at load time.
 
-### FORMOD-D-16 — Five inspectors give a FlexoConceptInstance where a VirtualModelInstance is expected  ·  `TODO`
+### FORMOD-D-16 — Two inspectors gave a FlexoConceptInstance where a VirtualModelInstance is expected  ·  `DONE`
 
-**Symptom.** Warning `component.virtualModelInstance=data.container … argument type mismatch` when `BMapping` is selected.
+**Symptom.** Warning `component.virtualModelInstance=data.container … argument type mismatch` when a `BMapping` was selected.
 
-**Measured.** `Assignment variable="component.virtualModelInstance" value="data.container"` in `BMapping.inspector`, `SysMLKaosElementMapping.inspector`, `Concept.inspector` and (twice) `AgentAssignment.inspector`. For a nested concept `data.container` is the enclosing instance. **Not measured:** the effect (the selector is probably empty); the fix I would try is `data.owningVirtualModelInstance`.
+**Cause (measured).** `data.container` is the instance that contains the object: the VirtualModelInstance for a top-level concept, the enclosing FlexoConceptInstance for a nested one. Of the five assignments reported, three were right (`Concept.inspector`, `AgentAssignment.inspector` twice: top-level concepts, whose role instances live in `container`) and two were wrong: `BMapping.inspector` (the `parent` role lives in `container.container`, the BMethodology instance) and `SysMLKaosElementMapping.inspector` (the `agent` role lives in `parentDiagramElementMapping.goalModel`, another instance).
+
+**Fixed (2026-10-13).** `BMapping.inspector`: `data.owningVirtualModelInstance`; `SysMLKaosElementMapping.inspector`: `data.parentDiagramElementMapping.goalModel`. The warning no longer appears in the application log after selecting a `BMapping`.
+
+**Not measured.** What the two selectors propose (agents of the parent goal model, other mappings of the methodology), and what the agent selector does for a mapping without a parent (the value cannot be evaluated: the selector is probably empty).
 
 ### FORMOD-D-17 — Default names of dropped objects were identical  ·  `DONE`
 
