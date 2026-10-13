@@ -61,10 +61,12 @@ of each concept, not inherited), and their 23 `.inspector` files are gone (with 
 concepts that had no inspector received the entries their representation showed: `Refinement`, `Contribution` and `Impact`. The
 `FormodInspectorsTest` checks every derivation (valid binding, no inspector of its own).
 
-### FORMOD-F-4 — Break the import cycle between FormoseCore and the methodologies  ·  `TODO`
+### FORMOD-F-4 — Break the import cycle between FormoseCore and the methodologies  ·  `DONE`
 
 **Problem.** `FormoseCore` imports `SysMLKaosMethodology`, `DomainModelMethodology` and `BMethodology` (to type the properties that give the methodology applicable to an element), and each of them imports `FormoseCore` (and `Methodology`, which does too). Loading a unit then runs into the guard of the resource loader and logs about 135 transient warnings (CORE-D-34); every unit is valid in the end.
 
 **Options.** (a) Move the properties typed by the methodologies out of `FormoseCore` into a model both import; (b) type them by the common parent `Methodology` and let the methodologies declare the precise accessors; (c) keep the cycle and wait for the platform to load it quietly.
 
 **Acceptance.** No `Unresolved type` / `Preventing StackOverflow` warning at the start of formod-app, `formod-test` and `formod-module` unchanged.
+
+**Decided with the user (2026-10-12): option (c), the cycle stays.** Cyclic imports are supported by the two-passes loading; the question became why the loader still warns. Answer: it treated a unit still being loaded higher in the stack as complete, in four places of `openflexo-core` (listed in CORE-D-34, fixed 2026-10-13). Measured over the printed output of the test runs (not on a formod-app start), before → after, `formod-test` 32/32 and `formod-module` 17/17 unchanged: `Preventing StackOverflow` 213 → 0 and 110 → 0, `Unresolved type` 182 → 0 and 100 → 0, `Parent concept … not found` 2 → 0 in `formod-module`, `NullPointerException` 10 → 0. The model is untouched. What is left of the 135 is `still invalid` (574 / 310 in the test output), diagram-specification constants and `new DefaultDataType(…)`, not caused by the cycle (CORE-D-34). Measured on a real formod-app start (2026-10-13): `Preventing StackOverflow` 0, `Unresolved type` 0, `Parent concept … not found` 0; 62 `still invalid` remain (70 before), all diagram-specification constants and `new DefaultDataType(…)`, tracked in CORE-D-34. The acceptance (no `Unresolved type` / `Preventing StackOverflow` at the start) is met; `formod-test` 32/32 and `formod-module` 17/17 unchanged.
