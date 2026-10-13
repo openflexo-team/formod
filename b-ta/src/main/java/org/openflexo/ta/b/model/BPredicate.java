@@ -70,8 +70,8 @@ public interface BPredicate extends BObject, InnerBComponent {
 
 		@Override
 		public String getSerializationIdentifier() {
-			// Cannot serialize id for predicate
-			return null;
+			// A predicate has no name: it is identified by its containment path in its component
+			return BSerializationIdentifiers.identifierFor(getComponent(), this);
 		}
 	}
 

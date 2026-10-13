@@ -78,8 +78,8 @@ public interface BSubstitution extends BObject, InnerBComponent {
 
 		@Override
 		public String getSerializationIdentifier() {
-			// Cannot serialize id for substitution
-			return null;
+			// A substitution has no name: it is identified by its containment path in its component
+			return BSerializationIdentifiers.identifierFor(getComponent(), this);
 		}
 	}
 

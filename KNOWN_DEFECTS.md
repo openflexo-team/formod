@@ -186,13 +186,24 @@ better than a `DuplicateURIException` in the log.
 
 **Cause (inferred, not observed in the log).** The File menu held two entries with the same Cmd-S accelerator calling `reviewModifiedResources()`: `FileMenu.SaveItem` (base) and `FMSFileMenu.SaveModifiedItem` (formod). Removed the formod one. The user confirmed the panel opens once.
 
-### FORMOD-D-15 — References to B predicates and to the INITIALISATION substitution are lost on reload  ·  `TODO`
+### FORMOD-D-15 — References to B predicates and to the INITIALISATION substitution are lost on reload  ·  `DONE`
 
 **Symptom.** After a reload, `Concept2Property.typingPredicate` and the rules' `initialisationOperationBody` are empty (their reference has the identifier `null`: `…#FLX_null`).
 
-**Measured.** `BComponent.getObjectWithSerializationIdentifier` finds a component, sets, constants, variables and (since FORMOD-D-10) events, by name; predicates and substitutions have no identifier. The B views do not depend on it, but a later update of the generation cannot remove or change those objects.
+**Three causes, all measured (2026-10-13).**
+1. `BPredicate`, `BSubstitution` and `BExpression` returned null as serialization identifier (`// Cannot serialize id for predicate`), and `BComponent.getObjectWithSerializationIdentifier` only looked objects up by name: an unnamed object could not be designated at all.
+2. `FlexoObjectReference.setObject` captures `objectIdentifier` **when the role is assigned**, and the save rewrote that field as it was. The FML assigns the role before inserting the object in its clause (`initialisationOperationBody = B::CreateBParallelSubstitution() …;` then `setInitialisation(…)`), so even once an identifier existed, the one captured was the one the object had before it was anywhere: null. Fixed in `openflexo-core`, CORE-D-37.
+3. `CreateBPredicateFromString` parses the predicate on its own (`EntryPointKind.Predicate`) and never attached it to the component the action creates it in - unlike `CreateBParallelSubstitution`, which goes through `factory.makeSubstitution(class, component)`, which does. With no component the predicate has no resource either, so the whole reference was empty: probe before the reload, `PROBE prop ref=null#null_null`. `CreateBExpressionFromString` had the same omission.
 
-**To decide.** An identifier scheme for predicates and substitutions (position-based, or generated and written in a comment), or rebuild these roles from the B text at load time.
+**Fixed (2026-10-13), scheme decided with the user: containment path plus a fallback on the content.** New `BSerializationIdentifiers` (b-ta): the identifier of an unnamed object is its containment path in its component, prefixed by `@` and followed by a digest of its normalized B representation - `@invariant/left~1f3a0b7c`, `@initialisation`. Resolution follows the path, then checks that what it finds still reads the same; a conjunct that moved is found by its digest, an object whose text was edited by its path. The representation is digested, not written: the identifier travels inside a `FlexoObjectReference`, whose string form is `<resourceURI>#<userIdentifier>_<objectIdentifier>` and is cut on `#` then on the last `_`, which B text holds (`concept_Door : POW(SET)`); an identifier that would hold one anyway is refused rather than stored broken. The containment tree is walked through the PAMELA properties of each object - no object declares its children, so any new kind of predicate, substitution or expression is covered - never leaving the component, so the walk cannot cycle. A named object (component, set, member, operation) keeps its name as identifier.
+
+**Tests.** `TestBObjectSerializationIdentifier` in `b-ta-test` (9 cases: the path identifiers, resolution in the component parsed again, the two fallbacks, an unknown identifier, and the absence of `#` and `_`); `TestBMethology.testReloadProject` now asserts the initialisation substitution, the size of the `properties` and `invariants` lists before and after the reload, no null in them, and the typing predicate of every structural rule. Measured red without the fix (`The initialisation substitution of the first mapping is not found again after the reload`), green with it: `b-ta-test` 144/144, `formod-test` 32/32, `formod-module` 17/17 + 57/57 (`testAll`, which is where `TestBMethology` runs - the `test` task does not include it), `flexo-foundation-test` 525 (520 successes, 5 skipped), `fml-cli-test` 99/99.
+
+**Also fixed in passing.** `BResourceImpl.findObject` printed `Je dois trouver l'objet avec l'ID …` on `System.out`; it logs at FINE now.
+
+**Not retro-fitted.** An instance saved before this fix holds `FLX_null` references, which no identifier can resolve: those roles stay empty until the generation sets them again.
+
+**Not measured.** An object nested deeper than a clause (a substitution inside an operation body): formod references only the clause-level predicates and the initialisation. Two conjuncts that read exactly the same share a digest, and the first one found wins.
 
 ### FORMOD-D-16 — Two inspectors gave a FlexoConceptInstance where a VirtualModelInstance is expected  ·  `DONE`
 

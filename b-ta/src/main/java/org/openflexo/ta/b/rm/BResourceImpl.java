@@ -384,8 +384,9 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 	 */
 	@Override
 	public FlexoObject findObject(String objectIdentifier, String userIdentifier) {
-		System.out.println("Je dois trouver l'objet avec l'ID " + objectIdentifier);
-		// return getFlexoObject(Long.parseLong(objectIdentifier), userIdentifier);
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Looking for object with identifier " + objectIdentifier + " in " + this);
+		}
 		try {
 			return getResourceData().getObjectWithSerializationIdentifier(objectIdentifier);
 		} catch (FileNotFoundException e) {

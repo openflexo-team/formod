@@ -94,8 +94,8 @@ public interface BExpression extends BObject, InnerBComponent {
 
 		@Override
 		public String getSerializationIdentifier() {
-			// Cannot serialize id for expression
-			return null;
+			// A expression has no name: it is identified by its containment path in its component
+			return BSerializationIdentifiers.identifierFor(getComponent(), this);
 		}
 	}
 

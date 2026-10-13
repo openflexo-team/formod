@@ -84,6 +84,7 @@ import org.openflexo.module.formose.model.action.InstantiateDomainModelMethodolo
 import org.openflexo.module.formose.model.action.InstantiateSysMLKaosMethodology;
 import org.openflexo.ta.b.BTechnologyAdapter;
 import org.openflexo.ta.b.model.BComponent;
+import org.openflexo.ta.b.model.BPredicate;
 import org.openflexo.ta.b.model.atelierb.AtelierBComponent;
 import org.openflexo.ta.b.model.parser.BParser;
 import org.openflexo.ta.b.rm.AtelierBProjectResource;
@@ -638,6 +639,13 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		log("testReloadProject");
 
+		// FORMOD-D-15: what the roles pointing at unnamed B objects hold before the reload, to be found again after it
+		FlexoConceptInstance topLevelBeforeReload = bProjectMapping.execute("topLevelBMappings.get(0)");
+		assertNotNull(topLevelBeforeReload.execute("initialisationOperationBody"));
+		int propertiesBeforeReload = ((List<BPredicate>) topLevelBeforeReload.execute("properties")).size();
+		int invariantsBeforeReload = ((List<BPredicate>) topLevelBeforeReload.execute("invariants")).size();
+		assertTrue("The first mapping has no property to be found again: the test measures nothing", propertiesBeforeReload > 0);
+
 		String oldFormoseViewURI = view.getURI();
 		instancesBeforeReload = ((FMLRTVirtualModelInstanceResource) view.getResource()).getVirtualModelInstanceResources().size();
 
@@ -709,6 +717,31 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 			}
 		}
 		assertTrue(eventFound);
+
+		// FORMOD-D-15: a predicate and a substitution have no name, they are found again by their containment path in their component
+		assertNotNull("The initialisation substitution of the first mapping is not found again after the reload",
+				topLevel.execute("initialisationOperationBody"));
+		assertSame(machine.getComponentResource().getBComponent().getInitialisation(), topLevel.execute("initialisationOperationBody"));
+
+		List<BPredicate> properties = topLevel.execute("properties");
+		List<BPredicate> invariants = topLevel.execute("invariants");
+		assertEquals("A property of the first mapping is not found again after the reload", propertiesBeforeReload, properties.size());
+		assertEquals("An invariant of the first mapping is not found again after the reload", invariantsBeforeReload, invariants.size());
+		assertFalse("A property of the first mapping is not found again after the reload", properties.contains(null));
+		assertFalse("An invariant of the first mapping is not found again after the reload", invariants.contains(null));
+
+		// The typing predicate each structural rule points at is one of them
+		boolean typingPredicateFound = false;
+		for (FlexoConceptInstance rule : instances) {
+			if (rule.getFlexoConcept().getAccessibleProperty("typingPredicate") != null) {
+				BPredicate typingPredicate = rule.execute("typingPredicate");
+				assertNotNull("The typing predicate of a " + rule.getFlexoConcept().getName() + " is not found again after the reload",
+						typingPredicate);
+				assertTrue(properties.contains(typingPredicate) || invariants.contains(typingPredicate));
+				typingPredicateFound = true;
+			}
+		}
+		assertTrue(typingPredicateFound);
 
 		/*assertEquals(5, instances.size());
 		assertEquals("ConceptA", instances.get(0).execute("set.name"));

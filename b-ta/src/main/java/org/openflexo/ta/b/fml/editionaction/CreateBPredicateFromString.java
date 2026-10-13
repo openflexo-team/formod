@@ -135,6 +135,13 @@ public interface CreateBPredicateFromString extends BAction<BPredicate> {
 				e.printStackTrace();
 			}
 
+			if (newPredicate != null) {
+				// Parsing a predicate on its own leaves it with no component: attach it to the one it is created in, as the factory
+				// does for the objects it makes. Without it the predicate has no serialization identifier - which is its containment
+				// path in its component - and a role pointing at it is lost on reload (FORMOD-D-15)
+				newPredicate.setComponent(resourceData);
+			}
+
 			return newPredicate;
 
 		}

@@ -141,6 +141,11 @@ public interface CreateBExpressionFromString extends BAction<BExpression> {
 				e.printStackTrace();
 			}
 
+			if (newExpression != null) {
+				// Same as CreateBPredicateFromString: an expression parsed on its own carries no component (FORMOD-D-15)
+				newExpression.setComponent(resourceData);
+			}
+
 			return newExpression;
 
 		}

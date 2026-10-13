@@ -430,6 +430,15 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 		@Override
 		public BObject getObjectWithSerializationIdentifier(String objectId) {
 
+			// Is it an object which has no name, identified by its containment path ?
+			if (objectId != null && objectId.startsWith(BSerializationIdentifiers.PATH_PREFIX)) {
+				BObject returned = BSerializationIdentifiers.resolve(this, objectId);
+				if (returned == null) {
+					logger.warning("Could not find object with serialization identifier " + objectId + " in " + getName());
+				}
+				return returned;
+			}
+
 			// Is it the component itself ?
 			if (getName().equals(objectId)) {
 				return this;
@@ -471,7 +480,7 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 				}
 			}
 
-			logger.warning("To be implemented: getObjectWithSerializationIdentifier(" + objectId + ")");
+			logger.warning("Could not find object with serialization identifier " + objectId + " in " + getName());
 			return null;
 		}
 	}
