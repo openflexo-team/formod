@@ -90,9 +90,23 @@ public class TestParseBExpression {
 		testExpression("-1+2");
 	}
 	
+	/**
+	 * A real literal cannot be parsed: the grammar has no real literal (FORMOD-D-1, DEFERRED).
+	 * 
+	 * It comes from probparsers and was imported before Atelier B added the REAL and FLOAT types and their decimal point literals, so
+	 * <code>integer_literal = digit+</code> is its only numeric token: the lexer reads <code>1</code>, then the dot cannot continue
+	 * the expression. Nothing in the corpus writes a real value, which is why the limitation is recorded rather than fixed.
+	 * 
+	 * Invert this test - call <code>testExpression("1.5")</code> - the day the grammar gains a real literal.
+	 */
 	@Test
-	public void testExpression7() throws ParseException, IOException, ModelDefinitionException {
-		testExpression("1.5");
+	public void testRealLiteralIsNotSupported() throws IOException, ModelDefinitionException {
+		try {
+			testExpression("1.5");
+			fail("A real literal is not expected to parse, see FORMOD-D-1");
+		} catch (ParseException e) {
+			// Expected: the dot cannot continue an expression starting with an integer literal
+		}
 	}
 	
 
