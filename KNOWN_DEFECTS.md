@@ -220,3 +220,17 @@ better than a `DuplicateURIException` in the log.
 **Symptom.** Defaults added so that drops need no dialog gave every concept the name `Concept` (B: duplicate declarations, `DuplicateURIException`).
 
 **Fixed (2026-10-12).** `DomainModel.newName(prefix)` (delegating to the root domain model) and `SysMLKaosModel.newName(prefix)` number the names (`Concept1`, `Individual2`, `Goal1`, `Agent2`…), never reusing a number. The five domain drops and the five goal/agent drops use them as default value. Trap measured: in a default value `container` is the container of the diagram, and `container.newName(…)` was rejected at load (`unresolved path element`), while a slot of the diagram (`domainModel`, `kaosModel`) resolves.
+
+### FORMOD-D-18 — `T10_BMethodology` dies on a `StackOverflowError` in `BSerializationIdentifiers.pathTo`  ·  `TODO`
+
+**Symptom.** `formod-test`, `FormodAutomatedTests.checkScript[T10_BMethodology.fmlscript]` fails with `java.lang.StackOverflowError`. The stack repeats `BSerializationIdentifiers.forEachChild` (line 261, invoking a getter by reflection) → `lambda$pathTo$0` (182) → `pathTo` (173) → `forEachChild` (267) → … : the containment walk of FORMOD-D-15 never ends.
+
+**Measured (2026-10-14).** Through `openflexo-dev`, `formod-test` 31/32, this test the only failure — twice: with the openflexo-core change of CORE-D-39 in the working copy, and again with openflexo-core back to its committed state. So the failure is in formod, not in that change. Not measured: whether it fails on every run (2 out of 2 here), and whether it passed before `d493913` (FORMOD-D-15).
+
+**Contradicts FORMOD-D-15**, which states the walk "cannot cycle": `isChild()` only refuses a `BComponent`, and takes any other `BObject` of the same component held by a PAMELA property for a child.
+
+**Hypothesis, not verified.** A property that points inside the same component without being containment — a back-pointer to the parent, or a cross-reference from an expression to what it designates — is walked as a child, and closes a cycle. `EXCLUDED_PROPERTIES` only lists the component, the pretty-print delegate and the resource. A derived getter invoked by reflection could also hand back an enclosing object.
+
+**Reproduction.** From `openflexo-dev`: `./gradlew --continue ":formod:formod-test:cleanTest" ":formod:formod-test:test"`, then the report of `FormodAutomatedTests`.
+
+**Next.** Find the property that closes the cycle (log the path when the depth passes a bound, on this script), then either exclude it or make the walk refuse an object it has already visited; add the case to `TestBObjectSerializationIdentifier`.
