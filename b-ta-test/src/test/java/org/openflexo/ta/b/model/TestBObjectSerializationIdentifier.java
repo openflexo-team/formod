@@ -221,4 +221,40 @@ public class TestBObjectSerializationIdentifier extends AbstractBTest {
 		}
 	}
 
+
+	/**
+	 * FORMOD-D-15: the initialisation FML creates for a mapping is an empty parallel substitution, which the B text does not hold: after
+	 * a reload the reference to it is resolved to a new empty one, not lost
+	 */
+	@Test
+	public void testEmptyInitialisationIsFoundAgainAfterAReload() throws Exception {
+		BComponent source = getSystem6();
+		BComponent component = BParser.parse("SYSTEM Empty\nEND\n", source.getResource().getFactory());
+		component.setResource(source.getResource());
+		BParallelSubstitution empty = component.getFactory().makeSubstitution(BParallelSubstitution.class, component);
+		component.setInitialisation(empty);
+		String identifier = empty.getSerializationIdentifier();
+		assertEquals("@initialisation", identifier);
+		BComponent reloaded = parseAgain(component);
+		assertNull(reloaded.getInitialisation());
+		BObject found = reloaded.getObjectWithSerializationIdentifier(identifier);
+		assertNotNull(found);
+		assertSame(reloaded.getInitialisation(), found);
+	}
+
+	/**
+	 * FORMOD-D-18: the walk follows the back-pointer of a set value (BSetValue.set) as if it were a child, and never ends when
+	 * the object looked for is not in the component
+	 */
+	@Test
+	public void testWalkDoesNotCycleThroughTheSetOfASetValue() throws Exception {
+		BComponent source = getSystem6();
+		BComponent component = BParser.parse("SYSTEM Cyc\nSETS\n    Colour = {red, green}\nEND\n", source.getResource().getFactory());
+		component.setResource(source.getResource());
+		assertEquals(1, component.getSets().size());
+		assertEquals(2, component.getSets().get(0).getEnumeratedValues().size());
+		// A predicate that belongs to the component without being in it: the case of a predicate whose parent was dropped
+		BPredicate detached = component.getFactory().makePredicate(BConjunctPredicate.class, component);
+		assertNull(BSerializationIdentifiers.identifierFor(component, detached));
+	}
 }

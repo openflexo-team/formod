@@ -41,6 +41,7 @@ package org.openflexo.module.formose.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -429,6 +430,21 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		FlexoConceptInstance conceptDGR = createDomainModelConcept("ConceptD", diagram);
 		declareParentConcept(conceptDGR, conceptAGR, diagram);
+
+		// FORMOD-D-15: a second property makes the context hold a conjunction, which a single property never does
+		FlexoConceptInstance conceptEGR = createDomainModelConcept("ConceptE", diagram);
+		declareParentConcept(conceptEGR, conceptBGR, diagram);
+
+		// FORMOD-D-15: a defined concept whose formula is an expression, not a predicate ("a+b"): it is ignored, and it must
+		// not take the properties of the other concepts away
+		FlexoConcept definedConceptGR = diagram.getVirtualModel().getFlexoConcept("DefinedConceptGR");
+		assertNotNull(definedConceptGR);
+		DropScheme definedScheme = (DropScheme) definedConceptGR.getFlexoBehaviour("dropDefinedConceptGRAtTopLevel");
+		DropSchemeAction definedAction = new DropSchemeAction(definedScheme, diagram, null, editor);
+		definedAction.setDropLocation(new DianaPoint(200, 200));
+		definedAction.setParameterValue(definedScheme.getParameters().get(1), "a+b");
+		definedAction.doAction();
+		assertTrue(definedAction.hasActionExecutionSucceeded());
 	}
 
 	private FlexoConceptInstance createDomainModelConcept(String conceptName, FMLRTVirtualModelInstance diagram)
@@ -557,6 +573,8 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 
 		System.out.println(context1.getComponentResource().getName() + "\n");
 		System.out.println(context1.getBPrettyPrint());
+		assertTrue(context1.getBPrettyPrint(), context1.getBPrettyPrint().contains("ConceptD <: ConceptA"));
+		assertTrue(context1.getBPrettyPrint(), context1.getBPrettyPrint().contains("ConceptE <: ConceptB"));
 
 		System.out.println(machine1.getComponentResource().getName() + "\n");
 		System.out.println(machine1.getBPrettyPrint());
@@ -735,6 +753,11 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 		for (FlexoConceptInstance rule : instances) {
 			if (rule.getFlexoConcept().getAccessibleProperty("typingPredicate") != null) {
 				BPredicate typingPredicate = rule.execute("typingPredicate");
+				if (rule.getFlexoConcept().getName().equals("LogicalFormula2Property")) {
+					// The formula "a+b" is no predicate: the rule keeps none, and none is null in the properties
+					assertNull(typingPredicate);
+					continue;
+				}
 				assertNotNull("The typing predicate of a " + rule.getFlexoConcept().getName() + " is not found again after the reload",
 						typingPredicate);
 				assertTrue(properties.contains(typingPredicate) || invariants.contains(typingPredicate));

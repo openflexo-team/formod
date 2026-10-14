@@ -117,6 +117,9 @@ public interface CreateBPredicateFromString extends BAction<BPredicate> {
 						} catch (IOException e) {
 							logger.warning("Unexpected IO exception");
 							e.printStackTrace();
+						} catch (RuntimeException e) {
+							// The parser fails on some texts that are no predicate at all, the empty one for instance
+							logger.warning("Cannot parse predicate: '" + stringToParse + "' (" + e + ")");
 						}
 					}
 					else {

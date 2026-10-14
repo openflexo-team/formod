@@ -39,8 +39,11 @@
 package org.openflexo.ta.b.model;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,7 +103,7 @@ public class BSerializationIdentifiers {
 		if (factory == null || object == null) {
 			return null;
 		}
-		String path = pathTo(component, object, factory, "");
+		String path = pathTo(component, object, factory, "", newPathSet(component));
 		if (path == null) {
 			return null;
 		}
@@ -136,7 +139,7 @@ public class BSerializationIdentifiers {
 		}
 		if (digest != null) {
 			// The object moved, or the path now leads to another one: look for what reads the same
-			BObject byDigest = findByDigest(component, digest, factory);
+			BObject byDigest = findByDigest(component, digest, factory, newPathSet(component));
 			if (byDigest != null) {
 				return byDigest;
 			}
@@ -167,11 +170,22 @@ public class BSerializationIdentifiers {
 		return Integer.toHexString(representation.hashCode());
 	}
 
+	/**
+	 * A set, by identity, of the objects of the path being walked. A walk never enters an object already on its path: some properties
+	 * are back-pointers (a {@link BSetValue} holds its {@link BSet}) which the walk cannot tell from a child, and following them never
+	 * ends (FORMOD-D-18)
+	 */
+	private static Set<BObject> newPathSet(BObject root) {
+		Set<BObject> returned = Collections.newSetFromMap(new IdentityHashMap<>());
+		returned.add(root);
+		return returned;
+	}
+
 	/** Return the path leading from supplied object to supplied target, or null when the target is not under it */
-	private static String pathTo(BObject object, BObject target, PamelaModelFactory factory, String pathToObject) {
+	private static String pathTo(BObject object, BObject target, PamelaModelFactory factory, String pathToObject, Set<BObject> onPath) {
 		String[] returned = new String[1];
 		forEachChild(object, factory, (segment, child) -> {
-			if (returned[0] != null) {
+			if (returned[0] != null || !onPath.add(child)) {
 				return;
 			}
 			String pathToChild = pathToObject.isEmpty() ? segment : pathToObject + "/" + segment;
@@ -179,8 +193,9 @@ public class BSerializationIdentifiers {
 				returned[0] = pathToChild;
 			}
 			else {
-				returned[0] = pathTo(child, target, factory, pathToChild);
+				returned[0] = pathTo(child, target, factory, pathToChild, onPath);
 			}
+			onPath.remove(child);
 		});
 		return returned[0];
 	}
@@ -206,25 +221,26 @@ public class BSerializationIdentifiers {
 		return returned[0];
 	}
 
-	private static BObject findByDigest(BObject object, String digest, PamelaModelFactory factory) {
+	private static BObject findByDigest(BObject object, String digest, PamelaModelFactory factory, Set<BObject> onPath) {
 		BObject[] returned = new BObject[1];
 		forEachChild(object, factory, (segment, child) -> {
-			if (returned[0] != null) {
+			if (returned[0] != null || !onPath.add(child)) {
 				return;
 			}
 			if (digest.equals(digestOf(child))) {
 				returned[0] = child;
 			}
 			else {
-				returned[0] = findByDigest(child, digest, factory);
+				returned[0] = findByDigest(child, digest, factory, onPath);
 			}
+			onPath.remove(child);
 		});
 		return returned[0];
 	}
 
 	/**
 	 * Return true when supplied value is part of the containment tree of its holder: a {@link BComponent} is never one, so the walk
-	 * never leaves the component it started in and cannot cycle. An object answering no component at all is taken as a child: a
+	 * never leaves the component it started in; a back-pointer to an object of the same component is handled by the walks themselves. An object answering no component at all is taken as a child: a
 	 * subtree parsed on its own carries no back-pointer, and what makes it a child is holding it, not the back-pointer
 	 */
 	private static boolean isChild(Object value, BObject holder) {

@@ -1125,9 +1125,14 @@ public model BMethodology extends Methodology {
 					domainConcept = parameters.aConcept;
 					formula = parameters.formula;
 					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
-					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
-					container.properties.add(typingPredicate);
-					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+					if (typingPredicate != null) {
+						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+						container.properties.add(typingPredicate);
+						container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+					}
+					else {
+						log "No typing predicate: the formula is not a B predicate and is ignored";
+					}
 				}
 
 				delete::deleteWithBItem() {
@@ -1148,9 +1153,14 @@ public model BMethodology extends Methodology {
 					domainConcept = parameters.aConcept;
 					formula = parameters.formula;
 					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
-					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
-					container.invariants.add(typingPredicate);
-					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+					if (typingPredicate != null) {
+						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+						container.invariants.add(typingPredicate);
+						container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+					}
+					else {
+						log "No typing predicate: the formula is not a B predicate and is ignored";
+					}
 				}
 
 				delete::deleteWithBItem() {
@@ -1170,9 +1180,14 @@ public model BMethodology extends Methodology {
 					logicalFormula = parameters.aLogicalFormula;
 					typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
 							in (container.context.componentResource.bComponent);
-					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
-					container.properties.add(typingPredicate);
-					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+					if (typingPredicate != null) {
+						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+						container.properties.add(typingPredicate);
+						container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+					}
+					else {
+						log "No typing predicate: the formula is not a B predicate and is ignored";
+					}
 				}
 
 				delete::deleteWithBItem() {
@@ -1192,9 +1207,14 @@ public model BMethodology extends Methodology {
 					logicalFormula = parameters.aLogicalFormula;
 					typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
 							in (container.machine.componentResource.bComponent);
-					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
-					container.invariants.add(typingPredicate);
-					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+					if (typingPredicate != null) {
+						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+						container.invariants.add(typingPredicate);
+						container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+					}
+					else {
+						log "No typing predicate: the formula is not a B predicate and is ignored";
+					}
 				}
 
 				delete::deleteWithBItem() {
@@ -1215,9 +1235,14 @@ public model BMethodology extends Methodology {
 					individual = parameters.anIndividual;
 					formula = parameters.formula;
 					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
-					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
-					container.properties.add(typingPredicate);
-					container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+					if (typingPredicate != null) {
+						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+						container.properties.add(typingPredicate);
+						container.context.componentResource.bComponent.setProperties(container.getProperties(0));
+					}
+					else {
+						log "No typing predicate: the formula is not a B predicate and is ignored";
+					}
 				}
 
 				delete::deleteWithBItem() {
@@ -1238,9 +1263,14 @@ public model BMethodology extends Methodology {
 					individual = parameters.anIndividual;
 					formula = parameters.formula;
 					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
-					log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
-					container.invariants.add(typingPredicate);
-					container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+					if (typingPredicate != null) {
+						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
+						container.invariants.add(typingPredicate);
+						container.machine.componentResource.bComponent.setInvariant(container.getInvariant(0));
+					}
+					else {
+						log "No typing predicate: the formula is not a B predicate and is ignored";
+					}
 				}
 
 				delete::deleteWithBItem() {

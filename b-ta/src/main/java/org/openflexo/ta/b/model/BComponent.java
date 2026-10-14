@@ -55,6 +55,7 @@ import org.openflexo.pamela.annotations.Reindexer;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLElement;
+import org.openflexo.ta.b.model.substitution.BParallelSubstitution;
 import org.openflexo.ta.b.rm.BResource;
 import org.openflexo.toolbox.StringUtils;
 
@@ -432,6 +433,11 @@ public interface BComponent extends BNamedObject, ResourceData<BComponent> {
 
 			// Is it an object which has no name, identified by its containment path ?
 			if (objectId != null && objectId.startsWith(BSerializationIdentifiers.PATH_PREFIX)) {
+				// An empty INITIALISATION is not written (see BComponentNode): what a reference to it designated is made again, empty
+				if (objectId.equals(BSerializationIdentifiers.PATH_PREFIX + INITIALISATION_KEY) && getInitialisation() == null
+						&& getFactory() != null) {
+					setInitialisation(getFactory().makeSubstitution(BParallelSubstitution.class, this));
+				}
 				BObject returned = BSerializationIdentifiers.resolve(this, objectId);
 				if (returned == null) {
 					logger.warning("Could not find object with serialization identifier " + objectId + " in " + getName());
