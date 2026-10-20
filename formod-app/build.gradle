@@ -15,9 +15,6 @@ dependencies {
   testImplementation flexoUiTest()
 
   if (JavaVersion.current().isJava9Compatible()) {
-	runtimeOnly group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
-	runtimeOnly group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.4.0-b180830.0438'
-	runtimeOnly group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
   }
 }
 
