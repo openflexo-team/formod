@@ -460,6 +460,14 @@ public class BTokenMaker extends AbstractJFlexCTokenMaker {
 	}
 
 	/**
+	 * The current lexical state: AbstractJFlexTokenMaker declares it abstract (absent from RSyntaxTextArea 3.3.2, present in 3.6.3)
+	 */
+	@Override
+	public final int yystate() {
+		return zzLexicalState;
+	}
+
+	/**
 	 * Adds the token specified to the current linked list of tokens.
 	 *
 	 * @param tokenType
