@@ -22,3 +22,11 @@ apply plugin: 'application'
 application {
   mainClass = "org.openflexo.Flexo"
 }
+
+// ./gradlew :formod:formod-app:jpackage builds the native installer of the platform (see the buildplugin)
+jpackage {
+  appName = 'Formod'
+  description = 'Formod application'
+  vendor = 'Formose consortium'
+  iconMac = file('src/main/resources/Icons/IconOpenflexo.icns')
+}
