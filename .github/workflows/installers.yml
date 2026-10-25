@@ -1,0 +1,46 @@
+# Builds the native installers of Formod with jpackage.
+# jpackage cannot cross-build: each installer is produced on a runner of its own operating system.
+# Run it by hand (Actions tab, "Run workflow"); the installers are attached to the run.
+name: Installers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  installers:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Linux: .deb, macOS: .dmg, Windows: .exe (WiX is installed on the runner). Not signed.
+      - name: Build the installer
+        shell: bash
+        run: ./gradlew :formod-app:jpackage
+
+      # Linux also gets a .rpm (the .deb above is the default type) and the portable archive
+      # (jars in lib/, start script in bin/; it needs a Java 17 or later on the machine)
+      - name: Build the .rpm and the portable archive
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update && sudo apt-get install -y rpm
+          ./gradlew -Pjpackage.type=rpm :formod-app:jpackage
+          ./gradlew :formod-app:distTar
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ runner.os }}
+          path: |
+            formod-app/build/jpackage/dist/*/*
+            formod-app/build/distributions/*.tar.gz
+          if-no-files-found: error

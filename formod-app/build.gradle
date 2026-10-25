@@ -29,4 +29,5 @@ jpackage {
   description = 'Formod application'
   vendor = 'Formose consortium'
   iconMac = file('src/main/resources/Icons/IconOpenflexo.icns')
+  iconWindows = file('src/main/resources/Icons/Openflexo.ico')
 }
