@@ -4,6 +4,10 @@
 name: Installers
 
 on:
+  # every Monday at 02:00 UTC; a scheduled run starts from the default branch, so the branch to build is asked for
+  # explicitly below. The weekly artifacts are kept 7 days
+  schedule:
+    - cron: '0 2 * * 1'
   workflow_dispatch:
 
 jobs:
@@ -17,6 +21,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'schedule' && '3.0' || github.ref }}
 
       - uses: actions/setup-java@v4
         with:
@@ -43,4 +49,5 @@ jobs:
           path: |
             formod-app/build/jpackage/dist/*/*
             formod-app/build/distributions/*.tar.gz
+          retention-days: ${{ github.event_name == 'schedule' && 7 || 90 }}
           if-no-files-found: error
