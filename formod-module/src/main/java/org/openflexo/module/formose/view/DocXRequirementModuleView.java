@@ -58,6 +58,7 @@ import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.LocalizedDelegate;
+import org.openflexo.localization.LocalizedSwing;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.module.formose.FMSModule;
 import org.openflexo.module.formose.controller.DocumentAnnotationPerspective;
@@ -150,7 +151,7 @@ public class DocXRequirementModuleView extends JPanel implements ModuleView<FMLR
 			e.printStackTrace();
 		}
 
-		identifyFragmentButton = new JButton(locales.localizedForKey(IdentifyTextFragment.ACTION_TYPE.getActionName()));
+		identifyFragmentButton = LocalizedSwing.bind(new JButton(locales.localizedForKey(IdentifyTextFragment.ACTION_TYPE.getActionName())), locales, IdentifyTextFragment.ACTION_TYPE.getActionName());
 		identifyFragmentButton.setIcon(getPerspective().getController().getEditor().getEnabledIconFor(IdentifyTextFragment.ACTION_TYPE));
 		identifyFragmentButton.addActionListener(new ActionListener() {
 			@Override
@@ -165,7 +166,7 @@ public class DocXRequirementModuleView extends JPanel implements ModuleView<FMLR
 		});
 		topPanel.add(identifyFragmentButton);
 
-		identifyRequirementButton = new JButton(locales.localizedForKey(IdentifyRequirement.ACTION_TYPE.getActionName()));
+		identifyRequirementButton = LocalizedSwing.bind(new JButton(locales.localizedForKey(IdentifyRequirement.ACTION_TYPE.getActionName())), locales, IdentifyRequirement.ACTION_TYPE.getActionName());
 		identifyRequirementButton.setIcon(getPerspective().getController().getEditor().getEnabledIconFor(IdentifyRequirement.ACTION_TYPE));
 		identifyRequirementButton.addActionListener(new ActionListener() {
 			@Override
@@ -177,7 +178,7 @@ public class DocXRequirementModuleView extends JPanel implements ModuleView<FMLR
 		});
 		topPanel.add(identifyRequirementButton);
 
-		identifyElementButton = new JButton(locales.localizedForKey(IdentifyElement.ACTION_TYPE.getActionName()));
+		identifyElementButton = LocalizedSwing.bind(new JButton(locales.localizedForKey(IdentifyElement.ACTION_TYPE.getActionName())), locales, IdentifyElement.ACTION_TYPE.getActionName());
 		identifyElementButton.setIcon(getPerspective().getController().getEditor().getEnabledIconFor(IdentifyElement.ACTION_TYPE));
 		identifyElementButton.addActionListener(new ActionListener() {
 			@Override
