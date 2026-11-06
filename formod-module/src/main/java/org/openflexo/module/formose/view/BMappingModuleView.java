@@ -74,6 +74,11 @@ import org.openflexo.technologyadapter.diagram.fml.FMLControlledDiagramVirtualMo
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.localization.LocalizedDelegate;
+import org.openflexo.module.ModuleLoadingException;
+import org.openflexo.module.formose.FMSModule;
+import org.openflexo.localization.LocalizedSwing;
 
 /**
  * A {@link ModuleView} representing a BMapping
@@ -83,6 +88,18 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  */
 @SuppressWarnings("serial")
 public class BMappingModuleView extends JPanel implements ModuleView<FlexoConceptInstance>, PropertyChangeListener {
+
+	/**
+	 * The localizer of the Formose module, or the one of the platform while the module is not loaded.
+	 */
+	private LocalizedDelegate locales() {
+		try {
+			return getPerspective().getController().getApplicationContext().getModuleLoader().getModuleInstance(FMSModule.class)
+					.getLocales();
+		} catch (ModuleLoadingException e) {
+			return FlexoLocalization.getMainLocalizer();
+		}
+	}
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(BMappingModuleView.class.getPackage().getName());
@@ -147,7 +164,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 				centerPanel.add(new JScrollPane(editor.getDrawingView()), LayoutPosition.TOP_LEFT.name());
 			}
 			else {
-				centerPanel.add(new JLabel("Missing goal model"), LayoutPosition.TOP_LEFT.name());
+				centerPanel.add(LocalizedSwing.bind(new JLabel(locales().localizedForKey("missing_goal_model")), locales(), "missing_goal_model"), LayoutPosition.TOP_LEFT.name());
 			}
 
 			// Domain model diagram
@@ -160,7 +177,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 				centerPanel.add(new JScrollPane(editor.getDrawingView()), LayoutPosition.TOP_RIGHT.name());
 			}
 			else {
-				centerPanel.add(new JLabel("Missing domain model"), LayoutPosition.TOP_RIGHT.name());
+				centerPanel.add(LocalizedSwing.bind(new JLabel(locales().localizedForKey("missing_domain_model")), locales(), "missing_domain_model"), LayoutPosition.TOP_RIGHT.name());
 			}
 
 			// B Context
@@ -169,7 +186,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 				centerPanel.add(new BComponentView(context, perspective.getController()), LayoutPosition.BOTTOM_LEFT.name());
 			}
 			else {
-				centerPanel.add(new JLabel("Missing B component"), LayoutPosition.BOTTOM_RIGHT.name());
+				centerPanel.add(LocalizedSwing.bind(new JLabel(locales().localizedForKey("missing_b_component")), locales(), "missing_b_component"), LayoutPosition.BOTTOM_RIGHT.name());
 			}
 
 			// B Machine
@@ -178,7 +195,7 @@ public class BMappingModuleView extends JPanel implements ModuleView<FlexoConcep
 				centerPanel.add(new BComponentView(machine, perspective.getController()), LayoutPosition.BOTTOM_RIGHT.name());
 			}
 			else {
-				centerPanel.add(new JLabel("Missing B component"), LayoutPosition.BOTTOM_LEFT.name());
+				centerPanel.add(LocalizedSwing.bind(new JLabel(locales().localizedForKey("missing_b_component")), locales(), "missing_b_component"), LayoutPosition.BOTTOM_LEFT.name());
 			}
 		} catch (TypeMismatchException e) {
 			// TODO Auto-generated catch block
