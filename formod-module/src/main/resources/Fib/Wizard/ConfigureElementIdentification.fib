@@ -17,7 +17,7 @@
   <LocalizedDictionary id="14">
     <Localized id="15" lang="English" value="Element" key="element" />
     <Localized id="16" lang="Dutch" value="Element" key="element" />
-    <Localized id="17" lang="French" value="Element" key="element" />
+    <Localized id="17" lang="French" value="Élément" key="element" />
     <Localized id="18" lang="English" value="Element name" key="element_name" />
     <Localized id="19" lang="Dutch" value="Element name" key="element_name" />
     <Localized id="20" lang="French" value="Nom de l'élément" key="element_name" />

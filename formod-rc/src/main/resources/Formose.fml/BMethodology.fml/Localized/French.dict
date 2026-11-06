@@ -1,8 +1,8 @@
-Update\ the\ formal\ model=Update the formal model
-back_Propagate_Structural_Part_Updates=back_Propagate_Structural_Part_Updates
-get_B_element_mapping=get_B_element_mapping
-parent=parent
-serializeSysMLKAOSModel=serializeSysMLKAOSModel
-updateFromDomainModel=updateFromDomainModel
-update_behavioral_part=update_behavioral_part
-update_structural_part=update_structural_part
+Update\ the\ formal\ model=Mettre \u00e0 jour le mod\u00e8le formel
+back_Propagate_Structural_Part_Updates=R\u00e9tropropager les mises \u00e0 jour de la partie structurelle
+get_B_element_mapping=Obtenir la correspondance de l'\u00e9l\u00e9ment B
+parent=Parent
+serializeSysMLKAOSModel=S\u00e9rialiser le mod\u00e8le SysML/KAOS
+updateFromDomainModel=Mettre \u00e0 jour depuis le mod\u00e8le du domaine
+update_behavioral_part=Mettre \u00e0 jour la partie comportementale
+update_structural_part=Mettre \u00e0 jour la partie structurelle

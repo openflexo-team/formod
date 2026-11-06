@@ -143,7 +143,7 @@
 		<Localized id="39" lang="French" value="Méthodologie" key="methodology" />
 		<Localized id="40" lang="English" value="Element" key="element" />
 		<Localized id="41" lang="Dutch" value="Element" key="element" />
-		<Localized id="42" lang="French" value="Element" key="element" />
+		<Localized id="42" lang="French" value="Élément" key="element" />
 		<Localized id="43" lang="English" value="Elements" key="elements" />
 		<Localized id="44" lang="Dutch" value="elements" key="elements" />
 		<Localized id="45" lang="French" value="Eléments" key="elements" />
@@ -172,7 +172,7 @@
 			key="create_sub_element" />
 		<Localized id="61" lang="English" value="Add action" key="add_action" />
 		<Localized id="62" lang="Dutch" value="Add action" key="add_action" />
-		<Localized id="63" lang="French" value="add_action" key="add_action" />
+		<Localized id="63" lang="French" value="Ajouter une action" key="add_action" />
 		<Localized id="64" lang="English" value="Instantiate B methodology"
 			key="instantiate_B_methodology" />
 		<Localized id="65" lang="Dutch" value="Instantiate B methodology"

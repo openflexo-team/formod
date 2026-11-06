@@ -1,5 +1,5 @@
-author=author
-identifier_name=identifier_name
-object_type=object_type
-set=set
-viewpoint=viewpoint
+author=Auteur
+identifier_name=Nom de l'identifiant
+object_type=Type d'objet
+set=Affecter
+viewpoint=VirtualModel

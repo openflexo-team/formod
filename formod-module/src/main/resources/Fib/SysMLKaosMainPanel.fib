@@ -138,7 +138,7 @@
 		<Localized id="32" lang="French" value="Méthodologie" key="methodology" />
 		<Localized id="33" lang="English" value="Element" key="element" />
 		<Localized id="34" lang="Dutch" value="Element" key="element" />
-		<Localized id="35" lang="French" value="Element" key="element" />
+		<Localized id="35" lang="French" value="Élément" key="element" />
 		<Localized id="36" lang="English" value="Elements" key="elements" />
 		<Localized id="37" lang="Dutch" value="elements" key="elements" />
 		<Localized id="38" lang="French" value="Eléments" key="elements" />

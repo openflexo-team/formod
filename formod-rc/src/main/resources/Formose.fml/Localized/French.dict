@@ -1,4 +1,4 @@
-init_formose_view=init_formose_view
-new=new
-projectDescription=projectDescription
-projectName=projectName
+init_formose_view=Initialisation de la vue Formose
+new=Nouveau
+projectDescription=Description du projet
+projectName=Nom du projet
