@@ -1,7 +1,7 @@
-docXDocumentResource=docXDocumentResource
-documentDescription=documentDescription
-documentName=documentName
-documentVMI=documentVMI
-import_doc_x_document=import_doc_x_document
-removeDocXDocument=removeDocXDocument
-remove_doc_x_document=remove_doc_x_document
+docXDocumentResource=DocX-documentbron
+documentDescription=Beschrijving van het document
+documentName=Naam van het document
+documentVMI=VirtualModel-instantie van het document
+import_doc_x_document=DocX-document importeren
+removeDocXDocument=DocX-document verwijderen
+remove_doc_x_document=DocX-document verwijderen

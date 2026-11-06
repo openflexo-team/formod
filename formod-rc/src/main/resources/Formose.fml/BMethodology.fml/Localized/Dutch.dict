@@ -1,8 +1,8 @@
-Update\ the\ formal\ model=Update the formal model
-back_Propagate_Structural_Part_Updates=back_Propagate_Structural_Part_Updates
-get_B_element_mapping=get_B_element_mapping
+Update\ the\ formal\ model=Het formele model bijwerken
+back_Propagate_Structural_Part_Updates=Wijzigingen van het structurele deel terugpropageren
+get_B_element_mapping=De koppeling van het B-element ophalen
 parent=parent
-serializeSysMLKAOSModel=serializeSysMLKAOSModel
-updateFromDomainModel=updateFromDomainModel
-update_behavioral_part=update_behavioral_part
-update_structural_part=update_structural_part
+serializeSysMLKAOSModel=Het SysML/KAOS-model serialiseren
+updateFromDomainModel=Bijwerken vanuit het domeinmodel
+update_behavioral_part=Het gedragsdeel bijwerken
+update_structural_part=Het structurele deel bijwerken

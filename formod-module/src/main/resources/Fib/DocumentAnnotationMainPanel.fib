@@ -51,10 +51,10 @@
   </Panel>
   <LocalizedDictionary id="38">
     <Localized id="39" lang="English" value="Import docx document" key="import_docx_document" />
-    <Localized id="40" lang="Dutch" value="Import docx document" key="import_docx_document" />
+    <Localized id="40" lang="Dutch" value="DocX-document importeren" key="import_docx_document" />
     <Localized id="41" lang="French" value="Importer un document &quot;.docx&quot;" key="import_docx_document" />
     <Localized id="42" lang="English" value="Remove document" key="remove_document" />
-    <Localized id="43" lang="Dutch" value="Remove document" key="remove_document" />
+    <Localized id="43" lang="Dutch" value="Document verwijderen" key="remove_document" />
     <Localized id="44" lang="French" value="Supprimer le document" key="remove_document" />
   </LocalizedDictionary>
   <FIBVariable id="45" type="org.openflexo.module.formose.model.FormoseProjectNature" name="data" />

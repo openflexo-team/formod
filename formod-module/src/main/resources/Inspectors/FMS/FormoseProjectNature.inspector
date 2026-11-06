@@ -72,22 +72,22 @@
 	<LocalizedDictionary>
 		<Localized key="location" lang="English" value="Location" />
 		<Localized key="location" lang="French" value="Répertoire de travail" />
-		<Localized key="location" lang="Dutch" value="Location" />
+		<Localized key="location" lang="Dutch" value="Locatie" />
 		<Localized key="target" lang="English" value="Target" />
 		<Localized key="target" lang="French" value="Environnement cible" />
-		<Localized key="target" lang="Dutch" value="Target" />
+		<Localized key="target" lang="Dutch" value="Doel" />
 		<Localized key="date_format" lang="English" value="Date format" />
 		<Localized key="date_format" lang="French" value="Format de date" />
-		<Localized key="date_format" lang="Dutch" value="Date format" />
+		<Localized key="date_format" lang="Dutch" value="Datumnotatie" />
 		<Localized key="creation_date" lang="English" value="Creation date" />
 		<Localized key="creation_date" lang="French" value="Date de création" />
-		<Localized key="creation_date" lang="Dutch" value="Creation date" />
+		<Localized key="creation_date" lang="Dutch" value="Aanmaakdatum" />
 		<Localized key="creation_user_id" lang="English" value="Creation user" />
 		<Localized key="creation_user_id" lang="French" value="Créé par" />
-		<Localized key="creation_user_id" lang="Dutch" value="Creation user" />
+		<Localized key="creation_user_id" lang="Dutch" value="Aangemaakt door" />
 		<Localized key="nature" lang="English" value="Nature" />
 		<Localized key="nature" lang="French" value="Nature" />
-		<Localized key="nature" lang="Dutch" value="Nature" />
+		<Localized key="nature" lang="Dutch" value="Aard" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="Project"/>
 </Panel>

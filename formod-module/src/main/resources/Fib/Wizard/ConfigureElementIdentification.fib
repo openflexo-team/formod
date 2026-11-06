@@ -19,13 +19,13 @@
     <Localized id="16" lang="Dutch" value="Element" key="element" />
     <Localized id="17" lang="French" value="Élément" key="element" />
     <Localized id="18" lang="English" value="Element name" key="element_name" />
-    <Localized id="19" lang="Dutch" value="Element name" key="element_name" />
+    <Localized id="19" lang="Dutch" value="Naam van het element" key="element_name" />
     <Localized id="20" lang="French" value="Nom de l'élément" key="element_name" />
     <Localized id="21" lang="English" value="Element description" key="element_description" />
-    <Localized id="22" lang="Dutch" value="Element description" key="element_description" />
+    <Localized id="22" lang="Dutch" value="Beschrijving van het element" key="element_description" />
     <Localized id="23" lang="French" value="Description de l'élément" key="element_description" />
     <Localized id="24" lang="English" value="Parent element" key="parent_element" />
-    <Localized id="25" lang="Dutch" value="Parent element" key="parent_element" />
+    <Localized id="25" lang="Dutch" value="Bovenliggend element" key="parent_element" />
     <Localized id="26" lang="French" value="Elément parent" key="parent_element" />
   </LocalizedDictionary>
   <FIBVariable id="27" type="org.openflexo.module.formose.controller.action.IdentifyElementWizard$ConfigureElementIdentification" name="data" />

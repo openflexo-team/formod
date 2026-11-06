@@ -19,16 +19,16 @@
     <Localized id="16" lang="Dutch" value="Element" key="element" />
     <Localized id="17" lang="French" value="Elément" key="element" />
     <Localized id="18" lang="English" value="Ontology" key="ontology" />
-    <Localized id="19" lang="Dutch" value="Ontology" key="ontology" />
+    <Localized id="19" lang="Dutch" value="Ontologie" key="ontology" />
     <Localized id="20" lang="French" value="Ontologie" key="ontology" />
     <Localized id="21" lang="English" value="Import owl ontology" key="import_owl_ontology" />
-    <Localized id="22" lang="Dutch" value="Import owl ontology" key="import_owl_ontology" />
+    <Localized id="22" lang="Dutch" value="OWL-ontologie importeren" key="import_owl_ontology" />
     <Localized id="23" lang="French" value="Importer une ontologie OWL" key="import_owl_ontology" />
     <Localized id="27" lang="English" value="Create new ontology" key="create_new_ontology" />
-    <Localized id="28" lang="Dutch" value="Create new ontology" key="create_new_ontology" />
+    <Localized id="28" lang="Dutch" value="Nieuwe ontologie maken" key="create_new_ontology" />
     <Localized id="29" lang="French" value="Créer une nouvelle ontologie" key="create_new_ontology" />
     <Localized id="30" lang="English" value="Import existing ontology" key="import_existing_ontology" />
-    <Localized id="31" lang="Dutch" value="Import existing ontology" key="import_existing_ontology" />
+    <Localized id="31" lang="Dutch" value="Bestaande ontologie importeren" key="import_existing_ontology" />
     <Localized id="32" lang="French" value="Importer une ontologie existante" key="import_existing_ontology" />
   </LocalizedDictionary>
 </Panel>

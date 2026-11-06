@@ -6,13 +6,13 @@
   <TextArea id="4" rows="5" columns="6" text="TextArea" localize="true" data="data.diagramDescription" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" index="13" name="TextArea" />
   <LocalizedDictionary id="5">
     <Localized id="6" lang="English" value="Diagram title" key="diagram_title" />
-    <Localized id="7" lang="Dutch" value="Diagram title" key="diagram_title" />
+    <Localized id="7" lang="Dutch" value="Titel van het diagram" key="diagram_title" />
     <Localized id="8" lang="French" value="Ttre du diagramme" key="diagram_title" />
     <Localized id="12" lang="English" value="You should provide a title for the new goal diagram" key="you_should_provide_a_title_for_the_new_goal_diagram" />
-    <Localized id="13" lang="Dutch" value="You should provide a title for the new goal diagram" key="you_should_provide_a_title_for_the_new_goal_diagram" />
+    <Localized id="13" lang="Dutch" value="Geef een titel op voor het nieuwe doeldiagram" key="you_should_provide_a_title_for_the_new_goal_diagram" />
     <Localized id="14" lang="French" value="Vous devez donner un titre au nouveau diagramme" key="you_should_provide_a_title_for_the_new_goal_diagram" />
     <Localized id="15" lang="English" value="It is recommanded to describe new goal diagram" key="it_is_recommanded_to_describe_new_goal_diagram" />
-    <Localized id="16" lang="Dutch" value="It is recommanded to describe new goal diagram" key="it_is_recommanded_to_describe_new_goal_diagram" />
+    <Localized id="16" lang="Dutch" value="Het is aanbevolen het nieuwe doeldiagram te beschrijven" key="it_is_recommanded_to_describe_new_goal_diagram" />
     <Localized id="17" lang="French" value="C'est le moment de décrire votre nouveau diagramme de buts" key="it_is_recommanded_to_describe_new_goal_diagram" />
   </LocalizedDictionary>
   <FIBVariable id="18" type="org.openflexo.module.formose.controller.action.CreateNewGoalDiagramWizard$ConfigureNewGoalDiagram" name="data" />

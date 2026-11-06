@@ -78,7 +78,7 @@
 			key="project_source_folder" />
 		<Localized id="19" lang="English" value="Select a project"
 			key="select_a_project" />
-		<Localized id="20" lang="Dutch" value="Select a project"
+		<Localized id="20" lang="Dutch" value="Selecteer een project"
 			key="select_a_project" />
 		<Localized id="21" lang="French"
 			value="Sélectionner un projet AtelierB" key="select_a_project" />
@@ -99,32 +99,32 @@
 			value="Que voulez vous faire ?" key="creationChoice" />
 		<Localized id="28" lang="English"
 			value="Create new Bproject" key="create_new_Bproject" />
-		<Localized id="29" lang="Dutch" value="Create new Bproject"
+		<Localized id="29" lang="Dutch" value="Nieuw B-project maken"
 			key="create_new_Bproject" />
 		<Localized id="30" lang="French"
 			value="Créer un nouveau projet AtelierB" key="create_new_Bproject" />
 		<Localized id="31" lang="English"
 			value="Open existing Bproject" key="open_existing_Bproject" />
 		<Localized id="32" lang="Dutch"
-			value="Open existing Bproject" key="open_existing_Bproject" />
+			value="Bestaand B-project openen" key="open_existing_Bproject" />
 		<Localized id="33" lang="French"
 			value="Ouvrir un projet AtelierB existant"
 			key="open_existing_Bproject" />
 		<Localized id="34" lang="English"
 			value="Project creation folder" key="project_creation_folder" />
 		<Localized id="35" lang="Dutch"
-			value="Project creation folder" key="project_creation_folder" />
+			value="Aanmaakmap van het project" key="project_creation_folder" />
 		<Localized id="36" lang="French"
 			value="Répertoire de création" key="project_creation_folder" />
 		<Localized id="37" lang="English" value="Select a folder"
 			key="select_a_folder" />
-		<Localized id="38" lang="Dutch" value="Select a folder"
+		<Localized id="38" lang="Dutch" value="Selecteer een map"
 			key="select_a_folder" />
 		<Localized id="39" lang="French"
 			value="Sélectionner un répertoire" key="select_a_folder" />
 		<Localized id="40" lang="English" value="New project name"
 			key="new_project_name" />
-		<Localized id="41" lang="Dutch" value="New project name"
+		<Localized id="41" lang="Dutch" value="Naam van het nieuwe project"
 			key="new_project_name" />
 		<Localized id="42" lang="French"
 			value="Nom du projet à créer" key="new_project_name" />

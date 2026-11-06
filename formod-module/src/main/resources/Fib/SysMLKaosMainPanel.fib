@@ -128,22 +128,22 @@
 	</Panel>
 	<LocalizedDictionary id="20">
 		<Localized id="24" lang="English" value="Methodologies" key="methodologies" />
-		<Localized id="25" lang="Dutch" value="methodologies" key="methodologies" />
+		<Localized id="25" lang="Dutch" value="Methodologieën" key="methodologies" />
 		<Localized id="26" lang="French" value="Méthodologies" key="methodologies" />
 		<Localized id="27" lang="English" value="Icon" key="icon" />
-		<Localized id="28" lang="Dutch" value="Icon" key="icon" />
+		<Localized id="28" lang="Dutch" value="Pictogram" key="icon" />
 		<Localized id="29" lang="French" value="Icône" key="icon" />
 		<Localized id="30" lang="English" value="Methodology" key="methodology" />
-		<Localized id="31" lang="Dutch" value="Methodology" key="methodology" />
+		<Localized id="31" lang="Dutch" value="Methodologie" key="methodology" />
 		<Localized id="32" lang="French" value="Méthodologie" key="methodology" />
 		<Localized id="33" lang="English" value="Element" key="element" />
 		<Localized id="34" lang="Dutch" value="Element" key="element" />
 		<Localized id="35" lang="French" value="Élément" key="element" />
 		<Localized id="36" lang="English" value="Elements" key="elements" />
-		<Localized id="37" lang="Dutch" value="elements" key="elements" />
+		<Localized id="37" lang="Dutch" value="Elementen" key="elements" />
 		<Localized id="38" lang="French" value="Eléments" key="elements" />
 		<Localized id="39" lang="English" value="Requirement" key="requirement" />
-		<Localized id="40" lang="Dutch" value="Requirement" key="requirement" />
+		<Localized id="40" lang="Dutch" value="Vereiste" key="requirement" />
 		<Localized id="41" lang="French" value="Exigence" key="requirement" />
 		<Localized id="42" lang="English" value="Status" key="status" />
 		<Localized id="43" lang="Dutch" value="Status" key="status" />
@@ -156,18 +156,18 @@
 			value="Instancier la méthodologie SysML/KAOS" key="instantiate_sysml_kaos_methodology" />
 		<Localized id="48" lang="English" value="Create element"
 			key="create_element" />
-		<Localized id="49" lang="Dutch" value="create_element" key="create_element" />
+		<Localized id="49" lang="Dutch" value="Element maken" key="create_element" />
 		<Localized id="50" lang="French" value="Créer un élément"
 			key="create_element" />
 		<Localized id="51" lang="English" value="Create requirement"
 			key="create_requirement" />
-		<Localized id="52" lang="Dutch" value="create_requirement"
+		<Localized id="52" lang="Dutch" value="Vereiste maken"
 			key="create_requirement" />
 		<Localized id="53" lang="French" value="Créer une exigence"
 			key="create_requirement" />
 		<Localized id="54" lang="English" value="Create sub-element"
 			key="create_sub_element" />
-		<Localized id="55" lang="Dutch" value="create_sub_element"
+		<Localized id="55" lang="Dutch" value="Subelement maken"
 			key="create_sub_element" />
 		<Localized id="56" lang="French" value="Créer un sous-élément"
 			key="create_sub_element" />

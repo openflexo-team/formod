@@ -19,7 +19,7 @@
 	<LocalizedDictionary>
 		<Localized key="validate" lang="English" value="Validate" />
 		<Localized key="validate" lang="French" value="Valider" />
-		<Localized key="validate" lang="Dutch" value="Validate" />
+		<Localized key="validate" lang="Dutch" value="Valideren" />
 		<Localized key="formose_nature_error_text" lang="English" value="Formose viewpoint not found, please reference it in the resource center." />
 		<Localized key="formose_nature_error_text" lang="French" value="Le viewpoint Formose n'a pas été trouvé, veuillez le référencer dans le centre de ressource." />
 		<Localized key="formose_nature_error_dialog_title" lang="English" value="Project initialisation error" />

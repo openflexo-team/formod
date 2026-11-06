@@ -6,10 +6,10 @@
   <TextArea id="4" rows="5" columns="6" text="TextArea" localize="true" data="data.description" useScrollBar="true" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" index="13" name="TextArea" />
   <LocalizedDictionary id="5">
     <Localized id="6" lang="English" value="Requirement name" key="requirement_name" />
-    <Localized id="7" lang="Dutch" value="Requirement name" key="requirement_name" />
+    <Localized id="7" lang="Dutch" value="Naam van de vereiste" key="requirement_name" />
     <Localized id="8" lang="French" value="Nom de l'exigence" key="requirement_name" />
     <Localized id="9" lang="English" value="Requirement description" key="requirement_description" />
-    <Localized id="10" lang="Dutch" value="Requirement description" key="requirement_description" />
+    <Localized id="10" lang="Dutch" value="Beschrijving van de vereiste" key="requirement_description" />
     <Localized id="11" lang="French" value="Description de l'exigence" key="requirement_description" />
   </LocalizedDictionary>
   <FIBVariable id="12" type="org.openflexo.module.formose.controller.action.CreateNewRequirementWizard$ConfigureRequirement" name="data" />
