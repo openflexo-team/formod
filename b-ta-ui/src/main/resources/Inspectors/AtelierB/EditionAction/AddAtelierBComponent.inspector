@@ -61,8 +61,6 @@
 	<FIBVariable name="data"
 		type="org.openflexo.ta.b.fml.atelierb.AddAtelierBComponent" />
 	<LocalizedDictionary>
-		<Localized key="Advanced" lang="French" value="Avancé" />
-		<Localized key="Basic" lang="French" value="Basique" />
 	</LocalizedDictionary>
 	<Parameter name="title" value="AddAtelierBComponent action" />
 </Panel>

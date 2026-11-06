@@ -1,6 +1,5 @@
 Defined\ with=Defined with
 antecedent=antecedent
-cardinality=cardinality
 concept=concept
 conceptIndividuals=conceptIndividuals
 domain=domain
@@ -20,6 +19,5 @@ new=new
 parent=parent
 parentConcept=parentConcept
 parentDomainModel=parentDomainModel
-property=property
 range=range
 rangeCardinality=rangeCardinality

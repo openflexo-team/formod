@@ -132,9 +132,6 @@
 			name="Button2" />
 	</Panel>
 	<LocalizedDictionary id="27">
-		<Localized id="28" lang="English" value="Description" key="description" />
-		<Localized id="29" lang="Dutch" value="Description" key="description" />
-		<Localized id="30" lang="French" value="Description" key="description" />
 		<Localized id="31" lang="English" value="Methodologies" key="methodologies" />
 		<Localized id="32" lang="Dutch" value="methodologies" key="methodologies" />
 		<Localized id="33" lang="French" value="Méthodologies" key="methodologies" />

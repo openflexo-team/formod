@@ -1,8 +1,4 @@
-behaviour=behaviour
-delete=delete
 init_formose_view=init_formose_view
 new=new
 projectDescription=projectDescription
 projectName=projectName
-property=property
-virtual_model=virtual_model

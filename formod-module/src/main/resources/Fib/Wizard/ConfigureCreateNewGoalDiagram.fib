@@ -8,9 +8,6 @@
     <Localized id="6" lang="English" value="Diagram title" key="diagram_title" />
     <Localized id="7" lang="Dutch" value="Diagram title" key="diagram_title" />
     <Localized id="8" lang="French" value="Ttre du diagramme" key="diagram_title" />
-    <Localized id="9" lang="English" value="Description" key="description" />
-    <Localized id="10" lang="Dutch" value="Description" key="description" />
-    <Localized id="11" lang="French" value="Description" key="description" />
     <Localized id="12" lang="English" value="You should provide a title for the new goal diagram" key="you_should_provide_a_title_for_the_new_goal_diagram" />
     <Localized id="13" lang="Dutch" value="You should provide a title for the new goal diagram" key="you_should_provide_a_title_for_the_new_goal_diagram" />
     <Localized id="14" lang="French" value="Vous devez donner un titre au nouveau diagramme" key="you_should_provide_a_title_for_the_new_goal_diagram" />

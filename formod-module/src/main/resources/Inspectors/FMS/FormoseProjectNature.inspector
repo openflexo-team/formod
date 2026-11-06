@@ -70,16 +70,9 @@
 		</Tab>
 	</TabPanel>
 	<LocalizedDictionary>
-		<Localized key="Basic" lang="French" value="Basique" />
-		<Localized key="name" lang="English" value="Name" />
-		<Localized key="name" lang="French" value="Nom" />
-		<Localized key="name" lang="Dutch" value="Name" />
 		<Localized key="location" lang="English" value="Location" />
 		<Localized key="location" lang="French" value="Répertoire de travail" />
 		<Localized key="location" lang="Dutch" value="Location" />
-		<Localized key="description" lang="English" value="Description" />
-		<Localized key="description" lang="French" value="Description" />
-		<Localized key="description" lang="Dutch" value="Description" />
 		<Localized key="target" lang="English" value="Target" />
 		<Localized key="target" lang="French" value="Environnement cible" />
 		<Localized key="target" lang="Dutch" value="Target" />
