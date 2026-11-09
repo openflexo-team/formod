@@ -126,7 +126,7 @@ public class RefineUsingAgentAllocation extends FMSAction<RefineUsingAgentAlloca
 		System.out.println("execute " + as);
 		ActionSchemeActionFactory at = new ActionSchemeActionFactory(as, skbgMethodology);
 		ActionSchemeAction action = at.makeNewEmbeddedAction(skbgMethodology, null, this);
-		FlexoBehaviourParameter elementParam = as.getParameters().get(0);
+		FlexoBehaviourArgument elementParam = as.getParameters().get(0);
 		action.setParameterValue(elementParam, element);
 		action.doAction();
 		
