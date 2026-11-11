@@ -7,6 +7,37 @@ dependencies {
   implementation testUtils()
   implementation flexoFoundationTest()
 
+  // Test harness of p2pp: the pretty-print of B is checked with its invariants (see TestBPrettyPrintInvariants)
+  testImplementation p2ppTest()
+
   // Test resource center
   testRuntimeOnly project(':b-ta-test-rc')
+}
+
+// Known defects of p2pp, as the p2pp test harness sees them (see KnownDefects in p2pp-test): the tests that show one FAIL, to be fixed. With
+// './gradlew :b-ta-test:test -Dp2pp.tolerateKnownDefects=true' they wait for the fix instead, and the summary below says which defects.
+def knownDefectsFile = layout.buildDirectory.file('known-defects.txt')
+
+tasks.withType(Test).configureEach {
+  systemProperty 'p2pp.tolerateKnownDefects', System.getProperty('p2pp.tolerateKnownDefects', 'false')
+  systemProperty 'p2pp.knownDefectsFile', knownDefectsFile.get().asFile.path
+  doFirst {
+    knownDefectsFile.get().asFile.delete()
+  }
+  doLast {
+    def report = knownDefectsFile.get().asFile
+    if (report.exists()) {
+      def byDefect = new TreeMap({ a, b -> (a.replaceAll('\\D', '') as int) <=> (b.replaceAll('\\D', '') as int) } as Comparator)
+      report.eachLine { row ->
+        def parts = row.split('\t')
+        if (parts.length == 2) {
+          byDefect.computeIfAbsent(parts[0]) { new TreeSet() }.add(parts[1])
+        }
+      }
+      println ''
+      println "Known p2pp defects waited for by this run (p2pp-core/KNOWN_DEFECTS.md): ${byDefect.size()} defects"
+      byDefect.each { id, tests -> println "  ${id.padRight(10)} ${tests.size()} test(s)" }
+      println '  (-Dp2pp.tolerateKnownDefects=true is set: without it these tests fail)'
+    }
+  }
 }
