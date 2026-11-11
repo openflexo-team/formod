@@ -10,6 +10,3 @@ move-constant/last      P2PP-D-10
 move-variable/first     P2PP-D-10
 move-variable/middle    P2PP-D-10
 move-variable/last      P2PP-D-10
-remove-set/last         P2PP-D-11
-remove-constant/last    P2PP-D-11
-remove-variable/last    P2PP-D-11

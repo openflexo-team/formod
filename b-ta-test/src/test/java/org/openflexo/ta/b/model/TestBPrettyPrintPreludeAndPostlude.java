@@ -151,7 +151,8 @@ public class TestBPrettyPrintPreludeAndPostlude extends AbstractBTest {
 
 		debug(rootNode, 0);
 
-		assertEquals(rawSource.makeFragment(1, 0, 17, 3), rootNode.getLastParsedFragment());
+		// The component stands for the whole source, final line separator included: the source ends with a line separator, after (17:3)
+		assertEquals(rawSource.makeFragment(1, 0, 18, 0), rootNode.getLastParsedFragment());
 
 		// The prelude of a first clause is its indentation only: the section keyword (INCLUDES...) is a static contents of its own
 		BIncludesClauseNode includes1 = (BIncludesClauseNode) rootNode.getChildren().get(0);
