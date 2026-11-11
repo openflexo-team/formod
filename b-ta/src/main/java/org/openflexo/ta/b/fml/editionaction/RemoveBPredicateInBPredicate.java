@@ -54,8 +54,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BPredicate;
@@ -65,7 +63,6 @@ import org.openflexo.ta.b.model.predicate.BConjunctPredicate;
 
 @ModelEntity
 @ImplementationClass(RemoveBPredicateInBPredicate.RemoveBPredicateInBPredicateImpl.class)
-@XMLElement
 @FML("RemoveBPredicateInBPredicate")
 public interface RemoveBPredicateInBPredicate extends BAction<BPredicate> {
 
@@ -76,12 +73,10 @@ public interface RemoveBPredicateInBPredicate extends BAction<BPredicate> {
 	public static final String SUB_PREDICATE_KEY = "subPredicate";
 
 	@Getter(value = CONTAINER_PREDICATE_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = CONTAINER_PREDICATE_KEY, required = true, description = "<html>predicate to remove from</html>")
 	public DataBinding<BPredicate> getContainerPredicate();
 
 	@Getter(value = SUB_PREDICATE_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = SUB_PREDICATE_KEY, required = true, description = "<html>predicate to remove</html>")
 	public DataBinding<BPredicate> getSubPredicate();
 

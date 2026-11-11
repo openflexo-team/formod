@@ -55,8 +55,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BExpression;
@@ -87,7 +85,6 @@ import org.openflexo.ta.b.model.predicate.BBinaryExpressionPredicate;
  */
 @ModelEntity
 @ImplementationClass(CreateBBinaryExpression.CreateBBinaryExpressionImpl.class)
-@XMLElement
 @FML("CreateBBinaryExpression")
 public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 
@@ -99,7 +96,6 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 	public static final String RIGHT_OPERAND_KEY = "rightOperand";
 
 	@Getter(value = OPERATOR_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = OPERATOR_KEY, required = true, kind = AttributeKind.Enum, description = "<html>operator of the expression</html>")
 	public BinaryOperator getOperator();
 
@@ -107,7 +103,6 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 	public void setOperator(BinaryOperator operator);
 
 	@Getter(value = LEFT_OPERAND_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = LEFT_OPERAND_KEY, required = true, description = "<html>left operand</html>")
 	public DataBinding<BExpression> getLeftOperand();
 
@@ -115,7 +110,6 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 	public void setLeftOperand(DataBinding<BExpression> left);
 
 	@Getter(value = RIGHT_OPERAND_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = RIGHT_OPERAND_KEY, required = true, description = "<html>right operand</html>")
 	public DataBinding<BExpression> getRightOperand();
 

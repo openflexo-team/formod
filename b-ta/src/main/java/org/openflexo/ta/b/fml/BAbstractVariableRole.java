@@ -43,7 +43,6 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.model.BAbstractVariable;
 import org.openflexo.ta.b.model.BComponent;
 
@@ -55,7 +54,6 @@ import org.openflexo.ta.b.model.BComponent;
  */
 @ModelEntity
 @ImplementationClass(BAbstractVariableRole.BAbstractVariableRoleImpl.class)
-@XMLElement
 @FML("BAbstractVariableRole")
 public interface BAbstractVariableRole extends BObjectRole<BComponent> {
 

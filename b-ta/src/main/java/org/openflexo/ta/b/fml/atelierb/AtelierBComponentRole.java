@@ -47,7 +47,6 @@ import org.openflexo.foundation.fml.rt.ActorReference;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BTechnologyAdapter;
 import org.openflexo.ta.b.model.atelierb.AtelierBComponent;
 
@@ -59,7 +58,6 @@ import org.openflexo.ta.b.model.atelierb.AtelierBComponent;
  */
 @ModelEntity
 @ImplementationClass(AtelierBComponentRole.AtelierBComponentRoleImpl.class)
-@XMLElement
 @FML("AtelierBComponentRole")
 public interface AtelierBComponentRole extends FlexoRole<AtelierBComponent> {
 

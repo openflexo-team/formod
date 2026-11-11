@@ -54,8 +54,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BSet;
@@ -63,7 +61,6 @@ import org.openflexo.ta.b.model.BSetValue;
 
 @ModelEntity
 @ImplementationClass(AddBSetValue.AddBSetValueImpl.class)
-@XMLElement
 @FML("AddBSetValue")
 public interface AddBSetValue extends BAction<BSetValue> {
 
@@ -75,12 +72,10 @@ public interface AddBSetValue extends BAction<BSetValue> {
 	public static final String SET_KEY = "bSet";
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 
 	@Getter(value = SET_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = SET_KEY, required = true, description = "<html>set the new value belongs to</html>")
 	public DataBinding<BSet> getSet();
 

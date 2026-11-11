@@ -54,8 +54,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BOperation;
@@ -64,7 +62,6 @@ import org.openflexo.ta.b.model.substitution.BSkipSubstitution;
 
 @ModelEntity
 @ImplementationClass(AddBOperation.AddBOperationImpl.class)
-@XMLElement
 @FML("AddBOperation")
 public interface AddBOperation extends BAction<BOperation> {
 
@@ -72,7 +69,6 @@ public interface AddBOperation extends BAction<BOperation> {
 	public static final String INDENTIFIER_NAME_KEY = "identifierName";
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 

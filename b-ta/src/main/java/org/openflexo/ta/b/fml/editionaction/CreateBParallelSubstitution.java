@@ -45,7 +45,6 @@ import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.substitution.BParallelSubstitution;
@@ -58,7 +57,6 @@ import org.openflexo.ta.b.model.substitution.BParallelSubstitution;
  */
 @ModelEntity
 @ImplementationClass(CreateBParallelSubstitution.CreateBParallelSubstitutionImpl.class)
-@XMLElement
 @FML("CreateBParallelSubstitution")
 public interface CreateBParallelSubstitution extends BAction<BParallelSubstitution> {
 

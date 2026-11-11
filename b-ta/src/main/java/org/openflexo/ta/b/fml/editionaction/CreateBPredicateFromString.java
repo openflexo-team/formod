@@ -55,8 +55,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BPredicate;
@@ -72,7 +70,6 @@ import org.openflexo.ta.b.parser.lexer.CustomLexer.EntryPointKind;
  */
 @ModelEntity
 @ImplementationClass(CreateBPredicateFromString.CreateBPredicateFromStringImpl.class)
-@XMLElement
 @FML("CreateBPredicateFromString")
 public interface CreateBPredicateFromString extends BAction<BPredicate> {
 
@@ -80,7 +77,6 @@ public interface CreateBPredicateFromString extends BAction<BPredicate> {
 	public static final String PREDICATE_AS_STRING_KEY = "predicateAsString";
 
 	@Getter(value = PREDICATE_AS_STRING_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = PREDICATE_AS_STRING_KEY, required = true, description = "<html>B text of the predicate</html>")
 	public DataBinding<String> getPredicateAsString();
 

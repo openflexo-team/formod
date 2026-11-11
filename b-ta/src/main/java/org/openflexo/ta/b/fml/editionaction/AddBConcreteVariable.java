@@ -41,13 +41,11 @@ package org.openflexo.ta.b.fml.editionaction;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BConcreteVariable;
 
 @ModelEntity
 @ImplementationClass(AddBConcreteVariable.AddBConcreteVariableImpl.class)
-@XMLElement
 @FML("AddBConcreteVariable")
 public interface AddBConcreteVariable extends AddBMember<BConcreteVariable> {
 

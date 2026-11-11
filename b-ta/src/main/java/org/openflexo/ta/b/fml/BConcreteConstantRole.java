@@ -43,7 +43,6 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BConcreteConstant;
 
@@ -55,7 +54,6 @@ import org.openflexo.ta.b.model.BConcreteConstant;
  */
 @ModelEntity
 @ImplementationClass(BConcreteConstantRole.BConcreteConstantRoleImpl.class)
-@XMLElement
 @FML("BConcreteConstantRole")
 public interface BConcreteConstantRole extends BObjectRole<BComponent> {
 

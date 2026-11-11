@@ -52,7 +52,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BMember;
@@ -65,7 +64,6 @@ public interface AddBMember<M extends BMember> extends BAction<M> {
 	public static final String INDENTIFIER_NAME_KEY = "identifierName";
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 

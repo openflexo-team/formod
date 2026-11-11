@@ -54,14 +54,11 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 
 @ModelEntity
 @ImplementationClass(String2Int.String2IntImpl.class)
-@XMLElement
 @FML("String2Int")
 public interface String2Int extends BAction<Integer> {
 
@@ -69,7 +66,6 @@ public interface String2Int extends BAction<Integer> {
 	public static final String STRING_KEY = "string";
 
 	@Getter(value = STRING_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = STRING_KEY, required = true, description = "<html>string to convert</html>")
 	public DataBinding<String> getString();
 

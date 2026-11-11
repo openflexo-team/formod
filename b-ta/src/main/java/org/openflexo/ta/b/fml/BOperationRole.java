@@ -43,7 +43,6 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BOperation;
 
@@ -55,7 +54,6 @@ import org.openflexo.ta.b.model.BOperation;
  */
 @ModelEntity
 @ImplementationClass(BOperationRole.BOperationRoleImpl.class)
-@XMLElement
 @FML("BOperationRole")
 public interface BOperationRole extends BObjectRole<BComponent> {
 

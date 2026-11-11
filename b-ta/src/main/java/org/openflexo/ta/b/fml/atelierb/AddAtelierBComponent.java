@@ -58,8 +58,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.ta.b.AtelierBProjectModelSlot;
 import org.openflexo.ta.b.model.AbstractBRefinement;
@@ -70,7 +68,6 @@ import org.openflexo.ta.b.model.atelierb.AtelierBProject;
 
 @ModelEntity
 @ImplementationClass(AddAtelierBComponent.AddAtelierBComponentImpl.class)
-@XMLElement
 @FML("AddAtelierBComponent")
 public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> {
 
@@ -87,7 +84,6 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	public static final String SEES_KEY = "sees";
 
 	@Getter(value = COMPONENT_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = COMPONENT_NAME_KEY, required = true, description = "<html>name of the new component</html>")
 	public DataBinding<String> getComponentName();
 
@@ -95,7 +91,6 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	public void setComponentName(DataBinding<String> componentName);
 
 	@Getter(value = COMPONENT_TYPE_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = COMPONENT_TYPE_KEY, required = true, kind = AttributeKind.Enum, description = "<html>kind of the new component: MACHINE, REFINEMENT, IMPLEMENTATION...</html>")
 	public BComponentType getComponentType();
 
@@ -105,7 +100,6 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	public boolean isRefinement();
 
 	@Getter(value = REFINES_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = REFINES_KEY, required = false, description = "<html>component the new component refines</html>")
 	public DataBinding<AtelierBComponent> getRefines();
 
@@ -113,7 +107,6 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	public void setRefines(DataBinding<AtelierBComponent> component);
 
 	@Getter(value = EXTENDS_COMPONENT_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = EXTENDS_COMPONENT_KEY, required = false, description = "<html>component the new component extends</html>")
 	public DataBinding<AtelierBComponent> getExtendsComponent();
 
@@ -121,7 +114,6 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 	public void setExtendsComponent(DataBinding<AtelierBComponent> component);
 
 	@Getter(value = SEES_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = SEES_KEY, required = false, description = "<html>component the new component sees</html>")
 	public DataBinding<AtelierBComponent> getSees();
 

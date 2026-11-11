@@ -51,7 +51,6 @@ import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.fml.BAbstractConstantRole;
 import org.openflexo.ta.b.fml.BAbstractVariableRole;
 import org.openflexo.ta.b.fml.BComponentRole;
@@ -102,7 +101,6 @@ import org.openflexo.ta.b.rm.BResource;
 @DeclareActorReferences({ ModelObjectActorReference.class })
 @ModelEntity
 @ImplementationClass(BModelSlot.BModelSlotImpl.class)
-@XMLElement
 @FML("BModelSlot")
 public interface BModelSlot extends FreeModelSlot<BComponent, BResource> {
 

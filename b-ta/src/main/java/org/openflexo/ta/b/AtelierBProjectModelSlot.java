@@ -50,7 +50,6 @@ import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.fml.atelierb.AddAtelierBComponent;
 import org.openflexo.ta.b.fml.atelierb.AtelierBComponentActorReference;
 import org.openflexo.ta.b.fml.atelierb.AtelierBComponentRole;
@@ -69,7 +68,6 @@ import org.openflexo.ta.b.rm.AtelierBProjectResource;
 @DeclareActorReferences({ AtelierBComponentActorReference.class })
 @ModelEntity
 @ImplementationClass(AtelierBProjectModelSlot.AtelierBProjectModelSlotImpl.class)
-@XMLElement
 @FML("AtelierBProjectModelSlot")
 public interface AtelierBProjectModelSlot extends FreeModelSlot<AtelierBProject, AtelierBProjectResource> {
 

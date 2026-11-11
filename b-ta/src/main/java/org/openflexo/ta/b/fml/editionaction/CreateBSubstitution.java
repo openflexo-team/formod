@@ -54,8 +54,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.BExpression;
@@ -71,7 +69,6 @@ import org.openflexo.ta.b.model.substitution.BBecomeElementOfSubstitution;
  */
 @ModelEntity
 @ImplementationClass(CreateBSubstitution.CreateBSubstitutionImpl.class)
-@XMLElement
 @FML("CreateBSubstitution")
 public interface CreateBSubstitution extends BAction<BSubstitution> {
 
@@ -83,7 +80,6 @@ public interface CreateBSubstitution extends BAction<BSubstitution> {
 	public static final String RIGHT_OPERAND_KEY = "rightOperand";
 
 	@Getter(value = OPERATOR_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = OPERATOR_KEY, required = true, description = "<html>operator of the expression</html>")
 	public DataBinding<String> getOperator();
 
@@ -91,7 +87,6 @@ public interface CreateBSubstitution extends BAction<BSubstitution> {
 	public void setOperator(DataBinding<String> operator);
 
 	@Getter(value = LEFT_OPERAND_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = LEFT_OPERAND_KEY, required = true, description = "<html>left operand</html>")
 	public DataBinding<BExpression> getLeftOperand();
 
@@ -99,7 +94,6 @@ public interface CreateBSubstitution extends BAction<BSubstitution> {
 	public void setLeftOperand(DataBinding<BExpression> left);
 
 	@Getter(value = RIGHT_OPERAND_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = RIGHT_OPERAND_KEY, required = true, description = "<html>right operand</html>")
 	public DataBinding<BExpression> getRightOperand();
 

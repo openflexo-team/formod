@@ -54,8 +54,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.ta.b.BModelSlot;
 import org.openflexo.ta.b.model.BComponent;
 import org.openflexo.ta.b.model.operation.BRefinedOperation;
@@ -63,7 +61,6 @@ import org.openflexo.ta.b.model.substitution.BSkipSubstitution;
 
 @ModelEntity
 @ImplementationClass(AddBRefinedOperation.AddBRefinedOperationImpl.class)
-@XMLElement
 @FML("AddBRefinedOperation")
 public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 
@@ -75,7 +72,6 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 	public static final String REFINED_OPERATION_NAME_KEY = "refinedOperationName";
 
 	@Getter(value = INDENTIFIER_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = INDENTIFIER_NAME_KEY, required = true, description = "<html>identifier of the new member</html>")
 	public DataBinding<String> getIdentifierName();
 
@@ -83,7 +79,6 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 	public void setIdentifierName(DataBinding<String> name);
 
 	@Getter(value = REFINEMENT_KEYWORD_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = REFINEMENT_KEYWORD_KEY, required = true, description = "<html>keyword of the refinement</html>")
 	public DataBinding<String> getRefinementKeyword();
 
@@ -91,7 +86,6 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 	public void setRefinementKeyword(DataBinding<String> refinementKeyword);
 
 	@Getter(value = REFINED_OPERATION_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = REFINED_OPERATION_NAME_KEY, required = true, description = "<html>name of the refined operation</html>")
 	public DataBinding<String> getRefinedOperationName();
 
