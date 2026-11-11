@@ -41,9 +41,11 @@ package org.openflexo.ta.b;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.FileNotFoundException;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -105,11 +107,15 @@ public abstract class AbstractBTest extends OpenflexoProjectAtRunTimeTestCase {
 	/**
 	 * Semantic equality of two B objects, typically a component and its re-parsed pretty-print.
 	 * 
-	 * The pretty-print delegate (the P2PP node) is excluded: PAMELA compares every non-derived property, and each parse builds its own
-	 * node. It is not flagged ignoreForEquality in {@link BObject}, as for FML, so that updateWith() still transfers it.
+	 * Excluded: the pretty-print delegate (the P2PP node), since PAMELA compares every property that is neither derived nor transient
+	 * and each parse builds its own node (it stays a regular property of {@link BObject}, as for FML, so that updateWith() still
+	 * transfers it); and the identifiers of {@link FlexoObject}, which each parse assigns anew (PAMELA-F-4).
 	 */
 	protected static boolean equalsIgnoringPrettyPrintDelegate(BObject object, BObject other) {
-		return object.equalsObject(other, property -> !BObject.PRETTY_PRINT_DELEGATE_KEY.equals(property.getPropertyIdentifier()));
+		return object.equalsObject(other, property -> !STRUCTURE_IGNORED_PROPERTIES.contains(property.getPropertyIdentifier()));
 	}
+
+	private static final Set<String> STRUCTURE_IGNORED_PROPERTIES = Set.of(BObject.PRETTY_PRINT_DELEGATE_KEY, FlexoObject.FLEXO_ID_KEY,
+			FlexoObject.USER_IDENTIFIER_KEY);
 
 }
