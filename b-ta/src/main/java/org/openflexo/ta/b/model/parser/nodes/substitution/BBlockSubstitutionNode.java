@@ -69,9 +69,9 @@ public class BBlockSubstitutionNode extends BSubstitutionNode<ABlockSubstitution
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(staticContents(LINE_SEPARATOR, "BEGIN", LINE_SEPARATOR), leadingKeywordFragment("BEGIN"), "Begin");
 		append(childContents("", () -> getModelObject().getSubstitution(), LINE_SEPARATOR, Indentation.Indent));

@@ -81,9 +81,9 @@ public class BAnySubstitutionNode extends BSubstitutionNode<AAnySubstitution, BA
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childrenContents(LINE_SEPARATOR + "ANY" + " ", ",", () -> getModelObject().getIdentifiers(), "", "", Indentation.DoNotIndent, BExpression.class));
 

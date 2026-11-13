@@ -70,9 +70,9 @@ public class BConvertBoolExpressionNode extends BExpressionNode<AConvertBoolExpr
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("bool"), leadingKeywordFragment("bool"), "Keyword");
 		append(childContents("(", () -> getModelObject().getPredicate(), ")", Indentation.DoNotIndent));
 	}

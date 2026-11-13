@@ -66,9 +66,9 @@ public abstract class BExpressionNodeWithUniqueKeyword<N extends Node, T extends
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents(getKeyword()), leadingKeywordFragment(getKeyword()), "Keyword");
 	}
 

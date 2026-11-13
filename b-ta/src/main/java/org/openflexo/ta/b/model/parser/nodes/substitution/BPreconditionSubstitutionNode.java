@@ -75,9 +75,9 @@ public class BPreconditionSubstitutionNode extends BSubstitutionNode<APreconditi
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childContents(LINE_SEPARATOR + "PRE" + " ", () -> getModelObject().getPredicate(), "", Indentation.DoNotIndent));
 

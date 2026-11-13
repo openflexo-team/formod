@@ -69,9 +69,9 @@ public class BIdentityExpressionNode extends BExpressionNode<AIdentityExpression
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("id"), leadingKeywordFragment("id"), "Keyword");
 		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
 	}

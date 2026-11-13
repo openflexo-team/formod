@@ -69,9 +69,9 @@ public class BUnaryMinusExpressionNode extends BExpressionNode<AUnaryMinusExpres
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("-"), leadingKeywordFragment("-"), "Keyword");
 		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
 	}

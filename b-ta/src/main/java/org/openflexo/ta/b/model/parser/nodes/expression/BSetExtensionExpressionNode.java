@@ -73,9 +73,9 @@ public class BSetExtensionExpressionNode extends BExpressionNode<ASetExtensionEx
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childrenContents("{", ", ", () -> getModelObject().getExpressions(), "", "}", Indentation.DoNotIndent, BExpression.class));
 	}

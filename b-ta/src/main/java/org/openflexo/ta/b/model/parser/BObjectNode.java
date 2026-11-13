@@ -121,7 +121,7 @@ public abstract class BObjectNode<N extends Node, T extends BObject> extends P2P
 		this.analyser = analyser;
 
 		modelObject.setPrettyPrintDelegate(this);
-		preparePrettyPrint(false);
+		definePrettyPrint(false);
 	}
 
 	public BModelFactory getModelFactory() {
@@ -156,8 +156,8 @@ public abstract class BObjectNode<N extends Node, T extends BObject> extends P2P
 
 	// Make this method visible
 	@Override
-	public void preparePrettyPrint(boolean hasParsedVersion) {
-		super.preparePrettyPrint(hasParsedVersion);
+	public void definePrettyPrint(boolean hasParsedVersion) {
+		super.definePrettyPrint(hasParsedVersion);
 	}
 
 	/*protected void handleToken(Token token) {

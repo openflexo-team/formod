@@ -66,9 +66,9 @@ public class BSkipSubstitutionNode extends BSubstitutionNode<ASkipSubstitution, 
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("skip"), leadingKeywordFragment("skip"), "Skip");
 	}
 }

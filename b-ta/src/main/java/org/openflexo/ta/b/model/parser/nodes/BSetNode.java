@@ -89,9 +89,9 @@ public class BSetNode extends BObjectNode<PSet, BSet> {
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(dynamicContents(() -> getModelObject().getName()), getSetNameFragment());
 

@@ -69,9 +69,9 @@ public class BDomainExpressionNode extends BExpressionNode<ADomainExpression, BD
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("dom"), leadingKeywordFragment("dom"), "Keyword");
 		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
 	}

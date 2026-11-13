@@ -78,9 +78,9 @@ public class BAssignSubstitutionNode extends BSubstitutionNode<AAssignSubstituti
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childrenContents("", ",", () -> getModelObject().getLeftExpressions(), "", " := ", Indentation.DoNotIndent, BExpression.class));
 		append(childrenContents("", ",", () -> getModelObject().getRightExpressions(), "", "", Indentation.DoNotIndent, BExpression.class));

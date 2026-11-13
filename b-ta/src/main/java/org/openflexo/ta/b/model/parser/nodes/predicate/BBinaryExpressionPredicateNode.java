@@ -59,9 +59,9 @@ public abstract class BBinaryExpressionPredicateNode<N extends Node, T extends B
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childContents("", () -> getModelObject().getLeft(), "", Indentation.DoNotIndent));
 		append(staticContents(" ", getOperator(), " "), operatorFragment(getOperator(), getModelObject().getLeft(), getModelObject().getRight()),

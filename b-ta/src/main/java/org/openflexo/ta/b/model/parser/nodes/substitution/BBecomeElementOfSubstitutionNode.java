@@ -77,9 +77,9 @@ public class BBecomeElementOfSubstitutionNode extends BSubstitutionNode<ABecomes
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childrenContents("", ",", () -> getModelObject().getIdentifiers(), "", " :: ", Indentation.DoNotIndent, BExpression.class));
 		append(childContents("", () -> getModelObject().getSet(), "", Indentation.DoNotIndent));

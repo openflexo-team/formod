@@ -71,9 +71,9 @@ public class BImageExpressionNode extends BExpressionNode<AImageExpression, BIma
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childContents("", () -> getModelObject().getIdentifier(), "[", Indentation.DoNotIndent));
 

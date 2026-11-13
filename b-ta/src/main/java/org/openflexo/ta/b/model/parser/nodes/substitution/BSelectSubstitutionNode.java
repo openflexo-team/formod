@@ -81,9 +81,9 @@ public class BSelectSubstitutionNode extends BSubstitutionNode<ASelectSubstituti
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childContents(LINE_SEPARATOR + "SELECT" + " ", () -> getModelObject().getCondition(), LINE_SEPARATOR, Indentation.Indent));
 

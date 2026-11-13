@@ -74,9 +74,9 @@ public class BSetValueNode extends BObjectNode<PExpression, BSetValue> {
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(dynamicContents(() -> getModelObject().getName()), getSetValueNameFragment());
 	}

@@ -69,9 +69,9 @@ public class BPowSubsetExpressionNode extends BExpressionNode<APowSubsetExpressi
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("POW"), leadingKeywordFragment("POW"), "Keyword");
 		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
 	}

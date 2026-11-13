@@ -72,9 +72,9 @@ public class BCoupleExpressionNode extends BExpressionNode<ACoupleExpression, BC
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		// TODO: what for expression cardinality different from 2 ????
 		append(childContents("", () -> getModelObject().getExpressions().get(0), "", Indentation.DoNotIndent));

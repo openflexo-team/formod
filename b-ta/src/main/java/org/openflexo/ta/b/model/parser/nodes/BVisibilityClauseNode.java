@@ -64,9 +64,9 @@ public abstract class BVisibilityClauseNode<N extends Node, T extends BVisibilit
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(dynamicContents(() -> getModelObject().getReferencedComponentName()), getComponentNameFragment());
 	}

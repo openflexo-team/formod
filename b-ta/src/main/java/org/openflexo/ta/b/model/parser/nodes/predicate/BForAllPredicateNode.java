@@ -76,9 +76,9 @@ public class BForAllPredicateNode extends BPredicateNode<AForallPredicate, BForA
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childrenContents("! ", ",", () -> getModelObject().getExpressions(), "", "", Indentation.DoNotIndent, BExpression.class));
 

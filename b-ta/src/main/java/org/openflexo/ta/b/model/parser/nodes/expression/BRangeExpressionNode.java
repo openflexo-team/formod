@@ -69,9 +69,9 @@ public class BRangeExpressionNode extends BExpressionNode<ARangeExpression, BRan
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 		append(staticContents("ran"), leadingKeywordFragment("ran"), "Keyword");
 		append(childContents("(", () -> getModelObject().getExpression(), ")", Indentation.DoNotIndent));
 	}

@@ -73,9 +73,9 @@ public class BParallelSubstitutionNode extends BSubstitutionNode<AParallelSubsti
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(childrenContents("", " || ", () -> getModelObject().getSubstitutions(), "", "", Indentation.DoNotIndent, BSubstitution.class));
 

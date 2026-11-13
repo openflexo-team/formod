@@ -104,9 +104,9 @@ public abstract class BComponentNode<N extends Node, T extends BComponent> exten
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		performPrettyPrintHeader(hasParsedVersion);
 

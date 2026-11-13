@@ -68,9 +68,9 @@ public class BIdentifierExpressionNode extends BExpressionNode<AIdentifierExpres
 	}
 
 	@Override
-	public final void preparePrettyPrint(boolean hasParsedVersion) {
+	public final void definePrettyPrint(boolean hasParsedVersion) {
 
-		super.preparePrettyPrint(hasParsedVersion);
+		super.definePrettyPrint(hasParsedVersion);
 
 		append(dynamicContents(() -> getModelObject().getIdentifier()), getIdentifierFragment());
 	}
