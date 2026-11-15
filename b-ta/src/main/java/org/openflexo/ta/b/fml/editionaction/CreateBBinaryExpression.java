@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -130,7 +131,7 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 		}
 
 		@Override
-		public BBinaryExpression execute(RunTimeEvaluationContext evaluationContext) {
+		public BBinaryExpression execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BBinaryExpression newExpression = null;
 

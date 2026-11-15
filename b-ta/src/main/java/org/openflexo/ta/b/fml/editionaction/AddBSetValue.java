@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -99,7 +100,7 @@ public interface AddBSetValue extends BAction<BSetValue> {
 		}
 
 		@Override
-		public BSetValue execute(RunTimeEvaluationContext evaluationContext) {
+		public BSetValue execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BSetValue newSetValue = null;
 

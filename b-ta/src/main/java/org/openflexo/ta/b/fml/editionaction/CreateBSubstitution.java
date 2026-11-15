@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -116,7 +117,7 @@ public interface CreateBSubstitution extends BAction<BSubstitution> {
 		}
 
 		@Override
-		public BSubstitution execute(RunTimeEvaluationContext evaluationContext) {
+		public BSubstitution execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BSubstitution newSubstitution = null;
 

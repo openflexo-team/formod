@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -111,7 +112,7 @@ public interface AddBSubsetPredicate extends BAction<BSubsetPredicate> {
 		}
 
 		@Override
-		public BSubsetPredicate execute(RunTimeEvaluationContext evaluationContext) {
+		public BSubsetPredicate execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BSubsetPredicate subsetPredicate = null;
 

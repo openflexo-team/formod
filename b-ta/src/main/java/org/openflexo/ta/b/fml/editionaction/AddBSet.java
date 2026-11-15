@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -86,7 +87,7 @@ public interface AddBSet extends BAction<BSet> {
 		}
 
 		@Override
-		public BSet execute(RunTimeEvaluationContext evaluationContext) {
+		public BSet execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BSet newSet = null;
 

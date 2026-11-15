@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
@@ -97,7 +98,7 @@ public interface CreateBExpressionFromString extends BAction<BExpression> {
 		}
 
 		@Override
-		public BExpression execute(RunTimeEvaluationContext evaluationContext) {
+		public BExpression execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BExpression newExpression = null;
 

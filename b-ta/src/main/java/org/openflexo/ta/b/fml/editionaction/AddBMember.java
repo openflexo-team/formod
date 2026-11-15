@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
@@ -81,7 +82,7 @@ public interface AddBMember<M extends BMember> extends BAction<M> {
 		public abstract Class<M> getAssignableType();
 
 		@Override
-		public M execute(RunTimeEvaluationContext evaluationContext) {
+		public M execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			M newMember = null;
 

@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -100,7 +101,7 @@ public interface RemoveBPredicateInBPredicate extends BAction<BPredicate> {
 		}
 
 		@Override
-		public BPredicate execute(RunTimeEvaluationContext evaluationContext) {
+		public BPredicate execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BPredicate newPredicate = null;
 

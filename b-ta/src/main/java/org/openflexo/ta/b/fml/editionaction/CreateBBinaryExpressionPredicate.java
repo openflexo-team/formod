@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -123,7 +124,7 @@ public interface CreateBBinaryExpressionPredicate extends BAction<BBinaryExpress
 		}
 
 		@Override
-		public BBinaryExpressionPredicate execute(RunTimeEvaluationContext evaluationContext) {
+		public BBinaryExpressionPredicate execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			BBinaryExpressionPredicate newPredicate = null;
 
