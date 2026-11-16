@@ -110,10 +110,10 @@ public interface CreateBPredicateFromString extends BAction<BPredicate> {
 					try {
 						newPredicate = (BPredicate) BParser.parse(stringToParse, resourceData.getFactory(), EntryPointKind.Predicate);
 					} catch (ParseException | RuntimeException e) {
-						// A text that is not a B predicate gives null, a meaningful answer that the FML tests (BMethodology: "the formula is
-						// not a B predicate and is ignored"; decided with the user, to revisit with FML try/catch, CORE-F-11 phase 7). The
-						// parser also fails, unchecked, on some texts that are no predicate at all, the empty one for instance
-						logger.warning("Not a B predicate, ignored: '" + stringToParse + "' (" + e + ")");
+						// A text that is not a B predicate is an error that FML catches (BMethodology: "the formula is not a B predicate and
+						// is ignored"; CORE-F-11 phase 7, decided with the user). The parser also fails, unchecked, on some texts that are no
+						// predicate at all, the empty one for instance
+						throw new FMLTechnologyError("Not a B predicate: '" + stringToParse + "' (" + e.getMessage() + ")", e);
 					} catch (IOException e) {
 						throw new FMLTechnologyError("Cannot read the B predicate '" + stringToParse + "': " + e.getMessage(), e);
 					}

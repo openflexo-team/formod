@@ -116,9 +116,9 @@ public interface CreateBExpressionFromString extends BAction<BExpression> {
 						//newExpression = (BExpression) BParser.parse(stringToParse, resourceData.getFactory(), EntryPointKind.Expression);
 						newExpression = predicate.getRight();
 					} catch (ParseException | ClassCastException e) {
-						// A text that is not a B expression (or not a single expression: "e=" + it is then no equality) gives null, a meaningful answer that the FML tests (decided with the user;
-						// to revisit with FML try/catch, CORE-F-11 phase 7)
-						logger.warning("Not a B expression, ignored: '" + stringToParse + "' (" + e + ")");
+						// A text that is not a B expression (or not a single expression: "e=" + it is then no equality) is an error that FML
+						// catches (CORE-F-11 phase 7, decided with the user)
+						throw new FMLTechnologyError("Not a B expression: '" + stringToParse + "' (" + e.getMessage() + ")", e);
 					} catch (IOException e) {
 						throw new FMLTechnologyError("Cannot read the B expression '" + stringToParse + "': " + e.getMessage(), e);
 					}

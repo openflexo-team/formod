@@ -1125,7 +1125,12 @@ public model BMethodology extends Methodology {
 					log "Concept2Property: create Property " + parameters.formula + " related to concept " + parameters.aConcept;
 					domainConcept = parameters.aConcept;
 					formula = parameters.formula;
-					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+					try {
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+					} catch (FMLTechnologyError e) {
+						// A text that is not B: no predicate (CORE-F-11 phase 7)
+						log "Not a B predicate: " + e.message;
+					}
 					if (typingPredicate != null) {
 						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
 						container.properties.add(typingPredicate);
@@ -1153,7 +1158,12 @@ public model BMethodology extends Methodology {
 					log "Concept2Invariant: create Invariant " + parameters.formula + " related to concept " + parameters.aConcept;
 					domainConcept = parameters.aConcept;
 					formula = parameters.formula;
-					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+					try {
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+					} catch (FMLTechnologyError e) {
+						// A text that is not B: no predicate (CORE-F-11 phase 7)
+						log "Not a B predicate: " + e.message;
+					}
 					if (typingPredicate != null) {
 						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
 						container.invariants.add(typingPredicate);
@@ -1179,8 +1189,13 @@ public model BMethodology extends Methodology {
 				create(LogicalFormula aLogicalFormula) {
 					log "LogicalFormula2Property: create Property related to logicalFormula " + parameters.aLogicalFormula.assertion;
 					logicalFormula = parameters.aLogicalFormula;
-					typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
-							in (container.context.componentResource.bComponent);
+					try {
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
+								in (container.context.componentResource.bComponent);
+					} catch (FMLTechnologyError e) {
+						// A text that is not B: no predicate (CORE-F-11 phase 7)
+						log "Not a B predicate: " + e.message;
+					}
 					if (typingPredicate != null) {
 						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
 						container.properties.add(typingPredicate);
@@ -1206,8 +1221,13 @@ public model BMethodology extends Methodology {
 				create(LogicalFormula aLogicalFormula) {
 					log "LogicalFormula2Invariant: create Invariant related to logicalFormula " + parameters.aLogicalFormula.assertion;
 					logicalFormula = parameters.aLogicalFormula;
-					typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
-							in (container.machine.componentResource.bComponent);
+					try {
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
+								in (container.machine.componentResource.bComponent);
+					} catch (FMLTechnologyError e) {
+						// A text that is not B: no predicate (CORE-F-11 phase 7)
+						log "Not a B predicate: " + e.message;
+					}
 					if (typingPredicate != null) {
 						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
 						container.invariants.add(typingPredicate);
@@ -1235,7 +1255,12 @@ public model BMethodology extends Methodology {
 					log "Individual2Property: create Property " + parameters.formula + " related to individual " + parameters.anIndividual;
 					individual = parameters.anIndividual;
 					formula = parameters.formula;
-					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+					try {
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+					} catch (FMLTechnologyError e) {
+						// A text that is not B: no predicate (CORE-F-11 phase 7)
+						log "Not a B predicate: " + e.message;
+					}
 					if (typingPredicate != null) {
 						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
 						container.properties.add(typingPredicate);
@@ -1263,7 +1288,12 @@ public model BMethodology extends Methodology {
 					log "Individual2Invariant: create Invariant " + parameters.formula + " related to individual " + parameters.anIndividual;
 					individual = parameters.anIndividual;
 					formula = parameters.formula;
-					typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+					try {
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+					} catch (FMLTechnologyError e) {
+						// A text that is not B: no predicate (CORE-F-11 phase 7)
+						log "Not a B predicate: " + e.message;
+					}
 					if (typingPredicate != null) {
 						log "typing predicate " + typingPredicate.getNormalizedBRepresentation();
 						container.invariants.add(typingPredicate);

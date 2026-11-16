@@ -114,3 +114,9 @@ binding there still skipped; the printed catches of `AtelierBComponentActorRefer
 **Verified (2026-11-16).** Green through the openflexo-dev composite: b-ta-test 212, formod-test 32, formod-module 17. ECJ compiles b-ta.
 Reviewed by `openflexo-reviewer` (its findings fixed or recorded here). Not checked in the running application (a drop without value, then
 the B generation; a formula that is not B).
+
+**Revisited with FML try/catch (`CORE-F-11` phase 7, decided with the user, 2026-11-16).** `CreateBPredicateFromString` and
+`CreateBExpressionFromString` raise an `FMLTechnologyError` for a text that is not B (no longer null after a warning); a null text still
+gives null. `BMethodology.fml` catches it in its six predicate creations (`catch (FMLTechnologyError e)`, logged), and keeps its
+"the formula is not a B predicate and is ignored" branch; its expression creations had no null check: a text that is not B now fails there,
+where it used to fail at the following substitution.
