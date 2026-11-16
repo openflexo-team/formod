@@ -41,9 +41,10 @@ package org.openflexo.ta.b.fml.editionaction;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.fml.rt.error.FMLTypeError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -85,31 +86,18 @@ public interface String2Int extends BAction<Integer> {
 		}
 
 		@Override
-		public Integer execute(RunTimeEvaluationContext evaluationContext) {
+		public Integer execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			Integer integer = null;
-
-
-			try {
-					String string = getString().getBindingValue(evaluationContext);
-					if (string != null) {
-						integer = Integer.parseInt(string);
-					}
-					else {
-						logger.warning("string required");
-					}
-				
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			String string = FMLEvaluation.evaluate(getString(), evaluationContext, this);
+			if (string == null) {
+				// An unset value (a cardinality not given): no integer, not an error (decided with the user)
+				return null;
 			}
-
-			return integer;
-
+			try {
+				return Integer.parseInt(string);
+			} catch (NumberFormatException e) {
+				throw new FMLTypeError("Not an integer: '" + string + "'", e);
+			}
 		}
 
 		@Override

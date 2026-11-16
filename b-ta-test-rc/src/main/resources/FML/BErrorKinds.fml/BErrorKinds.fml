@@ -1,0 +1,28 @@
+use org.openflexo.ta.b.BModelSlot as B;
+
+import org.openflexo.ta.b.model.BComponent;
+import org.openflexo.ta.b.model.BSet;
+import java.lang.Integer;
+
+/**
+ * Failures of the B edition actions (CORE-F-11 phase 6, FORMOD-F-5): see the scripts of BErrorKinds/ and TestBErrorKinds.
+ * The line numbers of the behaviours are asserted there.
+ */
+@URI("http://www.openflexo.org/test/b/FML/BErrorKinds.fml")
+public model BErrorKinds {
+
+	BComponent component with BModelSlot();
+
+	public BComponent noComponent() {
+		return null;
+	}
+
+	public addSetToNullComponent() {
+		BSet newSet = B::AddBSet(identifierName="S") in (this.noComponent());
+	}
+
+	public Integer notAnInteger() {
+		Integer i = B::String2Int(string="many") in (this.noComponent());
+		return i;
+	}
+}

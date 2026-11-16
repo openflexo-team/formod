@@ -38,13 +38,14 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -123,46 +124,37 @@ public interface CreateBSubstitution extends BAction<BSubstitution> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					
-					BExpression left = getLeftOperand().getBindingValue(evaluationContext);
-					BExpression right = getRightOperand().getBindingValue(evaluationContext);
-					String operator = getOperator().getBindingValue(evaluationContext);
+			if (resourceData != null) {
+				
+				BExpression left = FMLEvaluation.evaluate(getLeftOperand(), evaluationContext, this);
+				BExpression right = FMLEvaluation.evaluate(getRightOperand(), evaluationContext, this);
+				String operator = FMLEvaluation.evaluate(getOperator(), evaluationContext, this);
 
-					if (operator != null && left != null && right != null) {
-						if(operator.equalsIgnoreCase("BecomeElementOfSubstitution")){
-							BBecomeElementOfSubstitution newSubstitution1 = resourceData.getFactory().makeSubstitution(BBecomeElementOfSubstitution.class, resourceData);
-							newSubstitution1.addToIdentifiers(left);
-							newSubstitution1.setSet(right);
-							newSubstitution = newSubstitution1;
-						}
-						else if(operator.equalsIgnoreCase("AssignSubstitution")){
-							BAssignSubstitution newSubstitution1  = resourceData.getFactory().makeSubstitution(BAssignSubstitution.class, resourceData);
-							newSubstitution1.addToLeftExpressions(left);
-							newSubstitution1.addToRightExpressions(right);
-							newSubstitution = newSubstitution1;
-						}
-						else{
-							logger.warning("invalid operator: "+operator+". Must be: 'BecomeElementOfSubstitution' or 'AssignSubstitution'");
-						}
-						
-						}
-						else  {
-							logger.warning("Cannot create substitution without valid left, right and operator operands");
-						}
-						
+				if (operator != null && left != null && right != null) {
+					if(operator.equalsIgnoreCase("BecomeElementOfSubstitution")){
+						BBecomeElementOfSubstitution newSubstitution1 = resourceData.getFactory().makeSubstitution(BBecomeElementOfSubstitution.class, resourceData);
+						newSubstitution1.addToIdentifiers(left);
+						newSubstitution1.setSet(right);
+						newSubstitution = newSubstitution1;
+					}
+					else if(operator.equalsIgnoreCase("AssignSubstitution")){
+						BAssignSubstitution newSubstitution1  = resourceData.getFactory().makeSubstitution(BAssignSubstitution.class, resourceData);
+						newSubstitution1.addToLeftExpressions(left);
+						newSubstitution1.addToRightExpressions(right);
+						newSubstitution = newSubstitution1;
+					}
+					else {
+						throw new FMLTechnologyError(
+								"invalid operator: " + operator + ". Must be: 'BecomeElementOfSubstitution' or 'AssignSubstitution'");
+					}
 				}
 				else {
-					logger.warning("Cannot create predicate in null resource data");
+					throw new FMLNullReferenceError("Cannot create substitution without valid left, right and operator operands (left="
+							+ left + ", right=" + right + ", operator=" + operator + ")");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create substitution: no B component to work in");
 			}
 
 			return newSubstitution;

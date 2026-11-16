@@ -38,14 +38,15 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -104,38 +105,28 @@ public interface CreateBExpressionFromString extends BAction<BExpression> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String stringToParse = getExpressionAsString().getBindingValue(evaluationContext);
-					if (stringToParse != null) {
-						try {
-							BEqualPredicate predicate = (BEqualPredicate) BParser.parse("e="+stringToParse, resourceData.getFactory(),
-									EntryPointKind.Predicate);
-							
-							
-							//newExpression = (BExpression) BParser.parse(stringToParse, resourceData.getFactory(), EntryPointKind.Expression);
-							newExpression = predicate.getRight();
-						} catch (ParseException e) {
-							logger.warning("Cannot parse expression: " + stringToParse);
-						} catch (IOException e) {
-							logger.warning("Unexpected IO exception");
-							e.printStackTrace();
-						}
-					}
-					else {
-						logger.warning("Cannot create expression without string to parse");
+			if (resourceData != null) {
+				String stringToParse = FMLEvaluation.evaluate(getExpressionAsString(), evaluationContext, this);
+				if (stringToParse != null) {
+					try {
+						BEqualPredicate predicate = (BEqualPredicate) BParser.parse("e="+stringToParse, resourceData.getFactory(),
+								EntryPointKind.Predicate);
+						
+						
+						//newExpression = (BExpression) BParser.parse(stringToParse, resourceData.getFactory(), EntryPointKind.Expression);
+						newExpression = predicate.getRight();
+					} catch (ParseException | ClassCastException e) {
+						// A text that is not a B expression (or not a single expression: "e=" + it is then no equality) gives null, a meaningful answer that the FML tests (decided with the user;
+						// to revisit with FML try/catch, CORE-F-11 phase 7)
+						logger.warning("Not a B expression, ignored: '" + stringToParse + "' (" + e + ")");
+					} catch (IOException e) {
+						throw new FMLTechnologyError("Cannot read the B expression '" + stringToParse + "': " + e.getMessage(), e);
 					}
 				}
-				else {
-					logger.warning("Cannot create expression in null resource data");
-				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+				// No text: no expression, as for a text that is not B
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create expression: no B component to work in");
 			}
 
 			if (newExpression != null) {

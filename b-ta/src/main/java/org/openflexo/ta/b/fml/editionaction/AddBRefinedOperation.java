@@ -38,13 +38,13 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -110,53 +110,30 @@ public interface AddBRefinedOperation extends BAction<BRefinedOperation> {
 		@Override
 		public BRefinedOperation execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			BRefinedOperation newOperation = null;
-
 			BComponent resourceData = getReceiver(evaluationContext);
-
-			try {
-				if (resourceData != null) {
-					String identifierName = getIdentifierName().getBindingValue(evaluationContext);
-					if (identifierName != null) {
-						System.out.println("******* create REFINED event");
-						newOperation = resourceData.getFactory().makeRefinedOperation(identifierName);
-						newOperation.setOperationBody(resourceData.getFactory().makeSubstitution(BSkipSubstitution.class, resourceData));
-						resourceData.addToOperations(newOperation);
-					}
-					else {
-						logger.warning("Create a refined operation requires a name");
-					}
-					String refinementKeyword = getRefinementKeyword().getBindingValue(evaluationContext);
-					if (refinementKeyword != null) {
-						System.out.println("******* refinementKeyword=" + refinementKeyword);
-						newOperation.setRefinementKeyword(refinementKeyword);
-					}
-					else {
-						logger.warning("Create a refined operation requires a refinement keyword");
-					}
-					String refinedOperationName = getRefinedOperationName().getBindingValue(evaluationContext);
-					if (refinedOperationName != null) {
-						System.out.println("******* refinedOperationName=" + refinedOperationName);
-						newOperation.setRefinedOperationName(refinedOperationName);
-					}
-					else {
-						logger.warning("Create a refined operation requires a refined operation name");
-					}
-				}
-				else {
-					logger.warning("Cannot create operation in null resource data");
-				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			if (resourceData == null) {
+				throw new FMLNullReferenceError("Cannot create a refined operation: no B component to work in");
+			}
+			// Every input is checked before the component is changed: a failure leaves no half-built operation (CORE-F-11)
+			String identifierName = FMLEvaluation.evaluate(getIdentifierName(), evaluationContext, this);
+			if (identifierName == null) {
+				throw new FMLNullReferenceError("Create a refined operation requires a name");
+			}
+			String refinementKeyword = FMLEvaluation.evaluate(getRefinementKeyword(), evaluationContext, this);
+			if (refinementKeyword == null) {
+				throw new FMLNullReferenceError("Create a refined operation requires a refinement keyword");
+			}
+			String refinedOperationName = FMLEvaluation.evaluate(getRefinedOperationName(), evaluationContext, this);
+			if (refinedOperationName == null) {
+				throw new FMLNullReferenceError("Create a refined operation requires a refined operation name");
 			}
 
+			BRefinedOperation newOperation = resourceData.getFactory().makeRefinedOperation(identifierName);
+			newOperation.setOperationBody(resourceData.getFactory().makeSubstitution(BSkipSubstitution.class, resourceData));
+			newOperation.setRefinementKeyword(refinementKeyword);
+			newOperation.setRefinedOperationName(refinedOperationName);
+			resourceData.addToOperations(newOperation);
 			return newOperation;
-
 		}
 
 		@Override

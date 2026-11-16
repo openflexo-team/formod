@@ -43,11 +43,13 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLInternalError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
@@ -154,96 +156,84 @@ public interface AddAtelierBComponent extends AtelierBAction<AtelierBComponent> 
 
 			AtelierBProject resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String componentName = getComponentName().getBindingValue(evaluationContext);
-					if (componentName != null) {
-						System.out.println("OK, faut creer le composant " + componentName + " dans " + resourceData);
-						System.out.println("type: " + getComponentType());
-						System.out.println("refines: " + getRefines().getBindingValue(evaluationContext));
+			if (resourceData != null) {
+				String componentName = FMLEvaluation.evaluate(getComponentName(), evaluationContext, this);
+				if (componentName != null) {
 
-						try {
+					// The refined component is checked before the new one is created (and saved by the factory)
+					AtelierBComponent refines = null;
+					if (isRefinement() && getRefines().isSet() && getRefines().isValid()) {
+						refines = FMLEvaluation.evaluate(getRefines(), evaluationContext, this);
+						if (refines == null) {
+							throw new FMLNullReferenceError("No component refined by the refinement " + componentName);
+						}
+					}
 
-							switch (getComponentType()) {
-								case System:
-									newComponent = resourceData.getFactory().makeNewSystem(componentName);
-									break;
-								case Refinement:
-									newComponent = resourceData.getFactory().makeNewRefinement(componentName);
-									break;
-								case Machine:
-									newComponent = resourceData.getFactory().makeNewMachine(componentName);
-									break;
-								case Implementation:
-									newComponent = resourceData.getFactory().makeNewImplementation(componentName);
-									break;
-								default:
-									break;
-							}
-							BModelFactory bModelFactory = newComponent.getComponentResource().getFactory();
+					try {
 
-							if (isRefinement()) {
-								if (getRefines().isSet() && getRefines().isValid()) {
-									AtelierBComponent refines = getRefines().getBindingValue(evaluationContext);
-									((AbstractBRefinement) newComponent.getComponentResource().getBComponent())
-											.setRefinesComponent(refines.getComponentResource());
-								}
-							}
+						switch (getComponentType()) {
+							case System:
+								newComponent = resourceData.getFactory().makeNewSystem(componentName);
+								break;
+							case Refinement:
+								newComponent = resourceData.getFactory().makeNewRefinement(componentName);
+								break;
+							case Machine:
+								newComponent = resourceData.getFactory().makeNewMachine(componentName);
+								break;
+							case Implementation:
+								newComponent = resourceData.getFactory().makeNewImplementation(componentName);
+								break;
+							default:
+								break;
+						}
+						BModelFactory bModelFactory = newComponent.getComponentResource().getFactory();
 
-							if (getExtendsComponent().isSet() && getExtendsComponent().isValid()) {
-								AtelierBComponent extendsC = getExtendsComponent().getBindingValue(evaluationContext);
-								if (extendsC != null) {
-									newComponent.getComponentResource().getBComponent()
-											.addToExtendsClauses(bModelFactory.makeExtendsClause(extendsC.getComponentResource()));
-								}
+						if (isRefinement()) {
+							if (refines != null) {
+								((AbstractBRefinement) newComponent.getComponentResource().getBComponent())
+										.setRefinesComponent(refines.getComponentResource());
 							}
-							System.out.println("sees=" + getSees());
-							if (getSees().isSet() && getSees().isValid()) {
-								System.out.println("valid");
-								AtelierBComponent sees = getSees().getBindingValue(evaluationContext);
-								System.out.println("see=" + sees);
-								if (sees != null) {
-									newComponent.getComponentResource().getBComponent()
-											.addToSeesClauses(bModelFactory.makeSeesClause(sees.getComponentResource()));
-								}
-							}
-
-							if (isRefinement() && ((AbstractBRefinement) newComponent.getComponentResource().getBComponent())
-									.getRefinesComponent() != null) {
-								// The skeleton written when the component was created has no name after REFINES, which the B parser rejects:
-								// write it again now that the refined component is known, so that a component never saved afterwards stays readable
-								newComponent.getComponentResource().save();
-							}
-						} catch (SaveResourceException e) {
-							e.printStackTrace();
-							throw new FMLExecutionException(e);
-						} catch (ModelDefinitionException e) {
-							e.printStackTrace();
-							throw new FMLExecutionException(e);
-						} catch (IOException e) {
-							e.printStackTrace();
-							throw new FMLExecutionException(e);
 						}
 
-						resourceData.getAtelierBProjectDefinition().addToComponents(newComponent);
+						if (getExtendsComponent().isSet() && getExtendsComponent().isValid()) {
+							AtelierBComponent extendsC = FMLEvaluation.evaluate(getExtendsComponent(), evaluationContext, this);
+							if (extendsC != null) {
+								newComponent.getComponentResource().getBComponent()
+										.addToExtendsClauses(bModelFactory.makeExtendsClause(extendsC.getComponentResource()));
+							}
+						}
+						if (getSees().isSet() && getSees().isValid()) {
+							AtelierBComponent sees = FMLEvaluation.evaluate(getSees(), evaluationContext, this);
+							if (sees != null) {
+								newComponent.getComponentResource().getBComponent()
+										.addToSeesClauses(bModelFactory.makeSeesClause(sees.getComponentResource()));
+							}
+						}
 
-						// newComponent = resourceData.getFactory().makeDSLComponent(componentName);
-						// resourceData.addToComponents(newComponent);
+						if (isRefinement() && ((AbstractBRefinement) newComponent.getComponentResource().getBComponent())
+								.getRefinesComponent() != null) {
+							// The skeleton written when the component was created has no name after REFINES, which the B parser rejects:
+							// write it again now that the refined component is known, so that a component never saved afterwards stays readable
+							newComponent.getComponentResource().save();
+						}
+					} catch (ModelDefinitionException e) {
+						throw new FMLInternalError(e);
+					} catch (SaveResourceException | IOException e) {
+						throw new FMLTechnologyError("Cannot create the Atelier B component " + componentName + ": " + e.getMessage(), e);
 					}
-					else {
-						logger.warning("Create a component requires a name");
-					}
+
+					resourceData.getAtelierBProjectDefinition().addToComponents(newComponent);
+
+					// newComponent = resourceData.getFactory().makeDSLComponent(componentName);
+					// resourceData.addToComponents(newComponent);
 				}
 				else {
-					logger.warning("Cannot create component in null resource data");
+					throw new FMLNullReferenceError("Create a component requires a name");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create a component: no Atelier B project to work in");
 			}
 
 			return newComponent;

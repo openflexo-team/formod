@@ -38,13 +38,13 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -93,27 +93,18 @@ public interface AddBSet extends BAction<BSet> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String identifierName = getIdentifierName().getBindingValue(evaluationContext);
-					if (identifierName != null) {
-						newSet = resourceData.getFactory().makeSet(identifierName);
-						resourceData.addToSets(newSet);
-					}
-					else {
-						logger.warning("Create a set requires a name");
-					}
+			if (resourceData != null) {
+				String identifierName = FMLEvaluation.evaluate(getIdentifierName(), evaluationContext, this);
+				if (identifierName != null) {
+					newSet = resourceData.getFactory().makeSet(identifierName);
+					resourceData.addToSets(newSet);
 				}
 				else {
-					logger.warning("Cannot create set in null resource data");
+					throw new FMLNullReferenceError("Create a set requires a name");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create set: no B component to work in");
 			}
 
 			return newSet;

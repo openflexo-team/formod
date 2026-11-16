@@ -38,13 +38,13 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -106,30 +106,21 @@ public interface AddBSetValue extends BAction<BSetValue> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String identifierName = getIdentifierName().getBindingValue(evaluationContext);
-					BSet set = getSet().getBindingValue(evaluationContext);
-					if (identifierName != null && set !=null) {
-						newSetValue = resourceData.getFactory().makeSetValue(identifierName);
-						newSetValue.setSet(set);
-						set.addToEnumeratedValues(newSetValue);
-					}
-					else {
-						logger.warning("Create a set value requires a name and a set");
-					}
-					
+			if (resourceData != null) {
+				String identifierName = FMLEvaluation.evaluate(getIdentifierName(), evaluationContext, this);
+				BSet set = FMLEvaluation.evaluate(getSet(), evaluationContext, this);
+				if (identifierName != null && set !=null) {
+					newSetValue = resourceData.getFactory().makeSetValue(identifierName);
+					newSetValue.setSet(set);
+					set.addToEnumeratedValues(newSetValue);
 				}
 				else {
-					logger.warning("Cannot create set in null resource data");
+					throw new FMLNullReferenceError("Create a set value requires a name and a set");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+				
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create set: no B component to work in");
 			}
 
 			return newSetValue;

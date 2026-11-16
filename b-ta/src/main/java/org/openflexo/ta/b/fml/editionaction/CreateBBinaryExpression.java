@@ -38,13 +38,14 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLResolutionError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
@@ -137,88 +138,79 @@ public interface CreateBBinaryExpression extends BAction<BBinaryExpression> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
+			if (resourceData != null) {
 
-					if (getOperator() != null) {
-						BExpression left = getLeftOperand().getBindingValue(evaluationContext);
-						BExpression right = getRightOperand().getBindingValue(evaluationContext);
-						if (left != null && right != null) {
-							switch (getOperator()) {
-								case Add:
-									newExpression = resourceData.getFactory().makeExpression(BAddExpression.class, resourceData);
-									break;
-								case Composition:
-									newExpression = resourceData.getFactory().makeExpression(BCompositionExpression.class, resourceData);
-									break;
-								case MinusOrSet:
-									newExpression = resourceData.getFactory().makeExpression(BMinusOrSetSubstractExpression.class,
-											resourceData);
-									break;
-								case MultOrCart:
-									newExpression = resourceData.getFactory().makeExpression(BMultOrCartExpression.class, resourceData);
-									break;
-								case PartialFunction:
-									newExpression = resourceData.getFactory().makeExpression(BPartialFunctionExpression.class,
-											resourceData);
-									break;
-								case TotalFunction:
-									newExpression = resourceData.getFactory().makeExpression(BTotalFunctionExpression.class, resourceData);
-									break;
-								case TotalBijection:
-									newExpression = resourceData.getFactory().makeExpression(BTotalBijectionExpression.class, resourceData);
-									break;
-								case PartialInjection:
-									newExpression = resourceData.getFactory().makeExpression(BPartialInjectionExpression.class, resourceData);
-									break;
-								case Relations:
-									newExpression = resourceData.getFactory().makeExpression(BRelationsExpression.class, resourceData);
-									break;
-								case Intersection:
-									newExpression = resourceData.getFactory().makeExpression(BIntersectionExpression.class, resourceData);
-									break;
-								case Interval:
-									newExpression = resourceData.getFactory().makeExpression(BIntervalExpression.class, resourceData);
-									break;
-								case TotalSurjection:
-									newExpression = resourceData.getFactory().makeExpression(BTotalSurjectionExpression.class, resourceData);
-									break;
-								case PartialSurjection:
-									newExpression = resourceData.getFactory().makeExpression(BPartialSurjectionExpression.class, resourceData);
-									break;
-								case TotalInjection:
-									newExpression = resourceData.getFactory().makeExpression(BTotalInjectionExpression.class, resourceData);
-									break;
-								case Union:
-									newExpression = resourceData.getFactory().makeExpression(BUnionExpression.class, resourceData);
-									break;
-								default:
-									break;
-							}
-							newExpression.setLeft(left);
-							newExpression.setRight(right);
+				if (getOperator() != null) {
+					BExpression left = FMLEvaluation.evaluate(getLeftOperand(), evaluationContext, this);
+					BExpression right = FMLEvaluation.evaluate(getRightOperand(), evaluationContext, this);
+					if (left != null && right != null) {
+						switch (getOperator()) {
+							case Add:
+								newExpression = resourceData.getFactory().makeExpression(BAddExpression.class, resourceData);
+								break;
+							case Composition:
+								newExpression = resourceData.getFactory().makeExpression(BCompositionExpression.class, resourceData);
+								break;
+							case MinusOrSet:
+								newExpression = resourceData.getFactory().makeExpression(BMinusOrSetSubstractExpression.class,
+										resourceData);
+								break;
+							case MultOrCart:
+								newExpression = resourceData.getFactory().makeExpression(BMultOrCartExpression.class, resourceData);
+								break;
+							case PartialFunction:
+								newExpression = resourceData.getFactory().makeExpression(BPartialFunctionExpression.class,
+										resourceData);
+								break;
+							case TotalFunction:
+								newExpression = resourceData.getFactory().makeExpression(BTotalFunctionExpression.class, resourceData);
+								break;
+							case TotalBijection:
+								newExpression = resourceData.getFactory().makeExpression(BTotalBijectionExpression.class, resourceData);
+								break;
+							case PartialInjection:
+								newExpression = resourceData.getFactory().makeExpression(BPartialInjectionExpression.class, resourceData);
+								break;
+							case Relations:
+								newExpression = resourceData.getFactory().makeExpression(BRelationsExpression.class, resourceData);
+								break;
+							case Intersection:
+								newExpression = resourceData.getFactory().makeExpression(BIntersectionExpression.class, resourceData);
+								break;
+							case Interval:
+								newExpression = resourceData.getFactory().makeExpression(BIntervalExpression.class, resourceData);
+								break;
+							case TotalSurjection:
+								newExpression = resourceData.getFactory().makeExpression(BTotalSurjectionExpression.class, resourceData);
+								break;
+							case PartialSurjection:
+								newExpression = resourceData.getFactory().makeExpression(BPartialSurjectionExpression.class, resourceData);
+								break;
+							case TotalInjection:
+								newExpression = resourceData.getFactory().makeExpression(BTotalInjectionExpression.class, resourceData);
+								break;
+							case Union:
+								newExpression = resourceData.getFactory().makeExpression(BUnionExpression.class, resourceData);
+								break;
+							default:
+								break;
 						}
-						else if (left == null) {
-							logger.warning("Cannot create left operand predicate");
-						}
-						else if (right == null) {
-							logger.warning("Cannot create right operand predicate");
-						}
+						newExpression.setLeft(left);
+						newExpression.setRight(right);
 					}
-					else {
-						logger.warning("Cannot create predicate without operator");
+					else if (left == null) {
+						throw new FMLNullReferenceError("Cannot create left operand predicate");
+					}
+					else if (right == null) {
+						throw new FMLNullReferenceError("Cannot create right operand predicate");
 					}
 				}
 				else {
-					logger.warning("Cannot create predicate in null resource data");
+					throw new FMLResolutionError("Cannot create predicate without operator: the action declares none");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create predicate: no B component to work in");
 			}
 
 			return newExpression;

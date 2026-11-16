@@ -38,13 +38,14 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLResolutionError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
@@ -130,65 +131,56 @@ public interface CreateBBinaryExpressionPredicate extends BAction<BBinaryExpress
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
+			if (resourceData != null) {
 
-					if (getOperator() != null) {
-						BExpression left = getLeftOperand().getBindingValue(evaluationContext);
-						BExpression right = getRightOperand().getBindingValue(evaluationContext);
-						if (left != null && right != null) {
-							switch (getOperator()) {
-								case Equal:
-									newPredicate = resourceData.getFactory().makePredicate(BEqualPredicate.class, resourceData);
-									break;
-								case Greater:
-									newPredicate = resourceData.getFactory().makePredicate(BGreaterPredicate.class, resourceData);
-									break;
-								case GreaterEqual:
-									newPredicate = resourceData.getFactory().makePredicate(BGreaterEqualPredicate.class, resourceData);
-									break;
-								case Less:
-									newPredicate = resourceData.getFactory().makePredicate(BLessPredicate.class, resourceData);
-									break;
-								case LessEqual:
-									newPredicate = resourceData.getFactory().makePredicate(BLessEqualPredicate.class, resourceData);
-									break;
-								case Member:
-									newPredicate = resourceData.getFactory().makePredicate(BMemberPredicate.class, resourceData);
-									break;
-								case NotEqual:
-									newPredicate = resourceData.getFactory().makePredicate(BNotEqualPredicate.class, resourceData);
-									break;
-								case Subset:
-									newPredicate = resourceData.getFactory().makePredicate(BSubsetPredicate.class, resourceData);
-									break;
-								default:
-									break;
-							}
-							newPredicate.setLeft(left);
-							newPredicate.setRight(right);
+				if (getOperator() != null) {
+					BExpression left = FMLEvaluation.evaluate(getLeftOperand(), evaluationContext, this);
+					BExpression right = FMLEvaluation.evaluate(getRightOperand(), evaluationContext, this);
+					if (left != null && right != null) {
+						switch (getOperator()) {
+							case Equal:
+								newPredicate = resourceData.getFactory().makePredicate(BEqualPredicate.class, resourceData);
+								break;
+							case Greater:
+								newPredicate = resourceData.getFactory().makePredicate(BGreaterPredicate.class, resourceData);
+								break;
+							case GreaterEqual:
+								newPredicate = resourceData.getFactory().makePredicate(BGreaterEqualPredicate.class, resourceData);
+								break;
+							case Less:
+								newPredicate = resourceData.getFactory().makePredicate(BLessPredicate.class, resourceData);
+								break;
+							case LessEqual:
+								newPredicate = resourceData.getFactory().makePredicate(BLessEqualPredicate.class, resourceData);
+								break;
+							case Member:
+								newPredicate = resourceData.getFactory().makePredicate(BMemberPredicate.class, resourceData);
+								break;
+							case NotEqual:
+								newPredicate = resourceData.getFactory().makePredicate(BNotEqualPredicate.class, resourceData);
+								break;
+							case Subset:
+								newPredicate = resourceData.getFactory().makePredicate(BSubsetPredicate.class, resourceData);
+								break;
+							default:
+								break;
 						}
-						else if (left == null) {
-							logger.warning("Cannot create left operand predicate");
-						}
-						else if (right == null) {
-							logger.warning("Cannot create right operand predicate");
-						}
+						newPredicate.setLeft(left);
+						newPredicate.setRight(right);
 					}
-					else {
-						logger.warning("Cannot create predicate without operator");
+					else if (left == null) {
+						throw new FMLNullReferenceError("Cannot create left operand predicate");
+					}
+					else if (right == null) {
+						throw new FMLNullReferenceError("Cannot create right operand predicate");
 					}
 				}
 				else {
-					logger.warning("Cannot create predicate in null resource data");
+					throw new FMLResolutionError("Cannot create predicate without operator: the action declares none");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create predicate: no B component to work in");
 			}
 
 			return newPredicate;

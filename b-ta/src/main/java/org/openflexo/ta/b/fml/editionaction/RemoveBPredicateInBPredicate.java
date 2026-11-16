@@ -38,13 +38,13 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -107,28 +107,19 @@ public interface RemoveBPredicateInBPredicate extends BAction<BPredicate> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					BPredicate containerPredicate = getContainerPredicate().getBindingValue(evaluationContext);
-					BPredicate subPredicate = getSubPredicate().getBindingValue(evaluationContext);
-					if (containerPredicate != null && subPredicate !=null) {
-						newPredicate = computePredicateRemoval(resourceData, containerPredicate);
-					}
-					else {
-						logger.warning("RemoveBPredicateInBPredicate requires a containerPredicate and a subPredicate");
-					}
-					
+			if (resourceData != null) {
+				BPredicate containerPredicate = FMLEvaluation.evaluate(getContainerPredicate(), evaluationContext, this);
+				BPredicate subPredicate = FMLEvaluation.evaluate(getSubPredicate(), evaluationContext, this);
+				if (containerPredicate != null && subPredicate !=null) {
+					newPredicate = computePredicateRemoval(resourceData, containerPredicate);
 				}
 				else {
-					logger.warning("Cannot proceed with RemoveBPredicateInBPredicate with null resource data");
+					throw new FMLNullReferenceError("RemoveBPredicateInBPredicate requires a containerPredicate and a subPredicate");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+				
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot proceed with RemoveBPredicateInBPredicate: no B component to work in");
 			}
 
 			return newPredicate;

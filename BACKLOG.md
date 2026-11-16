@@ -70,3 +70,47 @@ concepts that had no inspector received the entries their representation showed:
 **Acceptance.** No `Unresolved type` / `Preventing StackOverflow` warning at the start of formod-app, `formod-test` and `formod-module` unchanged.
 
 **Decided with the user (2026-10-12): option (c), the cycle stays.** Cyclic imports are supported by the two-passes loading; the question became why the loader still warns. Answer: it treated a unit still being loaded higher in the stack as complete, in four places of `openflexo-core` (listed in CORE-D-34, fixed 2026-10-13). Measured over the printed output of the test runs (not on a formod-app start), before → after, `formod-test` 32/32 and `formod-module` 17/17 unchanged: `Preventing StackOverflow` 213 → 0 and 110 → 0, `Unresolved type` 182 → 0 and 100 → 0, `Parent concept … not found` 2 → 0 in `formod-module`, `NullPointerException` 10 → 0. The model is untouched. What was left of the 135 was `still invalid`, not caused by the cycle: annotation arguments naming an import (diagram-specification constants), false positives fixed in `openflexo-core` afterwards (CORE-D-34): `formod-test` 574 -> 0, `formod-module` 310 -> 0. Measured on a real formod-app start (2026-10-13): `Preventing StackOverflow` 0, `Unresolved type` 0, `Parent concept … not found` 0; 62 `still invalid` remained (70 before), all of the false-positive family, fixed afterwards in `openflexo-core` (CORE-D-34): 0 on a second formod-app start (2026-10-13), as are `Preventing StackOverflow`, `Unresolved type` and `Parent concept … not found`. The acceptance (no `Unresolved type` / `Preventing StackOverflow` at the start) is met; `formod-test` 32/32 and `formod-module` 17/17 unchanged.
+
+## B technology adapter
+
+### FORMOD-F-5 — The B adapter raises typed FML errors instead of returning null after a warning or a printed stack  ·  `DONE`
+
+**Problem.** Part of `CORE-F-11` phase 6 (`openflexo-core/BACKLOG.md`): the 16 edition actions of the B adapter (b-ta) caught the failures
+of their evaluations four at a time, printed the stack and went on; a missing name, operand, operator or component gave a warning and a
+null result (a half-built refined operation, with `AddBRefinedOperation`); `String2Int` let a `NumberFormatException` escape.
+
+**Done (decided with the user, 2026-11-16).** Scope: the paths that FML execution goes through.
+- The actions of `fml/editionaction` and `AddAtelierBComponent` evaluate through `FMLEvaluation` and declare `throws FMLExecutionException`.
+  A null receiver (B component, Atelier B project), name, operand, operator, set, predicate or refined component is an
+  `FMLNullReferenceError`; an action that declares no operator an `FMLResolutionError`; an unknown substitution operator an
+  `FMLTechnologyError`; a failing save of a new Atelier B component an
+  `FMLTechnologyError`, a `ModelDefinitionException` an `FMLInternalError`. `AddBRefinedOperation` checks every input before it changes the
+  component; `AddAtelierBComponent` checks the refined component before it creates (and saves) the new one. The `System.out` traces are
+  removed.
+- `CreateBPredicateFromString` / `CreateBExpressionFromString`: a text that is not B gives null, a meaningful answer that `BMethodology.fml`
+  tests ("the formula is not a B predicate and is ignored"), with the former warning naming the text; an I/O failure of the parser is an
+  `FMLTechnologyError`. To revisit with FML try/catch (`CORE-F-11` phase 7). Chosen without an explicit decision, kept: a null text gives
+  null too (the methodology passes formulas that may be unset); "not B" also covers the unchecked failure of the predicate parser on some
+  texts (caught already) and, for an expression, a text that does not make a single expression (the cast of `"e=" + text`); any other
+  unchecked failure of the parser propagates (a defect).
+- `String2Int`: a null text gives null (an unset cardinality), a text that is not an integer is an `FMLTypeError` naming it.
+
+- Found by the review: `BMethodology.fml` created a B member for every individual, its name included; a nameless individual (possible from a
+  drop without value in `DomainModelDiagram.fml`) used to give a warning and no member, it would now fail the whole generation. Decided with
+  the user: the error stays, and the three selects of individuals of the methodology (rules 11 to 14) skip a nameless individual.
+
+**Left as they are (scope).** The printed catches of `AtelierBComponentActorReference` (resolution of an actor, not FML execution), and the
+loading and parsing code of the B models.
+
+**Tests.** `TestBErrorKinds` (b-ta-test, which now depends on fml-cli and fml-cli-test; scripts of `BErrorKinds/` and fixture
+`FML/BErrorKinds.fml` in b-ta-test-rc): an `AddBSet` in a null component (`FMLNullReferenceError`), a `String2Int` of a text that is not an
+integer (`FMLTypeError`); each asserts the type, the behaviour frame and the line, and that nothing is printed to stderr.
+
+**Known limits (found by the review, not changed).** A missing `Cardinality` of an association fails on its path before `String2Int`
+(`domainCardinality.getMaxCardinality()`); a null `extendsComponent` / `sees` of `AddAtelierBComponent` is still ignored, and an invalid
+binding there still skipped; the printed catches of `AtelierBComponentActorReference` (read of a role) and a `System.out` of
+`AtelierBProjectFactory` remain; `RemoveBPredicateInBPredicate` compares a binding to a predicate (broken before, unused by any FML).
+
+**Verified (2026-11-16).** Green through the openflexo-dev composite: b-ta-test 212, formod-test 32, formod-module 17. ECJ compiles b-ta.
+Reviewed by `openflexo-reviewer` (its findings fixed or recorded here). Not checked in the running application (a drop without value, then
+the B generation; a formula that is not B).

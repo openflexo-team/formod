@@ -38,6 +38,7 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
@@ -86,7 +87,7 @@ public interface CreateBParallelSubstitution extends BAction<BParallelSubstituti
 				substitution = resourceData.getFactory().makeSubstitution(BParallelSubstitution.class, resourceData);
 			}
 			else {
-				logger.warning("Cannot create substitution in null resource data");
+				throw new FMLNullReferenceError("Cannot create substitution: no B component to work in");
 			}
 
 			return substitution;

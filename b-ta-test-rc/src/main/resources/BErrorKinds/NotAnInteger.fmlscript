@@ -1,0 +1,5 @@
+// CORE-F-11 phase 6 (FORMOD-F-5): notAnInteger() fails with a typed FML error (FMLTypeError), no longer an internal error (NumberFormatException).
+virtualModel = load -r ["http://www.openflexo.org/test/b/FML/BErrorKinds.fml"];
+service ResourceCenterService add_temp_rc;
+vmi = new BErrorKinds() with (name="notAnInteger");
+mustFail = vmi.notAnInteger();

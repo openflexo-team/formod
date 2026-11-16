@@ -38,12 +38,12 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
@@ -88,27 +88,18 @@ public interface AddBMember<M extends BMember> extends BAction<M> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String identifierName = getIdentifierName().getBindingValue(evaluationContext);
-					if (identifierName != null) {
-						newMember = makeMember(identifierName, resourceData);
-						addToMembers(newMember, resourceData);
-					}
-					else {
-						logger.warning("Create a member requires a name");
-					}
+			if (resourceData != null) {
+				String identifierName = FMLEvaluation.evaluate(getIdentifierName(), evaluationContext, this);
+				if (identifierName != null) {
+					newMember = makeMember(identifierName, resourceData);
+					addToMembers(newMember, resourceData);
 				}
 				else {
-					logger.warning("Cannot create member in null resource data");
+					throw new FMLNullReferenceError("Create a member requires a name");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create member: no B component to work in");
 			}
 
 			return newMember;

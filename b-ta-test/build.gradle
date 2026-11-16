@@ -10,6 +10,10 @@ dependencies {
   // Test harness of p2pp: the pretty-print of B is checked with its invariants (see TestBPrettyPrintInvariants)
   testImplementation p2ppTest()
 
+  // FML-scripts of the failures of the B actions (TestBErrorKinds, CORE-F-11 phase 6)
+  testImplementation fmlCli()
+  testImplementation fmlCliTest()
+
   // Test resource center
   testRuntimeOnly project(':b-ta-test-rc')
 }

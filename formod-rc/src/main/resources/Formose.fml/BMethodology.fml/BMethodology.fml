@@ -306,8 +306,9 @@ public model BMethodology extends Methodology {
 					}
 				}
 
+				// A nameless individual has no B counterpart: skipped, the B actions require a name (FORMOD-F-5)
 				List<Individual> individualsOfConstantConcepts = select Individual from domainModel
-						where (selected.individualOf != null, !(selected instanceof MapletIndividual), !selected.individualOf.isVariable,
+						where (selected.name != null, selected.individualOf != null, !(selected instanceof MapletIndividual), !selected.individualOf.isVariable,
 								!selected.individualOf.isEnumeration);
 				for (Individual individual : individualsOfConstantConcepts) {
 					log "Individual of a constant concept that is not an abstract enumeration (rule 11)";
@@ -329,7 +330,7 @@ public model BMethodology extends Methodology {
 				}
 
 				List<Individual> individualsOfVariableConcepts = select Individual from domainModel
-						where (selected.individualOf != null, selected.individualOf.isVariable, !(selected instanceof MapletIndividual));
+						where (selected.name != null, selected.individualOf != null, selected.individualOf.isVariable, !(selected instanceof MapletIndividual));
 				for (Individual individual : individualsOfVariableConcepts) {
 					log "Individual of a variable concept  (rules 12 & 13)";
 					formula = individual.name + " : " + individual.individualOf.name;
@@ -353,7 +354,7 @@ public model BMethodology extends Methodology {
 				}
 
 				List<Individual> variableEnumeratedIndividuals = select Individual from domainModel
-						where (selected.individualOf != null, !(selected instanceof MapletIndividual), selected.isVariable,
+						where (selected.name != null, selected.individualOf != null, !(selected instanceof MapletIndividual), selected.isVariable,
 								selected.individualOf.isEnumeration, selected.individualOf.parentConcept == null,
 								!(selected.individualOf instanceof Association), !(selected.individualOf instanceof DefinedConcept),
 								!(selected.individualOf instanceof DefaultDataType));

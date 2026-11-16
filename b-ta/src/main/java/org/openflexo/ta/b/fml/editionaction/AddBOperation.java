@@ -38,13 +38,13 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -95,28 +95,19 @@ public interface AddBOperation extends BAction<BOperation> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String identifierName = getIdentifierName().getBindingValue(evaluationContext);
-					if (identifierName != null) {
-						newOperation = resourceData.getFactory().makeNormalOperation(identifierName);
-						newOperation.setOperationBody(resourceData.getFactory().makeSubstitution(BSkipSubstitution.class, resourceData));
-						resourceData.addToOperations(newOperation);
-					}
-					else {
-						logger.warning("Create an operation requires a name");
-					}
+			if (resourceData != null) {
+				String identifierName = FMLEvaluation.evaluate(getIdentifierName(), evaluationContext, this);
+				if (identifierName != null) {
+					newOperation = resourceData.getFactory().makeNormalOperation(identifierName);
+					newOperation.setOperationBody(resourceData.getFactory().makeSubstitution(BSkipSubstitution.class, resourceData));
+					resourceData.addToOperations(newOperation);
 				}
 				else {
-					logger.warning("Cannot create operation in null resource data");
+					throw new FMLNullReferenceError("Create an operation requires a name");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create operation: no B component to work in");
 			}
 
 			return newOperation;

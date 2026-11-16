@@ -38,13 +38,13 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -118,55 +118,46 @@ public interface AddBSubsetPredicate extends BAction<BSubsetPredicate> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String subSetName = getSubSetName().getBindingValue(evaluationContext);
-					String superSetName = getSuperSetName().getBindingValue(evaluationContext);
-					Boolean isInvariant = getIsInvariant().getBindingValue(evaluationContext);
-					if (subSetName != null && superSetName != null && isInvariant != null) {
-						
-						subsetPredicate = resourceData.getFactory().makePredicate(BSubsetPredicate.class, resourceData);
-						BIdentifierExpression subSet = resourceData.getFactory().makeExpression(BIdentifierExpression.class, resourceData);
-						subSet.setIdentifier(subSetName);
-						subsetPredicate.setLeft(subSet);
-						BIdentifierExpression superSet = resourceData.getFactory().makeExpression(BIdentifierExpression.class, resourceData);
-						superSet.setIdentifier(superSetName);
-						subsetPredicate.setRight(superSet);
-						
-						BPredicate predicate = null;
-						if(isInvariant){
-							predicate = resourceData.getInvariant();
-						}
-						else{
-							predicate = resourceData.getProperties();
-						}
-						
-						BConjunctPredicate newPredicate = resourceData.getFactory().makePredicate(BConjunctPredicate.class, resourceData);
-						newPredicate.setLeft(predicate);
-						newPredicate.setRight(subsetPredicate);
-						
-						if(isInvariant){
-							resourceData.setInvariant(newPredicate);
-						}
-						else{
-							resourceData.setProperties(newPredicate);
-						}
-						
+			if (resourceData != null) {
+				String subSetName = FMLEvaluation.evaluate(getSubSetName(), evaluationContext, this);
+				String superSetName = FMLEvaluation.evaluate(getSuperSetName(), evaluationContext, this);
+				Boolean isInvariant = FMLEvaluation.evaluate(getIsInvariant(), evaluationContext, this);
+				if (subSetName != null && superSetName != null && isInvariant != null) {
+					
+					subsetPredicate = resourceData.getFactory().makePredicate(BSubsetPredicate.class, resourceData);
+					BIdentifierExpression subSet = resourceData.getFactory().makeExpression(BIdentifierExpression.class, resourceData);
+					subSet.setIdentifier(subSetName);
+					subsetPredicate.setLeft(subSet);
+					BIdentifierExpression superSet = resourceData.getFactory().makeExpression(BIdentifierExpression.class, resourceData);
+					superSet.setIdentifier(superSetName);
+					subsetPredicate.setRight(superSet);
+					
+					BPredicate predicate = null;
+					if(isInvariant){
+						predicate = resourceData.getInvariant();
 					}
-					else {
-						logger.warning("Create a subsetPredicate requires a subSetName, a superSetName and a flag isInvariant");
+					else{
+						predicate = resourceData.getProperties();
 					}
+					
+					BConjunctPredicate newPredicate = resourceData.getFactory().makePredicate(BConjunctPredicate.class, resourceData);
+					newPredicate.setLeft(predicate);
+					newPredicate.setRight(subsetPredicate);
+					
+					if(isInvariant){
+						resourceData.setInvariant(newPredicate);
+					}
+					else{
+						resourceData.setProperties(newPredicate);
+					}
+					
 				}
 				else {
-					logger.warning("Cannot create subsetPredicate in null resource data");
+					throw new FMLNullReferenceError("Create a subsetPredicate requires a subSetName, a superSetName and a flag isInvariant");
 				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create subsetPredicate: no B component to work in");
 			}
 
 			return subsetPredicate;

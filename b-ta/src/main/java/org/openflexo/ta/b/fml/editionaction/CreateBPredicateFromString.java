@@ -38,14 +38,15 @@
 
 package org.openflexo.ta.b.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -103,36 +104,24 @@ public interface CreateBPredicateFromString extends BAction<BPredicate> {
 
 			BComponent resourceData = getReceiver(evaluationContext);
 
-			try {
-				if (resourceData != null) {
-					String stringToParse = getPredicateAsString().getBindingValue(evaluationContext);
-					if (stringToParse != null) {
-						try {
-							newPredicate = (BPredicate) BParser.parse(stringToParse, resourceData.getFactory(), EntryPointKind.Predicate);
-						} catch (ParseException e) {
-							logger.warning("Cannot parse predicate: " + stringToParse);
-						} catch (IOException e) {
-							logger.warning("Unexpected IO exception");
-							e.printStackTrace();
-						} catch (RuntimeException e) {
-							// The parser fails on some texts that are no predicate at all, the empty one for instance
-							logger.warning("Cannot parse predicate: '" + stringToParse + "' (" + e + ")");
-						}
-					}
-					else {
-						logger.warning("Cannot create predicate without string to parse");
+			if (resourceData != null) {
+				String stringToParse = FMLEvaluation.evaluate(getPredicateAsString(), evaluationContext, this);
+				if (stringToParse != null) {
+					try {
+						newPredicate = (BPredicate) BParser.parse(stringToParse, resourceData.getFactory(), EntryPointKind.Predicate);
+					} catch (ParseException | RuntimeException e) {
+						// A text that is not a B predicate gives null, a meaningful answer that the FML tests (BMethodology: "the formula is
+						// not a B predicate and is ignored"; decided with the user, to revisit with FML try/catch, CORE-F-11 phase 7). The
+						// parser also fails, unchecked, on some texts that are no predicate at all, the empty one for instance
+						logger.warning("Not a B predicate, ignored: '" + stringToParse + "' (" + e + ")");
+					} catch (IOException e) {
+						throw new FMLTechnologyError("Cannot read the B predicate '" + stringToParse + "': " + e.getMessage(), e);
 					}
 				}
-				else {
-					logger.warning("Cannot create predicate in null resource data");
-				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+				// No text: no predicate, as for a text that is not B
+			}
+			else {
+				throw new FMLNullReferenceError("Cannot create predicate: no B component to work in");
 			}
 
 			if (newPredicate != null) {
