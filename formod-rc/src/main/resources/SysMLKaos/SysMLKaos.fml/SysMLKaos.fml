@@ -33,7 +33,7 @@ public model SysMLKaos {
 
 	/** Creates a new SysML/KAOS goal model */
 	create::init(String name, String title, String description) {
-		rootModel = new SysMLKaosModel::init(parameters.name + "RootModel", "Root model for " + parameters.name, "Root model", null)
+		rootModel = new SysMLKaosModel::init(name + "RootModel", "Root model for " + name, "Root model", null)
 				with (name="RootModel");
 	}
 

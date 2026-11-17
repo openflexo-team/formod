@@ -56,7 +56,7 @@ public model DomainModelMethodology extends Methodology {
 
 	/** The mapping of supplied element, null when this element has none */
 	public DomainModellingElementMapping getDomainModelElementMapping(Element element) {
-		return select unique DomainModellingElementMapping from this where (selected.element == parameters.element);
+		return select unique DomainModellingElementMapping from this where (selected.element == element);
 	}
 
 	delete() {
@@ -65,7 +65,7 @@ public model DomainModelMethodology extends Methodology {
 	create(SysMLKaosMethodology sysmlKaosMethodology) {
 		name = "DomainModelMethodology";
 		domainModelling = container.new DomainModelling() with (name="DomainModelling");
-		sysMLKaosMethodology = parameters.sysmlKaosMethodology;
+		sysMLKaosMethodology = sysmlKaosMethodology;
 		declaringElement = sysMLKaosMethodology.declaringElement;
 		rootElementMapping = new DomainModellingElementMapping(declaringElement, null);
 	}
@@ -100,14 +100,14 @@ public model DomainModelMethodology extends Methodology {
 		}
 
 		create(required Element anElement, DomainModelMapping parentDomainModelMapping) {
-			sysMLKaosElementMapping = container.sysMLKaosMethodology.getElementMapping(parameters.anElement);
-			parentDomainModelMapping = parameters.parentDomainModelMapping;
+			sysMLKaosElementMapping = container.sysMLKaosMethodology.getElementMapping(anElement);
+			this.parentDomainModelMapping = parentDomainModelMapping;
 			this.updateFromSysMLKAOS();
 		}
 
 		public createTopLevelDomainModelMapping(required String name, required DomainModelMapping parent) {
 			log "Create top-level domain model mapping";
-			DomainModelMapping topLevel = new DomainModelMapping::createNamed(parameters.name, parameters.parent);
+			DomainModelMapping topLevel = new DomainModelMapping::createNamed(name, parent);
 			topLevelDomainModelMappings.add(topLevel);
 		}
 
@@ -150,47 +150,47 @@ public model DomainModelMethodology extends Methodology {
 			};
 
 			create(GoalGroup goalGroup, DomainModelMapping parentDomainModelMapping) {
-				parent = parameters.parentDomainModelMapping;
-				goalGroup = parameters.goalGroup;
+				parent = parentDomainModelMapping;
+				this.goalGroup = goalGroup;
 				if (parent != null) {
 					parent.children.add(this);
 				}
 				log "creating domain mapping";
-				this.createDomainModel(parameters.goalGroup.title);
+				this.createDomainModel(goalGroup.title);
 			}
 
 			/** A domain model named after supplied name rather than after a group of goals */
 			create::createNamed(String name, DomainModelMapping parentDomainModelMapping) {
-				parent = parameters.parentDomainModelMapping;
+				parent = parentDomainModelMapping;
 				if (parent != null) {
 					parent.children.add(this);
 				}
 				log "creating domain mapping";
-				this.createDomainModel(parameters.name);
+				this.createDomainModel(name);
 			}
 
 			/** Create the domain model of this mapping, refining the one of its parent, and its default diagram */
 			private createDomainModel(String title) {
-				this.title = parameters.title;
+				this.title = title;
 				if (parent != null) {
 					domainModel = container.container.domainModelling.new DomainModel(
-							container.element.identifier + "-" + parameters.title, parent.domainModel)
-							with (name=container.element.identifier + "-" + parameters.title);
+							container.element.identifier + "-" + title, parent.domainModel)
+							with (name=container.element.identifier + "-" + title);
 				}
 				else {
 					domainModel = container.container.domainModelling.new DomainModel(
-							container.element.identifier + "-" + parameters.title, container.container.domainModelling.rootDomainModel)
-							with (name=container.element.identifier + "-" + parameters.title);
+							container.element.identifier + "-" + title, container.container.domainModelling.rootDomainModel)
+							with (name=container.element.identifier + "-" + title);
 				}
 				defaultDiagram = container.container.domainModelling.new DomainModelDiagram::init(domainModel,
-						container.element.identifier + "-DomainModel-" + parameters.title + "-Diagram")
-						with (name=container.element.identifier + "-DomainModel-" + parameters.title + "-Diagram");
+						container.element.identifier + "-DomainModel-" + title + "-Diagram")
+						with (name=container.element.identifier + "-DomainModel-" + title + "-Diagram");
 				notify "domainModel" in this;
 				notify "defaultDiagram" in this;
 			}
 
 			public DomainModelMapping createChildDomainModel(required String name) {
-				DomainModelMapping newDomainModelMapping = container.new DomainModelMapping::createNamed(parameters.name, this);
+				DomainModelMapping newDomainModelMapping = container.new DomainModelMapping::createNamed(name, this);
 				notify "children" in this;
 				return newDomainModelMapping;
 			}

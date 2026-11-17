@@ -50,56 +50,56 @@ public model DocumentAnnotationMethodology extends Methodology {
 
 	/** The reference of supplied element, created empty if this element has none yet */
 	public ElementReference getElementReference(Element element) {
-		List<ElementReference> references = select ElementReference from this where (selected.element == parameters.element);
+		List<ElementReference> references = select ElementReference from this where (selected.element == element);
 		if (references.size > 0) {
 			return references.get(0);
 		}
-		return new ElementReference::createNewEmptyElementReference(parameters.element);
+		return new ElementReference::createNewEmptyElementReference(element);
 	}
 
 	/** The reference of supplied requirement, created empty if this requirement has none yet */
 	public RequirementReference getRequirementReference(Requirement requirement) {
-		Element containerElement = parameters.requirement.element;
+		Element containerElement = requirement.element;
 		ElementReference elementReference = this.getElementReference(containerElement);
 		List<RequirementReference> references = select RequirementReference from elementReference
-				where (selected.requirement == parameters.requirement);
+				where (selected.requirement == requirement);
 		if (references.size > 0) {
 			return references.get(0);
 		}
-		return elementReference.new RequirementReference::createEmpty(parameters.requirement);
+		return elementReference.new RequirementReference::createEmpty(requirement);
 	}
 
 	/** Identify a new element from supplied document reference, as a child of supplied element */
 	public ElementReference identifyElement(String elementName, String elementDescription, Element parentElement,
 			Reference reference) {
-		Element newElement = parameters.parentElement.createChildrenElement(parameters.elementName, parameters.elementDescription);
-		log "Called identifyElement with " + parameters.reference;
+		Element newElement = parentElement.createChildrenElement(elementName, elementDescription);
+		log "Called identifyElement with " + reference;
 		ElementReference newElementReference = this.getElementReference(newElement);
-		newElementReference.references.add(parameters.reference);
+		newElementReference.references.add(reference);
 		return newElementReference;
 	}
 
 	/** Annotate an existing element with supplied document reference */
 	public ElementReference annotateElement(Element element, Reference reference) {
-		ElementReference elementReference = this.getElementReference(parameters.element);
-		elementReference.references.add(parameters.reference);
+		ElementReference elementReference = this.getElementReference(element);
+		elementReference.references.add(reference);
 		return elementReference;
 	}
 
 	/** Identify a new requirement of supplied element from supplied document reference */
 	public RequirementReference identifyRequirement(String requirementName, String requirementDescription,
 			Element parentElement, Reference reference) {
-		ElementReference elementReference = this.getElementReference(parameters.parentElement);
-		Requirement newRequirement = parameters.parentElement.createRequirement(parameters.requirementName,
-				parameters.requirementDescription);
+		ElementReference elementReference = this.getElementReference(parentElement);
+		Requirement newRequirement = parentElement.createRequirement(requirementName,
+				requirementDescription);
 		RequirementReference newRequirementReference = this.getRequirementReference(newRequirement);
-		newRequirementReference.references.add(parameters.reference);
+		newRequirementReference.references.add(reference);
 		return newRequirementReference;
 	}
 
 	public Reference addUnclassifiedReference(Reference reference) {
-		unclassified.addToUnclassifiedReferences(parameters.reference);
-		return parameters.reference;
+		unclassified.addToUnclassifiedReferences(reference);
+		return reference;
 	}
 
 	/**
@@ -114,8 +114,8 @@ public model DocumentAnnotationMethodology extends Methodology {
 		Reference[0,*] references with ConceptInstance(virtualModelInstance=container.documentLibrary);
 
 		create(required String aName, required String aDescription) {
-			name = parameters.aName;
-			description = parameters.aDescription;
+			name = aName;
+			description = aDescription;
 			user = System.getProperty("user.name");
 		}
 
@@ -123,19 +123,19 @@ public model DocumentAnnotationMethodology extends Methodology {
 		}
 
 		public Reference addReference(Reference aReference) {
-			if (parameters.aReference != null) {
-				references.add(parameters.aReference);
+			if (aReference != null) {
+				references.add(aReference);
 				notify "references" in this;
 			}
-			return parameters.aReference;
+			return aReference;
 		}
 
 		public moveReference(Reference aReference, NamedReference namedReference) {
-			log "Moving reference " + parameters.aReference + " to " + parameters.namedReference;
-			references.remove(parameters.aReference);
-			parameters.namedReference.references.add(parameters.aReference);
+			log "Moving reference " + aReference + " to " + namedReference;
+			references.remove(aReference);
+			namedReference.references.add(aReference);
 			notify "references" in this;
-			notify "references" in parameters.namedReference;
+			notify "references" in namedReference;
 		}
 	}
 
@@ -149,7 +149,7 @@ public model DocumentAnnotationMethodology extends Methodology {
 		}
 
 		create::createNewEmptyElementReference(required Element anElement) {
-			element = parameters.anElement;
+			element = anElement;
 			user = System.getProperty("user.name");
 		}
 
@@ -161,7 +161,7 @@ public model DocumentAnnotationMethodology extends Methodology {
 			Requirement requirement with ConceptInstance(virtualModelInstance=container.container.formoseVMI);
 
 			create::createEmpty(required Requirement aRequirement) {
-				requirement = parameters.aRequirement;
+				requirement = aRequirement;
 				user = System.getProperty("user.name");
 			}
 
@@ -182,16 +182,16 @@ public model DocumentAnnotationMethodology extends Methodology {
 		}
 
 		public addToUnclassifiedReferences(required Reference reference) {
-			unclassifiedReferences.add(parameters.reference);
+			unclassifiedReferences.add(reference);
 			notify "unclassifiedReferences" in this;
 		}
 
 		public moveReference(Reference aReference, NamedReference namedReference) {
-			log "Moving reference " + parameters.aReference + " to " + parameters.namedReference;
-			unclassifiedReferences.remove(parameters.aReference);
-			parameters.namedReference.references.add(parameters.aReference);
+			log "Moving reference " + aReference + " to " + namedReference;
+			unclassifiedReferences.remove(aReference);
+			namedReference.references.add(aReference);
 			notify "unclassifiedReferences" in this;
-			notify "references" in parameters.namedReference;
+			notify "references" in namedReference;
 		}
 	}
 }

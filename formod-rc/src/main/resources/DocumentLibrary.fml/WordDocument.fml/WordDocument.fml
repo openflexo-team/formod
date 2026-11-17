@@ -23,9 +23,9 @@ public model WordDocument extends AbstractDocument {
 	DocXDocument docXDocument with DocXModelSlot(isRequired=true);
 
 	create(required String documentName, required Resource<DocXDocument> documentResource, required String documentDescription) {
-		docXDocument = (DocXDocument) parameters.documentResource.getResourceData();
-		documentName = parameters.documentName;
-		documentDescription = parameters.documentDescription;
+		docXDocument = (DocXDocument) documentResource.getResourceData();
+		this.documentName = documentName;
+		this.documentDescription = documentDescription;
 	}
 
 	delete() {
@@ -48,7 +48,7 @@ public model WordDocument extends AbstractDocument {
 		};
 
 		create(TextSelection textSelection) {
-			textSelection = parameters.textSelection;
+			this.textSelection = textSelection;
 		}
 
 		delete() {

@@ -27,9 +27,9 @@ public model ExcelDocument extends AbstractDocument {
 	ExcelWorkbook excelWorkbook with BasicExcelModelSlot(isRequired=true);
 
 	create(String documentName, Resource<ExcelWorkbook> documentResource, String documentDescription) {
-		excelWorkbook = (ExcelWorkbook) parameters.documentResource.getResourceData();
-		documentName = parameters.documentName;
-		documentDescription = parameters.documentDescription;
+		excelWorkbook = (ExcelWorkbook) documentResource.getResourceData();
+		this.documentName = documentName;
+		this.documentDescription = documentDescription;
 	}
 
 	delete() {
@@ -55,9 +55,9 @@ public model ExcelDocument extends AbstractDocument {
 		};
 
 		create(String sheetName, int rowIndex, int columnIndex) {
-			sheetName = parameters.sheetName;
-			rowIndex = parameters.rowIndex;
-			columnIndex = parameters.columnIndex;
+			this.sheetName = sheetName;
+			this.rowIndex = rowIndex;
+			this.columnIndex = columnIndex;
 		}
 
 		delete() {

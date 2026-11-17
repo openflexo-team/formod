@@ -37,9 +37,9 @@ public model Formose {
 
 	/** Initialize a new Formose project, together with its core model */
 	create::initFormoseView(required String projectName, String projectDescription) {
-		projectName = parameters.projectName;
-		projectDescription = parameters.projectDescription;
-		formoseVMI = new FormoseCore::init(parameters.projectName) with (name="FormoseVMI");
+		this.projectName = projectName;
+		this.projectDescription = projectDescription;
+		formoseVMI = new FormoseCore::init(projectName) with (name="FormoseVMI");
 		documentAnnotationMethodology = new DocumentAnnotationMethodology() with (name="DocumentAnnotationMethodology");
 	}
 

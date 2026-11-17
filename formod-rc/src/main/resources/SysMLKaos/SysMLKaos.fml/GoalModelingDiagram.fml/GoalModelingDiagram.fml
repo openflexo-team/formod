@@ -106,10 +106,10 @@ public model GoalModelingDiagram {
 
 	create::init(String diagramName, String diagramTitle, SysMLKaosModel goalModel) {
 		log "Initializing diagram";
-		diagramName = parameters.diagramName;
-		diagramTitle = parameters.diagramTitle;
-		kaosModel = parameters.goalModel;
-		kaosGoalDiagram = DIAGRAM::CreateDiagram(resourceName=parameters.diagramName, resourceCenter=container.resourceCenter,
+		this.diagramName = diagramName;
+		this.diagramTitle = diagramTitle;
+		kaosModel = goalModel;
+		kaosGoalDiagram = DIAGRAM::CreateDiagram(resourceName=diagramName, resourceCenter=container.resourceCenter,
 				relativePath="/Diagrams");
 	}
 
@@ -220,13 +220,13 @@ public model GoalModelingDiagram {
 	}
 
 	public representRequiredRefinment(Refinement refinment) {
-		log "Represent refinment " + parameters.refinment;
-		List<GoalGR> parentGoals = this.getParentGoalGRs(parameters.refinment);
-		List<GoalGR> childGoals = this.getChildGoalGRs(parameters.refinment);
+		log "Represent refinment " + refinment;
+		List<GoalGR> parentGoals = this.getParentGoalGRs(refinment);
+		List<GoalGR> childGoals = this.getChildGoalGRs(refinment);
 		if (childGoals.size > 0 && parentGoals.size > 0) {
-			RefinementGR refinmentGR = select unique RefinementGR from this where (selected.refinement == parameters.refinment);
+			RefinementGR refinmentGR = select unique RefinementGR from this where (selected.refinement == refinment);
 			if (refinmentGR == null) {
-				refinmentGR = new RefinementGR::representRefinment(parameters.refinment, parentGoals, childGoals);
+				refinmentGR = new RefinementGR::representRefinment(refinment, parentGoals, childGoals);
 			}
 			else {
 				refinmentGR.updateRequiredLinks();
@@ -235,7 +235,7 @@ public model GoalModelingDiagram {
 	}
 
 	private boolean atLeastOneChild(Refinement refinment) {
-		for (Goal child : parameters.refinment.childGoals) {
+		for (Goal child : refinment.childGoals) {
 			GoalGR childGoalGR = select unique GoalGR from this where (selected.goal == child);
 			if (childGoalGR != null) {
 				return true;
@@ -245,7 +245,7 @@ public model GoalModelingDiagram {
 	}
 
 	private boolean atLeastOneParent(Refinement refinment) {
-		for (Goal parent : parameters.refinment.parentGoal) {
+		for (Goal parent : refinment.parentGoal) {
 			GoalGR parentGoalGR = select unique GoalGR from this where (selected.goal == parent);
 			if (parentGoalGR != null) {
 				return true;
@@ -256,7 +256,7 @@ public model GoalModelingDiagram {
 
 	private List<GoalGR> getChildGoalGRs(Refinement refinment) {
 		List<GoalGR> returned = new ArrayList();
-		for (Goal child : parameters.refinment.childGoals) {
+		for (Goal child : refinment.childGoals) {
 			GoalGR childGoalGR = select unique GoalGR from this where (selected.goal == child);
 			if (childGoalGR != null) {
 				returned.add(childGoalGR);
@@ -267,7 +267,7 @@ public model GoalModelingDiagram {
 
 	private List<GoalGR> getParentGoalGRs(Refinement refinment) {
 		List<GoalGR> returned = new ArrayList();
-		for (Goal parent : parameters.refinment.parentGoal) {
+		for (Goal parent : refinment.parentGoal) {
 			GoalGR parentGoalGR = select unique GoalGR from this where (selected.goal == parent);
 			if (parentGoalGR != null) {
 				returned.add(parentGoalGR);
@@ -297,7 +297,7 @@ public model GoalModelingDiagram {
 	/** Serialize every goal of the model as a row of the "Goal Model" sheet of supplied workbook */
 	public serializeGoalModel(required Resource<ExcelWorkbook> excelWorkBook) {
 		log "Goal model serialization";
-		ExcelWorkbook excelFile = parameters.excelWorkBook.excelWorkbook;
+		ExcelWorkbook excelFile = excelWorkBook.excelWorkbook;
 		if (excelFile.getExcelSheetByName("Goal Model") == null) {
 			XLS::AddExcelSheet(sheetName="Goal Model", override=true) in (excelFile);
 			ExcelRow rootRow = XLS::AddExcelRow(rowIndex=0, excelSheet=excelFile.getExcelSheetByName("Goal Model")) in (excelFile);
@@ -310,7 +310,7 @@ public model GoalModelingDiagram {
 		for (Goal aGoal : select Goal from kaosModel) {
 			log "serializing goal " + aGoal.name;
 			match EventSerialization in serializations from this where (goal=aGoal)
-					unmatched: new EventSerialization(aGoal, parameters.excelWorkBook);
+					unmatched: new EventSerialization(aGoal, excelWorkBook);
 		}
 		end match EventSerialization in serializations unmatched: delete();
 	}
@@ -350,34 +350,34 @@ public model GoalModelingDiagram {
 		FunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createFunctionalGoal(required String name = kaosModel.newName("Goal"), String type = "Functional", String description) with DropScheme(targetType=GoalModelingDiagram) {
-			goal = container.kaosModel.new FunctionalGoal(parameters.name, parameters.type, parameters.description, true);
-			log "Creating goal " + parameters.name;
+			goal = container.kaosModel.new FunctionalGoal(name, type, description, true);
+			log "Creating goal " + name;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
 
 		create::createTopFunctionalGoal(required String name, required String description, int index) {
-			log "Create top goal " + parameters.name;
-			goal = container.kaosModel.new FunctionalGoal(parameters.name, "", parameters.description, true);
+			log "Create top goal " + name;
+			goal = container.kaosModel.new FunctionalGoal(name, "", description, true);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
-			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x", value=20 + parameters.index * 10)
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x", value=20 + index * 10)
 					in (container.kaosGoalDiagram);
-			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="y", value=20 + parameters.index * 10)
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="y", value=20 + index * 10)
 					in (container.kaosGoalDiagram);
 		}
 
 		representFunctionalGoal(required FunctionalGoal goal) with DropScheme(targetType=GoalModelingDiagram) {
-			log "Representing goal " + parameters.goal;
-			goal = parameters.goal;
+			log "Representing goal " + goal;
+			this.goal = goal;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 			container.representRequiredRelationships();
 		}
 
 		create::representTopFunctionalGoal(FunctionalGoal goal, int index) {
-			goal = parameters.goal;
+			this.goal = goal;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
-			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x", value=20 + parameters.index * 10)
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x", value=20 + index * 10)
 					in (container.kaosGoalDiagram);
-			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="y", value=20 + parameters.index * 10)
+			DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="y", value=20 + index * 10)
 					in (container.kaosGoalDiagram);
 		}
 	}
@@ -389,7 +389,7 @@ public model GoalModelingDiagram {
 		NonFunctionalGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createNonFunctionalGoal(required String name = kaosModel.newName("Goal"), String type = "NonFunctional", String description) with DropScheme(targetType=GoalModelingDiagram) {
-			goal = container.kaosModel.new NonFunctionalGoal(parameters.name, parameters.type, parameters.description);
+			goal = container.kaosModel.new NonFunctionalGoal(name, type, description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
 
@@ -399,8 +399,8 @@ public model GoalModelingDiagram {
 		}
 
 		representNonFunctionalGoal(required NonFunctionalGoal goal) with DropScheme(targetType=GoalModelingDiagram) {
-			log "Representing goal " + parameters.goal;
-			goal = parameters.goal;
+			log "Representing goal " + goal;
+			this.goal = goal;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 			container.representRequiredRelationships();
 		}
@@ -413,13 +413,13 @@ public model GoalModelingDiagram {
 		ContributionGoal goal with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createContributionGoal(required String name = kaosModel.newName("Goal"), String type = "Contribution", String description) with DropScheme(targetType=GoalModelingDiagram) {
-			goal = container.kaosModel.new ContributionGoal(parameters.name, parameters.type, parameters.description);
+			goal = container.kaosModel.new ContributionGoal(name, type, description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
 
 		representContributionGoal(required ContributionGoal goal) with DropScheme(targetType=GoalModelingDiagram) {
-			log "Representing goal " + parameters.goal;
-			goal = parameters.goal;
+			log "Representing goal " + goal;
+			this.goal = goal;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 			container.representRequiredRelationships();
 		}
@@ -474,11 +474,11 @@ public model GoalModelingDiagram {
 		}
 
 		create::representRefinment(Refinement refinment, List<GoalGR> parentGoalGRs, List<GoalGR> childGoalsGRs) {
-			refinement = parameters.refinment;
+			refinement = refinment;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
-			if (parameters.parentGoalGRs.size() > 0 && parameters.childGoalsGRs.size() > 0) {
-				GoalGR mainParentGR = parameters.parentGoalGRs.get(0);
-				GoalGR mainChildGR = parameters.childGoalsGRs.get(0);
+			if (parentGoalGRs.size() > 0 && childGoalsGRs.size() > 0) {
+				GoalGR mainParentGR = parentGoalGRs.get(0);
+				GoalGR mainChildGR = childGoalsGRs.get(0);
 				DIAGRAM::GraphicalAction(subject=shape, graphicalFeatureName="x",
 						value=(mainParentGR.shape.graphicalRepresentation.x + mainParentGR.shape.graphicalRepresentation.width / 2
 								+ mainChildGR.shape.graphicalRepresentation.x + mainChildGR.shape.graphicalRepresentation.width / 2) / 2
@@ -488,14 +488,14 @@ public model GoalModelingDiagram {
 								+ mainChildGR.shape.graphicalRepresentation.y + mainChildGR.shape.graphicalRepresentation.height / 2) / 2
 								- shape.graphicalRepresentation.height / 2) in (container.kaosGoalDiagram);
 			}
-			for (GoalGR parentGoalGR : parameters.parentGoalGRs) {
+			for (GoalGR parentGoalGR : parentGoalGRs) {
 				ParentRefinementLinkGR parentRefinmentLink = select unique ParentRefinementLinkGR from container
 						where (selected.refinementGR == this, selected.parentGoalGR == parentGoalGR);
 				if (parentRefinmentLink == null) {
 					parentRefinementLinkGR.add(container.new ParentRefinementLinkGR(this, parentGoalGR));
 				}
 			}
-			for (GoalGR childGoalGR : parameters.childGoalsGRs) {
+			for (GoalGR childGoalGR : childGoalsGRs) {
 				ChildRefinmentLinkGR childRefinmentLink = select unique ChildRefinmentLinkGR from container
 						where (selected.refinementGR == this, selected.childrenGoalGR == childGoalGR);
 				if (childRefinmentLink == null) {
@@ -597,13 +597,13 @@ public model GoalModelingDiagram {
 		EnvironmentalAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createEnvironmentalAgent(required String name = kaosModel.newName("Agent"), String description) with DropScheme(targetType=GoalModelingDiagram) {
-			agent = container.kaosModel.new EnvironmentalAgent::createEnvironmentalAgent(parameters.name, parameters.description);
+			agent = container.kaosModel.new EnvironmentalAgent::createEnvironmentalAgent(name, description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
 
 		representEnvironmentalAgent(required EnvironmentalAgent agent) with DropScheme(targetType=GoalModelingDiagram) {
-			log "Representing agent " + parameters.agent;
-			agent = parameters.agent;
+			log "Representing agent " + agent;
+			this.agent = agent;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 			container.representRequiredRelationships();
 		}
@@ -616,13 +616,13 @@ public model GoalModelingDiagram {
 		SoftwareAgent agent with ConceptInstance(virtualModelInstance=container.kaosModel);
 
 		createSoftwareAgent(required String name = kaosModel.newName("Agent"), String description) with DropScheme(targetType=GoalModelingDiagram) {
-			agent = container.kaosModel.new SoftwareAgent::createSoftwareAgent(parameters.name, parameters.description);
+			agent = container.kaosModel.new SoftwareAgent::createSoftwareAgent(name, description);
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 		}
 
 		representSoftwareAgent(required SoftwareAgent agent) with DropScheme(targetType=GoalModelingDiagram) {
-			log "Representing agent " + parameters.agent;
-			agent = parameters.agent;
+			log "Representing agent " + agent;
+			this.agent = agent;
 			shape = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 			container.representRequiredRelationships();
 		}
@@ -646,9 +646,9 @@ public model GoalModelingDiagram {
 		}
 
 		create(RefinementGR refinementGR, GoalGR parentGoalGR) {
-			refinementGR = parameters.refinementGR;
-			parentGoalGR = parameters.parentGoalGR;
-			connector = DIAGRAM::AddConnector(fromShape=refinementGR.shape, toShape=parentGoalGR.shape)
+			this.refinementGR = refinementGR;
+			this.parentGoalGR = parentGoalGR;
+			connector = DIAGRAM::AddConnector(fromShape=this.refinementGR.shape, toShape=this.parentGoalGR.shape)
 					in (container.kaosGoalDiagram);
 		}
 
@@ -681,9 +681,9 @@ public model GoalModelingDiagram {
 		}
 
 		create(RefinementGR refinementGR, GoalGR childrenGoalGR) {
-			refinementGR = parameters.refinementGR;
-			childrenGoalGR = parameters.childrenGoalGR;
-			connector = DIAGRAM::AddConnector(fromShape=parameters.childrenGoalGR.shape, toShape=parameters.refinementGR.shape)
+			this.refinementGR = refinementGR;
+			this.childrenGoalGR = childrenGoalGR;
+			connector = DIAGRAM::AddConnector(fromShape=childrenGoalGR.shape, toShape=refinementGR.shape)
 					in (container.kaosGoalDiagram);
 		}
 
@@ -716,10 +716,10 @@ public model GoalModelingDiagram {
 		}
 
 		create::representAgentAssignment(AgentAssignment agentAssignment, AgentGR agentlGR, GoalGR goalGR) {
-			agentGR = parameters.agentlGR;
-			goalGR = parameters.goalGR;
-			agentAssignment = parameters.agentAssignment;
-			connector = DIAGRAM::AddConnector(fromShape=agentGR.shape, toShape=goalGR.shape) in (container.kaosGoalDiagram);
+			agentGR = agentlGR;
+			this.goalGR = goalGR;
+			this.agentAssignment = agentAssignment;
+			connector = DIAGRAM::AddConnector(fromShape=agentGR.shape, toShape=this.goalGR.shape) in (container.kaosGoalDiagram);
 		}
 
 		public delete() {
@@ -779,21 +779,21 @@ public model GoalModelingDiagram {
 
 		create::representContribution(Contribution contribution, ContributionGoalGR contributionGoalGR,
 				NonFunctionalGoalGR nonFunctionalGoalGR) {
-			contributionGoalGR = parameters.contributionGoalGR;
-			nonFunctionalGoalGR = parameters.nonFunctionalGoalGR;
-			contribution = parameters.contribution;
+			this.contributionGoalGR = contributionGoalGR;
+			this.nonFunctionalGoalGR = nonFunctionalGoalGR;
+			this.contribution = contribution;
 			node = DIAGRAM::AddShape(container=container.kaosGoalDiagram) in (container.kaosGoalDiagram);
 			DIAGRAM::GraphicalAction(subject=node, graphicalFeatureName="x",
-					value=(contributionGoalGR.shape.graphicalRepresentation.x + contributionGoalGR.shape.graphicalRepresentation.width / 2
-							+ nonFunctionalGoalGR.shape.graphicalRepresentation.x + nonFunctionalGoalGR.shape.graphicalRepresentation.width / 2) / 2
+					value=(this.contributionGoalGR.shape.graphicalRepresentation.x + this.contributionGoalGR.shape.graphicalRepresentation.width / 2
+							+ this.nonFunctionalGoalGR.shape.graphicalRepresentation.x + this.nonFunctionalGoalGR.shape.graphicalRepresentation.width / 2) / 2
 							- node.graphicalRepresentation.width / 2) in (container.kaosGoalDiagram);
 			DIAGRAM::GraphicalAction(subject=node, graphicalFeatureName="y",
-					value=(contributionGoalGR.shape.graphicalRepresentation.y + contributionGoalGR.shape.graphicalRepresentation.height / 2
-							+ nonFunctionalGoalGR.shape.graphicalRepresentation.y + nonFunctionalGoalGR.shape.graphicalRepresentation.height / 2) / 2
+					value=(this.contributionGoalGR.shape.graphicalRepresentation.y + this.contributionGoalGR.shape.graphicalRepresentation.height / 2
+							+ this.nonFunctionalGoalGR.shape.graphicalRepresentation.y + this.nonFunctionalGoalGR.shape.graphicalRepresentation.height / 2) / 2
 							- node.graphicalRepresentation.height / 2) in (container.kaosGoalDiagram);
-			connector1 = DIAGRAM::AddConnector(fromShape=contributionGoalGR.shape, toShape=node)
+			connector1 = DIAGRAM::AddConnector(fromShape=this.contributionGoalGR.shape, toShape=node)
 					in (container.kaosGoalDiagram);
-			connector2 = DIAGRAM::AddConnector(fromShape=node, toShape=nonFunctionalGoalGR.shape)
+			connector2 = DIAGRAM::AddConnector(fromShape=node, toShape=this.nonFunctionalGoalGR.shape)
 					in (container.kaosGoalDiagram);
 		}
 
@@ -837,10 +837,10 @@ public model GoalModelingDiagram {
 		}
 
 		create::representImpact(Impact impact, ContributionGoalGR contributionGoalGR, FunctionalGoalGR functionalGoalGR) {
-			contributionGoalGR = parameters.contributionGoalGR;
-			functionalGoalGR = parameters.functionalGoalGR;
-			impact = parameters.impact;
-			connector = DIAGRAM::AddConnector(fromShape=contributionGoalGR.shape, toShape=functionalGoalGR.shape)
+			this.contributionGoalGR = contributionGoalGR;
+			this.functionalGoalGR = functionalGoalGR;
+			this.impact = impact;
+			connector = DIAGRAM::AddConnector(fromShape=this.contributionGoalGR.shape, toShape=this.functionalGoalGR.shape)
 					in (container.kaosGoalDiagram);
 		}
 
@@ -868,7 +868,7 @@ public model GoalModelingDiagram {
 			for (GoalGR goalGR : selection) {
 				goalList.add(goalGR.goal);
 			}
-			goalGroup = container.kaosModel.new GoalGroup(parameters.title, goalList);
+			goalGroup = container.kaosModel.new GoalGroup(title, goalList);
 			for (GoalGR goalGR : selection) {
 				goalGR.goal.goalGroup = goalGroup;
 			}
@@ -896,20 +896,20 @@ public model GoalModelingDiagram {
 		ExcelRow row with ExcelRowRole(container=container.container.serializingDocument);
 
 		create(Goal aGoal, Resource<ExcelWorkbook> workBook) {
-			goal = parameters.aGoal;
+			goal = aGoal;
 			log "Serializing goal " + goal + " parentGoal=" + goal.parentGoal;
 			row = XLS::AddExcelRow(
-					excelSheet=parameters.workBook.excelWorkbook.getExcelSheetByName("Goal Model"),
-					rowIndex=parameters.workBook.excelWorkbook.getExcelSheetByName("Goal Model").excelRows.size)
-					in (parameters.workBook.excelWorkbook);
+					excelSheet=workBook.excelWorkbook.getExcelSheetByName("Goal Model"),
+					rowIndex=workBook.excelWorkbook.getExcelSheetByName("Goal Model").excelRows.size)
+					in (workBook.excelWorkbook);
 			if (goal.parentGoal != null) {
 				XLS::AddExcelCell(row=row, columnIndex=0, cellType=$String,
 						value=goal.refines.refinementType + "-refines " + goal.parentGoal.name)
-						in (parameters.workBook.excelWorkbook);
+						in (workBook.excelWorkbook);
 			}
-			XLS::AddExcelCell(row=row, columnIndex=1, cellType=$String, value=goal.name) in (parameters.workBook.excelWorkbook);
+			XLS::AddExcelCell(row=row, columnIndex=1, cellType=$String, value=goal.name) in (workBook.excelWorkbook);
 			XLS::AddExcelCell(row=row, columnIndex=2, cellType=$String, value=goal.description)
-					in (parameters.workBook.excelWorkbook);
+					in (workBook.excelWorkbook);
 		}
 
 		/** The only deletion scheme, so that "end match ... unmatched: delete()" runs this one: it drops the row it wrote */

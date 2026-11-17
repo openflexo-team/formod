@@ -28,16 +28,16 @@ public model DocumentLibrary {
 
 	/** Import supplied .docx resource as a new document of this library */
 	public WordDocument importDocXDocument(required Resource<DocXDocument> docXDocumentResource, required String documentName, required String documentDescription) {
-		WordDocument newDocument = new WordDocument(parameters.documentName, parameters.docXDocumentResource,
-				parameters.documentDescription) with (name=parameters.documentName);
+		WordDocument newDocument = new WordDocument(documentName, docXDocumentResource,
+				documentDescription) with (name=documentName);
 		notify "documents" in this;
 		return newDocument;
 	}
 
 	public WordDocument removeDocXDocument(required WordDocument documentVMI) {
-		log "Delete " + parameters.documentVMI;
-		delete parameters.documentVMI;
+		log "Delete " + documentVMI;
+		delete documentVMI;
 		notify "documents" in this;
-		return parameters.documentVMI;
+		return documentVMI;
 	}
 }

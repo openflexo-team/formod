@@ -51,14 +51,14 @@ public model DomainModel {
 	 */
 	public String newName(String prefix) {
 		if (parentDomainModel != null) {
-			return parentDomainModel.newName(parameters.prefix);
+			return parentDomainModel.newName(prefix);
 		}
 		int next = 1;
 		if (nameCounter != null) {
 			next = nameCounter + 1;
 		}
 		nameCounter = next;
-		return parameters.prefix + next;
+		return prefix + next;
 	}
 
 	/** All concepts declared in this domain model */
@@ -76,8 +76,8 @@ public model DomainModel {
 	};
 
 	create(String name, DomainModel parent) {
-		modelName = parameters.name;
-		parentDomainModel = parameters.parent;
+		modelName = name;
+		parentDomainModel = parent;
 	}
 
 	delete() {
@@ -89,11 +89,11 @@ public model DomainModel {
 		DomainModel dm = this;
 		List<Individual> list = new ArrayList();
 		List<Individual> individuals = select Individual from dm
-				where (!selected.isSole && selected.individualOf == parameters.aConcept);
+				where (!selected.isSole && selected.individualOf == aConcept);
 		list.addAll(individuals);
 		while (dm != container.rootDomainModel && dm.parentDomainModel != null) {
 			dm = dm.parentDomainModel;
-			individuals = select Individual from dm where (!selected.isSole && selected.individualOf == parameters.aConcept);
+			individuals = select Individual from dm where (!selected.isSole && selected.individualOf == aConcept);
 			list.addAll(individuals);
 		}
 		return list;
@@ -110,7 +110,7 @@ public model DomainModel {
 		Concept parentConcept with ConceptInstance(virtualModelInstance=container);
 
 		create(required String aName, required boolean anIsVariable, required boolean anIsEnumeration, Concept aParentConcept) {
-			this.creationAction(parameters.aName, parameters.anIsVariable, parameters.anIsEnumeration, parameters.aParentConcept);
+			this.creationAction(aName, anIsVariable, anIsEnumeration, aParentConcept);
 		}
 
 		delete() {
@@ -121,10 +121,10 @@ public model DomainModel {
 		}
 
 		public creationAction(required String name, required boolean isVariable, required boolean isEnumeration, Concept parentConcept) {
-			name = parameters.name;
-			isVariable = parameters.isVariable;
-			isEnumeration = parameters.isEnumeration;
-			parentConcept = parameters.parentConcept;
+			this.name = name;
+			this.isVariable = isVariable;
+			this.isEnumeration = isEnumeration;
+			this.parentConcept = parentConcept;
 			notify "concepts" in container;
 		}
 	}
@@ -136,7 +136,7 @@ public model DomainModel {
 		}
 
 		create(required String aName, required boolean isEnumeration) {
-			this.creationAction(parameters.aName, false, parameters.isEnumeration, null);
+			this.creationAction(aName, false, isEnumeration, null);
 		}
 	}
 
@@ -153,8 +153,8 @@ public model DomainModel {
 		}
 
 		create(required String aName, required boolean anIsVariable, required boolean anIsEnumeration, Concept aParentConcept, required LogicalFormula definedWith) {
-			this.creationAction(parameters.aName, parameters.anIsVariable, parameters.anIsEnumeration, parameters.aParentConcept);
-			definedWith.add(parameters.definedWith);
+			this.creationAction(aName, anIsVariable, anIsEnumeration, aParentConcept);
+			this.definedWith.add(definedWith);
 		}
 	}
 
@@ -174,16 +174,16 @@ public model DomainModel {
 		create(required String aName, required boolean isVariable, required boolean isEnumeration, Concept parentConcept, required Concept aDomain, Concept aRange,
 				required Cardinality domainCardinality, required Cardinality rangeCardinality, required boolean anIsTransitive, required boolean anIsSysmmetric,
 				required boolean anIsASymmetric, required boolean anIsReflexive, required boolean anIsIrreflexive) {
-			isTransitive = parameters.anIsTransitive;
-			isSysmmetric = parameters.anIsSysmmetric;
-			isASymmetric = parameters.anIsASymmetric;
-			isReflexive = parameters.anIsReflexive;
-			isIrreflexive = parameters.anIsIrreflexive;
-			domain = parameters.aDomain;
-			range = parameters.aRange;
-			domainCardinality = parameters.domainCardinality;
-			rangeCardinality = parameters.rangeCardinality;
-			this.creationAction(parameters.aName, parameters.isVariable, parameters.isEnumeration, parameters.parentConcept);
+			isTransitive = anIsTransitive;
+			isSysmmetric = anIsSysmmetric;
+			isASymmetric = anIsASymmetric;
+			isReflexive = anIsReflexive;
+			isIrreflexive = anIsIrreflexive;
+			domain = aDomain;
+			range = aRange;
+			this.domainCardinality = domainCardinality;
+			this.rangeCardinality = rangeCardinality;
+			this.creationAction(aName, isVariable, isEnumeration, parentConcept);
 		}
 
 		delete() {
@@ -205,7 +205,7 @@ public model DomainModel {
 		String[1,1] cardinality = "0..*";
 
 		create(required String cardinality) {
-			cardinality = parameters.cardinality;
+			this.cardinality = cardinality;
 		}
 
 		delete() {
@@ -251,7 +251,7 @@ public model DomainModel {
 		};
 
 		create(required String aName, required Concept aConcept, required boolean anIsVariable, Individual initialValue) {
-			this.creationAction(parameters.aName, parameters.aConcept, parameters.anIsVariable, parameters.initialValue);
+			this.creationAction(aName, aConcept, anIsVariable, initialValue);
 		}
 
 		delete() {
@@ -260,10 +260,10 @@ public model DomainModel {
 		}
 
 		public creationAction(required String name, required Concept aConcept, required boolean isVariable, Individual initialValue) {
-			name = parameters.name;
-			isVariable = parameters.isVariable;
-			initialValue = parameters.initialValue;
-			individualOf = parameters.aConcept;
+			this.name = name;
+			this.isVariable = isVariable;
+			this.initialValue = initialValue;
+			individualOf = aConcept;
 			notify "sole_individuals" in container;
 			notify "concepts" in container;
 		}
@@ -290,9 +290,9 @@ public model DomainModel {
 
 		create(required String aName, required Association aConcept, Individual antecedent, Individual image, required boolean anIsVariable,
 				Individual initialValue) {
-			this.creationAction(parameters.aName, parameters.aConcept, parameters.anIsVariable, parameters.initialValue);
-			antecedent = parameters.antecedent;
-			image = parameters.image;
+			this.creationAction(aName, aConcept, anIsVariable, initialValue);
+			this.antecedent = antecedent;
+			this.image = image;
 		}
 
 		public String getCanonicalString() {
@@ -315,7 +315,7 @@ public model DomainModel {
 		QuantVariable[0,*] variables with ConceptInstance(virtualModelInstance=container);
 
 		create(required String anAssertion) {
-			assertion = parameters.anAssertion;
+			assertion = anAssertion;
 		}
 
 		delete() {
@@ -332,7 +332,7 @@ public model DomainModel {
 		String[1,1] name;
 
 		create(required String aName) {
-			name = parameters.aName;
+			name = aName;
 		}
 
 		delete() {

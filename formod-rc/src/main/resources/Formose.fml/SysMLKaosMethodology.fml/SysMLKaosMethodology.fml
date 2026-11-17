@@ -56,11 +56,11 @@ public model SysMLKaosMethodology extends Methodology {
 	}
 
 	create(required String sysMLKaosViewName, Element element) {
-		name = parameters.sysMLKaosViewName;
-		sysMLKaos = container.new SysMLKaos::init(parameters.sysMLKaosViewName, parameters.sysMLKaosViewName, "")
-				with (name=parameters.sysMLKaosViewName);
-		declaringElement = parameters.element;
-		new SysMLKaosElementMapping::createNewMapping(parameters.element);
+		name = sysMLKaosViewName;
+		sysMLKaos = container.new SysMLKaos::init(sysMLKaosViewName, sysMLKaosViewName, "")
+				with (name=sysMLKaosViewName);
+		declaringElement = element;
+		new SysMLKaosElementMapping::createNewMapping(element);
 	}
 
 	delete() {
@@ -69,7 +69,7 @@ public model SysMLKaosMethodology extends Methodology {
 	/** The mapping of supplied element, null when this element has none */
 	public SysMLKaosElementMapping getElementMapping(Element element) {
 		List<SysMLKaosElementMapping> mappings = select SysMLKaosElementMapping from this
-				where (selected.element == parameters.element);
+				where (selected.element == element);
 		if (mappings.size > 0) {
 			return mappings.get(0);
 		}
@@ -78,10 +78,10 @@ public model SysMLKaosMethodology extends Methodology {
 
 	/** The mapping of supplied element, created if this element has none yet */
 	public SysMLKaosElementMapping retrieveDiagramElementMapping(Element element) {
-		SysMLKaosElementMapping returned = this.getElementMapping(parameters.element);
+		SysMLKaosElementMapping returned = this.getElementMapping(element);
 		if (returned == null) {
-			log "No mapping for " + parameters.element + ", creating one";
-			returned = new SysMLKaosElementMapping::createNewMapping(parameters.element);
+			log "No mapping for " + element + ", creating one";
+			returned = new SysMLKaosElementMapping::createNewMapping(element);
 		}
 		return returned;
 	}
@@ -116,21 +116,21 @@ public model SysMLKaosMethodology extends Methodology {
 		}
 
 		create::createNewMapping(required Element anElement) {
-			element = parameters.anElement;
-			if (parameters.anElement.parent != null) {
-				parentDiagramElementMapping = container.getElementMapping(parameters.anElement.parent);
+			element = anElement;
+			if (anElement.parent != null) {
+				parentDiagramElementMapping = container.getElementMapping(anElement.parent);
 			}
 			// The legacy passed parentDiagramElementMapping.goalModel unconditionally; when the element has no mapped parent
 			// that binding cannot be evaluated, and the whole goal model creation is silently skipped
 			if (parentDiagramElementMapping != null) {
-				goalModel = container.sysMLKaos.new SysMLKaosModel::init(parameters.anElement.identifier + "-GoalModel",
-						"GoalModel for " + parameters.anElement.identifier, "", parentDiagramElementMapping.goalModel)
-						with (name=parameters.anElement.identifier + "-GoalModel");
+				goalModel = container.sysMLKaos.new SysMLKaosModel::init(anElement.identifier + "-GoalModel",
+						"GoalModel for " + anElement.identifier, "", parentDiagramElementMapping.goalModel)
+						with (name=anElement.identifier + "-GoalModel");
 			}
 			else {
-				goalModel = container.sysMLKaos.new SysMLKaosModel::init(parameters.anElement.identifier + "-GoalModel",
-						"GoalModel for " + parameters.anElement.identifier, "", null)
-						with (name=parameters.anElement.identifier + "-GoalModel");
+				goalModel = container.sysMLKaos.new SysMLKaosModel::init(anElement.identifier + "-GoalModel",
+						"GoalModel for " + anElement.identifier, "", null)
+						with (name=anElement.identifier + "-GoalModel");
 			}
 			mainFunctionalGoalDiagram = new DiagramMapping::createMainFunctionalGoalDiagram();
 			this.updateMapping();
@@ -181,18 +181,18 @@ public model SysMLKaosMethodology extends Methodology {
 		/** The mapping of supplied requirement, created with a new goal if this requirement has none yet */
 		public GoalRequirementMapping ensureGoalRequirementMappingExists(required Requirement requirement) {
 			List<GoalRequirementMapping> mappings = select GoalRequirementMapping from this
-					where (selected.requirement == parameters.requirement);
+					where (selected.requirement == requirement);
 			if (mappings.size > 0) {
 				return mappings.get(0);
 			}
-			return new GoalRequirementMapping::createNewGoal(parameters.requirement);
+			return new GoalRequirementMapping::createNewGoal(requirement);
 		}
 
 		private SysMLKaosElementMapping allocateAgent(SoftwareAgent agent) {
-			log "Allocating agent " + parameters.agent;
-			Element newElement = element.createChildrenElement(parameters.agent.name, parameters.agent.description);
+			log "Allocating agent " + agent;
+			Element newElement = element.createChildrenElement(agent.name, agent.description);
 			SysMLKaosElementMapping newElementMapping = container.getElementMapping(newElement);
-			newElementMapping.agent = parameters.agent;
+			newElementMapping.agent = agent;
 			newElementMapping.goalModel.parentModel = goalModel;
 			notify "childrenDiagramElementMapping" in this;
 			return newElementMapping;
@@ -200,7 +200,7 @@ public model SysMLKaosMethodology extends Methodology {
 
 		private GoalRequirementMapping getGoalRequirementMapping(required Goal goal) {
 			List<GoalRequirementMapping> mappings = select GoalRequirementMapping from this
-					where (selected.goal == parameters.goal);
+					where (selected.goal == goal);
 			if (mappings.size > 0) {
 				return mappings.get(0);
 			}
@@ -219,8 +219,8 @@ public model SysMLKaosMethodology extends Methodology {
 		}
 
 		public DiagramMapping createNewGoalDiagram(required String diagramTitle, String diagramDescription) {
-			DiagramMapping newDiagramMapping = new DiagramMapping::createGoalDiagram(parameters.diagramTitle,
-					parameters.diagramDescription);
+			DiagramMapping newDiagramMapping = new DiagramMapping::createGoalDiagram(diagramTitle,
+					diagramDescription);
 			notify "goalDiagrams" in this;
 			return newDiagramMapping;
 		}
@@ -228,20 +228,20 @@ public model SysMLKaosMethodology extends Methodology {
 		/** Report on supplied mapping, as top goal requirements, the goals its agent is assigned to */
 		private SysMLKaosElementMapping updateTopGoals(SysMLKaosElementMapping newElementMapping) {
 			for (AgentAssignment assignment : select AgentAssignment from goalModel
-					where (selected.agent == parameters.newElementMapping.agent)) {
+					where (selected.agent == newElementMapping.agent)) {
 				GoalRequirementMapping parentMapping = this.getGoalRequirementMapping(assignment.goal);
 				TopGoalRequirementMapping topGoalRequirement = select unique TopGoalRequirementMapping
-						from parameters.newElementMapping where (selected.parentGoalRequirementMapping == parentMapping);
+						from newElementMapping where (selected.parentGoalRequirementMapping == parentMapping);
 				if (topGoalRequirement == null) {
 					log "Missing top goal requirement for " + assignment.goal;
-					Requirement newRequirement = parameters.newElementMapping.element.createRequirement(assignment.goal.name,
+					Requirement newRequirement = newElementMapping.element.createRequirement(assignment.goal.name,
 							assignment.goal.description);
-					GoalRequirementMapping newMapping = parameters.newElementMapping
+					GoalRequirementMapping newMapping = newElementMapping
 							.ensureGoalRequirementMappingExists(newRequirement);
-					topGoalRequirement = parameters.newElementMapping.new TopGoalRequirementMapping(parentMapping, newMapping);
+					topGoalRequirement = newElementMapping.new TopGoalRequirementMapping(parentMapping, newMapping);
 				}
 			}
-			return parameters.newElementMapping;
+			return newElementMapping;
 		}
 
 		/** Pairs one requirement of the mapped element with the goal standing for it */
@@ -251,8 +251,8 @@ public model SysMLKaosMethodology extends Methodology {
 			Goal goal with ConceptInstance(virtualModelInstance=container.goalModel);
 
 			create(required Requirement aRequirement, required Goal aGoal) {
-				requirement = parameters.aRequirement;
-				goal = parameters.aGoal;
+				requirement = aRequirement;
+				goal = aGoal;
 			}
 
 			delete() {
@@ -271,16 +271,16 @@ public model SysMLKaosMethodology extends Methodology {
 
 			/** Maps an existing requirement onto a new functional goal */
 			create::createNewGoal(required Requirement requirement) {
-				requirement = parameters.requirement;
-				goal = container.goalModel.new FunctionalGoal(parameters.requirement.name, "",
-						parameters.requirement.description, false);
+				this.requirement = requirement;
+				goal = container.goalModel.new FunctionalGoal(requirement.name, "",
+						requirement.description, false);
 			}
 
 			/** Maps an existing goal onto a new requirement of the mapped element */
 			create::createNewRequirement(required Goal goal) {
-				goal = parameters.goal;
-				requirement = container.element.new Requirement::createRequirement(parameters.goal.name,
-						parameters.goal.description);
+				this.goal = goal;
+				requirement = container.element.new Requirement::createRequirement(goal.name,
+						goal.description);
 			}
 		}
 
@@ -294,8 +294,8 @@ public model SysMLKaosMethodology extends Methodology {
 			GoalRequirementMapping goalRequirementMapping with ConceptInstance(virtualModelInstance=container.container);
 
 			create(GoalRequirementMapping parentMapping, GoalRequirementMapping mapping) {
-				parentGoalRequirementMapping = parameters.parentMapping;
-				goalRequirementMapping = parameters.mapping;
+				parentGoalRequirementMapping = parentMapping;
+				goalRequirementMapping = mapping;
 			}
 
 			delete() {
@@ -325,9 +325,9 @@ public model SysMLKaosMethodology extends Methodology {
 
 			create::createGoalDiagram(String diagramTitle, String diagramDescription) {
 				goalModelingDiagram = container.container.sysMLKaos.new GoalModelingDiagram::init(
-						container.element.identifier + "-" + parameters.diagramTitle, parameters.diagramTitle,
+						container.element.identifier + "-" + diagramTitle, diagramTitle,
 						container.goalModel)
-						with (name=container.element.identifier + "-" + parameters.diagramTitle);
+						with (name=container.element.identifier + "-" + diagramTitle);
 				notify "diagramTitle" in this;
 			}
 

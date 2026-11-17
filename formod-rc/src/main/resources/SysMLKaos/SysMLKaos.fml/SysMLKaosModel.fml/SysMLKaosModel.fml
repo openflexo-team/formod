@@ -64,21 +64,21 @@ public model SysMLKaosModel {
 			next = nameCounter + 1;
 		}
 		nameCounter = next;
-		return parameters.prefix + next;
+		return prefix + next;
 	}
 
 	create::init(String name, String title, String description, SysMLKaosModel parentModel) {
-		modelName = parameters.name;
-		modelTitle = parameters.title;
-		modelDescription = parameters.description;
-		parentModel = parameters.parentModel;
+		modelName = name;
+		modelTitle = title;
+		modelDescription = description;
+		this.parentModel = parentModel;
 	}
 
 	delete() {
 	}
 
 	public FunctionalGoal addFunctionalGoal(required String name, String type, String description) {
-		return new FunctionalGoal(parameters.name, parameters.type, parameters.description, true);
+		return new FunctionalGoal(name, type, description, true);
 	}
 
 	public Refinement addRefinement() {
@@ -86,7 +86,7 @@ public model SysMLKaosModel {
 	}
 
 	public removeRefinement(required Refinement refinement) {
-		delete parameters.refinement;
+		delete refinement;
 	}
 
 	/**
@@ -126,8 +126,8 @@ public model SysMLKaosModel {
 		};
 
 		public createGoal(required String name, String description) {
-			name = parameters.name;
-			description = parameters.description;
+			this.name = name;
+			this.description = description;
 		}
 
 		public delete() {
@@ -162,9 +162,9 @@ public model SysMLKaosModel {
 
 		// The legacy parameter was named "notify", which is an FML keyword: parameters.notify silently parsed as parameters.null
 		create(String name, String type, String description, boolean shouldNotify) {
-			functionalGoalType = parameters.type;
-			this.createGoal(parameters.name, parameters.description);
-			if (parameters.shouldNotify) {
+			functionalGoalType = type;
+			this.createGoal(name, description);
+			if (shouldNotify) {
 				log "Notify new event";
 				fire new NewGoal(this);
 			}
@@ -186,8 +186,8 @@ public model SysMLKaosModel {
 		Contribution[1,*] contributions with ConceptInstance(virtualModelInstance=container);
 
 		create(String name, String type, String description) {
-			this.createGoal(parameters.name, parameters.description);
-			nonFunctionalGoalType = parameters.type;
+			this.createGoal(name, description);
+			nonFunctionalGoalType = type;
 			fire new NewGoal(this);
 			notify "ungroupedGoals" in container;
 		}
@@ -201,8 +201,8 @@ public model SysMLKaosModel {
 		String contributionGoalType;
 
 		create(String name, String type, String description) {
-			this.createGoal(parameters.name, parameters.description);
-			contributionGoalType = parameters.type;
+			this.createGoal(name, description);
+			contributionGoalType = type;
 			fire new NewGoal(this);
 			notify "ungroupedGoals" in container;
 		}
@@ -246,10 +246,10 @@ public model SysMLKaosModel {
 		}
 
 		create::createLink(required Goal parentGoal, required Goal childrenGoal) {
-			parentGoal.add(parameters.parentGoal);
-			childGoals.add(parameters.childrenGoal);
-			parameters.parentGoal.childrenRefinement.add(this);
-			parameters.childrenGoal.parentRefinement.add(this);
+			this.parentGoal.add(parentGoal);
+			childGoals.add(childrenGoal);
+			parentGoal.childrenRefinement.add(this);
+			childrenGoal.parentRefinement.add(this);
 			this.setLogicalTypeToAnd();
 		}
 
@@ -259,28 +259,28 @@ public model SysMLKaosModel {
 		}
 
 		public addLinkToAParentGoal(required Goal parentGoal) {
-			if (!parentGoal.contains(parameters.parentGoal)) {
-				parentGoal.add(parameters.parentGoal);
-				parameters.parentGoal.childrenRefinement.add(this);
+			if (!this.parentGoal.contains(parentGoal)) {
+				this.parentGoal.add(parentGoal);
+				parentGoal.childrenRefinement.add(this);
 			}
 		}
 
 		public addLinkToAChildrenGoal(required Goal childrenGoal) {
-			if (!childGoals.contains(parameters.childrenGoal)) {
-				childGoals.add(parameters.childrenGoal);
-				parameters.childrenGoal.parentRefinement.add(this);
+			if (!childGoals.contains(childrenGoal)) {
+				childGoals.add(childrenGoal);
+				childrenGoal.parentRefinement.add(this);
 			}
 		}
 
 		public removeLinkToAParentGoal(required Goal parentGoal) {
-			parameters.parentGoal.childrenRefinement.remove(this);
-			parentGoal.remove(parameters.parentGoal);
+			parentGoal.childrenRefinement.remove(this);
+			this.parentGoal.remove(parentGoal);
 		}
 
 		public removeLinkToAChildrenGoal(required Goal childrenGoal) {
 			log "Behaviour removeLinkToAChildrenGoal";
-			parameters.childrenGoal.parentRefinement.remove(this);
-			childGoals.remove(parameters.childrenGoal);
+			childrenGoal.parentRefinement.remove(this);
+			childGoals.remove(childrenGoal);
 		}
 
 		public removeAllLinksToParentGoal() {
@@ -339,8 +339,8 @@ public model SysMLKaosModel {
 		String description;
 
 		public createAgent(required String name, String description) {
-			name = parameters.name;
-			description = parameters.description;
+			this.name = name;
+			this.description = description;
 		}
 
 		public delete() {
@@ -355,7 +355,7 @@ public model SysMLKaosModel {
 	public concept EnvironmentalAgent extends Agent {
 
 		create::createEnvironmentalAgent(String name, String description) {
-			this.createAgent(parameters.name, parameters.description);
+			this.createAgent(name, description);
 			notify "agents" in container;
 		}
 	}
@@ -364,7 +364,7 @@ public model SysMLKaosModel {
 	public concept SoftwareAgent extends Agent {
 
 		create::createSoftwareAgent(String name, String description) {
-			this.createAgent(parameters.name, parameters.description);
+			this.createAgent(name, description);
 			notify "agents" in container;
 		}
 	}
@@ -377,8 +377,8 @@ public model SysMLKaosModel {
 		Goal goal with ConceptInstance(virtualModelInstance=container);
 
 		create(required Agent anAgent, required Goal aGoal) {
-			agent = parameters.anAgent;
-			goal = parameters.aGoal;
+			agent = anAgent;
+			goal = aGoal;
 		}
 
 		delete() {
@@ -397,9 +397,9 @@ public model SysMLKaosModel {
 		String description;
 
 		create(required ContributionGoal contributionGoal, required NonFunctionalGoal nonFunctionalGoal, required boolean isPositive) {
-			contributionGoal = parameters.contributionGoal;
-			nonFunctionalGoal = parameters.nonFunctionalGoal;
-			isPositive = parameters.isPositive;
+			this.contributionGoal = contributionGoal;
+			this.nonFunctionalGoal = nonFunctionalGoal;
+			this.isPositive = isPositive;
 		}
 
 		delete() {
@@ -416,9 +416,9 @@ public model SysMLKaosModel {
 		String description;
 
 		create(required ContributionGoal contributionGoal, required FunctionalGoal functionalGoal, required boolean isPositive) {
-			contributionGoal = parameters.contributionGoal;
-			functionalGoal = parameters.functionalGoal;
-			isPositive = parameters.isPositive;
+			this.contributionGoal = contributionGoal;
+			this.functionalGoal = functionalGoal;
+			this.isPositive = isPositive;
 		}
 
 		delete() {
@@ -452,9 +452,9 @@ public model SysMLKaosModel {
 		}
 
 		create(String title, List<Goal> goals) {
-			title = parameters.title;
-			for (Goal goal : parameters.goals) {
-				goals.add(goal);
+			this.title = title;
+			for (Goal goal : goals) {
+				this.goals.add(goal);
 			}
 			fire new NewGoalGroup(this);
 			notify "groups" in container;
@@ -468,28 +468,28 @@ public model SysMLKaosModel {
 	event NewGoal {
 		Goal goal;
 		create(Goal aGoal) {
-			goal = parameters.aGoal;
+			goal = aGoal;
 		}
 	}
 
 	event DeletedGoal {
 		Goal goal;
 		create(Goal aGoal) {
-			goal = parameters.aGoal;
+			goal = aGoal;
 		}
 	}
 
 	event DeletedAgent {
 		Agent agent;
 		create(Agent anAgent) {
-			agent = parameters.anAgent;
+			agent = anAgent;
 		}
 	}
 
 	event NewGoalGroup {
 		GoalGroup group;
 		create(GoalGroup aGroup) {
-			group = parameters.aGroup;
+			group = aGroup;
 		}
 	}
 }

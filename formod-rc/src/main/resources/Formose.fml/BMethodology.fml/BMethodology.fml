@@ -87,9 +87,9 @@ public model BMethodology extends Methodology {
 	create(DomainModelMethodology domainModelMethodology, AtelierBProjectResource bProject) {
 		log "Create B-Methodology";
 		name = "BMethodology";
-		bProject = parameters.bProject.resourceData;
-		domainModelMethodology = parameters.domainModelMethodology;
-		declaringElement = domainModelMethodology.declaringElement;
+		this.bProject = bProject.resourceData;
+		this.domainModelMethodology = domainModelMethodology;
+		declaringElement = this.domainModelMethodology.declaringElement;
 		rootBElementMapping = new BElementMapping(declaringElement);
 	}
 
@@ -98,7 +98,7 @@ public model BMethodology extends Methodology {
 
 	/** The mapping of supplied element, null when this element has none */
 	public BElementMapping getBElementMapping(Element element) {
-		return select unique BElementMapping from this where (selected.element == parameters.element);
+		return select unique BElementMapping from this where (selected.element == element);
 	}
 
 	/** Maps one element onto the B models derived from the domain models of its domain modelling mapping */
@@ -121,7 +121,7 @@ public model BMethodology extends Methodology {
 		};
 
 		create(Element anElement) {
-			domainModellingElementMapping = container.domainModelMethodology.getDomainModelElementMapping(parameters.anElement);
+			domainModellingElementMapping = container.domainModelMethodology.getDomainModelElementMapping(anElement);
 			for (DomainModelMapping domainModelMapping : domainModellingElementMapping.topLevelDomainModelMappings) {
 				BMapping newBMapping = new BMapping(domainModelMapping, null);
 				topLevelBMappings.add(newBMapping);
@@ -165,10 +165,10 @@ public model BMethodology extends Methodology {
 			};
 
 			create(DomainModelMapping domainModelMapping, BMapping parent) {
-				domainModelMapping = parameters.domainModelMapping;
-				parent = parameters.parent;
-				if (parent != null) {
-					parent.children.add(this);
+				this.domainModelMapping = domainModelMapping;
+				this.parent = parent;
+				if (this.parent != null) {
+					this.parent.children.add(this);
 				}
 				context = this.createContext();
 				machine = this.createMachine();
@@ -689,22 +689,22 @@ public model BMethodology extends Methodology {
 
 			/** The first constant concept among supplied concept and its ancestors */
 			Concept getConstantParent(required Concept aConcept) {
-				if (parameters.aConcept.isVariable) {
-					return this.getConstantParent(parameters.aConcept.parentConcept);
+				if (aConcept.isVariable) {
+					return this.getConstantParent(aConcept.parentConcept);
 				}
-				return parameters.aConcept;
+				return aConcept;
 			}
 
 			/** The B enumeration of the constant individuals of supplied concept, "{a, b, c}" */
 			String getConstantIndividualString(required Concept aConcept) {
 				String str = "";
 				List<MapletIndividual> maplets = select MapletIndividual from domainModel
-						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == parameters.aConcept);
+						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == aConcept);
 				for (MapletIndividual individual : maplets) {
 					str = str + individual.getCanonicalString() + ", ";
 				}
 				List<Individual> individuals = select Individual from domainModel
-						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == parameters.aConcept,
+						where (selected.individualOf != null, !selected.isVariable, selected.individualOf == aConcept,
 								!(selected instanceof MapletIndividual));
 				for (Individual individual : individuals) {
 					str = str + individual.getCanonicalString() + ", ";
@@ -718,27 +718,27 @@ public model BMethodology extends Methodology {
 
 			/** The conjunction of the properties from index i on */
 			BPredicate getProperties(int i) {
-				if (parameters.i >= properties.size) {
+				if (i >= properties.size) {
 					return null;
 				}
-				if (parameters.i == properties.size - 1) {
-					return properties.get(parameters.i);
+				if (i == properties.size - 1) {
+					return properties.get(i);
 				}
-				BPredicate conjunction = B::CreateBBinaryPredicatePredicate(operator=$Conjunct, leftOperand=properties.get(parameters.i),
-						rightOperand=this.getProperties(parameters.i + 1)) in (context.componentResource.bComponent);
+				BPredicate conjunction = B::CreateBBinaryPredicatePredicate(operator=$Conjunct, leftOperand=properties.get(i),
+						rightOperand=this.getProperties(i + 1)) in (context.componentResource.bComponent);
 				return conjunction;
 			}
 
 			/** The conjunction of the invariants from index i on */
 			BPredicate getInvariant(int i) {
-				if (parameters.i >= invariants.size) {
+				if (i >= invariants.size) {
 					return null;
 				}
-				if (parameters.i == invariants.size - 1) {
-					return invariants.get(parameters.i);
+				if (i == invariants.size - 1) {
+					return invariants.get(i);
 				}
-				BPredicate conjunction = B::CreateBBinaryPredicatePredicate(operator=$Conjunct, leftOperand=invariants.get(parameters.i),
-						rightOperand=this.getInvariant(parameters.i + 1)) in (machine.componentResource.bComponent);
+				BPredicate conjunction = B::CreateBBinaryPredicatePredicate(operator=$Conjunct, leftOperand=invariants.get(i),
+						rightOperand=this.getInvariant(i + 1)) in (machine.componentResource.bComponent);
 				return conjunction;
 			}
 
@@ -746,13 +746,13 @@ public model BMethodology extends Methodology {
 			boolean isInvariant(required LogicalFormula logicalFormula) {
 				List<Concept> variableConcepts = select Concept from domainModel where (selected.isVariable);
 				for (Concept aConcept : variableConcepts) {
-					if (parameters.logicalFormula.assertion.contains(aConcept.name)) {
+					if (logicalFormula.assertion.contains(aConcept.name)) {
 						return true;
 					}
 				}
 				List<Individual> variableIndividuals = select Individual from domainModel where (selected.isVariable);
 				for (Individual individual : variableIndividuals) {
-					if (parameters.logicalFormula.assertion.contains(individual.name)) {
+					if (logicalFormula.assertion.contains(individual.name)) {
 						return true;
 					}
 				}
@@ -877,9 +877,9 @@ public model BMethodology extends Methodology {
 				ConceptGR domainConceptGR with ConceptInstance(virtualModelInstance=container.domainModelMapping.defaultDiagram);
 
 				create(Concept aConcept) {
-					log "Concept2SetMapping: create Set related to concept " + parameters.aConcept;
-					domainConcept = parameters.aConcept;
-					bSet = B::AddBSet(identifierName=parameters.aConcept.name) in (container.context.componentResource.bComponent);
+					log "Concept2SetMapping: create Set related to concept " + aConcept;
+					domainConcept = aConcept;
+					bSet = B::AddBSet(identifierName=aConcept.name) in (container.context.componentResource.bComponent);
 				}
 
 				delete::deleteWithBItem() {
@@ -888,8 +888,8 @@ public model BMethodology extends Methodology {
 				}
 
 				create::createWithSet(FlexoBSet aSet) {
-					log "Concept2SetMapping: create Concept related to set " + parameters.aSet.bSet.name;
-					bSet = parameters.aSet.bSet;
+					log "Concept2SetMapping: create Concept related to set " + aSet.bSet.name;
+					bSet = aSet.bSet;
 					domainConcept = container.domainModel.new Concept(bSet.name, false, false, null);
 					domainConceptGR = container.domainModelMapping.defaultDiagram.new ConceptGR(domainConcept,
 							container.domainModelMapping.defaultDiagram);
@@ -920,8 +920,8 @@ public model BMethodology extends Methodology {
 				}
 
 				create(Concept aConcept) {
-					log "Concept2VariableMapping: create variable related to concept " + parameters.aConcept;
-					domainConcept = parameters.aConcept;
+					log "Concept2VariableMapping: create variable related to concept " + aConcept;
+					domainConcept = aConcept;
 					variable = B::AddBAbstractVariable(identifierName=domainConcept.name) in (container.machine.componentResource.bComponent);
 				}
 
@@ -941,7 +941,7 @@ public model BMethodology extends Methodology {
 				Goal goal with ConceptInstance(virtualModelInstance=container.container.goalModel);
 
 				create(Goal aGoal) {
-					goal = parameters.aGoal;
+					goal = aGoal;
 					log "Handling event " + goal + " parentGoal=" + goal.parentGoal;
 					if (goal.parentGoal != null) {
 						operation = B::AddBRefinedOperation(identifierName=goal.name, refinementKeyword=goal.refines.refinementType,
@@ -984,11 +984,11 @@ public model BMethodology extends Methodology {
 				IndividualGR individualGR with ConceptInstance(virtualModelInstance=container.domainModelMapping.defaultDiagram);
 
 				create(required Individual individual, required Concept2SetMapping concept2SetMapping) {
-					log "Individual2SetValueMapping: create SetValue related to individual " + parameters.individual;
-					individual = parameters.individual;
-					setValue = B::AddBSetValue(identifierName=parameters.individual.name, bSet=parameters.concept2SetMapping.bSet)
+					log "Individual2SetValueMapping: create SetValue related to individual " + individual;
+					this.individual = individual;
+					setValue = B::AddBSetValue(identifierName=individual.name, bSet=concept2SetMapping.bSet)
 							in (container.context.componentResource.bComponent);
-					bSet = parameters.concept2SetMapping.bSet;
+					bSet = concept2SetMapping.bSet;
 				}
 
 				delete::deleteWithBItem() {
@@ -997,8 +997,8 @@ public model BMethodology extends Methodology {
 				}
 
 				create::createWithSetValue(FlexoBSetValue aSetValue) {
-					log "Individual2SetValueMapping: create Individual related to setValue " + parameters.aSetValue.setValue.name;
-					setValue = parameters.aSetValue.setValue;
+					log "Individual2SetValueMapping: create Individual related to setValue " + aSetValue.setValue.name;
+					setValue = aSetValue.setValue;
 					bSet = setValue.getSet();
 					Concept2SetMapping concept2SetMapping = select unique Concept2SetMapping from container
 							where (selected.bSet.name == bSet.name);
@@ -1034,8 +1034,8 @@ public model BMethodology extends Methodology {
 				}
 
 				create(Concept aConcept) {
-					log "Concept2ConstantMapping: create Constant related to concept " + parameters.aConcept;
-					domainConcept = parameters.aConcept;
+					log "Concept2ConstantMapping: create Constant related to concept " + aConcept;
+					domainConcept = aConcept;
 					constant = B::AddBAbstractConstant(identifierName=domainConcept.name) in (container.context.componentResource.bComponent);
 				}
 
@@ -1061,10 +1061,10 @@ public model BMethodology extends Methodology {
 
 				/** An unnamed maplet is named after nameString */
 				create(Individual anIndividual, String nameString) {
-					log "Individual2VariableMapping: create variable related to individual " + parameters.anIndividual;
-					individual = parameters.anIndividual;
+					log "Individual2VariableMapping: create variable related to individual " + anIndividual;
+					individual = anIndividual;
 					if (individual.name == null) {
-						variable = B::AddBAbstractVariable(identifierName=parameters.nameString)
+						variable = B::AddBAbstractVariable(identifierName=nameString)
 								in (container.machine.componentResource.bComponent);
 					}
 					else {
@@ -1094,10 +1094,10 @@ public model BMethodology extends Methodology {
 
 				/** An unnamed maplet is named after nameString */
 				create(Individual anIndividual, String nameString) {
-					log "Individual2ConstantMapping: create Constant related to individual " + parameters.anIndividual;
-					individual = parameters.anIndividual;
+					log "Individual2ConstantMapping: create Constant related to individual " + anIndividual;
+					individual = anIndividual;
 					if (individual.name == null) {
-						constant = B::AddBAbstractConstant(identifierName=parameters.nameString)
+						constant = B::AddBAbstractConstant(identifierName=nameString)
 								in (container.context.componentResource.bComponent);
 					}
 					else {
@@ -1122,11 +1122,11 @@ public model BMethodology extends Methodology {
 				String formula;
 
 				create(Concept aConcept, String formula) {
-					log "Concept2Property: create Property " + parameters.formula + " related to concept " + parameters.aConcept;
-					domainConcept = parameters.aConcept;
-					formula = parameters.formula;
+					log "Concept2Property: create Property " + formula + " related to concept " + aConcept;
+					domainConcept = aConcept;
+					this.formula = formula;
 					try {
-						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=this.formula) in (container.context.componentResource.bComponent);
 					} catch (FMLTechnologyError e) {
 						// A text that is not B: no predicate (CORE-F-11 phase 7)
 						log "Not a B predicate: " + e.message;
@@ -1155,11 +1155,11 @@ public model BMethodology extends Methodology {
 				String formula;
 
 				create(Concept aConcept, String formula) {
-					log "Concept2Invariant: create Invariant " + parameters.formula + " related to concept " + parameters.aConcept;
-					domainConcept = parameters.aConcept;
-					formula = parameters.formula;
+					log "Concept2Invariant: create Invariant " + formula + " related to concept " + aConcept;
+					domainConcept = aConcept;
+					this.formula = formula;
 					try {
-						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=this.formula) in (container.machine.componentResource.bComponent);
 					} catch (FMLTechnologyError e) {
 						// A text that is not B: no predicate (CORE-F-11 phase 7)
 						log "Not a B predicate: " + e.message;
@@ -1187,8 +1187,8 @@ public model BMethodology extends Methodology {
 				BPredicate typingPredicate with BPredicateRole();
 
 				create(LogicalFormula aLogicalFormula) {
-					log "LogicalFormula2Property: create Property related to logicalFormula " + parameters.aLogicalFormula.assertion;
-					logicalFormula = parameters.aLogicalFormula;
+					log "LogicalFormula2Property: create Property related to logicalFormula " + aLogicalFormula.assertion;
+					logicalFormula = aLogicalFormula;
 					try {
 						typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
 								in (container.context.componentResource.bComponent);
@@ -1219,8 +1219,8 @@ public model BMethodology extends Methodology {
 				BPredicate typingPredicate with BPredicateRole();
 
 				create(LogicalFormula aLogicalFormula) {
-					log "LogicalFormula2Invariant: create Invariant related to logicalFormula " + parameters.aLogicalFormula.assertion;
-					logicalFormula = parameters.aLogicalFormula;
+					log "LogicalFormula2Invariant: create Invariant related to logicalFormula " + aLogicalFormula.assertion;
+					logicalFormula = aLogicalFormula;
 					try {
 						typingPredicate = B::CreateBPredicateFromString(predicateAsString=logicalFormula.assertion)
 								in (container.machine.componentResource.bComponent);
@@ -1252,11 +1252,11 @@ public model BMethodology extends Methodology {
 				String formula;
 
 				create(Individual anIndividual, String formula) {
-					log "Individual2Property: create Property " + parameters.formula + " related to individual " + parameters.anIndividual;
-					individual = parameters.anIndividual;
-					formula = parameters.formula;
+					log "Individual2Property: create Property " + formula + " related to individual " + anIndividual;
+					individual = anIndividual;
+					this.formula = formula;
 					try {
-						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.context.componentResource.bComponent);
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=this.formula) in (container.context.componentResource.bComponent);
 					} catch (FMLTechnologyError e) {
 						// A text that is not B: no predicate (CORE-F-11 phase 7)
 						log "Not a B predicate: " + e.message;
@@ -1285,11 +1285,11 @@ public model BMethodology extends Methodology {
 				String formula;
 
 				create(Individual anIndividual, String formula) {
-					log "Individual2Invariant: create Invariant " + parameters.formula + " related to individual " + parameters.anIndividual;
-					individual = parameters.anIndividual;
-					formula = parameters.formula;
+					log "Individual2Invariant: create Invariant " + formula + " related to individual " + anIndividual;
+					individual = anIndividual;
+					this.formula = formula;
 					try {
-						typingPredicate = B::CreateBPredicateFromString(predicateAsString=formula) in (container.machine.componentResource.bComponent);
+						typingPredicate = B::CreateBPredicateFromString(predicateAsString=this.formula) in (container.machine.componentResource.bComponent);
 					} catch (FMLTechnologyError e) {
 						// A text that is not B: no predicate (CORE-F-11 phase 7)
 						log "Not a B predicate: " + e.message;
@@ -1318,12 +1318,12 @@ public model BMethodology extends Methodology {
 				BSubstitution substitution with BSubstitutionRole();
 
 				create(Concept aConcept, String individualsString) {
-					log "Concept2Initialisation: create Initialisation substitution related to concept " + parameters.aConcept;
-					domainConcept = parameters.aConcept;
-					individualsString = parameters.individualsString;
+					log "Concept2Initialisation: create Initialisation substitution related to concept " + aConcept;
+					domainConcept = aConcept;
+					this.individualsString = individualsString;
 					BExpression left = B::CreateBExpressionFromString(expressionAsString=domainConcept.name)
 							in (container.machine.componentResource.bComponent);
-					BExpression right = B::CreateBExpressionFromString(expressionAsString=individualsString)
+					BExpression right = B::CreateBExpressionFromString(expressionAsString=this.individualsString)
 							in (container.machine.componentResource.bComponent);
 					substitution = B::CreateBSubstitution(operator="AssignSubstitution", leftOperand=left, rightOperand=right)
 							in (container.machine.componentResource.bComponent);
@@ -1344,8 +1344,8 @@ public model BMethodology extends Methodology {
 				BSubstitution substitution with BSubstitutionRole();
 
 				create(Individual anIndividual) {
-					log "Individual2Initialisation: create Initialisation substitution related to individual " + parameters.anIndividual;
-					individual = parameters.anIndividual;
+					log "Individual2Initialisation: create Initialisation substitution related to individual " + anIndividual;
+					individual = anIndividual;
 					BExpression left = B::CreateBExpressionFromString(expressionAsString=individual.name)
 							in (container.machine.componentResource.bComponent);
 					if (individual.initialValue != null) {
@@ -1385,8 +1385,8 @@ public model BMethodology extends Methodology {
 
 				create(MapletIndividual anIndividual) {
 					log "UnnamedMapletIndividual2Initialisation: create Initialisation substitution related to UnnamedMapletIndividual "
-							+ parameters.anIndividual;
-					individual = parameters.anIndividual;
+							+ anIndividual;
+					individual = anIndividual;
 					BExpression left = B::CreateBExpressionFromString(expressionAsString=individual.getNormalisedString())
 							in (container.machine.componentResource.bComponent);
 					BExpression right = B::CreateBExpressionFromString(

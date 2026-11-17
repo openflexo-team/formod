@@ -52,7 +52,7 @@ public model FormoseCore {
 	}
 
 	public removeElement(required Element element) {
-		delete parameters.element;
+		delete element;
 	}
 
 	@Renderer(identifier)
@@ -144,22 +144,22 @@ public model FormoseCore {
 
 		/** Declare the B methodology on this element, formalizing the applicable domain model methodology */
 		public BMethodology createBMethodology(AtelierBProjectResource bProject) {
-			BMethodology methodology = container.container.new BMethodology(applicableDomainModelMethodology, parameters.bProject) with (name=identifier + "-B-Methodology");
+			BMethodology methodology = container.container.new BMethodology(applicableDomainModelMethodology, bProject) with (name=identifier + "-B-Methodology");
 			notify "applicableBMethodology" in this;
 			return methodology;
 		}
 
 		create::createElement(String elementIdentifier) {
-			identifier = parameters.elementIdentifier;
+			identifier = elementIdentifier;
 		}
 
 		delete() {
 		}
 
 		public Element createChildrenElement(required String elementIdentifier, String elementDescription) {
-			log "Creating new element " + parameters.elementIdentifier;
-			Element newElement = container.new Element::createElement(parameters.elementIdentifier);
-			newElement.description = parameters.elementDescription;
+			log "Creating new element " + elementIdentifier;
+			Element newElement = container.new Element::createElement(elementIdentifier);
+			newElement.description = elementDescription;
 			newElement.parent = this;
 			childrenElements.add(newElement);
 			fire new NewElement(newElement);
@@ -167,15 +167,15 @@ public model FormoseCore {
 		}
 
 		public Requirement createRequirement(required String name, String description) {
-			log "Creating new requirement " + parameters.name;
-			Requirement newRequirement = new Requirement::createRequirement(parameters.name, parameters.description);
+			log "Creating new requirement " + name;
+			Requirement newRequirement = new Requirement::createRequirement(name, description);
 			notify "requirements" in this;
 			fire new NewRequirement(newRequirement);
 			return newRequirement;
 		}
 
 		public Requirement createRequirementNoNotification(required String name, String description) {
-			Requirement newRequirement = new Requirement::createRequirement(parameters.name, parameters.description);
+			Requirement newRequirement = new Requirement::createRequirement(name, description);
 			notify "requirements" in this;
 			return newRequirement;
 		}
@@ -193,8 +193,8 @@ public model FormoseCore {
 			Element element values container;
 
 			create::createRequirement(String name, String description) {
-				name = parameters.name;
-				description = parameters.description;
+				this.name = name;
+				this.description = description;
 				status = "Not proved";
 				notify "requirements" in container;
 			}
@@ -208,14 +208,14 @@ public model FormoseCore {
 	event NewElement {
 		Element element with ConceptInstance(virtualModelInstance=container);
 		create(Element anElement) {
-			element = parameters.anElement;
+			element = anElement;
 		}
 	}
 
 	event NewRequirement {
 		Requirement requirement;
 		create(Requirement aRequirement) {
-			requirement = parameters.aRequirement;
+			requirement = aRequirement;
 		}
 	}
 }
