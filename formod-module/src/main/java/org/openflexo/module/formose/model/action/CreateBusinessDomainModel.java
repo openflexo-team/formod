@@ -43,7 +43,7 @@ import java.util.Vector;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -108,7 +108,7 @@ public class CreateBusinessDomainModel extends FMSAction<CreateBusinessDomainMod
 	}
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 
 		System.out.println("On cree un modele de domaine");
 

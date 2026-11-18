@@ -46,7 +46,7 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
@@ -101,7 +101,7 @@ public class TestCreateBlankAtelierBProject extends AbstractBTest {
 
 	@Test
 	@TestOrder(2)
-	public void createSystem() throws ModelDefinitionException, IOException, ResourceLoadingCancelledException, FlexoException {
+	public void createSystem() throws ModelDefinitionException, IOException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		AtelierBComponent newSystemComponent = generatedAtelierBProjectResource.getFactory().makeNewSystem("TestSystem");
 		assertNotNull(newSystemComponent.getComponentResource());

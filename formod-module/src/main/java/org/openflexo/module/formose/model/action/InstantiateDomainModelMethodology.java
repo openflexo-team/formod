@@ -45,7 +45,7 @@ import org.openflexo.connie.exception.InvalidBindingException;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -113,7 +113,7 @@ public class InstantiateDomainModelMethodology extends FMSAction<InstantiateDoma
 	// createSysMLKaosMethodology
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 
 		FlexoConcept elementConcept = getFocusedObject().getFlexoConcept();
 

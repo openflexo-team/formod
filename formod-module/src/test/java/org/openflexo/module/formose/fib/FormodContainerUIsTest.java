@@ -46,7 +46,7 @@ import java.io.FileNotFoundException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.FIBComponentResource;
@@ -93,7 +93,7 @@ public class FormodContainerUIsTest extends OpenflexoTestCase {
 
 	@Test
 	@TestOrder(1)
-	public void test0LoadFormose() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void test0LoadFormose() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 		instanciateTestServiceManager(DiagramTechnologyAdapter.class, DocXTechnologyAdapter.class, ExcelTechnologyAdapter.class,
 				BTechnologyAdapter.class);
 		formose = serviceManager.getVirtualModelLibrary().getVirtualModel(FORMOSE_URI);
@@ -108,7 +108,7 @@ public class FormodContainerUIsTest extends OpenflexoTestCase {
 
 	@Test
 	@TestOrder(3)
-	public void test2ElementHasItsView() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, InterruptedException {
+	public void test2ElementHasItsView() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException, InterruptedException {
 		VirtualModel formoseCore = serviceManager.getVirtualModelLibrary().getVirtualModel(FORMOSE_CORE_URI);
 		assertNotNull(formoseCore);
 		FlexoConcept element = formoseCore.getFlexoConcept("Element");
@@ -119,7 +119,7 @@ public class FormodContainerUIsTest extends OpenflexoTestCase {
 	@Test
 	@TestOrder(4)
 	public void test3ElementMappingHasItsView()
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, InterruptedException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException, InterruptedException {
 		VirtualModel methodology = serviceManager.getVirtualModelLibrary().getVirtualModel(SYSML_KAOS_METHODOLOGY_URI);
 		assertNotNull(methodology);
 		FlexoConcept elementMapping = methodology.getFlexoConcept("SysMLKaosElementMapping");

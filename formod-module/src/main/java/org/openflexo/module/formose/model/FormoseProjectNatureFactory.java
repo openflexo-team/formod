@@ -141,7 +141,7 @@ public class FormoseProjectNatureFactory extends DefaultProjectNatureFactoryImpl
 			try {
 				ceVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
 						.getVirtualModel(FMSConstants.FORMOSE_URI);
-			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+			} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -184,7 +184,7 @@ public class FormoseProjectNatureFactory extends DefaultProjectNatureFactoryImpl
 					} catch (ResourceLoadingCancelledException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					} catch (FlexoException e) {
+					} catch (OpenflexoRuntimeException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

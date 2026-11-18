@@ -62,7 +62,7 @@ import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.diana.geom.DianaPoint;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FlexoConcept;
@@ -135,14 +135,14 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	/**
 	 * Instantiate test resource center
 	 * 
-	 * @throws FlexoException
+	 * @throws OpenflexoRuntimeException
 	 * @throws ResourceLoadingCancelledException
 	 * @throws FileNotFoundException
 	 */
 	@Test
 	@TestOrder(1)
 	@Category(UITest.class)
-	public void instantiateServiceManager() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void instantiateServiceManager() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		log("testInstantiateResourceCenter()");
 
@@ -531,7 +531,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@TestOrder(19)
 	@Category(UITest.class)
 	public void instantiateBMethodology() throws SaveResourceException, TypeMismatchException, NullReferenceException,
-			ReflectiveOperationException, InvalidBindingException, FileNotFoundException, ResourceLoadingCancelledException, FlexoException, java.io.IOException {
+			ReflectiveOperationException, InvalidBindingException, FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException, java.io.IOException {
 
 		log("instantiateBMethodology");
 
@@ -641,7 +641,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	/**
 	 * Reload the project, tests that uri, name and description are persistent
 	 * 
-	 * @throws FlexoException
+	 * @throws OpenflexoRuntimeException
 	 * @throws ResourceLoadingCancelledException
 	 * @throws FileNotFoundException
 	 * @throws InvalidBindingException
@@ -652,7 +652,7 @@ public class TestBMethology extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@Test
 	@TestOrder(100)
 	@Category(UITest.class)
-	public void testReloadProject() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, TypeMismatchException,
+	public void testReloadProject() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException, TypeMismatchException,
 			NullReferenceException, ReflectiveOperationException, InvalidBindingException {
 
 		log("testReloadProject");

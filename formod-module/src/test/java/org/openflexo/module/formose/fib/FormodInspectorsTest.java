@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openflexo.fib.binding.FMLControlledComponent;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.FIBComponentResource;
@@ -67,7 +67,7 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 	@Test
 	@TestOrder(2)
 	public void test1EveryInspectorIsValid()
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException, InterruptedException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException, InterruptedException {
 		int count = 0;
 		List<String> invalid = new ArrayList<>();
 		for (String uri : MODEL_URIS) {
@@ -259,7 +259,7 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 	}
 
 	private FlexoConcept concept(String modelUri, String name)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 		VirtualModel model = serviceManager.getVirtualModelLibrary().getVirtualModel(modelUri);
 		assertNotNull("No VirtualModel " + modelUri, model);
 		List<FlexoConcept> concepts = new ArrayList<>();

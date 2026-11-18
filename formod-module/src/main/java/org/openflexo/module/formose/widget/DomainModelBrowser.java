@@ -45,7 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
@@ -99,7 +99,7 @@ public class DomainModelBrowser extends FIBBrowserView<FMLRTVirtualModelInstance
 			try {
 				domainModelViewpoint = getFlexoController().getApplicationContext().getVirtualModelLibrary()
 						.getVirtualModel(FMSConstants.DOMAIN_MODELLING_URI);
-			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+			} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 				e.printStackTrace();
 			}
 		}

@@ -47,7 +47,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.openflexo.OpenflexoProjectAtRunTimeTestCaseWithGUI;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
@@ -92,7 +92,7 @@ public class TestFormoseJarRC extends OpenflexoProjectAtRunTimeTestCaseWithGUI {
 	@Test
 	@TestOrder(3)
 	@Category(UITest.class)
-	public void loadViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void loadViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		fmlAdapter = serviceManager.getTechnologyAdapterService().getTechnologyAdapter(FMLTechnologyAdapter.class);
 

@@ -41,7 +41,7 @@ package org.openflexo.module.formose.model.action;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -92,7 +92,7 @@ public class IdentifyElement extends AbstractIdentifyTextFragment<IdentifyElemen
 	}
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 
 		FlexoConceptInstance docXReference = makeDocXReference();
 

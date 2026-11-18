@@ -47,7 +47,7 @@ import org.openflexo.connie.exception.InvalidBindingException;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.InvalidArgumentException;
@@ -133,23 +133,23 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 	}
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 		AtelierBProjectResource projectResource = retrieveProject();
 
 		try {
 			newMethodology = getFocusedObject().execute("createBMethodology({$bProject})", projectResource);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		} catch (InvalidBindingException e) {
 			e.printStackTrace();
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		}
 
 		getFocusedObject().getPropertyChangeSupport().firePropertyChange(FMSConstants.APPLICABLE_B_METHODOLOGY_PROPERTY_NAME, null,
@@ -157,7 +157,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 	}
 
 	/** Retrieve the Atelier B project designated by the choice: an existing project folder, or a blank project created in a folder */
-	private AtelierBProjectResource retrieveProject() throws FlexoException {
+	private AtelierBProjectResource retrieveProject() throws OpenflexoRuntimeException {
 		File projectFolder = null;
 		if (getChoice().equals("open_existing_Bproject")) {
 			if (getProjectFolder() == null || !getProjectFolder().exists()) {
@@ -169,7 +169,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 			try {
 				projectFolder = AtelierBProjectResourceFactory.generateBlankAtelierBProject(new File(getCreationFolder(), getNewProjectName()));
 			} catch (IOException e) {
-				throw new FlexoException(e);
+				throw new OpenflexoRuntimeException(e);
 			}
 		}
 
@@ -181,7 +181,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 			try {
 				resourceCenter = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(projectFolder.getParentFile(), rcService);
 			} catch (IOException e) {
-				throw new FlexoException(e);
+				throw new OpenflexoRuntimeException(e);
 			}
 			rcService.addToResourceCenters(resourceCenter);
 		}
@@ -197,7 +197,7 @@ public class InstantiateBMethodology extends FMSAction<InstantiateBMethodology, 
 			returned = resourceCenter.getResource(dbFile, AtelierBProjectResource.class);
 		}
 		if (returned == null) {
-			throw new FlexoException("The project " + projectFolder + " is not recognized as an Atelier B project");
+			throw new OpenflexoRuntimeException("The project " + projectFolder + " is not recognized as an Atelier B project");
 		}
 		return returned;
 	}

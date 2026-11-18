@@ -40,7 +40,7 @@ package org.openflexo.module.formose.widget;
 
 import java.io.FileNotFoundException;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.gina.model.FIBComponent;
@@ -90,7 +90,7 @@ public abstract class AbstractFormoseProjectBrowser extends FIBBrowserView<Formo
 			try {
 				formoseViewpoint = getFlexoController().getApplicationContext().getVirtualModelLibrary()
 						.getVirtualModel(FMSConstants.FORMOSE_URI);
-			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+			} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 				e.printStackTrace();
 			}
 		}

@@ -54,7 +54,7 @@ import org.openflexo.connie.exception.InvalidBindingException;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.FMLCompilationUnit;
 import org.openflexo.foundation.fml.VirtualModel;
@@ -95,14 +95,14 @@ public class TestCreateFormoseProject extends OpenflexoProjectAtRunTimeTestCaseW
 	/**
 	 * Instantiate test resource center
 	 * 
-	 * @throws FlexoException
+	 * @throws OpenflexoRuntimeException
 	 * @throws ResourceLoadingCancelledException
 	 * @throws FileNotFoundException
 	 */
 	@Test
 	@TestOrder(1)
 	@Category(UITest.class)
-	public void instantiateServiceManager() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void instantiateServiceManager() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		log("testInstantiateResourceCenter()");
 

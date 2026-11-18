@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoConceptInstanceRole;
@@ -127,7 +127,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 			if (formoseViewpoint == null && getServiceManager() != null) {
 				try {
 					formoseViewpoint = getServiceManager().getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_URI);
-				} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+				} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 					e.printStackTrace();
 				}
 			}
@@ -140,7 +140,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 				try {
 					documentLibraryVirtualModel = getServiceManager().getVirtualModelLibrary()
 							.getVirtualModel(FMSConstants.DOCUMENT_LIBRARY_URI);
-				} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+				} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 					e.printStackTrace();
 				}
 			}
@@ -333,7 +333,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 			try {
 				ceVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
 						.getVirtualModel(FMSConstants.FORMOSE_URI);
-			} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+			} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -376,7 +376,7 @@ public interface FormoseProjectNature extends ProjectNature<FormoseProjectNature
 					} catch (ResourceLoadingCancelledException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					} catch (FlexoException e) {
+					} catch (OpenflexoRuntimeException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -476,7 +476,7 @@ public interface FormoseProject extends FlexoObject, ProjectWrapper<FormoseProje
 				try {
 					formoseVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
 							.getVirtualModel(FMSConstants.FORMOSE_URI);
-				} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+				} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -496,7 +496,7 @@ public interface FormoseProject extends FlexoObject, ProjectWrapper<FormoseProje
 					try {
 						documentLibraryVirtualModel = resourceCenter.getServiceManager().getVirtualModelLibrary()
 								.getVirtualModel(FMSConstants.DOCUMENT_LIBRARY_URI);
-					} catch (FileNotFoundException | ResourceLoadingCancelledException | FlexoException e) {
+					} catch (FileNotFoundException | ResourceLoadingCancelledException | OpenflexoRuntimeException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

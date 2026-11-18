@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 import org.openflexo.ApplicationContext;
 import org.openflexo.action.ModuleSpecificFlexoAction;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.FlexoProject;
@@ -129,7 +129,7 @@ public class GivesFormoseNature extends GivesNatureAction<GivesFormoseNature, Fo
 			} catch (ResourceLoadingCancelledException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (FlexoException e) {
+			} catch (OpenflexoRuntimeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -181,7 +181,7 @@ public class GivesFormoseNature extends GivesNatureAction<GivesFormoseNature, Fo
 				} catch (ResourceLoadingCancelledException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (FlexoException e) {
+				} catch (OpenflexoRuntimeException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -275,12 +275,12 @@ public class GivesFormoseNature extends GivesNatureAction<GivesFormoseNature, Fo
 	}
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 		final FormoseProjectNature nature = getServiceManager().getProjectNatureService().getProjectNature(FormoseProjectNature.class);
 		final VirtualModel formoseViewPoint = nature.getFormoseViewPoint(getServiceManager());
 
 		if (!nature.authorizeInit(getFocusedObject())) {
-			throw new FlexoException("formose_viewpoint_not_found");
+			throw new OpenflexoRuntimeException("formose_viewpoint_not_found");
 		}
 
 		FMLRTVirtualModelInstance formoseView = nature.getFormoseView(getFocusedObject());

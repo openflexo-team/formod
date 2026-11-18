@@ -45,7 +45,7 @@ import org.openflexo.connie.exception.InvalidBindingException;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -103,7 +103,7 @@ public class RefineUsingAgentAllocation extends FMSAction<RefineUsingAgentAlloca
 	}
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 
 		System.out.println("Tiens, faudrait raffiner...");
 
@@ -113,7 +113,7 @@ public class RefineUsingAgentAllocation extends FMSAction<RefineUsingAgentAlloca
 		try {
 			elementMapping.execute("this.refineUsingAgentAllocation()");
 		} catch (Exception e) {
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		}
 
 		/*FMLRTVirtualModelInstance methodology = element.getFlexoPropertyValue(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME);

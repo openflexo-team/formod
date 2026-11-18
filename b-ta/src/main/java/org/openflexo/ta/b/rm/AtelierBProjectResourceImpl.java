@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.resource.FileIODelegate;
 import org.openflexo.foundation.resource.InJarIODelegate;
 import org.openflexo.foundation.resource.PamelaXMLSerializableResourceImpl;
@@ -82,7 +82,7 @@ public abstract class AtelierBProjectResourceImpl extends PamelaXMLSerializableR
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;

@@ -49,7 +49,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openflexo.ApplicationContext;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.gina.FIBLibrary;
@@ -95,7 +95,7 @@ public class TestsFormoseFibs extends GenericFIBTestCase {
 
 	@BeforeClass
 	public static void instanciateTestServiceManager(/*Class<? extends TechnologyAdapter>... taClasses*/)
-			throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+			throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 		System.out.println("Init ServiceManager");
 		serviceManager = new TestApplicationContext();
 		/*for (Class<? extends TechnologyAdapter> technologyAdapterClass : taClasses) {
@@ -113,7 +113,7 @@ public class TestsFormoseFibs extends GenericFIBTestCase {
 		return fibLibrary;
 	}
 
-	public static VirtualModel getFormoseViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public static VirtualModel getFormoseViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 		return serviceManager.getVirtualModelLibrary().getVirtualModel(FMSConstants.FORMOSE_URI);
 	}
 
@@ -130,7 +130,7 @@ public class TestsFormoseFibs extends GenericFIBTestCase {
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

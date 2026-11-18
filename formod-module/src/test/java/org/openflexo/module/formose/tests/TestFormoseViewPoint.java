@@ -48,7 +48,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.openflexo.OpenflexoProjectAtRunTimeTestCaseWithGUI;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rm.CompilationUnitResource;
@@ -142,14 +142,14 @@ public class TestFormoseViewPoint extends OpenflexoProjectAtRunTimeTestCaseWithG
 	/**
 	 * Lookup Formose ViewPoint
 	 * 
-	 * @throws FlexoException
+	 * @throws OpenflexoRuntimeException
 	 * @throws ResourceLoadingCancelledException
 	 * @throws FileNotFoundException
 	 */
 	@Test
 	@TestOrder(4)
 	@Category(UITest.class)
-	public void loadFormoseViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void loadFormoseViewPoint() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		log("loadFormoseViewPoint()");
 

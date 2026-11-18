@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.ta.b.AbstractBTest;
@@ -67,7 +67,7 @@ public class TestAtelierBProject extends AbstractBTest {
 	}
 
 	@Test
-	public void test1() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void test1() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		FlexoResourceCenter<?> resourceCenter = serviceManager.getResourceCenterService()
 				.getFlexoResourceCenter("http://www.openflexo.org/test/b");
@@ -110,7 +110,7 @@ public class TestAtelierBProject extends AbstractBTest {
 	}
 
 	@Test
-	public void test2() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void test2() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		FlexoResourceCenter<?> resourceCenter = serviceManager.getResourceCenterService()
 				.getFlexoResourceCenter("http://www.openflexo.org/test/b");

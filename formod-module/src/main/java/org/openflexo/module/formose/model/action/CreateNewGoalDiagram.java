@@ -42,7 +42,7 @@ import java.util.Vector;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoActionFactory;
@@ -103,7 +103,7 @@ public class CreateNewGoalDiagram extends FMSAction<CreateNewGoalDiagram, FlexoC
 	private FlexoConceptInstance newDiagramMapping;
 
 	@Override
-	protected void doAction(final Object context) throws FlexoException {
+	protected void doAction(final Object context) throws OpenflexoRuntimeException {
 
 		System.out.println("Create new goal diagram...");
 
@@ -114,7 +114,7 @@ public class CreateNewGoalDiagram extends FMSAction<CreateNewGoalDiagram, FlexoC
 			newDiagramMapping = elementMapping.execute("this.createNewGoalDiagram({$title},{$description})", getDiagramTitle(),
 					getDiagramDescription());
 		} catch (Exception e) {
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		}
 
 		/*FMLRTVirtualModelInstance methodology = element.getFlexoPropertyValue(FMSConstants.APPLICABLE_SYSML_KAOS_METHODOLOGY_PROPERTY_NAME);

@@ -48,7 +48,7 @@ import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.IOFlexoException;
@@ -101,7 +101,7 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -395,7 +395,7 @@ public abstract class BResourceImpl extends PamelaResourceImpl<BComponent, BMode
 		} catch (ResourceLoadingCancelledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
