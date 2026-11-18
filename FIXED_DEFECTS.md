@@ -9,6 +9,8 @@ with what was verified, the cause and the fix. Identifiers are those of `KNOWN_D
 
 ### FORMOD-D-2 — TestBMethology.testReloadProject fails about one run in three  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#2](https://github.com/openflexo-team/formod/issues/2)
+
 **Symptom.** `formod-module`, uiTest `TestBMethology.testReloadProject` fails intermittently, right after the project is reloaded, on
 the first methodology it asks the reloaded model for: `projectElement.execute("applicableSysMLKaosMethodology")` returns null, or the
 next one does, or `getBElementMapping(...)` does. Measured 2026-10-07: two green runs, one red.
@@ -32,6 +34,8 @@ loud counterpart in textual FML, so it vanished without an error.
 
 ### FORMOD-D-3 — A functional goal dropped on a diagram has no goal and no label  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#3](https://github.com/openflexo-team/formod/issues/3)
+
 **Symptom.** Dropping a `FunctionalGoal` from the palette puts a shape on the diagram, with no label, and the `goal` role of its
 `FunctionalGoalGR` is null: no goal exists in the model. Same for the other goal and agent drops.
 
@@ -46,6 +50,8 @@ of `GoalModelingDiagram` (the legacy `GRSpec featureName="label"`), which the mi
 
 ### FORMOD-D-4 — `isRequired` of the behaviour parameters was dropped  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#4](https://github.com/openflexo-team/formod/issues/4)
+
 **Symptom and extent.** The legacy declared 191 required parameters (`isRequired="true"`); the migrated FML kept one. Every wizard that
 should insist on a name lets an empty value through.
 
@@ -56,6 +62,8 @@ legacy methodologies built on missing VirtualModels are gone (FORMOD-F-1). `seri
 legacy `skipConfirmationPanel="false"`, which has no FML spelling on a plain behaviour.
 
 ### FORMOD-D-5 — The concept inspectors were dropped  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#5](https://github.com/openflexo-team/formod/issues/5)
 
 **Symptom.** Selecting any instance of a Formose concept showed the generic inspector: the entries of the legacy `<Inspector>` (goal name,
 type, description, the cardinalities of an association, …) were gone. 52 concepts, about 120 entries.
@@ -70,6 +78,8 @@ methodologies. The four methodologies inherit it through the additive compositio
 
 ### FORMOD-D-6 — Required roles never set: methodologies and requirements are invalid  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#6](https://github.com/openflexo-team/formod/issues/6)
+
 **Symptom.** The methodologies show an error cross when a project is opened: `Missing required role name` (`Methodology.name`), `user`
 (`Transition.user`), `status` (`Requirement.status`). All three are `[1,1]` and nothing set them — **already the case in the legacy**
 (`cardinality="One"`, never assigned), so not a migration regression.
@@ -80,11 +90,15 @@ Asserted in T1, T3, T6, T9 and T10.
 
 ### FORMOD-D-7 — `@Renderer("name")`: the expression was written as a string  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#7](https://github.com/openflexo-team/formod/issues/7)
+
 **Symptom.** The 14 `@Renderer` of the Formose models were written with quotes around the expression (`@Renderer("identifier")`, `@Renderer("element.identifier")`…) — the form of the legacy `renderer="…"` attribute. In FML the expression is written without quotes; quotes denote a string. The parser tolerated it (measured: the string representation of an element was still its identifier, `LandingGear`, and not the constant), and the FML printer wrote the expression back without the quotes: the source file did not say what the model meant.
 
 **Fixed (2026-10-09).** The 14 occurrences are written `@Renderer(name)`, `@Renderer(identifier)`, `@Renderer(element.identifier)`… The scenarios assert it (`T1`: an element, `T4`: a goal).
 
 ### FORMOD-D-8 — The B components of a hand-made domain model are named `<element>null`  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#8](https://github.com/openflexo-team/formod/issues/8)
 
 **Symptom.** In the running application, a domain model mapping created by hand (`createTopLevelDomainModelMapping`, `createChildDomainModel`)
 generated the Atelier B components `Projectnull.sys`, `ProjectnullContext.sys` and `Projectnull.ref`, and a second one raised a
@@ -101,6 +115,8 @@ generates the B models of a named mapping (`LandingGearSensors`, `LandingGearSen
 **Not covered.** A mapping saved before the fix has no stored title: it keeps generating `…null` names. A project created after the fix is fine.
 
 ### FORMOD-D-9 — A group of goals drawn on the goal diagram has no title  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#9](https://github.com/openflexo-team/formod/issues/9)
 
 **Symptom.** In the running application (project `TestFormose9`, 2026-10-12), drawing a group of goals on the goal diagram opened no dialog, and
 the group had a `null` title. Creating the domain model methodology then derived one domain model per group, named `Project-null`: two groups gave
@@ -119,6 +135,8 @@ better than a `DuplicateURIException` in the log.
 
 ### FORMOD-D-10 — The B views of a reloaded project are empty  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#10](https://github.com/openflexo-team/formod/issues/10)
+
 **Symptom.** After closing and reopening a project holding a B methodology, the B perspective showed no B code (2026-10-12, `TestFormose12`/`13`).
 
 **Cause (measured).** The references to the generated components (`AtelierBComponentActorReference`) find the Atelier B project through the model slot of their role, which a role infers from its `container` binding (`FlexoRole.getInferedModelSlot`). The legacy `AtelierBComponentRole` declarations carried `container="sourceProject"`; the migration dropped it, claiming it was not a property of the role. After a reload `getFlexoRole().getModelSlot()` was `null`, so `context` and `machine` were not found again. Reproduced headless by `TestBMethology.testReloadProject`, which asserted nothing about B.
@@ -126,6 +144,8 @@ better than a `DuplicateURIException` in the log.
 **Fixed (2026-10-12).** `AtelierBComponent context/machine with AtelierBComponentRole(container=container.container.bProject)`; the header of `BMethodology.fml` says why. `BComponent.getObjectWithSerializationIdentifier` also looks events up by name (an `EventMapping` lost its event after a reload). `testReloadProject` asserts the context, the machine (with content) and the events. Confirmed in the application by the user.
 
 ### FORMOD-D-11 — INITIALISATION was generated as an event the B parser cannot read  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#11](https://github.com/openflexo-team/formod/issues/11)
 
 **Symptom.** After saving and reloading, two of four generated B files failed to load (`ParserException: [6,2] expecting … identifier literal`).
 
@@ -137,6 +157,8 @@ better than a `DuplicateURIException` in the log.
 
 ### FORMOD-D-12 — A refinement was written with an empty `REFINES`  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#12](https://github.com/openflexo-team/formod/issues/12)
+
 **Symptom.** A B project whose methodology was never saved could not be loaded again: `[4,1] expecting identifier`.
 
 **Cause (measured).** `makeNewRefinement` writes the file at once, before the refined component is set; the skeleton `REFINES` / `END` is not parseable.
@@ -144,6 +166,8 @@ better than a `DuplicateURIException` in the log.
 **Fixed (2026-10-12).** `AddAtelierBComponent` writes the refinement again once `refines`, `extends` and `sees` are set. `TestBMethology.instantiateBMethodology` checks every `.ref` before any save (red without the fix, after the first version of its regular expression, which accepted `REFINES`/`END`, was corrected).
 
 ### FORMOD-D-13 — Refinement and contribution nodes lost their position  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#13](https://github.com/openflexo-team/formod/issues/13)
 
 **Symptom.** A refinement node (AND/OR) appeared far to the right of the two goals it refines.
 
@@ -153,11 +177,15 @@ better than a `DuplicateURIException` in the log.
 
 ### FORMOD-D-14 — The save panel opened twice  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#14](https://github.com/openflexo-team/formod/issues/14)
+
 **Symptom.** Cmd-S showed the "review unsaved resources" panel, then showed it again.
 
 **Cause (inferred, not observed in the log).** The File menu held two entries with the same Cmd-S accelerator calling `reviewModifiedResources()`: `FileMenu.SaveItem` (base) and `FMSFileMenu.SaveModifiedItem` (formod). Removed the formod one. The user confirmed the panel opens once.
 
 ### FORMOD-D-15 — References to B predicates and to the INITIALISATION substitution are lost on reload  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#15](https://github.com/openflexo-team/formod/issues/15)
 
 **Symptom.** After a reload, `Concept2Property.typingPredicate` and the rules' `initialisationOperationBody` are empty (their reference has the identifier `null`: `…#FLX_null`).
 
@@ -184,6 +212,8 @@ Tests: `TestBObjectSerializationIdentifier.testEmptyInitialisationIsFoundAgainAf
 
 ### FORMOD-D-16 — Two inspectors gave a FlexoConceptInstance where a VirtualModelInstance is expected  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#16](https://github.com/openflexo-team/formod/issues/16)
+
 **Symptom.** Warning `component.virtualModelInstance=data.container … argument type mismatch` when a `BMapping` was selected.
 
 **Cause (measured).** `data.container` is the instance that contains the object: the VirtualModelInstance for a top-level concept, the enclosing FlexoConceptInstance for a nested one. Of the five assignments reported, three were right (`Concept.inspector`, `AgentAssignment.inspector` twice: top-level concepts, whose role instances live in `container`) and two were wrong: `BMapping.inspector` (the `parent` role lives in `container.container`, the BMethodology instance) and `SysMLKaosElementMapping.inspector` (the `agent` role lives in `parentDiagramElementMapping.goalModel`, another instance).
@@ -194,11 +224,15 @@ Tests: `TestBObjectSerializationIdentifier.testEmptyInitialisationIsFoundAgainAf
 
 ### FORMOD-D-17 — Default names of dropped objects were identical  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#17](https://github.com/openflexo-team/formod/issues/17)
+
 **Symptom.** Defaults added so that drops need no dialog gave every concept the name `Concept` (B: duplicate declarations, `DuplicateURIException`).
 
 **Fixed (2026-10-12).** `DomainModel.newName(prefix)` (delegating to the root domain model) and `SysMLKaosModel.newName(prefix)` number the names (`Concept1`, `Individual2`, `Goal1`, `Agent2`…), never reusing a number. The five domain drops and the five goal/agent drops use them as default value. Trap measured: in a default value `container` is the container of the diagram, and `container.newName(…)` was rejected at load (`unresolved path element`), while a slot of the diagram (`domainModel`, `kaosModel`) resolves.
 
 ### FORMOD-D-18 — `T10_BMethodology` dies on a `StackOverflowError` in `BSerializationIdentifiers.pathTo`  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#18](https://github.com/openflexo-team/formod/issues/18)
 
 **Symptom.** `formod-test`, `FormodAutomatedTests.checkScript[T10_BMethodology.fmlscript]` fails with `java.lang.StackOverflowError`, repeating `BSerializationIdentifiers.forEachChild` → `pathTo`. It contradicted FORMOD-D-15, which stated the walk "cannot cycle".
 

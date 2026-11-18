@@ -13,6 +13,8 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 ### FORMOD-F-1 — Two B methodologies built on missing VirtualModels  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#19](https://github.com/openflexo-team/formod/issues/19)
+
 **Problem.** Two legacy VirtualModels of `formod-rc` could not be migrated as they were: `Formose.fml/SysMLKaos-B-Methodology.fml`
 mapped functional goals and refinements onto B events and proof obligations, mounting `http://formose.lacl.fr/BSystem.viewpoint` and
 typing its roles with `BSystem.viewpoint/BSystemModel.fml#Event` and `#PO`; `Formose.fml/DomainModel-B-Methodology.fml` mapped domain
@@ -31,6 +33,8 @@ and unusable), their localized dictionaries, and the `SysMLKaos-B-Methodology` e
 
 ### FORMOD-F-2 — The B methodology has two Atelier B project slots, only one is meant  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#20](https://github.com/openflexo-team/formod/issues/20)
+
 **Problem.** `BMethodology` declared two Atelier B project slots, `sourceProject` and `generatedProject`, and the wizard asked for one project and
 passed it twice. Measured: `generatedProject` was never read (FML, Java, `.fib`), and every B component was created `in (sourceProject)`, in the
 legacy `.fml.xml` as well. In the legacy file `generatedProject` is the older slot (`flexoID` 7) and `sourceProject` a later one (`flexoID` 2975),
@@ -46,6 +50,8 @@ not recognized instead of passing `null`. Scripts T10/T11 and `TestBMethology` u
 Projects created before this change keep the old slot names in their saved methodology: to be thrown away (user's decision).
 
 ### FORMOD-F-3 — Let the graphical-representation concepts derive their inspector  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#21](https://github.com/openflexo-team/formod/issues/21)
 
 **Problem.** FORMOD-D-5 restored the 52 inspectors as the legacy had them: a `…GR` concept has its own inspector, which repeats entries of the
 model concept it represents (`goal.name`, `modelConcept.name`, …). The free modelling editor does it differently:
@@ -63,6 +69,8 @@ concepts that had no inspector received the entries their representation showed:
 
 ### FORMOD-F-4 — Break the import cycle between FormoseCore and the methodologies  ·  `DONE`
 
+**GitHub:** [openflexo-team/formod#22](https://github.com/openflexo-team/formod/issues/22)
+
 **Problem.** `FormoseCore` imports `SysMLKaosMethodology`, `DomainModelMethodology` and `BMethodology` (to type the properties that give the methodology applicable to an element), and each of them imports `FormoseCore` (and `Methodology`, which does too). Loading a unit then runs into the guard of the resource loader and logs about 135 transient warnings (CORE-D-34); every unit is valid in the end.
 
 **Options.** (a) Move the properties typed by the methodologies out of `FormoseCore` into a model both import; (b) type them by the common parent `Methodology` and let the methodologies declare the precise accessors; (c) keep the cycle and wait for the platform to load it quietly.
@@ -74,6 +82,8 @@ concepts that had no inspector received the entries their representation showed:
 ## B technology adapter
 
 ### FORMOD-F-5 — The B adapter raises typed FML errors instead of returning null after a warning or a printed stack  ·  `DONE`
+
+**GitHub:** [openflexo-team/formod#23](https://github.com/openflexo-team/formod/issues/23)
 
 **Problem.** Part of `CORE-F-11` phase 6 (`openflexo-core/BACKLOG.md`): the 16 edition actions of the B adapter (b-ta) caught the failures
 of their evaluations four at a time, printed the stack and went on; a missing name, operand, operator or component gave a warning and a

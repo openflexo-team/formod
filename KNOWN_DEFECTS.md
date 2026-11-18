@@ -15,6 +15,8 @@ Fixed defects are moved to [`FIXED_DEFECTS.md`](./FIXED_DEFECTS.md) once their s
 
 ### FORMOD-D-1 — The B grammar has no real literals  ·  `DEFERRED`
 
+**GitHub:** [openflexo-team/formod#1](https://github.com/openflexo-team/formod/issues/1)
+
 **Symptom.** Parsing a B expression holding a real number fails: `BParser.parse("1.5", factory, EntryPointKind.Expression)` throws
 `ParseException: [1,2] expecting: EOF`.
 
