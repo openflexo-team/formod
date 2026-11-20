@@ -97,7 +97,7 @@ public class FormodInspectorsTest extends OpenflexoTestCase {
 			collect(embedded, into);
 		}
 		if (concept instanceof VirtualModel) {
-			for (FlexoConcept declared : ((VirtualModel) concept).getFlexoConcepts()) {
+			for (FlexoConcept declared : ((VirtualModel) concept).getAllFlexoConcepts()) {
 				if (declared != concept && !into.contains(declared)) {
 					collect(declared, into);
 				}
